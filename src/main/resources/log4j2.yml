@@ -1,0 +1,116 @@
+Configuration:
+  status: warn
+
+  Properties:
+    Property:
+      - name: log.directory
+        value: /opt/beginning-mind-logs
+      - name: log.name
+        value: beginning-mind
+      - name: log.level
+        value: info
+
+  Appenders:
+    # 控制台
+    Console:
+      name: console
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        level: info
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        charset: utf-8
+        pattern: "%d{HH:mm:ss} %4p [%t][%file:%L] - %m%n"
+
+    RollingFile:
+      # WARN日志
+      - name: warnFile
+        ignoreExceptions: false
+        fileName: ${sys:log.directory}/${sys:log.name}-WARN.log
+        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-WARN.log.gz"
+        append: true
+        Filters:
+          ThresholdFilter:
+            level: error
+            onMatch: DENY
+            onMismatch: NEUTRAL
+          ThresholdFilter:
+            level: warn
+            onMatch: ACCEPT
+            onMismatch: DENY
+        PatternLayout:
+          charset: utf-8
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+        DefaultRolloverStrategy:
+          max: 1000
+      # ERROR日志
+      - name: errorFile
+        ignoreExceptions: false
+        fileName: ${sys:log.directory}/${sys:log.name}-ERROR.log
+        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-ERROR.log.gz"
+        append: true
+        Filters:
+          ThresholdFilter:
+            level: error
+            onMatch: ACCEPT
+            onMismatch: DENY
+        PatternLayout:
+          charset: utf-8
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+        DefaultRolloverStrategy:
+          max: 1000
+      # INFO及以上日志
+      - name: infoFile
+        ignoreExceptions: false
+        fileName: ${sys:log.directory}/${sys:log.name}-INFO+.log
+        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-INFO+.log.gz"
+        append: true
+        Filters:
+          ThresholdFilter:
+            level: info
+            onMatch: ACCEPT
+            onMismatch: DENY
+        PatternLayout:
+          charset: utf-8
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+        DefaultRolloverStrategy:
+          max: 1000
+      # DEBUG及以上日志
+      - name: debugFile
+        ignoreExceptions: false
+        fileName: ${sys:log.directory}/${sys:log.name}-DEBUG+.log
+        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-DEBUG+.log.gz"
+        append: true
+        Filters:
+          ThresholdFilter:
+            level: debug
+            onMatch: ACCEPT
+            onMismatch: DENY
+        PatternLayout:
+          charset: utf-8
+          pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        Policies:
+          SizeBasedTriggeringPolicy:
+            size: "128 MB"
+        DefaultRolloverStrategy:
+          max: 1000
+
+  Loggers:
+    Root:
+      level: ${sys:log.level}
+      AppenderRef:
+        - ref: console
+        - ref: warnFile
+        - ref: errorFile
+        - ref: infoFile
+        - ref: debugFile

@@ -1,0 +1,57 @@
+spring:
+
+  profiles:
+    active: @profiles.active@
+
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSS
+    deserialization:
+      fail-on-unknown-properties: false
+    property-naming-strategy: SNAKE_CASE
+    time-zone: GMT+8
+
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
+    username: root
+    password: root
+    druid:
+      initialSize: 2
+      minIdle: 2
+      maxActive: 30
+
+  redis:
+    host: localhost
+    port: 6379
+    password: root
+    pool:
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
+
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/beginning_mind
+
+server:
+  port: 2333
+  context-path: /
+
+# tk.mapper
+mapper:
+  mappers:
+      - com.spldeolin.cadeau.library.inherited.CommonMapper
+  not-empty: false
+  identity: MYSQL
+
+pagehelper:
+  helperDialect: mysql
+  reasonable: true
+  supportMethodsArguments: true
+  params: count=countSql
+
+beginning-mind:
+
+  one-cookie: 一个曲奇饼干
