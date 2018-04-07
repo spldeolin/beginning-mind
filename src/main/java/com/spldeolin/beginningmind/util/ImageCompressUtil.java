@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.MathContext;
 import java.util.ArrayList;
-import java.util.Date;
 import javax.imageio.ImageIO;
 
 /**
@@ -88,9 +87,6 @@ public class ImageCompressUtil {
 
     /**
      * 将double类型的数据转换为int，四舍五入原则
-     *
-     * @param sourceDouble
-     * @return
      */
     private static int parseDoubleToInt(double sourceDouble) {
         int result = 0;
@@ -139,20 +135,6 @@ public class ImageCompressUtil {
         Double double1 = new Double(bigDecimal_result.toString());
         System.out.println("相除后的double为：" + double1);
         return double1;
-    }
-
-    public static void main(String[] args) {
-        System.out.println(new Date());
-        String filePath = "C:\\2.bmp";
-        String fileName = new File(filePath).getName();
-        String fileExPath = "C:\\2Ex.bmp";
-        scaleImageWithParams(filePath, fileExPath, 250, 250, false, fileName.substring(fileName.lastIndexOf(".") + 1));
-        System.out.println(new Date());
-
-        String a = ("aaaaabbbbbcccccdddddeeeeefffffgg-thumb.jpg");
-        System.out.println(a.length());
-        String b = a.replace("-thumb", "");
-        System.out.println(b);
     }
 
 }

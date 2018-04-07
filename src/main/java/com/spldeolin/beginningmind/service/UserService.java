@@ -2,13 +2,13 @@ package com.spldeolin.beginningmind.service;
 
 import java.util.List;
 import com.spldeolin.beginningmind.model.User;
-import com.spldeolin.cadeau.library.inherited.CommonService;
 import com.spldeolin.cadeau.library.dto.Page;
+import com.spldeolin.cadeau.library.inherited.CommonService;
 
 /**
  * “用户”业务
  *
- * @author Deolin 2018/4/4
+ * @author Deolin 2018/4/7
  * @generator Cadeau Support
  */
 public interface UserService extends CommonService<User> {
@@ -32,7 +32,6 @@ public interface UserService extends CommonService<User> {
 
     /**
      * 删除一个“用户”
-     * 
      *
      * @param id 待删除“用户”的ID
      */
@@ -40,7 +39,7 @@ public interface UserService extends CommonService<User> {
 
     /**
      * 删除多个资源
-     （附带业务校验，并返回详细情况）
+     * （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况
@@ -56,6 +55,6 @@ public interface UserService extends CommonService<User> {
      */
     Page<User> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
-	// 其他方法声明
+    // 其他方法声明
 
 }

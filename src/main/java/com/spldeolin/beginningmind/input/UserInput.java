@@ -2,19 +2,22 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import javax.validation.constraints.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.spldeolin.beginningmind.model.User;
+import com.spldeolin.cadeau.library.valid.annotation.TextOption;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.spldeolin.cadeau.library.valid.annotation.TextOption;
-import com.spldeolin.beginningmind.model.User;
 
 /**
  * “用户”Input类
  *
- * @author Deolin 2018/4/4
+ * @author Deolin 2018/4/7
  * @generator Cadeau Support
  */
 @Data
@@ -55,8 +58,7 @@ public class UserInput implements Serializable {
      * 通用字段 更新时间
      */
     @JsonProperty("updated_at")
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     /**
      * 名称
@@ -74,7 +76,7 @@ public class UserInput implements Serializable {
      * 性别（m男 f女 n中 a无）
      */
     @Size(max = 2)
-    @TextOption({"m" ,"f" ,"n" ,"a"})
+    @TextOption({"m", "f", "n", "a"})
     private String sex;
 
     /**
@@ -90,22 +92,19 @@ public class UserInput implements Serializable {
     /**
      * 年月日
      */
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private Date ymd;
+    private LocalDate ymd;
 
     /**
      * 时分秒
      */
-    @JsonFormat(pattern = "HH:mm:ss")
-    private Date hms;
+    private LocalTime hms;
 
     /**
      * 年月日时分秒
      */
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date ymdhms;
+    private LocalDateTime ymdhms;
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public User toModel() {
         User model = User.builder().build();

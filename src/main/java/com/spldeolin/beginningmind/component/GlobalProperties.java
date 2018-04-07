@@ -11,4 +11,10 @@ public class GlobalProperties {
 
     private String oneCookie;
 
+    private String defaultDatePattern;
+
+    private String defaultTimePattern;
+
+    private String defaultDatetimePattern;
+
 }

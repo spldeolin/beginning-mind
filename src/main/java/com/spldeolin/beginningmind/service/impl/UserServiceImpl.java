@@ -3,23 +3,22 @@ package com.spldeolin.beginningmind.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.cadeau.library.inherited.CommonServiceImpl;
+import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.dao.UserMapper;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.service.UserService;
-import lombok.extern.log4j.Log4j2;
-import tk.mybatis.mapper.entity.Condition;
-import com.spldeolin.cadeau.library.exception.ServiceException;
-import com.spldeolin.cadeau.library.util.FieldExtractUtil;
 import com.spldeolin.cadeau.library.dto.Page;
-import com.github.pagehelper.PageHelper;
+import com.spldeolin.cadeau.library.exception.ServiceException;
+import com.spldeolin.cadeau.library.inherited.CommonServiceImpl;
+import com.spldeolin.cadeau.library.util.FieldExtractUtil;
+import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 import tk.mybatis.mapper.entity.Example;
 
 /**
  * “用户”业务实现
  *
- * @author Deolin 2018/4/4
+ * @author Deolin 2018/4/7
  * @generator Cadeau Support
  */
 @Service

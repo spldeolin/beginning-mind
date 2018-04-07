@@ -1,12 +1,16 @@
 package com.spldeolin.beginningmind.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.util.Date;
-import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +20,7 @@ import lombok.experimental.Accessors;
 /**
  * 用户
  *
- * @author Deolin 2018/4/4
+ * @author Deolin 2018/4/7
  * @generator Cadeau Support
  */
 @Data
@@ -26,6 +30,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Table(name = "user")
 public class User implements Serializable {
+
     /**
      * 通用字段 ID
      */
@@ -38,20 +43,20 @@ public class User implements Serializable {
      */
     @Column(name = "inserted_at")
     @JsonIgnore
-    private Date insertedAt;
+    private LocalDateTime insertedAt;
 
     /**
      * 通用字段 更新时间
      */
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private LocalDateTime updatedAt;
 
     /**
      * 通用字段 删除时间
      */
     @Column(name = "deleted_at")
     @JsonIgnore
-    private Date deletedAt;
+    private LocalDateTime deletedAt;
 
     /**
      * 名称
@@ -81,17 +86,17 @@ public class User implements Serializable {
     /**
      * 年月日
      */
-    private Date ymd;
+    private LocalDate ymd;
 
     /**
      * 时分秒
      */
-    private Date hms;
+    private LocalTime hms;
 
     /**
      * 年月日时分秒
      */
-    private Date ymdhms;
+    private LocalDateTime ymdhms;
 
     /**
      * 金额
