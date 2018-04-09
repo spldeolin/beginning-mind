@@ -84,7 +84,7 @@ public class JsonUtil {
             JsonNode node = om.readTree(json);
             for (String nodeKey : nodeKeys) {
                 if (node == null) {
-                    break;
+                    return null;
                 }
                 if (NumberUtils.isCreatable(nodeKey)) {
                     Integer index = Integer.valueOf(nodeKey);
