@@ -4,13 +4,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -20,7 +20,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.spring4all.swagger.EnableSwagger2Doc;
 
-@Component
 @Configuration
 @EnableSwagger2Doc
 @EnableRedisHttpSession
@@ -30,23 +29,26 @@ public class ExtraConfiguration {
     private GlobalProperties globalProperties;
 
     @Bean
-    @ConditionalOnMissingBean
-    public ObjectMapper objectMapper() {
+    public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
         DateTimeFormatter date = DateTimeFormatter.ofPattern(globalProperties.getDefaultDatePattern());
         DateTimeFormatter time = DateTimeFormatter.ofPattern(globalProperties.getDefaultTimePattern());
         DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(globalProperties.getDefaultDatetimePattern());
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        // date Json化和反Json化
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(date));
-        // time  Json化和反Json化
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(time));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(time));
-        // datetime Json化和反Json化
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
-        return new ObjectMapper().registerModule(javaTimeModule);
-    }
+        SimpleModule javaTimeModule = new JavaTimeModule();
 
+        // 三大时间对象 序列器
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date))
+                .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
+                .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime));
+        // 三大时间对象 反序列器
+        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
+                .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
+                .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
+
+        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
+        if (!Optional.ofNullable(globalProperties.getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
+            builder.simpleDateFormat(globalProperties.getDefaultDatetimePattern());
+        }
+        return builder;
+    }
 
 }

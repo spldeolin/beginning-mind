@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,9 +10,11 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spldeolin.beginningmind.component.GlobalProperties;
 import com.spldeolin.beginningmind.dao.UserMapper;
 import com.spldeolin.beginningmind.model.User;
+import com.spldeolin.beginningmind.util.JsonUtil;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
@@ -56,6 +59,23 @@ public class Tests {
     public void mybatisPlugin() {
         log.info(userMapper.selectAll());
 //        userMapper.updateByPrimaryKeySelective(User.builder().id(5L).name("啊啊啊").build());
+    }
+
+    @Test
+    public void testJsonUtil() {
+        ObjectMapper om = new ObjectMapper();
+        JsonUtil.commonConfig(om);
+        JsonUtil.timeConfig(om);
+        User user = User.builder().name("aaa_bbb").updatedAt(LocalDateTime.MAX).build();
+        log.info(JsonUtil.toJson(user));
+        log.info(JsonUtil.toJson(user, om));
+
+        String json = "{\"id\":null,\"updatedAt\":\"+999999999-12-31 23:59:59\",\"name\":\"aaa_bbb\",\"salt\":null,\"sex\":null,\"age\":null,\"flag\":null,\"ymd\":null,\"hms\":null,\"ymdhms\":null,\"money\":null,\"serialNumber\":null,\"percent\":null,\"richText\":null}";
+        String snakeJson = "{\"id\":null,\"updated_at\":\"+999999999-12-31 23:59:59\",\"name\":\"aaa_bbb\",\"salt\":null,\"sex\":null,\"age\":null,\"flag\":null,\"ymd\":null,\"hms\":null,\"ymdhms\":null,\"money\":null,\"serial_number\":null,\"percent\":null,\"rich_text\":null}";
+        log.info(JsonUtil.toObject(json, User.class));
+        log.info(JsonUtil.toObject(json, User.class, om));
+        log.info(JsonUtil.toObject(snakeJson, User.class));
+        log.info(JsonUtil.toObject(snakeJson, User.class, om));
     }
 
 }

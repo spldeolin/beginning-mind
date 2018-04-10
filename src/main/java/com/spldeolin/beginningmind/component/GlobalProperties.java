@@ -9,12 +9,14 @@ import lombok.Data;
 @Data
 public class GlobalProperties {
 
-    private String oneCookie;
-
     private String defaultDatePattern;
 
     private String defaultTimePattern;
 
     private String defaultDatetimePattern;
+
+    private Boolean serializeJavaUtilDateToTimestamp;
+
+    private String oneCookie;
 
 }

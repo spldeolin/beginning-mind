@@ -52,7 +52,9 @@ pagehelper:
   params: count=countSql
 
 beginning-mind:
-  one-cookie: 一个曲奇饼干
   default-date-pattern: yyyy-MM-dd
   default-time-pattern: HH:mm:ss
   default-datetime-pattern: yyyy-MM-dd HH:mm:ss
+  serialize-java-util-date-to-timestamp: true
+
+  one-cookie: 一个曲奇饼干
