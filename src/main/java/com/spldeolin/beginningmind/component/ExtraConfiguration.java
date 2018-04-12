@@ -18,6 +18,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.spldeolin.beginningmind.properties.Properties;
+import com.spldeolin.beginningmind.properties.TimeProperties;
 import com.spring4all.swagger.EnableSwagger2Doc;
 
 @Configuration
@@ -26,13 +28,14 @@ import com.spring4all.swagger.EnableSwagger2Doc;
 public class ExtraConfiguration {
 
     @Autowired
-    private GlobalProperties globalProperties;
+    private Properties properties;
 
     @Bean
     public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern(globalProperties.getDefaultDatePattern());
-        DateTimeFormatter time = DateTimeFormatter.ofPattern(globalProperties.getDefaultTimePattern());
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(globalProperties.getDefaultDatetimePattern());
+        TimeProperties timeProperties = properties.getTimeProperties();
+        DateTimeFormatter date = DateTimeFormatter.ofPattern(timeProperties.getDefaultDatePattern());
+        DateTimeFormatter time = DateTimeFormatter.ofPattern(timeProperties.getDefaultTimePattern());
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(timeProperties.getDefaultDatetimePattern());
         SimpleModule javaTimeModule = new JavaTimeModule();
 
         // 三大时间对象 序列器
@@ -45,8 +48,8 @@ public class ExtraConfiguration {
                 .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
 
         Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
-        if (!Optional.ofNullable(globalProperties.getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
-            builder.simpleDateFormat(globalProperties.getDefaultDatetimePattern());
+        if (!Optional.ofNullable(timeProperties.getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
+            builder.simpleDateFormat(timeProperties.getDefaultDatetimePattern());
         }
         return builder;
     }

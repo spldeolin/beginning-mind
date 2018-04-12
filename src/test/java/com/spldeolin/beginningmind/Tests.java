@@ -11,7 +11,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.component.GlobalProperties;
+import com.spldeolin.beginningmind.properties.Properties;
 import com.spldeolin.beginningmind.dao.UserMapper;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.util.JsonUtil;
@@ -23,11 +23,11 @@ import lombok.extern.log4j.Log4j2;
 public class Tests {
 
     @Autowired
-    private GlobalProperties globalProperties;
+    private Properties properties;
 
     @Test
     public void contextLoads() {
-        log.info(globalProperties.getOneCookie());
+        log.info(properties.getOneCookie());
     }
 
     @Test

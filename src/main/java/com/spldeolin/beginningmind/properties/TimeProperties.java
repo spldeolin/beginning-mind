@@ -1,13 +1,13 @@
-package com.spldeolin.beginningmind.component;
+package com.spldeolin.beginningmind.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
 
 @Component
-@ConfigurationProperties(prefix = "beginning-mind")
+@ConfigurationProperties(Properties.PREFIX + ".time")
 @Data
-public class GlobalProperties {
+public class TimeProperties {
 
     private String defaultDatePattern;
 
@@ -16,7 +16,5 @@ public class GlobalProperties {
     private String defaultDatetimePattern;
 
     private Boolean serializeJavaUtilDateToTimestamp;
-
-    private String oneCookie;
 
 }

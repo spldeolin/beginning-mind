@@ -52,9 +52,42 @@ pagehelper:
   params: count=countSql
 
 beginning-mind:
-  default-date-pattern: yyyy-MM-dd
-  default-time-pattern: HH:mm:ss
-  default-datetime-pattern: yyyy-MM-dd HH:mm:ss
-  serialize-java-util-date-to-timestamp: true
 
   one-cookie: 一个曲奇饼干
+
+  time:
+    default-date-pattern: yyyy-MM-dd
+    default-time-pattern: HH:mm:ss
+    default-datetime-pattern: yyyy-MM-dd HH:mm:ss
+    serialize-java-util-date-to-timestamp: true
+
+  # 以下配置用于演示配置管理
+
+  # 未分类
+  ip: sssad
+  version: 233
+  use-one-cent-when-pay: true
+
+  # 中文简体文案
+  text-zh-hans:
+    hello: 你好
+    excellent: 优秀
+
+  # 日语文案
+  text-ja-jp:
+    hello: こんにちは
+    excellent: 素晴らしい
+
+  # 微信（第三方）
+  wechat:
+    appid: asdfas22
+    appsecret: asdfa232
+
+  # 阿里大鱼（第三方）
+  alidayu:
+    appid: asdasd
+    appsecret: asdfasdf
+    sign-name: dssd
+    template-code: sdfsd
+
+  # 其他配置分类
