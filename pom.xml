@@ -23,18 +23,24 @@
 
     <profiles>
         <profile>
-            <id>dev</id>
+            <id>default</id>
             <properties>
-                <profiles.active>dev</profiles.active>
+                <mvnProfile/>
             </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
         </profile>
         <profile>
+            <id>dev</id>
+            <properties>
+                <mvnProfile>dev</mvnProfile>
+            </properties>
+        </profile>
+        <profile>
             <id>prod</id>
             <properties>
-                <profiles.active>prod</profiles.active>
+                <mvnProfile>prod</mvnProfile>
             </properties>
         </profile>
     </profiles>

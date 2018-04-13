@@ -1,7 +1,13 @@
+server:
+
+  port: 2333
+
+  context-path: /
+
 spring:
 
   profiles:
-    active: @profiles.active@
+    active: @mvnProfile@
 
   jackson:
     deserialization:
@@ -33,10 +39,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://root:root@localhost:27017/beginning_mind
-
-server:
-  port: 2333
-  context-path: /
 
 # tk.mapper
 mapper:
@@ -89,5 +91,3 @@ beginning-mind:
     appsecret: asdfasdf
     sign-name: dssd
     template-code: sdfsd
-
-  # 其他配置分类
