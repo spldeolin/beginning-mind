@@ -1,13 +1,11 @@
 package com.spldeolin.beginningmind.util;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
 import org.apache.commons.lang3.math.NumberUtils;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,8 +17,8 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * JSON工具类
@@ -33,7 +31,6 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin
  */
 @UtilityClass
-@Log4j2
 public class JsonUtil {
 
     private static ObjectMapper defaultObjectMapper = new ObjectMapper();
@@ -76,12 +73,9 @@ public class JsonUtil {
     /**
      * 将对象转化为JSON字符串，支持自定义ObjectMapper
      */
+    @SneakyThrows
     public static String toJson(Object object, ObjectMapper om) {
-        try {
-            return om.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException("JsonUtil.toJson()", e);
-        }
+        return om.writeValueAsString(object);
     }
 
     /**
@@ -94,13 +88,9 @@ public class JsonUtil {
     /**
      * 将JSON字符串转化为对象，支持自定义ObjectMapper
      */
+    @SneakyThrows
     public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
-        try {
-            return om.readValue(json, clazz);
-        } catch (IOException e) {
-            log.info(e.getMessage());
-            throw new RuntimeException("JsonUtil.toObject()", e);
-        }
+        return om.readValue(json, clazz);
     }
 
     /**
@@ -130,24 +120,21 @@ public class JsonUtil {
      * @param nodeKeys 抵达目标节点所有的节点key或数组下标
      * @return 目标值
      */
+    @SneakyThrows
     public static String getValue(String json, String... nodeKeys) {
-        try {
-            JsonNode node = defaultObjectMapper.readTree(json);
-            for (String nodeKey : nodeKeys) {
-                if (node == null) {
-                    return null;
-                }
-                if (NumberUtils.isCreatable(nodeKey)) {
-                    Integer index = Integer.valueOf(nodeKey);
-                    node = node.get(index);
-                } else {
-                    node = node.get(nodeKey);
-                }
+        JsonNode node = defaultObjectMapper.readTree(json);
+        for (String nodeKey : nodeKeys) {
+            if (node == null) {
+                return null;
             }
-            return node.asText();
-        } catch (IOException e) {
-            throw new RuntimeException("JsonUtil.getValue()", e);
+            if (NumberUtils.isCreatable(nodeKey)) {
+                Integer index = Integer.valueOf(nodeKey);
+                node = node.get(index);
+            } else {
+                node = node.get(nodeKey);
+            }
         }
+        return node.asText();
     }
 
 }

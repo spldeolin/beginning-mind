@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.input.UserInput;
+import com.spldeolin.beginningmind.properties.Properties;
 import com.spldeolin.beginningmind.service.UserService;
 import com.spldeolin.cadeau.library.dto.RequestResult;
 import com.spldeolin.cadeau.library.exception.ServiceException;
@@ -24,6 +25,14 @@ public class TestController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private Properties properties;
+
+    @GetMapping("quqi")
+    public RequestResult quqi() {
+        return RequestResult.success(properties.getOneCookie());
+    }
 
     @GetMapping("one")
     public RequestResult one(@RequestParam @Max(10) Integer one) {

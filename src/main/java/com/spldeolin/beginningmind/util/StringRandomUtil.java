@@ -2,13 +2,11 @@ package com.spldeolin.beginningmind.util;
 
 import java.util.Random;
 import lombok.experimental.UtilityClass;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 随机字符串
  */
 @UtilityClass
-@Log4j2
 public class StringRandomUtil {
 
     /**

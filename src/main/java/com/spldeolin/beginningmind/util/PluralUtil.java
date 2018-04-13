@@ -15,6 +15,8 @@ import lombok.experimental.UtilityClass;
  * e.g.1: PluralUtil.pluralize("woman");   // 返回women
  * e.g.2: PluralUtil.singularize("boxes"); // 返回box
  * </pre>
+ *
+ * @author Web
  */
 @UtilityClass
 public class PluralUtil {
