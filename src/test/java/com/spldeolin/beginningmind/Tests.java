@@ -58,7 +58,7 @@ public class Tests {
     @Test
     public void mybatisPlugin() {
         log.info(userMapper.selectAll());
-//        userMapper.updateByPrimaryKeySelective(User.builder().id(5L).name("啊啊啊").build());
+//        userMapper.updateByPrimaryKeySelective(UserXLSX.builder().id(5L).name("啊啊啊").build());
     }
 
     @Test

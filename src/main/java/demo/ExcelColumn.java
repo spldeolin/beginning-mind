@@ -13,7 +13,7 @@ public @interface ExcelColumn {
 
     String columnName() default "";
 
-    Class<? extends Formatter> formatter() default DefaultFormatter.class;
+    Class<? extends Formatter> formatter() default Formatter.class;
 
     String defaultValue() default "";
 
