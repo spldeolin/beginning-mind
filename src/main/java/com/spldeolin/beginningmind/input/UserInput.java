@@ -2,22 +2,19 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
+import java.time.*;
+import javax.validation.constraints.*;
 import org.springframework.beans.BeanUtils;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.spldeolin.beginningmind.model.User;
-import com.spldeolin.cadeau.library.valid.annotation.TextOption;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.spldeolin.cadeau.library.valid.annotation.TextOption;
+import com.spldeolin.beginningmind.model.User;
 
 /**
  * “用户”Input类
  *
- * @author Deolin 2018/4/7
+ * @author Deolin 2018/4/15
  * @generator Cadeau Support
  */
 @Data
@@ -25,9 +22,14 @@ import lombok.NoArgsConstructor;
 public class UserInput implements Serializable {
 
     /**
-     * 通用字段 ID
+     * ID
      */
     private Long id;
+
+    /**
+     * 年月日时分秒
+     */
+    private LocalDateTime ymdhms;
 
     /**
      * 金额
@@ -55,10 +57,16 @@ public class UserInput implements Serializable {
     private String richText;
 
     /**
-     * 通用字段 更新时间
+     * 审计字段 更新时间
      */
     @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
+
+    /**
+     * 审计字段 是否被删除
+     */
+    @JsonProperty("is_deleted")
+    private Boolean isDeleted;
 
     /**
      * 名称
@@ -76,7 +84,7 @@ public class UserInput implements Serializable {
      * 性别（m男 f女 n中 a无）
      */
     @Size(max = 2)
-    @TextOption({"m", "f", "n", "a"})
+    @TextOption({"m" ,"f" ,"n" ,"a"})
     private String sex;
 
     /**
@@ -99,12 +107,7 @@ public class UserInput implements Serializable {
      */
     private LocalTime hms;
 
-    /**
-     * 年月日时分秒
-     */
-    private LocalDateTime ymdhms;
-
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
     public User toModel() {
         User model = User.builder().build();

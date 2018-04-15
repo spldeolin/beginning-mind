@@ -13,12 +13,11 @@ import com.spldeolin.cadeau.library.inherited.CommonServiceImpl;
 import com.spldeolin.cadeau.library.util.FieldExtractUtil;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 /**
  * “用户”业务实现
  *
- * @author Deolin 2018/4/7
+ * @author Deolin 2018/4/15
  * @generator Cadeau Support
  */
 @Service
@@ -31,7 +30,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     @Override
     public Long createEX(User user) {
         /* 业务校验 */
-        return super.create(user);
+        super.create(user);
+        return user.getId();
     }
 
     @Override
@@ -66,11 +66,9 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     @Override
     public Page<User> page(Integer pageNo, Integer pageSize) {
         Condition condition = new Condition(User.class);
-        Example.Criteria criteria = condition.createCriteria();
-        criteria.andIsNull("deletedAt");
-        /* 其他条件 */
+        condition.createCriteria()/* 添加条件 */;
         PageHelper.startPage(pageNo, pageSize);
-        return Page.wrap(userMapper.selectByCondition(condition));
+        return Page.wrap(userMapper.selectBatchByCondition(condition));
     }
 
 }

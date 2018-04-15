@@ -11,7 +11,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.dao.UserMapper;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.properties.Properties;
 import com.spldeolin.beginningmind.util.JsonUtil;
@@ -27,9 +26,6 @@ public class Tests {
 
     @Autowired
     private MongoTemplate mongoTemplate;
-
-    @Autowired
-    private UserMapper userMapper;
 
     @Test
     public void contextLoads() {
@@ -53,11 +49,6 @@ public class Tests {
     public void test2() {
         List<User> users = mongoTemplate.find(new Query().addCriteria(Criteria.where("id").is(1L)), User.class);
         log.info(users);
-    }
-
-    @Test
-    public void mybatis() {
-        log.info(userMapper.selectAll());
     }
 
     @Test

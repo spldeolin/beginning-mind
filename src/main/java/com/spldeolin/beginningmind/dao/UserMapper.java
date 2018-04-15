@@ -3,11 +3,10 @@ package com.spldeolin.beginningmind.dao;
 import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.cadeau.library.inherited.CommonMapper;
-
 /**
  * “用户”数据库映射
  *
- * @author Deolin 2018/4/7
+ * @author Deolin 2018/4/15
  * @generator Cadeau Support
  */
 @Mapper

@@ -1,16 +1,14 @@
 package com.spldeolin.beginningmind.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +18,7 @@ import lombok.experimental.Accessors;
 /**
  * 用户
  *
- * @author Deolin 2018/4/7
+ * @author Deolin 2018/4/15
  * @generator Cadeau Support
  */
 @Data
@@ -30,33 +28,31 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Table(name = "user")
 public class User implements Serializable {
-
     /**
-     * 通用字段 ID
+     * ID
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     /**
-     * 通用字段 插入时间
+     * wocao
      */
     @Column(name = "inserted_at")
     @JsonIgnore
     private LocalDateTime insertedAt;
 
     /**
-     * 通用字段 更新时间
+     * 审计字段 更新时间
      */
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
     /**
-     * 通用字段 删除时间
+     * 审计字段 是否被删除
      */
-    @Column(name = "deleted_at")
-    @JsonIgnore
-    private LocalDateTime deletedAt;
+    @Column(name = "is_deleted")
+    private Boolean isDeleted;
 
     /**
      * 名称
