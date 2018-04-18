@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind;
 
-import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.Test;
@@ -11,10 +10,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.util.ReflectionUtils;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.component.Properties;
+import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.util.JsonUtil;
 import lombok.extern.log4j.Log4j2;
 
@@ -24,37 +22,22 @@ import lombok.extern.log4j.Log4j2;
 public class Tests {
 
     @Autowired
-    private Properties properties;
-
-    @Autowired
     private MongoTemplate mongoTemplate;
 
     @Test
     public void contextLoads() {
-        for (Field field : Properties.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            log.info(ReflectionUtils.getField(field, properties));
-        }
-        for (Field field : Properties.TimeProperties.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            log.info(ReflectionUtils.getField(field, properties));
-        }
-        for (Field field : Properties.TextZhHansProperties.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            log.info(ReflectionUtils.getField(field, properties));
-        }
-        for (Field field : Properties.TextJaJpProperties.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            log.info(ReflectionUtils.getField(field, properties));
-        }
-        for (Field field : Properties.WechatProperties.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            log.info(ReflectionUtils.getField(field, properties));
-        }
-        for (Field field : Properties.AlidayuProperties.class.getDeclaredFields()) {
-            field.setAccessible(true);
-            log.info(ReflectionUtils.getField(field, properties));
-        }
+        log.info(Properties.getIp());
+        log.info(Properties.getOneCookie());
+        log.info(Properties.getUseOneCentWhenPay());
+        log.info(Properties.getVersion());
+        log.info(Properties.AlidayuProperties.getAppid());
+        log.info(Properties.AlidayuProperties.getAppsecret());
+        log.info(Properties.AlidayuProperties.getSignName());
+        log.info(Properties.AlidayuProperties.getTemplateCode());
+        log.info(Properties.TextJaJpProperties.getExcellent());
+        log.info(Properties.TextJaJpProperties.getHello());
+        log.info(Properties.TextZhHansProperties.getExcellent());
+
     }
 
     @Test

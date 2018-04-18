@@ -19,7 +19,7 @@ public class Properties {
      */
     @Getter
     @Setter
-    private static String oneCookie;
+    public static String OneCookie;
 
     /**
      * IP地址
