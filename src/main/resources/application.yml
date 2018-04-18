@@ -7,7 +7,7 @@ server:
 spring:
 
   profiles:
-    active: @mvnProfile@
+    active:
 
   jackson:
     deserialization:
