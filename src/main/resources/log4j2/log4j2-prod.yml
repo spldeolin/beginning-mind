@@ -3,12 +3,10 @@ Configuration:
 
   Properties:
     Property:
-      - name: log.directory
+      - name: log.dir
         value: /opt/beginning-mind-logs
       - name: log.name
         value: beginning-mind
-      - name: log.level
-        value: info
 
   Appenders:
     # 控制台
@@ -21,14 +19,14 @@ Configuration:
         onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{HH:mm:ss} %4p [%t][%file:%L] - %m%n"
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %4p [%t][%file:%L] - %m%n"
 
     RollingFile:
       # WARN日志
       - name: warnFile
         ignoreExceptions: false
-        fileName: ${sys:log.directory}/${sys:log.name}-WARN.log
-        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-WARN.log.gz"
+        fileName: ${sys:log.dir}/${sys:log.name}-WARN.log
+        filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-WARN.log.gz"
         append: true
         Filters:
           ThresholdFilter:
@@ -43,6 +41,9 @@ Configuration:
           charset: utf-8
           pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
         Policies:
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
           SizeBasedTriggeringPolicy:
             size: "128 MB"
         DefaultRolloverStrategy:
@@ -50,8 +51,8 @@ Configuration:
       # ERROR日志
       - name: errorFile
         ignoreExceptions: false
-        fileName: ${sys:log.directory}/${sys:log.name}-ERROR.log
-        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-ERROR.log.gz"
+        fileName: ${sys:log.dir}/${sys:log.name}-ERROR.log
+        filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-ERROR.log.gz"
         append: true
         Filters:
           ThresholdFilter:
@@ -62,6 +63,9 @@ Configuration:
           charset: utf-8
           pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
         Policies:
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
           SizeBasedTriggeringPolicy:
             size: "128 MB"
         DefaultRolloverStrategy:
@@ -69,8 +73,8 @@ Configuration:
       # INFO及以上日志
       - name: infoFile
         ignoreExceptions: false
-        fileName: ${sys:log.directory}/${sys:log.name}-INFO+.log
-        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-INFO+.log.gz"
+        fileName: ${sys:log.dir}/${sys:log.name}-INFO+.log
+        filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-INFO+.log.gz"
         append: true
         Filters:
           ThresholdFilter:
@@ -81,6 +85,9 @@ Configuration:
           charset: utf-8
           pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
         Policies:
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
           SizeBasedTriggeringPolicy:
             size: "128 MB"
         DefaultRolloverStrategy:
@@ -88,8 +95,8 @@ Configuration:
       # DEBUG及以上日志
       - name: debugFile
         ignoreExceptions: false
-        fileName: ${sys:log.directory}/${sys:log.name}-DEBUG+.log
-        filePattern: "${sys:log.directory}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-DEBUG+.log.gz"
+        fileName: ${sys:log.dir}/${sys:log.name}-DEBUG+.log
+        filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-DEBUG+.log.gz"
         append: true
         Filters:
           ThresholdFilter:
@@ -100,6 +107,9 @@ Configuration:
           charset: utf-8
           pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
         Policies:
+          TimeBasedTriggeringPolicy:
+            modulate: true
+            interval: 1
           SizeBasedTriggeringPolicy:
             size: "128 MB"
         DefaultRolloverStrategy:
@@ -107,7 +117,7 @@ Configuration:
 
   Loggers:
     Root:
-      level: ${sys:log.level}
+      level: all
       AppenderRef:
         - ref: console
         - ref: warnFile

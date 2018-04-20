@@ -1,3 +1,5 @@
 beginning-mind:
 
   one-cookie: 一个投入生产曲奇饼干
+
+logging.config: classpath:log4j2/log4j2-prod.yml

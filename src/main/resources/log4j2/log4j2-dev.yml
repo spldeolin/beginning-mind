@@ -1,0 +1,20 @@
+Configuration:
+  status: warn
+
+  Appenders:
+    Console:
+      name: console
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        level: info         # 修改为“debug”可查看DEBUG级日志
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        charset: utf-8
+        pattern: "%d{HH:mm:ss} %4p [%t][%file:%L] - %m%n"
+
+  Loggers:
+    Root:
+      level: all
+      AppenderRef:
+        - ref: console
