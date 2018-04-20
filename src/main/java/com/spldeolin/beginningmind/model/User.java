@@ -1,19 +1,22 @@
 package com.spldeolin.beginningmind.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import tk.mybatis.mapper.annotation.Version;
 
 /**
  * 用户
@@ -45,6 +48,7 @@ public class User implements Serializable {
     /**
      * 审计字段 更新时间
      */
+    @Version
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 

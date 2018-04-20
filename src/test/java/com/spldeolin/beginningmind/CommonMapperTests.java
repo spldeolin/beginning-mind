@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -10,6 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.spldeolin.beginningmind.dao.UserMapper;
 import com.spldeolin.beginningmind.model.User;
@@ -17,11 +19,21 @@ import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("dev")
 @Log4j2
 public class CommonMapperTests {
 
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * 乐观锁测试：通用Mapper的@Version注解
+     */
+    @Test
+    public void testVersion() {
+        User user = User.builder().updatedAt(LocalDateTime.of(2018, 4, 20, 17, 19, 30)).id(73L).name("111").build();
+        log.info(userMapper.updateByIdSelective(user) + "结果");
+    }
 
     @Test
     public void deleteById() {
