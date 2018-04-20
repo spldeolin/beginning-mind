@@ -30,9 +30,10 @@ public class ExtraConfiguration {
 
     @Bean
     public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern(Properties.TimeProperties.getDefaultDatePattern());
-        DateTimeFormatter time = DateTimeFormatter.ofPattern(Properties.TimeProperties.getDefaultTimePattern());
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(Properties.TimeProperties.getDefaultDatetimePattern());
+        DateTimeFormatter date = DateTimeFormatter.ofPattern(properties.getTime().getDefaultDatePattern());
+        DateTimeFormatter time = DateTimeFormatter.ofPattern(properties.getTime().getDefaultTimePattern());
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(
+                properties.getTime().getDefaultDatetimePattern());
         SimpleModule javaTimeModule = new JavaTimeModule();
 
         // 三大时间对象 序列器
@@ -45,8 +46,8 @@ public class ExtraConfiguration {
                 .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
 
         Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
-        if (!Optional.ofNullable(Properties.TimeProperties.getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
-            builder.simpleDateFormat(Properties.TimeProperties.getDefaultDatetimePattern());
+        if (!Optional.ofNullable(properties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
+            builder.simpleDateFormat(properties.getTime().getDefaultDatetimePattern());
         }
         return builder;
     }

@@ -1,145 +1,186 @@
 package com.spldeolin.beginningmind.component;
 
+import java.math.BigDecimal;
+import java.util.List;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 配置一览
  */
 @Component
-@ConfigurationProperties(Properties.PREFIX)
+@ConfigurationProperties(value = "beginning-mind")
+@Data
 public class Properties {
 
-    public static final String PREFIX = "beginning-mind";
+//    private static Properties properties;
 
     /**
      * “一个曲奇”
      */
-    @Getter
-    @Setter
-    public static String OneCookie;
+    private String oneCookie;
 
     /**
      * IP地址
      */
-    @Getter
-    @Setter
-    private static String ip;
+    private String ip;
 
     /**
      * 版本号
      */
-    @Getter
-    @Setter
-    private static Integer version;
+    private Integer version;
+
+    /**
+     * 价格
+     */
+    private BigDecimal price;
 
     /**
      * 使用一分钱支付
      */
-    @Getter
-    @Setter
-    private static Boolean useOneCentWhenPay;
+    private Boolean useOneCentWhenPay;
 
     /**
-     * 时间格式配置
+     * “时间”格式
      */
-    @Component
-    @ConfigurationProperties(Properties.PREFIX + ".time")
-    public static class TimeProperties {
+    private Time time;
 
-        @Getter
-        @Setter
-        private static String defaultDatePattern;
+    /**
+     * 中文文案
+     */
+    private TextZhHans textZhHans;
 
-        @Getter
-        @Setter
-        private static String defaultTimePattern;
+    /**
+     * 日语文案
+     */
+    private TextJaJp textJaJp;
 
-        @Getter
-        @Setter
-        private static String defaultDatetimePattern;
+    /**
+     * 微信
+     */
+    private Wechat wechat;
 
-        @Getter
-        @Setter
-        private static Boolean serializeJavaUtilDateToTimestamp;
+    /**
+     * 阿里大鱼
+     */
+    private Alidayu alidayu;
+
+    /**
+     * 各种类型的构造体
+     */
+    private Struct struct;
+
+    @Data
+    public static class Time {
+
+        private String defaultDatePattern;
+
+        private String defaultTimePattern;
+
+        private String defaultDatetimePattern;
+
+        private Boolean serializeJavaUtilDateToTimestamp;
 
     }
 
     /**
-     * 中文简体文案配置
+     * 中文简体文案
      */
-    @Component
-    @ConfigurationProperties(Properties.PREFIX + ".text-zh-hans")
-    public static class TextZhHansProperties {
+    @Data
+    public static class TextZhHans {
 
-        @Getter
-        @Setter
-        private static String hello;
+        private String hello;
 
-        @Getter
-        @Setter
-        private static String excellent;
+        private String excellent;
 
     }
 
     /**
-     * 日语文案配置
+     * 日语文案
      */
-    @Component
-    @ConfigurationProperties(Properties.PREFIX + ".text-ja-jp")
-    public static class TextJaJpProperties {
+    @Data
+    public static class TextJaJp {
 
-        @Getter
-        @Setter
-        private static String hello;
+        private String hello;
 
-        @Getter
-        @Setter
-        private static String excellent;
+        private String excellent;
 
     }
 
     /**
-     * 微信配置（第三方）
+     * 微信
      */
-    @Component
-    @ConfigurationProperties(Properties.PREFIX + ".wechat")
-    public static class WechatProperties {
+    @Data
+    public static class Wechat {
 
-        @Getter
-        @Setter
-        private static String appid;
+        private String appid;
 
-        @Getter
-        @Setter
-        private static String appsecret;
+        private String appsecret;
 
     }
 
     /**
-     * 阿里大鱼配置（第三方）
+     * 阿里大鱼
      */
-    @Component
-    @ConfigurationProperties(Properties.PREFIX + ".alidayu")
-    public static class AlidayuProperties {
+    @Data
+    public static class Alidayu {
 
-        @Getter
-        @Setter
-        private static String appid;
+        private String appid;
 
-        @Getter
-        @Setter
-        private static String appsecret;
+        private String appsecret;
 
-        @Getter
-        @Setter
-        private static String signName;
+        private String signName;
 
-        @Getter
-        @Setter
-        private static String templateCode;
+        private String templateCode;
+
+    }
+
+    /**
+     * 数组/Map性质的构造
+     */
+    @Data
+    public static class Struct {
+
+        /**
+         * 简单集合型构造
+         */
+        private Array array;
+
+        /**
+         * Map集合型勾结
+         */
+        private KeyValueArray keyValueArray;
+
+        @Data
+        public static class Array {
+
+            private List<String> strings;
+
+            private List<Integer> integers;
+
+        }
+
+        /**
+         * Map列表型构造
+         */
+        @Data
+        public static class KeyValueArray {
+
+            private List<CaloricFood> highCaloricFood;
+
+            private List<CaloricFood> lowCaloricFood;
+
+            @Data
+            public static class CaloricFood {
+
+                private String name;
+
+                private BigDecimal calorie;
+
+            }
+
+        }
 
     }
 

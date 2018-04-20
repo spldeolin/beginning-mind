@@ -9,8 +9,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spldeolin.beginningmind.component.ApplicationContext;
 import com.spldeolin.beginningmind.component.Properties;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.util.JsonUtil;
@@ -18,26 +20,20 @@ import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
+@ActiveProfiles("prod")
 @Log4j2
 public class Tests {
 
     @Autowired
     private MongoTemplate mongoTemplate;
 
+    @Autowired
+    private Properties properties;
+
     @Test
     public void contextLoads() {
-        log.info(Properties.getIp());
-        log.info(Properties.getOneCookie());
-        log.info(Properties.getUseOneCentWhenPay());
-        log.info(Properties.getVersion());
-        log.info(Properties.AlidayuProperties.getAppid());
-        log.info(Properties.AlidayuProperties.getAppsecret());
-        log.info(Properties.AlidayuProperties.getSignName());
-        log.info(Properties.AlidayuProperties.getTemplateCode());
-        log.info(Properties.TextJaJpProperties.getExcellent());
-        log.info(Properties.TextJaJpProperties.getHello());
-        log.info(Properties.TextZhHansProperties.getExcellent());
-
+        log.info(properties);
+        log.info(ApplicationContext.getBean(Properties.class));
     }
 
     @Test

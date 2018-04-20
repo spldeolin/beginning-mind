@@ -68,6 +68,7 @@ beginning-mind:
   # 未分类
   ip: sssad
   version: 233
+  price: 9.15
   use-one-cent-when-pay: true
 
   # 中文简体文案
@@ -80,14 +81,37 @@ beginning-mind:
     hello: こんにちは
     excellent: 素晴らしい
 
-  # 微信（第三方）
+  # 微信
   wechat:
     appid: asdfas22
     appsecret: asdfa232
 
-  # 阿里大鱼（第三方）
+  # 阿里大鱼
   alidayu:
     appid: asdasd
     appsecret: asdfasdf
     sign-name: dssd
     template-code: sdfsd
+
+  struct:
+    array:
+      strings:
+      - a
+      - b
+      - c
+      integers:
+      - 0
+      - 10
+      - 999
+
+    key-value-array:
+      high-caloric-food:
+      - name: cola
+        calorie: 100000000
+      - name: chicken
+        calorie: 99999
+      low-caloric-food:
+      - name: cucumber
+        calorie: 0.1
+      - name: tomato
+        calorie: 20
