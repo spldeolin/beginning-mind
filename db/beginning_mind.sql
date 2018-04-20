@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50719
 File Encoding         : 65001
 
-Date: 2018-04-15 21:01:44
+Date: 2018-04-21 07:05:25
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -36,8 +36,8 @@ INSERT INTO `tiny` VALUES ('1', '没有任何审计字段');
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'wocao',
-  `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
   `name` varchar(64) DEFAULT NULL COMMENT '名称',
   `salt` char(9) DEFAULT NULL COMMENT '随机盐',
@@ -52,7 +52,7 @@ CREATE TABLE `user` (
   `serial_number` bigint(20) DEFAULT NULL COMMENT '编号',
   `percent` double(5,2) DEFAULT NULL COMMENT '百分率',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC;
 
 -- ----------------------------
 -- Records of user
@@ -125,14 +125,15 @@ INSERT INTO `user` VALUES ('68', '2018-04-15 18:27:08', '2018-04-15 20:19:02', '
 INSERT INTO `user` VALUES ('70', '2018-04-15 18:33:41', '2018-04-15 20:19:02', '0', '汉字', null, null, null, null, null, '18:33:41', null, null, null, null, null);
 INSERT INTO `user` VALUES ('71', '2018-04-15 19:49:06', '2018-04-15 20:19:02', '0', '汉字0', null, null, null, null, '2018-04-15', null, null, null, null, null, null);
 INSERT INTO `user` VALUES ('72', '2018-04-15 19:49:06', '2018-04-15 20:19:02', '0', '汉字1', null, null, null, null, '2018-04-16', null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('73', '2018-04-15 19:49:06', '2018-04-15 20:19:02', '0', '汉字2', null, null, null, null, '2018-04-17', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('73', '2018-04-15 19:49:06', '2018-04-15 19:49:06', '0', '汉字2', null, null, null, null, '2018-04-17', null, null, null, null, null, null);
 INSERT INTO `user` VALUES ('74', '2018-04-15 19:49:06', '2018-04-15 20:31:10', '1', '汉字，还能改吗', null, null, null, null, '2018-04-18', null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('76', '2018-04-15 20:29:17', null, '0', '汉字', null, null, null, null, null, '20:29:17', null, null, null, null, null);
-INSERT INTO `user` VALUES ('77', '2018-04-15 20:31:01', null, '0', '汉字0', null, null, null, null, '2018-04-15', null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('78', '2018-04-15 20:31:01', null, '0', '汉字1', null, null, null, null, '2018-04-16', null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('79', '2018-04-15 20:31:01', null, '0', '汉字2', null, null, null, null, '2018-04-17', null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('80', '2018-04-15 20:31:01', null, '0', '汉字3', null, null, null, null, '2018-04-18', null, null, null, null, null, null);
-INSERT INTO `user` VALUES ('81', '2018-04-15 20:31:01', null, '0', '汉字4', null, null, null, null, '2018-04-19', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('76', '2018-04-15 20:29:17', '2018-04-15 20:29:17', '0', '汉字', null, null, null, null, null, '20:29:17', null, null, null, null, null);
+INSERT INTO `user` VALUES ('77', '2018-04-15 20:31:01', '2018-04-15 20:31:01', '0', '汉字0', null, null, null, null, '2018-04-15', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('78', '2018-04-15 20:31:01', '2018-04-15 20:31:01', '0', '汉字1', null, null, null, null, '2018-04-16', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('79', '2018-04-15 20:31:01', '2018-04-15 20:31:01', '0', '汉字2', null, null, null, null, '2018-04-17', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('80', '2018-04-15 20:31:01', '2018-04-15 20:31:01', '0', '汉字3', null, null, null, null, '2018-04-18', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('81', '2018-04-15 20:31:01', '2018-04-15 20:31:01', '0', '汉字4', null, null, null, null, '2018-04-19', null, null, null, null, null, null);
+INSERT INTO `user` VALUES ('82', '2018-04-21 07:02:49', '2018-04-21 07:02:49', '0', '汉字', null, null, null, null, null, '07:02:49', null, null, null, null, null);
 
 -- ----------------------------
 -- Table structure for __template
@@ -141,7 +142,7 @@ DROP TABLE IF EXISTS `__template`;
 CREATE TABLE `__template` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
-  `updated_at` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
   `name` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)

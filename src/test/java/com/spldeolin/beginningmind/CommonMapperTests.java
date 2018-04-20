@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
@@ -31,7 +30,7 @@ public class CommonMapperTests {
      */
     @Test
     public void testVersion() {
-        User user = User.builder().updatedAt(LocalDateTime.of(2018, 4, 20, 17, 19, 30)).id(73L).name("111").build();
+        User user = User.builder().updatedAt(null).id(73L).name("111").build();
         log.info(userMapper.updateByIdSelective(user) + "结果");
     }
 
