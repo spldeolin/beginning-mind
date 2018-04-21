@@ -38,7 +38,7 @@ public class CommonMapperTests {
 
     @Test
     public void deleteById() {
-        Long id = 1L;
+        Long id = 83L;
         userMapper.deleteById(id);
     }
 
