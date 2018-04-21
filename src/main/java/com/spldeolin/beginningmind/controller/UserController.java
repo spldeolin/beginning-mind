@@ -4,18 +4,25 @@ import java.util.List;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import com.spldeolin.cadeau.library.annotation.*;
-import com.spldeolin.cadeau.library.dto.RequestResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.input.UserInput;
 import com.spldeolin.beginningmind.service.UserService;
-import com.spldeolin.cadeau.library.valid.ValidableList;
+import com.spldeolin.cadeau.library.annotation.PageNo;
+import com.spldeolin.cadeau.library.annotation.PageSize;
+import com.spldeolin.cadeau.library.dto.RequestResult;
 import com.spldeolin.cadeau.library.exception.ServiceException;
 
 /**
  * “用户”管理
  *
- * @author Deolin 2018/4/15
+ * @author Deolin 2018/4/21
  * @generator Cadeau Support
  */
 @RestController

@@ -16,12 +16,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
-import tk.mybatis.mapper.annotation.Version;
 
 /**
  * 用户
  *
- * @author Deolin 2018/4/15
+ * @author Deolin 2018/4/21
  * @generator Cadeau Support
  */
 @Data
@@ -31,6 +30,7 @@ import tk.mybatis.mapper.annotation.Version;
 @Accessors(chain = true)
 @Table(name = "user")
 public class User implements Serializable {
+
     /**
      * ID
      */
@@ -39,7 +39,7 @@ public class User implements Serializable {
     private Long id;
 
     /**
-     * wocao
+     * 审计字段 插入时间
      */
     @Column(name = "inserted_at")
     @JsonIgnore
@@ -48,7 +48,7 @@ public class User implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @Version
+    @tk.mybatis.mapper.annotation.Version
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -56,6 +56,7 @@ public class User implements Serializable {
      * 审计字段 是否被删除
      */
     @Column(name = "is_deleted")
+    @JsonIgnore
     private Boolean isDeleted;
 
     /**

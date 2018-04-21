@@ -58,8 +58,6 @@ public class Tests {
     @Test
     public void testJsonUtil() {
         ObjectMapper om = new ObjectMapper();
-        JsonUtil.commonConfig(om);
-        JsonUtil.timeConfig(om);
         User user = User.builder().name("aaa_bbb").updatedAt(LocalDateTime.MAX).build();
         log.info(JsonUtil.toJson(user));
         log.info(JsonUtil.toJson(user, om));

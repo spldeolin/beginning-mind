@@ -17,7 +17,7 @@ import tk.mybatis.mapper.entity.Condition;
 /**
  * “用户”业务实现
  *
- * @author Deolin 2018/4/15
+ * @author Deolin 2018/4/21
  * @generator Cadeau Support
  */
 @Service
@@ -40,7 +40,9 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
             throw new ServiceException("用户不存在或是已被删除");
         }
         /* 业务校验 */
-        super.update(user);
+        if (!super.update(user)) {
+            throw new ServiceException("用户数据过时");
+        }
     }
 
     @Override
@@ -54,7 +56,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public String deleteEX(List<Long> ids) {
-        List<User> exist = get(ids);
+        List<User> exist = super.get(ids);
         if (exist.size() == 0) {
             throw new ServiceException("选中的用户全部不存在或是已被删除");
         }
