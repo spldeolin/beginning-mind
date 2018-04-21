@@ -1,17 +1,19 @@
 package com.spldeolin.beginningmind.controller;
 
-import java.time.LocalDateTime;
-import java.util.Date;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.cadeau.library.dto.RequestResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.servlet.http.HttpSession;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @RestController
-@RequestMapping("test")
+@RequestMapping("ses")
 public class TestController {
 
     @GetMapping("time")
@@ -28,6 +30,17 @@ public class TestController {
 
         private Date date;
 
+    }
+
+    @GetMapping("set")
+    public String setSes(HttpSession ses) {
+        ses.setAttribute("one-cookie", "会话中的曲奇饼干");
+        return "SUCCESS";
+    }
+
+    @GetMapping("get")
+    public String getSes(HttpSession ses) {
+        return (String) ses.getAttribute("one-cookie");
     }
 
 }

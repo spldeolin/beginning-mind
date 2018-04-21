@@ -21,31 +21,8 @@
         <java.version>1.8</java.version>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>default</id>
-            <properties>
-                <mvnProfile/>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <mvnProfile>dev</mvnProfile>
-            </properties>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <mvnProfile>prod</mvnProfile>
-            </properties>
-        </profile>
-    </profiles>
-
     <dependencies>
+        <!--springboot-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -56,42 +33,45 @@
                 </exclusion>
             </exclusions>
         </dependency>
+        <!--springboot test-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <!--cadeau library-->
         <dependency>
             <groupId>com.spldeolin.cadeau</groupId>
             <artifactId>library-spring-boot-starter</artifactId>
-            <version>0.0.52</version>
+            <version>0.0.53</version>
         </dependency>
+        <!--swagger-->
         <dependency>
             <groupId>com.spring4all</groupId>
             <artifactId>swagger-spring-boot-starter</artifactId>
             <version>1.6.0.RELEASE</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-data-redis</artifactId>
-        </dependency>
 
+        <!--commons lang3-->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.7</version>
         </dependency>
+        <!--guava-->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>24.1-jre</version>
         </dependency>
+        <!--okhttp-->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
             <version>3.10.0</version>
         </dependency>
 
+        <!--lombok-->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
