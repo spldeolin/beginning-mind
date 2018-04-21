@@ -8,12 +8,6 @@ spring:
 
   profiles.active: ${profile}
 
-  jackson:
-    deserialization:
-      fail-on-unknown-properties: false
-    property-naming-strategy: SNAKE_CASE
-    time-zone: GMT+8
-
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver

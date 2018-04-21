@@ -1,22 +1,9 @@
 package com.spldeolin.beginningmind.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
 import org.apache.commons.lang3.math.NumberUtils;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.spldeolin.beginningmind.component.ApplicationContext;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -33,34 +20,17 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class JsonUtil {
 
-    private static ObjectMapper defaultObjectMapper = new ObjectMapper();
+    private static ObjectMapper defaultObjectMapper;
 
     static {
-        commonConfig(defaultObjectMapper);
-        timeConfig(defaultObjectMapper);
-        defaultObjectMapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
+        initDefaultObjectMapper();
     }
 
-    public static void commonConfig(ObjectMapper om) {
-        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        om.setTimeZone(TimeZone.getTimeZone("GMT+8:00"));
-    }
-
-    public static void timeConfig(ObjectMapper om) {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        JavaTimeModule javaTimeModule = new JavaTimeModule();
-        // LocalDate Json化和反Json化
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(date));
-        // LocalTime  Json化和反Json化
-        javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(time));
-        javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(time));
-        // LocalDateTime Json化和反Json化
-        javaTimeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime));
-        javaTimeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
-        om.registerModule(javaTimeModule);
+    private static void initDefaultObjectMapper() {
+        defaultObjectMapper = ApplicationContext.getBean(ObjectMapper.class);
+        if (defaultObjectMapper == null) {
+            defaultObjectMapper = new ObjectMapper();
+        }
     }
 
     /**
