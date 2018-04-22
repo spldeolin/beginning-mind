@@ -23,6 +23,7 @@ spring:
     host: localhost
     port: 6379
     password: root
+    timeout: 5
     pool:
       max-active: 8
       max-wait: -1
