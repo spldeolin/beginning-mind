@@ -61,8 +61,7 @@ public class ImageCompressUtil {
     public static void scaleImageWithParams(String sourceImagePath, String destinationPath, int width, int height,
             boolean auto, String format) {
         File file = new File(sourceImagePath);
-        BufferedImage bufferedImage;
-        bufferedImage = ImageIO.read(file);
+        BufferedImage bufferedImage = ImageIO.read(file);
         if (auto) {
             ArrayList<Integer> paramsArrayList = getAutoWidthAndHeight(bufferedImage, width, height);
             width = paramsArrayList.get(0);
