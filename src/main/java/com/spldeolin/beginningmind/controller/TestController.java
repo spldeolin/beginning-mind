@@ -1,19 +1,18 @@
 package com.spldeolin.beginningmind.controller;
 
+import java.time.LocalDateTime;
+import java.util.Date;
+import javax.servlet.http.HttpSession;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.cadeau.library.dto.RequestResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import javax.servlet.http.HttpSession;
-import java.time.LocalDateTime;
-import java.util.Date;
 
 @RestController
-@RequestMapping("ses")
+@RequestMapping("test")
 public class TestController {
 
     @GetMapping("time")

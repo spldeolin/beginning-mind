@@ -43,7 +43,7 @@
         <dependency>
             <groupId>com.spldeolin.cadeau</groupId>
             <artifactId>library-spring-boot-starter</artifactId>
-            <version>0.0.53</version>
+            <version>0.0.52</version>
         </dependency>
         <!--swagger-->
         <dependency>

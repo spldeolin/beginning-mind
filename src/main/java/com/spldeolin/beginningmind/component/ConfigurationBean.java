@@ -1,17 +1,12 @@
 package com.spldeolin.beginningmind.component;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.spldeolin.beginningmind.component.shiro.CredentialsMatcher;
-import com.spldeolin.beginningmind.component.shiro.Realm;
-import com.spring4all.swagger.EnableSwagger2Doc;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -26,19 +21,26 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.spldeolin.beginningmind.component.shiro.CredentialsMatcher;
+import com.spldeolin.beginningmind.component.shiro.Realm;
+import com.spring4all.swagger.EnableSwagger2Doc;
 
 @Configuration
 @EnableSwagger2Doc
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1801) // Session保存时间、登录超时时间均在这里设置（单位：秒）
+// Session保存时间、登录超时时间均在这里设置（单位：秒）
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = ConfigurationBean.SESSION_EXPIRE_SECONDS)
 public class ConfigurationBean {
+
+    public static final int SESSION_EXPIRE_SECONDS = 1801;
 
     @Autowired
     private Properties properties;
@@ -83,7 +85,7 @@ public class ConfigurationBean {
         // 不再重定向到未授权页面，而是返回前端code403
         shiroFilterFactoryBean.setUnauthorizedUrl("/unauth");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        filterChainDefinitionMap.put("/shiro/need_sign_in", "authc");
+        filterChainDefinitionMap.put("/shiro/signer", "authc");
         filterChainDefinitionMap.put("/shiro/sign_out", "authc");
         filterChainDefinitionMap.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
