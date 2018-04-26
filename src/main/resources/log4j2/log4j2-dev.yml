@@ -17,4 +17,4 @@ Configuration:
     Root:
       level: all
       AppenderRef:
-        - ref: console
+      - ref: console
