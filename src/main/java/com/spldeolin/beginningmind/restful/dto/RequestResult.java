@@ -1,6 +1,8 @@
 package com.spldeolin.beginningmind.restful.dto;
 
+import org.apache.commons.lang3.StringUtils;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.spldeolin.beginningmind.constant.ResultCode;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -37,14 +39,17 @@ public class RequestResult {
 
     public static RequestResult success(Object data) {
         RequestResult instance = new RequestResult();
-        instance.setCode(200);
+        instance.setCode(ResultCode.OK.getCode());
         instance.setData(data);
         return instance;
     }
 
-    public static RequestResult failture(Integer code, String message) {
+    public static RequestResult failture(ResultCode code, String message) {
         RequestResult instance = new RequestResult();
-        instance.setCode(code);
+        instance.setCode(code.getCode());
+        if (StringUtils.isBlank(message)) {
+            message = code.getDefaultMessage();
+        }
         instance.setMessage(message);
         return instance;
     }

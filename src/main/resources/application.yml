@@ -37,7 +37,7 @@ spring:
 # tk.mapper
 mapper:
   mappers:
-      - com.spldeolin.cadeau.library.inherited.CommonMapper
+  - com.spldeolin.beginningmind.api.CommonMapper
   not-empty: false
   identity: MYSQL
 

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.restful.aop;
+package com.spldeolin.beginningmind.aspect;
 
 import java.lang.reflect.Method;
 import org.aspectj.lang.JoinPoint;

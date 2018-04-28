@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.restful.aop;
+package com.spldeolin.beginningmind.aspect;
 
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;

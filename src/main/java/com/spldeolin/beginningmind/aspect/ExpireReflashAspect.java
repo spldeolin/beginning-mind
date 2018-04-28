@@ -1,8 +1,9 @@
-package com.spldeolin.beginningmind.aop;
+package com.spldeolin.beginningmind.aspect;
 
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.UnavailableSecurityManagerException;
 import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -39,7 +40,13 @@ public class ExpireReflashAspect {
     }
 
     private void reflashSigning() {
-        Subject subject = SecurityUtils.getSubject();
+        Subject subject;
+        try {
+            subject = SecurityUtils.getSubject();
+        } catch(UnavailableSecurityManagerException e) {
+            // 请求404时，会捕获异常，直接返回
+            return;
+        }
         // 如果当前会话有人登录着，则刷新signer缓存
         if (subject.isAuthenticated() || subject.isRemembered()) {
             String username = ((CurrentSignUser) SecurityUtils.getSubject().getPrincipal()).getUsername();

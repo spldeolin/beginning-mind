@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.restful.aop;
+package com.spldeolin.beginningmind.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
