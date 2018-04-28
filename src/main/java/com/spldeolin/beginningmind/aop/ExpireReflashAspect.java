@@ -10,9 +10,9 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.component.ConfigurationBean;
+import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.dto.CurrentSignUser;
-import com.spldeolin.cadeau.library.util.RequestContextUtil;
+import com.spldeolin.beginningmind.util.RequestContextUtil;
 import lombok.extern.log4j.Log4j2;
 
 @Component
@@ -35,7 +35,7 @@ public class ExpireReflashAspect {
     private void reflashSession() {
         // 无条件刷新一切会话
         HttpSession session = RequestContextUtil.session();
-        session.setMaxInactiveInterval(ConfigurationBean.SESSION_EXPIRE_SECONDS);
+        session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
     private void reflashSigning() {
@@ -43,7 +43,7 @@ public class ExpireReflashAspect {
         // 如果当前会话有人登录着，则刷新signer缓存
         if (subject.isAuthenticated() || subject.isRemembered()) {
             String username = ((CurrentSignUser) SecurityUtils.getSubject().getPrincipal()).getUsername();
-            redisTemplate.expire("signer:" + username, ConfigurationBean.SESSION_EXPIRE_SECONDS, TimeUnit.SECONDS);
+            redisTemplate.expire("signer:" + username, SessionConfig.SESSION_EXPIRE_SECONDS, TimeUnit.SECONDS);
         }
     }
 

@@ -13,11 +13,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.input.UserInput;
+import com.spldeolin.beginningmind.restful.annotation.PageNo;
+import com.spldeolin.beginningmind.restful.annotation.PageSize;
+import com.spldeolin.beginningmind.restful.dto.RequestResult;
+import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.service.UserService;
-import com.spldeolin.cadeau.library.annotation.PageNo;
-import com.spldeolin.cadeau.library.annotation.PageSize;
-import com.spldeolin.cadeau.library.dto.RequestResult;
-import com.spldeolin.cadeau.library.exception.ServiceException;
 
 /**
  * “用户”管理

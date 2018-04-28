@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.component;
 import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
-import com.spldeolin.cadeau.library.util.RequestContextUtil;
+import com.spldeolin.beginningmind.util.RequestContextUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**

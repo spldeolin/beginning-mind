@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.component;
+package com.spldeolin.beginningmind.util;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContextAware;

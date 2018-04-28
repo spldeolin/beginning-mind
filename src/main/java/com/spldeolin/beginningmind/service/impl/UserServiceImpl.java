@@ -5,12 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.dao.UserMapper;
+import com.spldeolin.beginningmind.api.dto.Page;
+import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.api.CommonServiceImpl;
+import com.spldeolin.beginningmind.util.FieldExtractUtil;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.service.UserService;
-import com.spldeolin.cadeau.library.dto.Page;
-import com.spldeolin.cadeau.library.exception.ServiceException;
-import com.spldeolin.cadeau.library.inherited.CommonServiceImpl;
-import com.spldeolin.cadeau.library.util.FieldExtractUtil;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 

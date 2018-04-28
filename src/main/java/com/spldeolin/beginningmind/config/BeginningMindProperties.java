@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.component;
+package com.spldeolin.beginningmind.config;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -12,14 +12,42 @@ import lombok.Data;
 @Component
 @ConfigurationProperties(value = "beginning-mind")
 @Data
-public class Properties {
-
-//    private static Properties properties;
+public class BeginningMindProperties {
 
     /**
      * “一个曲奇”
      */
     private String oneCookie;
+
+    /**
+     * HTTP请求 页码的URL参数名
+     */
+    private String pageNoParamName;
+
+    /**
+     * HTTP请求 分页尺寸的URL参数名
+     */
+    private String pageSizeParamName;
+
+    /**
+     * 数据库 数据插入时间的字段名
+     */
+    private String insertTimeColumnName;
+
+    /**
+     * 数据库 数据更新时间的字段名
+     */
+    private String updateTimeColumnName;
+
+    /**
+     * 数据库 数据删除标识的字段名
+     */
+    private String deleteFlagColumnName;
+
+    /**
+     * 数据库 数据删除标识满足什么条件才算数据被删除
+     */
+    private String HowDeleteIsDelete;
 
     /**
      * IP地址

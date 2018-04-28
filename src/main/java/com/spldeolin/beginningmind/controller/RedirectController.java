@@ -1,8 +1,8 @@
 package com.spldeolin.beginningmind.controller;
 
-import com.spldeolin.cadeau.library.dto.RequestResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.spldeolin.beginningmind.restful.dto.RequestResult;
 
 @RestController
 public class RedirectController {

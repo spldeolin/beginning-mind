@@ -9,8 +9,8 @@ import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.spldeolin.beginningmind.valid.annotation.TextOption;
 import com.spldeolin.beginningmind.model.User;
-import com.spldeolin.cadeau.library.valid.annotation.TextOption;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

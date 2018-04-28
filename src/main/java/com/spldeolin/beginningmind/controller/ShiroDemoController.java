@@ -19,13 +19,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.component.ConfigurationBean;
+import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.dto.CurrentSignUser;
 import com.spldeolin.beginningmind.input.SignInInput;
-import com.spldeolin.cadeau.library.cache.RedisCache;
-import com.spldeolin.cadeau.library.dto.RequestResult;
-import com.spldeolin.cadeau.library.exception.ServiceException;
-import com.spldeolin.cadeau.library.util.RequestContextUtil;
+import com.spldeolin.beginningmind.cache.RedisCache;
+import com.spldeolin.beginningmind.restful.dto.RequestResult;
+import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.util.RequestContextUtil;
 
 @RestController
 @RequestMapping("shiro")
@@ -50,7 +50,7 @@ public class ShiroDemoController {
                 subject.login(token);
                 // 添加signer缓存
                 redisCache.setCacheWithExpireTime("signer:" + input.getUsername(), RequestContextUtil.session().getId(),
-                        ConfigurationBean.SESSION_EXPIRE_SECONDS);
+                        SessionConfig.SESSION_EXPIRE_SECONDS);
             } catch (AuthenticationException e) {
                 throw new ServiceException(e.getMessage());
             }

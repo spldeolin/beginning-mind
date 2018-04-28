@@ -1,9 +1,9 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.List;
+import com.spldeolin.beginningmind.api.dto.Page;
+import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.model.User;
-import com.spldeolin.cadeau.library.dto.Page;
-import com.spldeolin.cadeau.library.inherited.CommonService;
 
 /**
  * “用户”业务

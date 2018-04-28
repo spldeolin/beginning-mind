@@ -51,6 +51,10 @@ beginning-mind:
 
   one-cookie: 一个曲奇饼干
 
+  page-no-param-name: page_no
+
+  page-size-param-name: page_size
+
   time:
     default-date-pattern: yyyy-MM-dd
     default-time-pattern: HH:mm:ss

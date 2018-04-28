@@ -12,8 +12,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.component.ApplicationContext;
-import com.spldeolin.beginningmind.component.Properties;
+import com.spldeolin.beginningmind.util.ApplicationContext;
+import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.model.User;
 import com.spldeolin.beginningmind.util.JsonUtil;
 import lombok.extern.log4j.Log4j2;
@@ -28,12 +28,12 @@ public class Tests {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private Properties properties;
+    private BeginningMindProperties beginningMindProperties;
 
     @Test
     public void contextLoads() {
-        log.info(properties);
-        log.info(ApplicationContext.getBean(Properties.class));
+        log.info(beginningMindProperties);
+        log.info(ApplicationContext.getBean(BeginningMindProperties.class));
     }
 
     @Test

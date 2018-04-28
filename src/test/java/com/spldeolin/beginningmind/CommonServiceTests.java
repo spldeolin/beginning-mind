@@ -10,8 +10,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.google.common.collect.Lists;
+import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.model.User;
-import com.spldeolin.cadeau.library.inherited.CommonService;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 

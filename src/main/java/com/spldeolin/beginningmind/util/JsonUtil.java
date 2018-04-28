@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.util;
 import org.apache.commons.lang3.math.NumberUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.component.ApplicationContext;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
