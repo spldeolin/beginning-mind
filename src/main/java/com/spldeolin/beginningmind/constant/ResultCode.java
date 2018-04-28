@@ -1,5 +1,19 @@
 package com.spldeolin.beginningmind.constant;
 
+/**
+ * 控制器通用返回值的结果码
+ * <pre>
+ *   200 请求成功，返回预想结果
+ *   400 请求方法交互失败
+ *   401 没有认证
+ *   403 登录者没有权限
+ *   404 HTTP404
+ *   500 内部BUG
+ *  1001 存在业务错误，无法返回预想结果（商品库存不足等）
+ *  </pre>
+ *
+ * @author Deolin
+ */
 public enum ResultCode {
 
     OK(200, null),
