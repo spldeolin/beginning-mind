@@ -13,17 +13,17 @@ public class RedirectController implements ErrorController {
 
     @GetMapping("unauthc")
     public RequestResult unauthc() {
-        return RequestResult.failture(ResultCode.UNAUTHORIZED, "未登录或登录超时");
+        return RequestResult.failture(ResultCode.UNAUTHORIZED);
     }
 
     @GetMapping("unauth")
     public RequestResult unauth() {
-        return RequestResult.failture(ResultCode.FORBIDDEN, "没有权限");
+        return RequestResult.failture(ResultCode.FORBIDDEN);
     }
 
     @GetMapping(ERROR_MAPPING)
     public RequestResult notFound() {
-        return RequestResult.failture(ResultCode.NOT_FOUND, "资源不存在或是已被删除");
+        return RequestResult.failture(ResultCode.NOT_FOUND);
     }
 
     @Override
