@@ -23,7 +23,7 @@ import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.dto.CurrentSignUser;
 import com.spldeolin.beginningmind.input.SignInInput;
 import com.spldeolin.beginningmind.cache.RedisCache;
-import com.spldeolin.beginningmind.restful.dto.RequestResult;
+import com.spldeolin.beginningmind.dto.RequestResult;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.restful.dto;
+package com.spldeolin.beginningmind.aspect.dto;
 
 import java.lang.reflect.Method;
 import lombok.AllArgsConstructor;

@@ -147,7 +147,7 @@ Configuration:
       - ref: infoFile
       - ref: debugFile
     Logger:
-    - name: com.spldeolin.beginningmind.component.ServletRequestProcessingTimeLogListener
+    - name: com.spldeolin.beginningmind.aspect.ControllerListener
       additivity: true
       level: all
       AppenderRef:

@@ -1,18 +1,19 @@
-package com.spldeolin.beginningmind.component;
+package com.spldeolin.beginningmind.aspect;
 
 import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.support.ServletRequestHandledEvent;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * HTTP请求事件监听：打印每个请求执行时间的日志（毫秒）
+ * 控制层监听器：打印每个请求执行时间的日志（毫秒）
  *
  * @author Deolin
  */
-//@Component
+@Component
 @Log4j2
-public class ServletRequestProcessingTimeLogListener implements ApplicationListener<ServletRequestHandledEvent> {
+public class ControllerListener implements ApplicationListener<ServletRequestHandledEvent> {
 
     private static final String SEP = "\t";
 

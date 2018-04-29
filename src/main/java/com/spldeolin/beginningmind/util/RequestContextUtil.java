@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import com.spldeolin.beginningmind.restful.dto.ControllerInfo;
+import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

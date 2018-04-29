@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.restful.dto;
+package com.spldeolin.beginningmind.aspect.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -8,8 +8,6 @@
 
 ### 依赖
 
-[cadeau-library](https://github.com/spldeolin/cadeau-libray) 一个spring-boot-starter
-
 [cadeau-support](https://github.com/spldeolin/cadeau-support) 代码生成器
 
 ### 项目前身
@@ -21,5 +19,7 @@
 [best-practice](https://github.com/spldeolin/best-practice) Spring的集成各种第三方框架
 
 [tiny-springmvc](https://github.com/spldeolin/tiny-springmvc) 极小的SpringMVC项目
+
+[cadeau-library](https://github.com/spldeolin/cadeau-libray) 一个spring-boot-starter
 
 这些项目将不再更新。

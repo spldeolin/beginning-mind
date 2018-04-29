@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.restful.annotation;
+package com.spldeolin.beginningmind.aspect.annotation;
 
 import static java.lang.annotation.ElementType.PARAMETER;
 import static java.lang.annotation.RetentionPolicy.RUNTIME;

@@ -1,7 +1,7 @@
-package com.spldeolin.beginningmind.restful.exception;
+package com.spldeolin.beginningmind.aspect.exception;
 
 import java.util.List;
-import com.spldeolin.beginningmind.restful.dto.Invalid;
+import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

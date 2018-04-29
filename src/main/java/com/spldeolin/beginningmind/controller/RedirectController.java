@@ -4,7 +4,7 @@ import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.restful.dto.RequestResult;
+import com.spldeolin.beginningmind.dto.RequestResult;
 
 @RestController
 public class RedirectController implements ErrorController {
