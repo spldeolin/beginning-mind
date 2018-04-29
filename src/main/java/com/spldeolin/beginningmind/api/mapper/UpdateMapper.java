@@ -5,7 +5,7 @@ import com.spldeolin.beginningmind.api.mapper.provider.UpdateMapperProvider;
 
 public interface UpdateMapper<M> {
 
-    @UpdateProvider(type = UpdateMapperProvider.class, method ="dynamicSQL")
+    @UpdateProvider(type = UpdateMapperProvider.class, method = "dynamicSQL")
     int updateByIdSelective(M model);
 
 }

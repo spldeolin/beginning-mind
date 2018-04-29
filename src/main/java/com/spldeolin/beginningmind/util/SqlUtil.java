@@ -1,9 +1,9 @@
 package com.spldeolin.beginningmind.util;
 
 import java.util.Set;
+import javax.persistence.Version;
 import org.apache.commons.lang3.StringUtils;
 import lombok.experimental.UtilityClass;
-import tk.mybatis.mapper.annotation.Version;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.IDynamicTableName;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
@@ -360,7 +360,8 @@ public class SqlUtil {
             if (!column.isId() && column.isUpdatable()) {
                 if (column == versionColumn) {
                     Version version = versionColumn.getEntityField().getAnnotation(Version.class);
-                    String versionClass = version.nextVersion().getCanonicalName();
+//                    String versionClass = version.nextVersion().getCanonicalName();
+                    String versionClass = null;
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())
                             .append(" = ${@tk.mybatis.mapper.version.VersionUtil@nextVersion(\"")

@@ -8,7 +8,7 @@ import com.spldeolin.beginningmind.api.mapper.UpdateMapper;
 
 /**
  * 通用Mapper，所有Mapper接口都应该继承这个接口。
- * <p>
+ *
  * <pre>
  * BaseMapper接口：使mapper包含完整的CRUD方法
  * ConditionMapper接口：使mapper支持Condition类型参数

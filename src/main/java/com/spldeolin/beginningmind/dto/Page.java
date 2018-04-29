@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.api.dto;
+package com.spldeolin.beginningmind.dto;
 
 import java.io.Serializable;
 import java.util.List;
@@ -7,8 +7,6 @@ import lombok.Data;
 
 /**
  * 分页包装对象
- *
- * @param <T>
  */
 @Data
 public class Page<T> implements Serializable {

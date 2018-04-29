@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,7 +10,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.api.CommonService;
-import com.spldeolin.beginningmind.model.User;
+import com.spldeolin.beginningmind.model.Goods;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -22,14 +21,14 @@ import tk.mybatis.mapper.entity.Condition;
 public class CommonServiceTests {
 
     @Autowired
-    private CommonService<User> service;
+    private CommonService<Goods> service;
 
     /**
      * 创建一个资源
      */
     @Test
     public void create() {
-        service.create(User.builder().name("业务层操作").build());
+        service.create(Goods.builder().name("业务层操作").build());
     }
 
     /**
@@ -37,9 +36,9 @@ public class CommonServiceTests {
      */
     @Test
     public void createB() {
-        List<User> users = Lists.newArrayList();
+        List<Goods> users = Lists.newArrayList();
         for (int i = 0; i < 5; i++) {
-            users.add(User.builder().name("业务层操作" + i).hms(LocalTime.now()).build());
+            users.add(Goods.builder().name("业务层操作" + i).build());
         }
         service.create(users);
     }
@@ -74,8 +73,8 @@ public class CommonServiceTests {
      */
     @Test
     public void update() {
-        User user = User.builder().updatedAt(LocalDateTime.of(2018, 4, 15, 19, 49, 6)).id(73L).name("111").build();
-        log.info(service.update(user) ? "用户更新成功" : "更新失败，可能的原因是用户不存在、已被删除或是本次请求数据过时");
+        Goods goods = Goods.builder().updatedAt(LocalDateTime.of(2018, 4, 15, 19, 49, 6)).id(73L).name("111").build();
+        log.info(service.update(goods) ? "用户更新成功" : "更新失败，可能的原因是用户不存在、已被删除或是本次请求数据过时");
     }
 
     /**
@@ -109,11 +108,11 @@ public class CommonServiceTests {
      */
     @Test
     public void batchToOne() {
-        Condition condition = new Condition(User.class);
+        Condition condition = new Condition(Goods.class);
         condition.createCriteria().andEqualTo("name", "汉字");
         log.info(service.searchBatch(condition));
 
-        User user = User.builder().name("汉字").build();
+        Goods user = Goods.builder().name("汉字").build();
         try {
             service.searchOne(user);
         } catch (Exception e) {

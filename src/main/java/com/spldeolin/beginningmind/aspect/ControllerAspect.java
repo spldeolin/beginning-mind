@@ -17,13 +17,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
-import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.aspect.annotation.PageNo;
 import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
+import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import com.spldeolin.beginningmind.util.StringRandomUtil;
 import lombok.extern.log4j.Log4j2;
@@ -33,7 +33,6 @@ import lombok.extern.log4j.Log4j2;
  * <pre>
  * 基础处理：控制器解析、额外注解处理、日志处理
  * </pre>
- *
  */
 @Component
 @Aspect
