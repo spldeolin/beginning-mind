@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.controller;
 import java.time.LocalDateTime;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -15,6 +16,7 @@ import lombok.Data;
 @RequestMapping("test")
 public class TestController {
 
+    @Secured("time")
     @GetMapping("time")
     public RequestResult time() {
         return RequestResult.success(TimeOutput.builder().localDateTime(LocalDateTime.now()).date(new Date()).build());
