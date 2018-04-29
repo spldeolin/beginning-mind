@@ -9,7 +9,7 @@ import com.spldeolin.beginningmind.restful.dto.RequestResult;
 @RestController
 public class RedirectController implements ErrorController {
 
-    private static final String ERROR_MAPPING = "error";
+    public static final String ERROR_MAPPING = "/error";
 
     @GetMapping("unauthc")
     public RequestResult unauthc() {
