@@ -34,11 +34,11 @@ public class RequestResult {
         return instance;
     }
 
-    public static RequestResult failture(ResultCode code) {
-        return failture(code, code.getDefaultMessage());
+    public static RequestResult failure(ResultCode code) {
+        return failure(code, code.getDefaultMessage());
     }
 
-    public static RequestResult failture(ResultCode code, String message) {
+    public static RequestResult failure(ResultCode code, String message) {
         RequestResult instance = new RequestResult();
         instance.setCode(code.getCode());
         instance.setMessage(message);

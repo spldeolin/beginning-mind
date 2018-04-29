@@ -52,7 +52,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RequestResult handle(HttpRequestMethodNotSupportedException e) {
-        return RequestResult.failture(ResultCode.BAD_REQEUST,
+        return RequestResult.failure(ResultCode.BAD_REQEUST,
                 "请求动词不受支持，当前为[" + e.getMethod() + "]，正确为" + Arrays.toString(e.getSupportedMethods()));
     }
 
@@ -62,7 +62,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult handle(HttpMediaTypeNotSupportedException e) {
-        return RequestResult.failture(ResultCode.BAD_REQEUST,
+        return RequestResult.failure(ResultCode.BAD_REQEUST,
                 "Content-Type错误，当前为[" + e.getContentType().toString().replace(";charset=UTF-8", "") +
                         "]，正确为[application/json]");
     }
@@ -77,7 +77,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public RequestResult handle(MissingServletRequestParameterException e) {
-        return RequestResult.failture(ResultCode.BAD_REQEUST,
+        return RequestResult.failure(ResultCode.BAD_REQEUST,
                 "缺少请求参数" + StringCaseUtil.camelToSnake(e.getParameterName()));
     }
 
@@ -86,7 +86,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public RequestResult handle(MethodArgumentTypeMismatchException e) {
-        return RequestResult.failture(ResultCode.BAD_REQEUST, e.getName() + "类型错误");
+        return RequestResult.failure(ResultCode.BAD_REQEUST, e.getName() + "类型错误");
     }
 
     /**
@@ -107,7 +107,7 @@ public class GlobalExceptionAdvance {
             invalids.add(Invalid.builder().name(StringCaseUtil.camelToSnake(paramNames[paramIndex])).value(
                     paramValues[paramIndex]).cause(cv.getMessage()).build());
         }
-        return RequestResult.failture(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
 
     /**
@@ -121,7 +121,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult httpMessageNotReadable() {
-        return RequestResult.failture(ResultCode.BAD_REQEUST, "请求Body不可读。可能是JSON格式错误，或JSON不存在，或类型错误");
+        return RequestResult.failure(ResultCode.BAD_REQEUST, "请求Body不可读。可能是JSON格式错误，或JSON不存在，或类型错误");
     }
 
     /**
@@ -135,15 +135,15 @@ public class GlobalExceptionAdvance {
             invalids.add(Invalid.builder().name(StringCaseUtil.camelToSnake(fieldError.getField())).value(
                     fieldError.getRejectedValue()).cause(fieldError.getDefaultMessage()).build());
         }
-        return RequestResult.failture(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
 
     /**
-     * 400 RequestParam参数或请求Body内字段没用通过额外的检验
+     * 400 RequestParam参数或请求Body内字段没有通过额外的检验
      */
     @ExceptionHandler(ExtraInvalidException.class)
     public RequestResult handle(ExtraInvalidException e) {
-        return RequestResult.failture(ResultCode.BAD_REQEUST, "数据校验未通过").setData(e.getInvalids());
+        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(e.getInvalids());
     }
 
     /**
@@ -151,7 +151,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(ServiceException.class)
     public RequestResult handle(ServiceException e) {
-        return RequestResult.failture(ResultCode.SERVICE_ERROR, e.getMessage());
+        return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
     }
 
     /**
@@ -161,7 +161,7 @@ public class GlobalExceptionAdvance {
     public RequestResult handle(Throwable e) {
         String insignia = RequestContextUtil.getControllerInfo().getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
-        return RequestResult.failture(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
+        return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
     }
 
 }

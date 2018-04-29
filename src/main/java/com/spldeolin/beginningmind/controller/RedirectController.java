@@ -13,17 +13,17 @@ public class RedirectController implements ErrorController {
 
     @GetMapping("unauthc")
     public RequestResult unauthc() {
-        return RequestResult.failture(ResultCode.UNAUTHORIZED);
+        return RequestResult.failure(ResultCode.UNAUTHORIZED);
     }
 
     @GetMapping("unauth")
     public RequestResult unauth() {
-        return RequestResult.failture(ResultCode.FORBIDDEN);
+        return RequestResult.failure(ResultCode.FORBIDDEN);
     }
 
     @GetMapping(ERROR_MAPPING)
     public RequestResult notFound() {
-        return RequestResult.failture(ResultCode.NOT_FOUND);
+        return RequestResult.failure(ResultCode.NOT_FOUND);
     }
 
     @Override
