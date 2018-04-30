@@ -16,6 +16,7 @@ import com.spldeolin.beginningmind.model.Account;
 import com.spldeolin.beginningmind.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.security.dto.FinalCredential;
 import com.spldeolin.beginningmind.service.AccountService;
+import com.spldeolin.beginningmind.util.RequestContextUtil;
 
 public class ServiceRealm extends AuthorizingRealm {
 
@@ -43,7 +44,8 @@ public class ServiceRealm extends AuthorizingRealm {
         if (!account.getEnableSign()) {
             throw new DisabledAccountException("用户已被禁用");
         }
-        CurrentSigner currentSigner = CurrentSigner.builder().account(account).signedAt(LocalDateTime.now()).build();
+        CurrentSigner currentSigner = CurrentSigner.builder().sessionId(RequestContextUtil.session().getId()).account(
+                account).signedAt(LocalDateTime.now()).build();
         FinalCredential finalCredential = FinalCredential.builder().finalPassword(account.getPassword()).build();
         return new SimpleAuthenticationInfo(currentSigner, finalCredential, getName());
     }

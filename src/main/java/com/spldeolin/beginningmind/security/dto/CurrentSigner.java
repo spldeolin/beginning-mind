@@ -21,6 +21,11 @@ import lombok.experimental.Accessors;
 public class CurrentSigner implements Serializable, AuthCachePrincipal {
 
     /**
+     * 会话ID
+     */
+    private String sessionId;
+
+    /**
      * 帐号
      */
     private Account account;

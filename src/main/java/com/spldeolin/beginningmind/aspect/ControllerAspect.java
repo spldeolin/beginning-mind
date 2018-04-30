@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.shiro.SecurityUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -23,6 +24,7 @@ import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
+import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.controller.RedirectController;
@@ -44,6 +46,9 @@ public class ControllerAspect {
     @Autowired
     private BeginningMindProperties properties;
 
+    @Autowired
+    private RedisCache redisCache;
+
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     public void controllerMethod() {}
 
@@ -61,6 +66,8 @@ public class ControllerAspect {
         RequestContextUtil.setControllerInfo(controllerInfo);
         // 开始日志
         logBefore(controllerInfo);
+        // 检查会话是否被击杀
+        checkKilled();
         // 刷新会话
         reflashSessionExpire();
         // 拓展注解处理
@@ -117,6 +124,12 @@ public class ControllerAspect {
             log.info("[Java] 请求方法参数" + parameterNames[i] + "：" + parameterValues[i]);
         }
         log.info("开始处理...");
+    }
+
+    private void checkKilled() {
+        if (redisCache.getCache("killed:session:" + RequestContextUtil.session().getId(), String.class) != null) {
+            SecurityUtils.getSubject().logout();
+        }
     }
 
     private void reflashSessionExpire() {

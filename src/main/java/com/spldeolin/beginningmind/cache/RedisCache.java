@@ -12,8 +12,6 @@ import com.spldeolin.beginningmind.util.SerializationUtil;
 @Component
 public class RedisCache {
 
-    public final static int CAHCETIME = 60;//默认缓存时间
-
     @Autowired
     private RedisTemplate<String, String> redisTemplate;
 
