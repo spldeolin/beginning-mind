@@ -86,4 +86,5 @@ public class Account implements Serializable {
     private Boolean enableSign;
 
     private static final long serialVersionUID = 1L;
+
 }

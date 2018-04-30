@@ -116,19 +116,14 @@
             <artifactId>pagehelper-spring-boot-starter</artifactId>
         </dependency>
         <!--shiro-->
-        <!--<dependency>-->
-        <!--<groupId>org.apache.shiro</groupId>-->
-        <!--<artifactId>shiro-spring</artifactId>-->
-        <!--</dependency>-->
-        <!--shiro-redis-->
-        <!--<dependency>-->
-        <!--<groupId>org.crazycake</groupId>-->
-        <!--<artifactId>shiro-redis</artifactId>-->
-        <!--</dependency>-->
-        <!--spring security-->
         <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-security</artifactId>
+            <groupId>org.apache.shiro</groupId>
+            <artifactId>shiro-spring</artifactId>
+        </dependency>
+        <!--shiro-redis-->
+        <dependency>
+            <groupId>org.crazycake</groupId>
+            <artifactId>shiro-redis</artifactId>
         </dependency>
         <!--swagger-->
         <dependency>
