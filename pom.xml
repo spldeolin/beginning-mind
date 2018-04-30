@@ -255,6 +255,18 @@
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>1.2.5</version>
             </dependency>
+            <!--shiro-->
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-spring</artifactId>
+                <version>1.4.0</version>
+            </dependency>
+            <!--shiro redis-->
+            <dependency>
+                <groupId>org.crazycake</groupId>
+                <artifactId>shiro-redis</artifactId>
+                <version>3.0.0</version>
+            </dependency>
             <!--swagger-->
             <dependency>
                 <groupId>com.spring4all</groupId>

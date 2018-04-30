@@ -6,7 +6,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.dto.RequestResult;
+import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.service;
 
 import java.util.List;
 import com.spldeolin.beginningmind.api.CommonService;
-import com.spldeolin.beginningmind.dto.Page;
+import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.model.Buyer;
 
 /**

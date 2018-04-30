@@ -7,7 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.dao.GoodsMapper;
-import com.spldeolin.beginningmind.dto.Page;
+import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.service.GoodsService;
 import lombok.extern.log4j.Log4j2;

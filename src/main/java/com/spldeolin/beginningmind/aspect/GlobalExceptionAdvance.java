@@ -23,7 +23,7 @@ import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.dto.RequestResult;
+import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import com.spldeolin.beginningmind.util.StringCaseUtil;
 import lombok.extern.log4j.Log4j2;

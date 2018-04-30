@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.dto;
+package com.spldeolin.beginningmind.api.dto;
 
 import java.io.Serializable;
 import java.util.List;
