@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -23,6 +24,7 @@ import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import com.spldeolin.beginningmind.util.StringRandomUtil;
@@ -59,6 +61,8 @@ public class ControllerAspect {
         RequestContextUtil.setControllerInfo(controllerInfo);
         // 开始日志
         logBefore(controllerInfo);
+        // 刷新会话
+        reflashSessionExpire();
         // 拓展注解处理
         List<Invalid> invalids = handleExtraAnnotation(controllerInfo);
         if (invalids.size() > 0) {
@@ -113,6 +117,11 @@ public class ControllerAspect {
             log.info("[Java] 请求方法参数" + parameterNames[i] + "：" + parameterValues[i]);
         }
         log.info("开始处理...");
+    }
+
+    private void reflashSessionExpire() {
+        HttpSession session = RequestContextUtil.session();
+        session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
     private void logAfter(ControllerInfo controllerInfo, Object requestResult) {
