@@ -6,6 +6,14 @@
 
 这个项目将会保持更新。
 
+### 特点
+
+- 纯粹Restful API，任何请求的进出数据只会是JSON。
+- 统一异常处理，可能的错误均被考虑到。
+- 控制层数据校验，确保API健壮性。
+- 使用性能最好的Log4j2作为日志实现，通过适配器将主流日志门面统一适配到Log4j2实现。
+- 丰富的日志输出。
+
 ### 依赖
 
 [cadeau-support](https://github.com/spldeolin/cadeau-support) 代码生成器
