@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
@@ -30,16 +31,8 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * 控制层增强：统一异常处理
- * <pre>
- *  400 API交互失败
- *  401 没有认证        （不在演示范围中）
- *  403 没有权限        （不在演示范围中）
- *  500 内部BUG
- *  200 成功
- * 1001 成功，但是存在业务异常（不在演示范围中）
- *                            （e.g.:请求的资源已被删除、禁用等）
- * </pre>
  *
+ * @see com.spldeolin.beginningmind.constant.ResultCode
  * @author Deolin
  */
 @Component
@@ -147,6 +140,14 @@ public class GlobalExceptionAdvance {
     }
 
     /**
+     * 403 登录者没有某个请求的权限
+     */
+    @ExceptionHandler(AuthorizationException.class)
+    public RequestResult handle() {
+        return RequestResult.failure(ResultCode.FORBIDDEN);
+    }
+
+    /**
      * 1001 业务异常
      */
     @ExceptionHandler(ServiceException.class)
@@ -159,7 +160,11 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        String insignia = RequestContextUtil.getControllerInfo().getInsignia();
+        ControllerInfo controllerInfo = RequestContextUtil.getControllerInfo();
+        if (controllerInfo == null) {
+            return RequestResult.failure(ResultCode.INTERNAL_ERROR);
+        }
+        String insignia = controllerInfo.getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
         return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
     }

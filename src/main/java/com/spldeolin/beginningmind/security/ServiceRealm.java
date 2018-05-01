@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.security;
 
 import java.time.LocalDateTime;
+import java.util.Set;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
@@ -9,9 +10,11 @@ import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.model.Account;
 import com.spldeolin.beginningmind.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.security.dto.FinalCredential;
@@ -27,8 +30,14 @@ public class ServiceRealm extends AuthorizingRealm {
      * 认证后授权
      */
     @Override
+    // TODO 这个方法每次请求需要权限的接口时都会调用，考虑做个缓存。
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        return null;
+        String username = (String) principals.getPrimaryPrincipal();
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        // TODO 这里通过accountService获取用户的权限
+        Set<String> permissionNames = Sets.newHashSet("test/set");
+        info.setStringPermissions(permissionNames);
+        return info;
     }
 
     /**
