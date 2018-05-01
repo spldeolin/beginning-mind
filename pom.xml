@@ -16,6 +16,10 @@
         <version>1.5.12.RELEASE</version>
     </parent>
 
+    <properties>
+        <java.version>1.8</java.version>
+    </properties>
+
     <dependencies>
         <!--springboot-->
         <dependency>
@@ -63,6 +67,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
+        </dependency>
+        <!--actuator-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <scope>compile</scope>
         </dependency>
         <!-- spring session-->
         <dependency>

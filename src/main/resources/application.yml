@@ -34,6 +34,15 @@ spring:
     mongodb:
       uri: mongodb://root:root@localhost:27017/beginning_mind
 
+management:
+  security:
+    enabled: false
+  port: 2333
+  context-path: /actuator
+  endpoints:
+    shutdown:
+      enabled: true
+
 # tk.mapper
 mapper:
   mappers:
