@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -10,15 +11,21 @@ import org.apache.shiro.spring.web.ShiroFilterFactoryBean;
 import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.crazycake.shiro.RedisCacheManager;
 import org.crazycake.shiro.RedisManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import com.spldeolin.beginningmind.constant.BasicConstant;
 import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.TinyCredentialsMatcher;
 
 @Configuration
 public class SecurityConfig {
+
+    @Autowired
+    private Environment environment;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -30,6 +37,10 @@ public class SecurityConfig {
         // 放行登录请求、404页面
         filterChainDefinitionMap.put("/security/sign_in", "anon");
         filterChainDefinitionMap.put(RedirectController.NOT_FOUND_MAPPING, "anon");
+        // 非prod环境放行actuator相关请求
+        if (!ArrayUtils.contains(environment.getActiveProfiles(), BasicConstant.PROD_PROFILE_NAME)) {
+            filterChainDefinitionMap.put("/actuator/**", "anon");
+        }
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
