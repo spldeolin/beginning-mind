@@ -16,16 +16,16 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Sets;
-import com.spldeolin.beginningmind.model.Account;
+import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.security.dto.FinalCredential;
-import com.spldeolin.beginningmind.service.AccountService;
+import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 
 public class ServiceRealm extends AuthorizingRealm {
 
     @Autowired
-    private AccountService accountService;
+    private SecurityAccountService securityAccountService;
 
     /**
      * 认证后授权
@@ -33,10 +33,10 @@ public class ServiceRealm extends AuthorizingRealm {
     @Override
     // TODO 这个方法每次请求需要权限的接口时都会调用，考虑做个缓存。
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long accountId = ((CurrentSigner) principals.getPrimaryPrincipal()).getAccount().getId();
+        Long accountId = ((CurrentSigner) principals.getPrimaryPrincipal()).getSecurityAccount().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         // TODO 这里通过accountService获取用户的权限
-        List<String> permissionMappings = accountService.listAccountPermissionMappings(accountId);
+        List<String> permissionMappings = securityAccountService.listAccountPermissionMappings(accountId);
         Set<String> permissionNames = Sets.newHashSet(permissionMappings);
         info.setStringPermissions(permissionNames);
         return info;
@@ -50,14 +50,16 @@ public class ServiceRealm extends AuthorizingRealm {
             AuthenticationToken authenticationToken) throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
-        Account account = accountService.searchOne("username", username).orElseThrow(
+        SecurityAccount securityAccount = securityAccountService.searchOne("username", username).orElseThrow(
                 () -> new UnknownAccountException("用户不存在或密码错误"));
-        if (!account.getEnableSign()) {
+        if (!securityAccount.getEnableSign()) {
             throw new DisabledAccountException("用户已被禁用");
         }
-        CurrentSigner currentSigner = CurrentSigner.builder().sessionId(RequestContextUtil.session().getId()).account(
-                account).signedAt(LocalDateTime.now()).build();
-        FinalCredential finalCredential = FinalCredential.builder().finalPassword(account.getPassword()).build();
+        CurrentSigner currentSigner = CurrentSigner.builder().sessionId(
+                RequestContextUtil.session().getId()).securityAccount(securityAccount).signedAt(
+                LocalDateTime.now()).build();
+        FinalCredential finalCredential = FinalCredential.builder().finalPassword(
+                securityAccount.getPassword()).build();
         return new SimpleAuthenticationInfo(currentSigner, finalCredential, getName());
     }
 

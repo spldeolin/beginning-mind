@@ -16,71 +16,73 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.annotation.PageNo;
 import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
-import com.spldeolin.beginningmind.input.SellerInput;
-import com.spldeolin.beginningmind.service.SellerService;
+import com.spldeolin.beginningmind.input.SecurityPermissionInput;
+import com.spldeolin.beginningmind.service.SecurityPermissionService;
 
 /**
- * “卖家”管理
+ * “权限”管理
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("sellers")
+@RequestMapping("security_permissions")
 @Validated
-public class SellerController {
+public class SecurityPermissionController {
 
     @Autowired
-    private SellerService sellerService;
+    private SecurityPermissionService securityPermissionService;
 
     /**
-     * 创建一个“卖家”
+     * 创建一个“权限”
      */
     @PostMapping
-    public RequestResult create(@RequestBody @Valid SellerInput sellerInput) {
-        return RequestResult.success(sellerService.createEX(sellerInput.toModel()));
+    public RequestResult create(@RequestBody @Valid SecurityPermissionInput securityPermissionInput) {
+        return RequestResult.success(securityPermissionService.createEX(securityPermissionInput.toModel()));
     }
 
     /**
-     * 获取一个“卖家”
+     * 获取一个“权限”
      */
     @GetMapping("{id}")
     public RequestResult get(@PathVariable Long id) {
-        return RequestResult.success(sellerService.get(id).orElseThrow(() -> new ServiceException("卖家不存在或是已被删除")));
+        return RequestResult.success(
+                securityPermissionService.get(id).orElseThrow(() -> new ServiceException("权限不存在或是已被删除")));
     }
 
     /**
-     * 更新一个“卖家”
+     * 更新一个“权限”
      */
     @PutMapping("{id}")
-    public RequestResult update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
-        sellerService.updateEX(sellerInput.toModel().setId(id));
+    public RequestResult update(@PathVariable Long id,
+            @RequestBody @Valid SecurityPermissionInput securityPermissionInput) {
+        securityPermissionService.updateEX(securityPermissionInput.toModel().setId(id));
         return RequestResult.success();
     }
 
     /**
-     * 删除一个“卖家”
+     * 删除一个“权限”
      */
     @DeleteMapping("{id}")
     public RequestResult delete(@PathVariable Long id) {
-        sellerService.deleteEX(id);
+        securityPermissionService.deleteEX(id);
         return RequestResult.success();
     }
 
     /**
-     * 获取一批“卖家”
+     * 获取一批“权限”
      */
     @GetMapping
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
-        return RequestResult.success(sellerService.page(pageNo, pageSize));
+        return RequestResult.success(securityPermissionService.page(pageNo, pageSize));
     }
 
     /**
-     * 删除一批“卖家”
+     * 删除一批“权限”
      */
     @PutMapping("batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
-        return RequestResult.success(sellerService.deleteEX(ids));
+        return RequestResult.success(securityPermissionService.deleteEX(ids));
     }
 
 }

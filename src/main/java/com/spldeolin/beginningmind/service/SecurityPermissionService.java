@@ -3,37 +3,37 @@ package com.spldeolin.beginningmind.service;
 import java.util.List;
 import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.api.dto.Page;
-import com.spldeolin.beginningmind.model.Goods;
+import com.spldeolin.beginningmind.model.SecurityPermission;
 
 /**
- * “商品”业务
+ * “权限”业务
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
-public interface GoodsService extends CommonService<Goods> {
+public interface SecurityPermissionService extends CommonService<SecurityPermission> {
 
     /**
-     * 创建一个“商品”
+     * 创建一个“权限”
      * （附带业务校验）
      *
-     * @param goods 待创建“商品”
+     * @param securityPermission 待创建“权限”
      * @return 自增ID
      */
-    Long createEX(Goods goods);
+    Long createEX(SecurityPermission securityPermission);
 
     /**
-     * 更新一个“商品”
+     * 更新一个“权限”
      * （附带业务校验）
      *
-     * @param goods 待更新“商品”
+     * @param securityPermission 待更新“权限”
      */
-    void updateEX(Goods goods);
+    void updateEX(SecurityPermission securityPermission);
 
     /**
-     * 删除一个“商品”
+     * 删除一个“权限”
      *
-     * @param id 待删除“商品”的ID
+     * @param id 待删除“权限”的ID
      */
     void deleteEX(Long id);
 
@@ -53,7 +53,7 @@ public interface GoodsService extends CommonService<Goods> {
      * @param pageSize 分页尺寸
      * @return Page 分页对象
      */
-    Page<Goods> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
+    Page<SecurityPermission> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
     // 其他方法声明
 

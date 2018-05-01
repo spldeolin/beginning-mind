@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 商品
+ * 帐号（用于登录的信息）
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
@@ -27,8 +26,8 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "goods")
-public class Goods implements Serializable {
+@Table(name = "security_account")
+public class SecurityAccount implements Serializable {
 
     /**
      * ID
@@ -59,27 +58,32 @@ public class Goods implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 商品名
+     * 登录者类型（1买家 2卖家）
      */
-    private String name;
+    @Column(name = "signer_type")
+    private Integer signerType;
 
     /**
-     * 净重（单位g）
+     * 登录者ID（逻辑外键）
      */
-    @Column(name = "net_weight")
-    private Integer netWeight;
+    @Column(name = "signer_id")
+    private Long signerId;
 
     /**
-     * 单价
+     * “用户名”
      */
-    @Column(name = "unit_price")
-    private BigDecimal unitPrice;
+    private String username;
 
     /**
-     * 库存余量
+     * 密码
      */
-    @Column(name = "stock_balance")
-    private Integer stockBalance;
+    private String password;
+
+    /**
+     * 能否登录
+     */
+    @Column(name = "enable_sign")
+    private Boolean enableSign;
 
     private static final long serialVersionUID = 1L;
 }

@@ -16,71 +16,73 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.annotation.PageNo;
 import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
-import com.spldeolin.beginningmind.input.SellerInput;
-import com.spldeolin.beginningmind.service.SellerService;
+import com.spldeolin.beginningmind.input.SecurityAccounts2rolesInput;
+import com.spldeolin.beginningmind.service.SecurityAccounts2rolesService;
 
 /**
- * “卖家”管理
+ * “帐号与权限的关联”管理
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("sellers")
+@RequestMapping("security_accounts2roles")
 @Validated
-public class SellerController {
+public class SecurityAccounts2rolesController {
 
     @Autowired
-    private SellerService sellerService;
+    private SecurityAccounts2rolesService securityAccounts2rolesService;
 
     /**
-     * 创建一个“卖家”
+     * 创建一个“帐号与权限的关联”
      */
     @PostMapping
-    public RequestResult create(@RequestBody @Valid SellerInput sellerInput) {
-        return RequestResult.success(sellerService.createEX(sellerInput.toModel()));
+    public RequestResult create(@RequestBody @Valid SecurityAccounts2rolesInput securityAccounts2rolesInput) {
+        return RequestResult.success(securityAccounts2rolesService.createEX(securityAccounts2rolesInput.toModel()));
     }
 
     /**
-     * 获取一个“卖家”
+     * 获取一个“帐号与权限的关联”
      */
     @GetMapping("{id}")
     public RequestResult get(@PathVariable Long id) {
-        return RequestResult.success(sellerService.get(id).orElseThrow(() -> new ServiceException("卖家不存在或是已被删除")));
+        return RequestResult.success(
+                securityAccounts2rolesService.get(id).orElseThrow(() -> new ServiceException("帐号与权限的关联不存在或是已被删除")));
     }
 
     /**
-     * 更新一个“卖家”
+     * 更新一个“帐号与权限的关联”
      */
     @PutMapping("{id}")
-    public RequestResult update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
-        sellerService.updateEX(sellerInput.toModel().setId(id));
+    public RequestResult update(@PathVariable Long id,
+            @RequestBody @Valid SecurityAccounts2rolesInput securityAccounts2rolesInput) {
+        securityAccounts2rolesService.updateEX(securityAccounts2rolesInput.toModel().setId(id));
         return RequestResult.success();
     }
 
     /**
-     * 删除一个“卖家”
+     * 删除一个“帐号与权限的关联”
      */
     @DeleteMapping("{id}")
     public RequestResult delete(@PathVariable Long id) {
-        sellerService.deleteEX(id);
+        securityAccounts2rolesService.deleteEX(id);
         return RequestResult.success();
     }
 
     /**
-     * 获取一批“卖家”
+     * 获取一批“帐号与权限的关联”
      */
     @GetMapping
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
-        return RequestResult.success(sellerService.page(pageNo, pageSize));
+        return RequestResult.success(securityAccounts2rolesService.page(pageNo, pageSize));
     }
 
     /**
-     * 删除一批“卖家”
+     * 删除一批“帐号与权限的关联”
      */
     @PutMapping("batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
-        return RequestResult.success(sellerService.deleteEX(ids));
+        return RequestResult.success(securityAccounts2rolesService.deleteEX(ids));
     }
 
 }

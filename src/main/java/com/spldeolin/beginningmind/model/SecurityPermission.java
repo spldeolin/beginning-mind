@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.model;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -17,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 商品
+ * 权限
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
@@ -27,8 +26,8 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "goods")
-public class Goods implements Serializable {
+@Table(name = "security_permission")
+public class SecurityPermission implements Serializable {
 
     /**
      * ID
@@ -59,27 +58,15 @@ public class Goods implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 商品名
+     * 权限名
      */
     private String name;
 
     /**
-     * 净重（单位g）
+     * 请求方法@RequiresPermissions注解属性的映射
      */
-    @Column(name = "net_weight")
-    private Integer netWeight;
-
-    /**
-     * 单价
-     */
-    @Column(name = "unit_price")
-    private BigDecimal unitPrice;
-
-    /**
-     * 库存余量
-     */
-    @Column(name = "stock_balance")
-    private Integer stockBalance;
+    @Column(name = "requires_permissions_mapping")
+    private String requiresPermissionsMapping;
 
     private static final long serialVersionUID = 1L;
 }

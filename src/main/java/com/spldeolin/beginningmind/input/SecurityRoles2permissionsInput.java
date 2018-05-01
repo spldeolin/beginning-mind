@@ -1,25 +1,22 @@
 package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.spldeolin.beginningmind.model.Buyer;
+import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * “买家”Input类
+ * “角色与权限的关联”Input类
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @Data
 @NoArgsConstructor
-public class BuyerInput implements Serializable {
+public class SecurityRoles2permissionsInput implements Serializable {
 
     /**
      * ID
@@ -38,29 +35,16 @@ public class BuyerInput implements Serializable {
     @JsonProperty("is_deleted")
     private Boolean isDeleted;
 
-    /**
-     * 昵称
-     */
-    @Size(max = 255)
-    private String nickname;
+    @JsonProperty("role_id")
+    private Long roleId;
 
-    /**
-     * 钱包余额
-     */
-    @JsonProperty("wallet_balance")
-    @Digits(integer = 8, fraction = 2)
-    private BigDecimal walletBalance;
-
-    /**
-     * VIP等级（最低0，代表非VIP）
-     */
-    @JsonProperty("vip_level")
-    private Integer vipLevel;
+    @JsonProperty("permission_id")
+    private Long permissionId;
 
     private static final long serialVersionUID = 1L;
 
-    public Buyer toModel() {
-        Buyer model = Buyer.builder().build();
+    public SecurityRoles2permissions toModel() {
+        SecurityRoles2permissions model = SecurityRoles2permissions.builder().build();
         BeanUtils.copyProperties(this, model);
         return model;
     }

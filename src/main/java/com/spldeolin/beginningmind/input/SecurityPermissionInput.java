@@ -1,25 +1,23 @@
 package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.spldeolin.beginningmind.model.Buyer;
+import com.spldeolin.beginningmind.model.SecurityPermission;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * “买家”Input类
+ * “权限”Input类
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @Data
 @NoArgsConstructor
-public class BuyerInput implements Serializable {
+public class SecurityPermissionInput implements Serializable {
 
     /**
      * ID
@@ -39,28 +37,22 @@ public class BuyerInput implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 昵称
+     * 权限名
      */
     @Size(max = 255)
-    private String nickname;
+    private String name;
 
     /**
-     * 钱包余额
+     * 请求方法@RequiresPermissions注解属性的映射
      */
-    @JsonProperty("wallet_balance")
-    @Digits(integer = 8, fraction = 2)
-    private BigDecimal walletBalance;
-
-    /**
-     * VIP等级（最低0，代表非VIP）
-     */
-    @JsonProperty("vip_level")
-    private Integer vipLevel;
+    @JsonProperty("requires_permissions_mapping")
+    @Size(max = 255)
+    private String requiresPermissionsMapping;
 
     private static final long serialVersionUID = 1L;
 
-    public Buyer toModel() {
-        Buyer model = Buyer.builder().build();
+    public SecurityPermission toModel() {
+        SecurityPermission model = SecurityPermission.builder().build();
         BeanUtils.copyProperties(this, model);
         return model;
     }

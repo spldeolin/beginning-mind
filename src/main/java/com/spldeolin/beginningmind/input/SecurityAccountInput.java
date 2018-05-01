@@ -1,25 +1,23 @@
 package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.spldeolin.beginningmind.model.Buyer;
+import com.spldeolin.beginningmind.model.SecurityAccount;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * “买家”Input类
+ * “帐号（用于登录的信息）”Input类
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @Data
 @NoArgsConstructor
-public class BuyerInput implements Serializable {
+public class SecurityAccountInput implements Serializable {
 
     /**
      * ID
@@ -39,28 +37,39 @@ public class BuyerInput implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 昵称
+     * 登录者类型（1买家 2卖家）
      */
-    @Size(max = 255)
-    private String nickname;
+    @JsonProperty("signer_type")
+    private Integer signerType;
 
     /**
-     * 钱包余额
+     * 登录者ID（逻辑外键）
      */
-    @JsonProperty("wallet_balance")
-    @Digits(integer = 8, fraction = 2)
-    private BigDecimal walletBalance;
+    @JsonProperty("signer_id")
+    private Long signerId;
 
     /**
-     * VIP等级（最低0，代表非VIP）
+     * “用户名”
      */
-    @JsonProperty("vip_level")
-    private Integer vipLevel;
+    @Size(max = 16)
+    private String username;
+
+    /**
+     * 密码
+     */
+    @Size(max = 16)
+    private String password;
+
+    /**
+     * 能否登录
+     */
+    @JsonProperty("enable_sign")
+    private Boolean enableSign;
 
     private static final long serialVersionUID = 1L;
 
-    public Buyer toModel() {
-        Buyer model = Buyer.builder().build();
+    public SecurityAccount toModel() {
+        SecurityAccount model = SecurityAccount.builder().build();
         BeanUtils.copyProperties(this, model);
         return model;
     }

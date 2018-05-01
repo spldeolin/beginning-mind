@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.security.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import org.crazycake.shiro.AuthCachePrincipal;
-import com.spldeolin.beginningmind.model.Account;
+import com.spldeolin.beginningmind.model.SecurityAccount;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -28,7 +28,7 @@ public class CurrentSigner implements Serializable, AuthCachePrincipal {
     /**
      * 帐号
      */
-    private Account account;
+    private SecurityAccount securityAccount;
 
     /**
      * 登录时间
@@ -39,7 +39,7 @@ public class CurrentSigner implements Serializable, AuthCachePrincipal {
 
     @Override
     public String getAuthCacheKey() {
-        return account.getUsername();
+        return securityAccount.getUsername();
     }
 
 }

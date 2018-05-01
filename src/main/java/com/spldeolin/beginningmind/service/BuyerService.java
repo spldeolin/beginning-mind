@@ -1,9 +1,9 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.List;
-import com.spldeolin.beginningmind.model.Buyer;
 import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.api.dto.Page;
+import com.spldeolin.beginningmind.model.Buyer;
 
 /**
  * “买家”业务
@@ -32,7 +32,6 @@ public interface BuyerService extends CommonService<Buyer> {
 
     /**
      * 删除一个“买家”
-     * 
      *
      * @param id 待删除“买家”的ID
      */
@@ -40,7 +39,7 @@ public interface BuyerService extends CommonService<Buyer> {
 
     /**
      * 删除多个资源
-     （附带业务校验，并返回详细情况）
+     * （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况
@@ -56,6 +55,6 @@ public interface BuyerService extends CommonService<Buyer> {
      */
     Page<Buyer> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
-	// 其他方法声明
+    // 其他方法声明
 
 }

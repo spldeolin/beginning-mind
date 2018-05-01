@@ -16,71 +16,72 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.annotation.PageNo;
 import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
-import com.spldeolin.beginningmind.input.SellerInput;
-import com.spldeolin.beginningmind.service.SellerService;
+import com.spldeolin.beginningmind.input.SecurityRoleInput;
+import com.spldeolin.beginningmind.service.SecurityRoleService;
 
 /**
- * “卖家”管理
+ * “角色”管理
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("sellers")
+@RequestMapping("security_roles")
 @Validated
-public class SellerController {
+public class SecurityRoleController {
 
     @Autowired
-    private SellerService sellerService;
+    private SecurityRoleService securityRoleService;
 
     /**
-     * 创建一个“卖家”
+     * 创建一个“角色”
      */
     @PostMapping
-    public RequestResult create(@RequestBody @Valid SellerInput sellerInput) {
-        return RequestResult.success(sellerService.createEX(sellerInput.toModel()));
+    public RequestResult create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
+        return RequestResult.success(securityRoleService.createEX(securityRoleInput.toModel()));
     }
 
     /**
-     * 获取一个“卖家”
+     * 获取一个“角色”
      */
     @GetMapping("{id}")
     public RequestResult get(@PathVariable Long id) {
-        return RequestResult.success(sellerService.get(id).orElseThrow(() -> new ServiceException("卖家不存在或是已被删除")));
+        return RequestResult.success(
+                securityRoleService.get(id).orElseThrow(() -> new ServiceException("角色不存在或是已被删除")));
     }
 
     /**
-     * 更新一个“卖家”
+     * 更新一个“角色”
      */
     @PutMapping("{id}")
-    public RequestResult update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
-        sellerService.updateEX(sellerInput.toModel().setId(id));
+    public RequestResult update(@PathVariable Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
+        securityRoleService.updateEX(securityRoleInput.toModel().setId(id));
         return RequestResult.success();
     }
 
     /**
-     * 删除一个“卖家”
+     * 删除一个“角色”
      */
     @DeleteMapping("{id}")
     public RequestResult delete(@PathVariable Long id) {
-        sellerService.deleteEX(id);
+        securityRoleService.deleteEX(id);
         return RequestResult.success();
     }
 
     /**
-     * 获取一批“卖家”
+     * 获取一批“角色”
      */
     @GetMapping
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
-        return RequestResult.success(sellerService.page(pageNo, pageSize));
+        return RequestResult.success(securityRoleService.page(pageNo, pageSize));
     }
 
     /**
-     * 删除一批“卖家”
+     * 删除一批“角色”
      */
     @PutMapping("batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
-        return RequestResult.success(sellerService.deleteEX(ids));
+        return RequestResult.success(securityRoleService.deleteEX(ids));
     }
 
 }

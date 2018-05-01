@@ -1,12 +1,15 @@
 package com.spldeolin.beginningmind.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,6 +29,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Table(name = "buyer")
 public class Buyer implements Serializable {
+
     /**
      * ID
      */

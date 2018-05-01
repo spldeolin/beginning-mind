@@ -2,14 +2,14 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.time.*;
-import javax.validation.constraints.*;
+import java.time.LocalDateTime;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.spldeolin.beginningmind.model.Goods;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.spldeolin.beginningmind.valid.annotation.TextOption;
-import com.spldeolin.beginningmind.model.Goods;
 
 /**
  * “商品”Input类
@@ -63,7 +63,7 @@ public class GoodsInput implements Serializable {
     @JsonProperty("stock_balance")
     private Integer stockBalance;
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public Goods toModel() {
         Goods model = Goods.builder().build();

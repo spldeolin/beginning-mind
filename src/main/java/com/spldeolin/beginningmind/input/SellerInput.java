@@ -1,15 +1,13 @@
 package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
-import java.time.*;
-import javax.validation.constraints.*;
+import java.time.LocalDateTime;
+import javax.validation.constraints.Size;
 import org.springframework.beans.BeanUtils;
-import com.fasterxml.jackson.annotation.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.spldeolin.beginningmind.model.Seller;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import com.spldeolin.beginningmind.valid.annotation.TextOption;
-import com.spldeolin.beginningmind.model.Seller;
 
 /**
  * “卖家”Input类
@@ -44,7 +42,7 @@ public class SellerInput implements Serializable {
     @Size(max = 255)
     private String nickname;
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
     public Seller toModel() {
         Seller model = Seller.builder().build();

@@ -32,8 +32,8 @@ import lombok.extern.log4j.Log4j2;
 /**
  * 控制层增强：统一异常处理
  *
- * @see com.spldeolin.beginningmind.constant.ResultCode
  * @author Deolin
+ * @see com.spldeolin.beginningmind.constant.ResultCode
  */
 @Component
 @RestControllerAdvice
