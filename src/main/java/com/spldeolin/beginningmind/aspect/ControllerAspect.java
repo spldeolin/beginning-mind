@@ -55,7 +55,7 @@ public class ControllerAspect {
     @Value("${management.context-path}")
     private String actuatorContextPath;
 
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
+    @Pointcut("execution(* com.spldeolin.beginningmind.controller.*.*(..))")
     public void controllerMethod() {}
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
@@ -63,17 +63,9 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        // 忽略error请求
         String url = RequestContextUtil.request().getRequestURI();
-        if (RedirectController.NOT_FOUND_MAPPING.equals(url)) {
-            return point.proceed(point.getArgs());
-        }
-        // 忽略actuator相关的请求
-        if (StringUtils.isNotEmpty(actuatorContextPath) && url.contains(actuatorContextPath)) {
-            return point.proceed(point.getArgs());
-        }
-        // 忽略swagger相关的请求
-        if (StringUtils.containsAny(url, CoupledConstant.SWAGGER_URL_MATCHING_PREFIXES)) {
+        // 忽略error请求（这类请求是重定向请求，RequestContextUtil.request()会报错）
+        if (CoupledConstant.ERROR_PAGE_URL.equals(url)) {
             return point.proceed(point.getArgs());
         }
         // 解析切点

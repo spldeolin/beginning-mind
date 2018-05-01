@@ -18,7 +18,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
-import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.TinyCredentialsMatcher;
 
@@ -40,7 +39,7 @@ public class SecurityConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 放行登录请求、404页面
         filterChainDefinitionMap.put("/security/sign_in", "anon");
-        filterChainDefinitionMap.put(RedirectController.NOT_FOUND_MAPPING, "anon");
+        filterChainDefinitionMap.put(CoupledConstant.ERROR_PAGE_URL, "anon");
         if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {
             // 非prod环境放行actuator相关请求
             if (StringUtils.isNotBlank(actuatorContextPath)) {

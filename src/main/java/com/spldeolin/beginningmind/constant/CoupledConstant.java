@@ -12,4 +12,9 @@ public class CoupledConstant {
      */
     public static final String[] SWAGGER_URL_MATCHING_PREFIXES = {"/swagger", "/webjars/", "/v2/"};
 
+    /**
+     * 这个常量代表Spring Boot Web提供的错误页面的全URL
+     */
+    public static final String ERROR_PAGE_URL = "/error";
+
 }
