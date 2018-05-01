@@ -39,6 +39,7 @@ public class TestController {
         return "SUCCESS";
     }
 
+    @RequiresPermissions("test/get")
     @GetMapping("get")
     public String getSes(HttpSession ses) {
         return (String) ses.getAttribute("one-cookie");

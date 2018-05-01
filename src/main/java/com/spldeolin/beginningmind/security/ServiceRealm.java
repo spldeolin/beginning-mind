@@ -31,11 +31,9 @@ public class ServiceRealm extends AuthorizingRealm {
      * 认证后授权
      */
     @Override
-    // TODO 这个方法每次请求需要权限的接口时都会调用，考虑做个缓存。
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Long accountId = ((CurrentSigner) principals.getPrimaryPrincipal()).getSecurityAccount().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        // TODO 这里通过accountService获取用户的权限
         List<String> permissionMappings = securityAccountService.listAccountPermissionMappings(accountId);
         Set<String> permissionNames = Sets.newHashSet(permissionMappings);
         info.setStringPermissions(permissionNames);
