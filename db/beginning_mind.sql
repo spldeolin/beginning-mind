@@ -10,38 +10,10 @@ Target Server Type    : MYSQL
 Target Server Version : 50719
 File Encoding         : 65001
 
-Date: 2018-04-30 07:41:07
+Date: 2018-05-01 09:57:40
 */
 
 SET FOREIGN_KEY_CHECKS=0;
-
--- ----------------------------
--- Table structure for account
--- ----------------------------
-DROP TABLE IF EXISTS `account`;
-CREATE TABLE `account` (
-  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
-  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
-  `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
-  `signer_type` int(11) DEFAULT NULL COMMENT '登录者类型（1买家 2卖家）',
-  `signer_id` bigint(20) DEFAULT NULL COMMENT '登录者ID（逻辑外键）',
-  `username` varchar(16) DEFAULT NULL COMMENT '“用户名”',
-  `password` varchar(16) DEFAULT NULL COMMENT '密码',
-  `enable_sign` tinyint(1) DEFAULT NULL COMMENT '能否登录',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `index_username` (`username`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号（用于登录的信息）';
-
--- ----------------------------
--- Records of account
--- ----------------------------
-INSERT INTO `account` VALUES ('1', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '2', '1', 'fresh2018', '123456', '1');
-INSERT INTO `account` VALUES ('2', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '2', '2', 'like_food', '123456', '1');
-INSERT INTO `account` VALUES ('3', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '1', '1', 'smrs', '123456', '1');
-INSERT INTO `account` VALUES ('4', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '1', '2', 'abe', '123456', '1');
-INSERT INTO `account` VALUES ('5', '2018-04-30 07:27:00', '2018-04-30 07:39:20', '0', '1', '3', 'jeandiata', '123456', '1');
-INSERT INTO `account` VALUES ('6', '2018-04-30 07:27:00', '2018-04-30 07:39:20', '0', '1', '4', 'dan', '123456', '1');
 
 -- ----------------------------
 -- Table structure for buyer
@@ -85,13 +57,112 @@ CREATE TABLE `goods` (
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES ('1', '2018-04-30 07:13:39', '2018-04-30 07:18:32', '0', '西冷牛排', '1000', '390.00', '2350');
+INSERT INTO `goods` VALUES ('1', '2018-04-30 07:13:39', '2018-04-30 08:25:15', '0', '111', '1000', '390.00', '2350');
 INSERT INTO `goods` VALUES ('2', '2018-04-30 07:13:39', '2018-04-30 07:19:18', '0', '黄油', '200', '23.80', '2816');
 INSERT INTO `goods` VALUES ('3', '2018-04-30 07:13:40', '2018-04-30 07:20:35', '0', '可可豆', '1000', '235.00', '128');
 INSERT INTO `goods` VALUES ('4', '2018-04-30 07:13:40', '2018-04-30 07:21:16', '0', '西兰花', '500', '7.50', '255');
 INSERT INTO `goods` VALUES ('5', '2018-04-30 07:13:40', '2018-04-30 07:21:48', '0', '金枪鱼', '250', '388.00', '8672');
 INSERT INTO `goods` VALUES ('6', '2018-04-30 07:13:40', '2018-04-30 07:22:21', '0', '薄荷', '30', '28.80', '14080');
 INSERT INTO `goods` VALUES ('7', '2018-04-30 07:13:40', '2018-04-30 07:22:57', '0', '牛油果', '300', '69.80', '8365');
+
+-- ----------------------------
+-- Table structure for security_account
+-- ----------------------------
+DROP TABLE IF EXISTS `security_account`;
+CREATE TABLE `security_account` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
+  `signer_type` int(11) DEFAULT NULL COMMENT '登录者类型（1买家 2卖家）',
+  `signer_id` bigint(20) DEFAULT NULL COMMENT '登录者ID（逻辑外键）',
+  `username` varchar(16) DEFAULT NULL COMMENT '“用户名”',
+  `password` varchar(16) DEFAULT NULL COMMENT '密码',
+  `enable_sign` tinyint(1) DEFAULT NULL COMMENT '能否登录',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_username` (`username`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号（用于登录的信息）';
+
+-- ----------------------------
+-- Records of security_account
+-- ----------------------------
+INSERT INTO `security_account` VALUES ('1', '2018-04-30 07:26:59', '2018-04-30 10:51:01', '0', '2', '1', 'fresh2018', '123456', '1');
+INSERT INTO `security_account` VALUES ('2', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '2', '2', 'like_food', '123456', '1');
+INSERT INTO `security_account` VALUES ('3', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '1', '1', 'smrs', '123456', '1');
+INSERT INTO `security_account` VALUES ('4', '2018-04-30 07:26:59', '2018-04-30 07:39:19', '0', '1', '2', 'abe', '123456', '1');
+INSERT INTO `security_account` VALUES ('5', '2018-04-30 07:27:00', '2018-04-30 07:39:20', '0', '1', '3', 'jeandiata', '123456', '1');
+INSERT INTO `security_account` VALUES ('6', '2018-04-30 07:27:00', '2018-04-30 07:39:20', '0', '1', '4', 'dan', '123456', '1');
+
+-- ----------------------------
+-- Table structure for security_accounts2roles
+-- ----------------------------
+DROP TABLE IF EXISTS `security_accounts2roles`;
+CREATE TABLE `security_accounts2roles` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
+  `account_id` bigint(20) DEFAULT NULL,
+  `role_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号与权限的关联';
+
+-- ----------------------------
+-- Records of security_accounts2roles
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for security_permission
+-- ----------------------------
+DROP TABLE IF EXISTS `security_permission`;
+CREATE TABLE `security_permission` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
+  `name` varchar(255) DEFAULT NULL COMMENT '权限名',
+  `requires_permissions_mapping` varchar(255) DEFAULT NULL COMMENT '请求方法@RequiresPermissions注解属性的映射',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限';
+
+-- ----------------------------
+-- Records of security_permission
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for security_role
+-- ----------------------------
+DROP TABLE IF EXISTS `security_role`;
+CREATE TABLE `security_role` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
+  `name` varchar(255) DEFAULT NULL COMMENT '角色名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色';
+
+-- ----------------------------
+-- Records of security_role
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for security_roles2permissions
+-- ----------------------------
+DROP TABLE IF EXISTS `security_roles2permissions`;
+CREATE TABLE `security_roles2permissions` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
+  `role_id` bigint(20) DEFAULT NULL,
+  `permission_id` bigint(20) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色与权限的关联';
+
+-- ----------------------------
+-- Records of security_roles2permissions
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for seller
@@ -104,7 +175,7 @@ CREATE TABLE `seller` (
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
   `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='卖家';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='卖家';
 
 -- ----------------------------
 -- Records of seller
