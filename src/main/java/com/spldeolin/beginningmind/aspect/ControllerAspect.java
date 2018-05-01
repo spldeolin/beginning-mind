@@ -17,6 +17,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -28,6 +29,7 @@ import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
+import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import com.spldeolin.beginningmind.util.StringRandomUtil;
@@ -50,6 +52,9 @@ public class ControllerAspect {
     @Autowired
     private RedisCache redisCache;
 
+    @Value("${management.context-path}")
+    private String actuatorContextPath;
+
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController) || @within(org.springframework.stereotype.Controller)")
     public void controllerMethod() {}
 
@@ -58,8 +63,17 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        // HTTP-404的请求不做任何切面处理
-        if (RedirectController.NOT_FOUND_MAPPING.equals(RequestContextUtil.request().getRequestURI())) {
+        // 忽略error请求
+        String url = RequestContextUtil.request().getRequestURI();
+        if (RedirectController.NOT_FOUND_MAPPING.equals(url)) {
+            return point.proceed(point.getArgs());
+        }
+        // 忽略actuator相关的请求
+        if (StringUtils.isNotEmpty(actuatorContextPath) && url.contains(actuatorContextPath)) {
+            return point.proceed(point.getArgs());
+        }
+        // 忽略swagger相关的请求
+        if (StringUtils.containsAny(url, CoupledConstant.SWAGGER_URL_MATCHING_PREFIXES)) {
             return point.proceed(point.getArgs());
         }
         // 解析切点

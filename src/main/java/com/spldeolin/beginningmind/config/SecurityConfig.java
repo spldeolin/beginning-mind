@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.config;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -16,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import com.spldeolin.beginningmind.constant.BasicConstant;
+import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.TinyCredentialsMatcher;
@@ -26,6 +27,9 @@ public class SecurityConfig {
 
     @Autowired
     private Environment environment;
+
+    @Value("${management.context-path}")
+    private String actuatorContextPath;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -37,14 +41,15 @@ public class SecurityConfig {
         // 放行登录请求、404页面
         filterChainDefinitionMap.put("/security/sign_in", "anon");
         filterChainDefinitionMap.put(RedirectController.NOT_FOUND_MAPPING, "anon");
-        // 非prod环境放行actuator、swagger相关请求
-        if (!ArrayUtils.contains(environment.getActiveProfiles(), BasicConstant.PROD_PROFILE_NAME)) {
-            filterChainDefinitionMap.put("/actuator/**", "anon");
-            filterChainDefinitionMap.put("/swagger-ui.html","anon");
-            filterChainDefinitionMap.put("/swagger/**","anon");
-            filterChainDefinitionMap.put("/swagger-resources/**","anon");
-            filterChainDefinitionMap.put("/webjars/**", "anon");
-            filterChainDefinitionMap.put("/v2/**","anon");
+        if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {
+            // 非prod环境放行actuator相关请求
+            if (StringUtils.isNotBlank(actuatorContextPath)) {
+                filterChainDefinitionMap.put(actuatorContextPath + "/**", "anon");
+            }
+            // 非prod环境放行swagger相关请求
+            for (String swaggerUrlMatchingPrefix : CoupledConstant.SWAGGER_URL_MATCHING_PREFIXES) {
+                filterChainDefinitionMap.put(swaggerUrlMatchingPrefix + "**", "anon");
+            }
         }
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
