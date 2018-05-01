@@ -1,40 +1,40 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.List;
-import com.spldeolin.beginningmind.model.Seller;
+import com.spldeolin.beginningmind.model.Permission;
 import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.api.dto.Page;
 
 /**
- * “卖家”业务
+ * “权限”业务
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
-public interface SellerService extends CommonService<Seller> {
+public interface PermissionService extends CommonService<Permission> {
 
     /**
-     * 创建一个“卖家”
+     * 创建一个“权限”
      * （附带业务校验）
      *
-     * @param seller 待创建“卖家”
+     * @param permission 待创建“权限”
      * @return 自增ID
      */
-    Long createEX(Seller seller);
+    Long createEX(Permission permission);
 
     /**
-     * 更新一个“卖家”
+     * 更新一个“权限”
      * （附带业务校验）
      *
-     * @param seller 待更新“卖家”
+     * @param permission 待更新“权限”
      */
-    void updateEX(Seller seller);
+    void updateEX(Permission permission);
 
     /**
-     * 删除一个“卖家”
+     * 删除一个“权限”
      * 
      *
-     * @param id 待删除“卖家”的ID
+     * @param id 待删除“权限”的ID
      */
     void deleteEX(Long id);
 
@@ -54,7 +54,7 @@ public interface SellerService extends CommonService<Seller> {
      * @param pageSize 分页尺寸
      * @return Page 分页对象
      */
-    Page<Seller> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
+    Page<Permission> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
 	// 其他方法声明
 

@@ -9,17 +9,17 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.spldeolin.beginningmind.valid.annotation.TextOption;
-import com.spldeolin.beginningmind.model.Account;
+import com.spldeolin.beginningmind.model.Permission;
 
 /**
- * “帐号（用于登录的信息）”Input类
+ * “权限”Input类
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @Data
 @NoArgsConstructor
-public class AccountInput implements Serializable {
+public class PermissionInput implements Serializable {
 
     /**
      * ID
@@ -39,39 +39,22 @@ public class AccountInput implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 登录者类型（1买家 2卖家）
+     * 权限名
      */
-    @JsonProperty("signer_type")
-    private Integer signerType;
+    @Size(max = 255)
+    private String name;
 
     /**
-     * 登录者ID（逻辑外键）
+     * 请求方法@RequiresPermissions注解属性的映射
      */
-    @JsonProperty("signer_id")
-    private Long signerId;
-
-    /**
-     * “用户名”
-     */
-    @Size(max = 16)
-    private String username;
-
-    /**
-     * 密码
-     */
-    @Size(max = 16)
-    private String password;
-
-    /**
-     * 能否登录
-     */
-    @JsonProperty("enable_sign")
-    private Boolean enableSign;
+    @JsonProperty("requires_permissions_mapping")
+    @Size(max = 255)
+    private String requiresPermissionsMapping;
 
 	private static final long serialVersionUID = 1L;
 
-    public Account toModel() {
-        Account model = Account.builder().build();
+    public Permission toModel() {
+        Permission model = Permission.builder().build();
         BeanUtils.copyProperties(this, model);
         return model;
     }

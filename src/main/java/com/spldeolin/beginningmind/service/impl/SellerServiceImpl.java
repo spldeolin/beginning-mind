@@ -3,20 +3,22 @@ package com.spldeolin.beginningmind.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.api.CommonServiceImpl;
-import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.dao.SellerMapper;
-import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.model.Seller;
 import com.spldeolin.beginningmind.service.SellerService;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
+import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.api.dto.Page;
+import com.github.pagehelper.PageHelper;
+import tk.mybatis.mapper.entity.Condition;
+import tk.mybatis.mapper.entity.Example;
 
 /**
  * “卖家”业务实现
  *
- * @author Deolin 2018/4/30
+ * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @Service

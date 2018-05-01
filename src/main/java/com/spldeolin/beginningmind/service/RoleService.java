@@ -1,40 +1,40 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.List;
-import com.spldeolin.beginningmind.model.Seller;
+import com.spldeolin.beginningmind.model.Role;
 import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.api.dto.Page;
 
 /**
- * “卖家”业务
+ * “角色”业务
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
-public interface SellerService extends CommonService<Seller> {
+public interface RoleService extends CommonService<Role> {
 
     /**
-     * 创建一个“卖家”
+     * 创建一个“角色”
      * （附带业务校验）
      *
-     * @param seller 待创建“卖家”
+     * @param role 待创建“角色”
      * @return 自增ID
      */
-    Long createEX(Seller seller);
+    Long createEX(Role role);
 
     /**
-     * 更新一个“卖家”
+     * 更新一个“角色”
      * （附带业务校验）
      *
-     * @param seller 待更新“卖家”
+     * @param role 待更新“角色”
      */
-    void updateEX(Seller seller);
+    void updateEX(Role role);
 
     /**
-     * 删除一个“卖家”
+     * 删除一个“角色”
      * 
      *
-     * @param id 待删除“卖家”的ID
+     * @param id 待删除“角色”的ID
      */
     void deleteEX(Long id);
 
@@ -54,7 +54,7 @@ public interface SellerService extends CommonService<Seller> {
      * @param pageSize 分页尺寸
      * @return Page 分页对象
      */
-    Page<Seller> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
+    Page<Role> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
 	// 其他方法声明
 

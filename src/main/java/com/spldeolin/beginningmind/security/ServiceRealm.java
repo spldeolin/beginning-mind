@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.security;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -32,10 +33,11 @@ public class ServiceRealm extends AuthorizingRealm {
     @Override
     // TODO 这个方法每次请求需要权限的接口时都会调用，考虑做个缓存。
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        String username = (String) principals.getPrimaryPrincipal();
+        Long accountId = ((CurrentSigner) principals.getPrimaryPrincipal()).getAccount().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         // TODO 这里通过accountService获取用户的权限
-        Set<String> permissionNames = Sets.newHashSet("test/set");
+        List<String> permissionMappings = accountService.listAccountPermissionMappings(accountId);
+        Set<String> permissionNames = Sets.newHashSet(permissionMappings);
         info.setStringPermissions(permissionNames);
         return info;
     }

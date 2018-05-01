@@ -9,17 +9,17 @@ import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import com.spldeolin.beginningmind.valid.annotation.TextOption;
-import com.spldeolin.beginningmind.model.Account;
+import com.spldeolin.beginningmind.model.Accounts2roles;
 
 /**
- * “帐号（用于登录的信息）”Input类
+ * “帐号与权限的关联”Input类
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @Data
 @NoArgsConstructor
-public class AccountInput implements Serializable {
+public class Accounts2rolesInput implements Serializable {
 
     /**
      * ID
@@ -38,40 +38,16 @@ public class AccountInput implements Serializable {
     @JsonProperty("is_deleted")
     private Boolean isDeleted;
 
-    /**
-     * 登录者类型（1买家 2卖家）
-     */
-    @JsonProperty("signer_type")
-    private Integer signerType;
+    @JsonProperty("account_id")
+    private Long accountId;
 
-    /**
-     * 登录者ID（逻辑外键）
-     */
-    @JsonProperty("signer_id")
-    private Long signerId;
-
-    /**
-     * “用户名”
-     */
-    @Size(max = 16)
-    private String username;
-
-    /**
-     * 密码
-     */
-    @Size(max = 16)
-    private String password;
-
-    /**
-     * 能否登录
-     */
-    @JsonProperty("enable_sign")
-    private Boolean enableSign;
+    @JsonProperty("role_id")
+    private Long roleId;
 
 	private static final long serialVersionUID = 1L;
 
-    public Account toModel() {
-        Account model = Account.builder().build();
+    public Accounts2roles toModel() {
+        Accounts2roles model = Accounts2roles.builder().build();
         BeanUtils.copyProperties(this, model);
         return model;
     }

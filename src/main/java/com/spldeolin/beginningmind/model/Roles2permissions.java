@@ -2,11 +2,8 @@ package com.spldeolin.beginningmind.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.persistence.*;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,7 +11,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 商品
+ * 角色与权限的关联
  *
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
@@ -24,8 +21,8 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "goods")
-public class Goods implements Serializable {
+@Table(name = "roles2permissions")
+public class Roles2permissions implements Serializable {
     /**
      * ID
      */
@@ -54,28 +51,11 @@ public class Goods implements Serializable {
     @JsonIgnore
     private Boolean isDeleted;
 
-    /**
-     * 商品名
-     */
-    private String name;
+    @Column(name = "role_id")
+    private Long roleId;
 
-    /**
-     * 净重（单位g）
-     */
-    @Column(name = "net_weight")
-    private Integer netWeight;
-
-    /**
-     * 单价
-     */
-    @Column(name = "unit_price")
-    private BigDecimal unitPrice;
-
-    /**
-     * 库存余量
-     */
-    @Column(name = "stock_balance")
-    private Integer stockBalance;
+    @Column(name = "permission_id")
+    private Long permissionId;
 
     private static final long serialVersionUID = 1L;
 }

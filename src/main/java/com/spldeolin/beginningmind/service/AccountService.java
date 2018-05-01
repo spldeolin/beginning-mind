@@ -8,7 +8,7 @@ import com.spldeolin.beginningmind.model.Account;
 /**
  * “帐号（用于登录的信息）”业务
  *
- * @author Deolin 2018/4/30
+ * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 public interface AccountService extends CommonService<Account> {
@@ -32,6 +32,7 @@ public interface AccountService extends CommonService<Account> {
 
     /**
      * 删除一个“帐号（用于登录的信息）”
+     * 
      *
      * @param id 待删除“帐号（用于登录的信息）”的ID
      */
@@ -39,7 +40,7 @@ public interface AccountService extends CommonService<Account> {
 
     /**
      * 删除多个资源
-     * （附带业务校验，并返回详细情况）
+     （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况
@@ -55,6 +56,9 @@ public interface AccountService extends CommonService<Account> {
      */
     Page<Account> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
-    // 其他方法声明
+    /**
+     * 通过唯一用户名，获取帐号关联到的权限的@RequiresPermissions映射
+     */
+    List<String> listAccountPermissionMappings(Long accountId);
 
 }

@@ -22,7 +22,7 @@ import com.spldeolin.beginningmind.service.AccountService;
 /**
  * “帐号（用于登录的信息）”管理
  *
- * @author Deolin 2018/4/30
+ * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
 @RestController
@@ -46,8 +46,7 @@ public class AccountController {
      */
     @GetMapping("{id}")
     public RequestResult get(@PathVariable Long id) {
-        return RequestResult.success(
-                accountService.get(id).orElseThrow(() -> new ServiceException("帐号（用于登录的信息）不存在或是已被删除")));
+        return RequestResult.success(accountService.get(id).orElseThrow(() -> new ServiceException("帐号（用于登录的信息）不存在或是已被删除")));
     }
 
     /**
