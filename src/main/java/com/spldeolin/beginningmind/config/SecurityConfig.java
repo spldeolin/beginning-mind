@@ -25,8 +25,6 @@ public class SecurityConfig {
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 重定向到RestController
         shiroFilterFactoryBean.setLoginUrl("/unauthc");
-        // 重定向到RestController
-        shiroFilterFactoryBean.setUnauthorizedUrl("/unauth");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         filterChainDefinitionMap.put("/security/sign_in", "anon");
         filterChainDefinitionMap.put("/**", "authc");
@@ -71,6 +69,9 @@ public class SecurityConfig {
         return redisManager;
     }
 
+    /**
+     * 开启@RequiresPermissions注解
+     */
     @Bean
     public AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor(SecurityManager securityManager) {
         AuthorizationAttributeSourceAdvisor authorizationAttributeSourceAdvisor = new AuthorizationAttributeSourceAdvisor();

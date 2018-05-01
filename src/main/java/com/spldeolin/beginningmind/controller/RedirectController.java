@@ -16,11 +16,6 @@ public class RedirectController implements ErrorController {
         return RequestResult.failure(ResultCode.UNAUTHORIZED);
     }
 
-    @GetMapping("unauth")
-    public RequestResult unauth() {
-        return RequestResult.failure(ResultCode.FORBIDDEN);
-    }
-
     @GetMapping(ERROR_MAPPING)
     public RequestResult notFound() {
         return RequestResult.failure(ResultCode.NOT_FOUND);

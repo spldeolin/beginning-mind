@@ -55,11 +55,6 @@ public class SecurityController {
         return RequestResult.success();
     }
 
-    @GetMapping("signer")
-    public RequestResult signer() {
-        return RequestResult.success(SecurityUtils.getSubject().getPrincipal());
-    }
-
     @Autowired
     private FindByIndexNameSessionRepository<? extends Session> finder;
 

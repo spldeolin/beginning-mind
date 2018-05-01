@@ -56,8 +56,12 @@ public interface SecurityAccountService extends CommonService<SecurityAccount> {
     Page<SecurityAccount> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
     /**
-     * 通过唯一用户名，获取帐号关联到的权限的@RequiresPermissions映射
+     * 获取帐号关联到的权限的@RequiresPermissions映射
      */
     List<String> listAccountPermissionMappings(Long accountId);
+
+    // TODO 获取指定帐号的在线情况
+
+    // TODO 将指定帐号踢下线
 
 }
