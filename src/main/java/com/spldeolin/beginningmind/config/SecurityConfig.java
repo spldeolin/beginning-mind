@@ -37,9 +37,14 @@ public class SecurityConfig {
         // 放行登录请求、404页面
         filterChainDefinitionMap.put("/security/sign_in", "anon");
         filterChainDefinitionMap.put(RedirectController.NOT_FOUND_MAPPING, "anon");
-        // 非prod环境放行actuator相关请求
+        // 非prod环境放行actuator、swagger相关请求
         if (!ArrayUtils.contains(environment.getActiveProfiles(), BasicConstant.PROD_PROFILE_NAME)) {
             filterChainDefinitionMap.put("/actuator/**", "anon");
+            filterChainDefinitionMap.put("/swagger-ui.html","anon");
+            filterChainDefinitionMap.put("/swagger/**","anon");
+            filterChainDefinitionMap.put("/swagger-resources/**","anon");
+            filterChainDefinitionMap.put("/webjars/**", "anon");
+            filterChainDefinitionMap.put("/v2/**","anon");
         }
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);

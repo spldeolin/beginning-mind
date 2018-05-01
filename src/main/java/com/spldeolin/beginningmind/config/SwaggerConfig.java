@@ -1,7 +1,9 @@
 package com.spldeolin.beginningmind.config;
 
-import com.spring4all.swagger.EnableSwagger2Doc;
+import org.springframework.context.annotation.Configuration;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
-@EnableSwagger2Doc
+@Configuration
+@EnableSwagger2
 public class SwaggerConfig {
 }
