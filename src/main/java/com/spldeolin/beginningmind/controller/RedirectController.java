@@ -10,21 +10,21 @@ import com.spldeolin.beginningmind.controller.dto.RequestResult;
 @RestController
 public class RedirectController implements ErrorController {
 
-    public static final String ERROR_MAPPING = "/error";
+    public static final String NOT_FOUND_MAPPING = "/error";
 
     @GetMapping("unauthc")
     public RequestResult unauthc() {
         return RequestResult.failure(ResultCode.UNAUTHENTICATED);
     }
 
-    @RequestMapping(ERROR_MAPPING)
+    @RequestMapping(NOT_FOUND_MAPPING)
     public RequestResult notFound() {
         return RequestResult.failure(ResultCode.NOT_FOUND);
     }
 
     @Override
     public String getErrorPath() {
-        return ERROR_MAPPING;
+        return NOT_FOUND_MAPPING;
     }
 
 }

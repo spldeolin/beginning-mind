@@ -59,7 +59,7 @@ public class ControllerAspect {
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         // HTTP-404的请求不做任何切面处理
-        if (RedirectController.ERROR_MAPPING.equals(RequestContextUtil.request().getRequestURI())) {
+        if (RedirectController.NOT_FOUND_MAPPING.equals(RequestContextUtil.request().getRequestURI())) {
             return point.proceed(point.getArgs());
         }
         // 解析切点

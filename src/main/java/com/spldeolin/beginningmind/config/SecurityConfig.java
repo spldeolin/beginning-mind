@@ -29,7 +29,7 @@ public class SecurityConfig {
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 放行登录请求、404页面
         filterChainDefinitionMap.put("/security/sign_in", "anon");
-        filterChainDefinitionMap.put(RedirectController.ERROR_MAPPING, "anon");
+        filterChainDefinitionMap.put(RedirectController.NOT_FOUND_MAPPING, "anon");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;
