@@ -1,13 +1,19 @@
 package com.spldeolin.beginningmind.service.impl;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.session.FindByIndexNameSessionRepository;
+import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.cache.RedisCache;
+import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.dao.SecurityAccountMapper;
 import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.model.SecurityAccounts2roles;
@@ -41,6 +47,12 @@ public class SecurityAccountServiceImpl extends CommonServiceImpl<SecurityAccoun
 
     @Autowired
     private SecurityPermissionService permissionService;
+
+    @Autowired
+    private RedisCache redisCache;
+
+    @Autowired
+    private FindByIndexNameSessionRepository<? extends Session> finder;
 
     @Override
     public Long createEX(SecurityAccount securityAccount) {
@@ -123,6 +135,36 @@ public class SecurityAccountServiceImpl extends CommonServiceImpl<SecurityAccoun
             result.add(permission.getRequiresPermissionsMapping());
         }
         return result;
+    }
+
+    @Override
+    public Boolean isAccountSigning(Long accountId) {
+        return getSignerSession(accountId).isPresent();
+    }
+
+    @Override
+    public void killSigner(Long accountId) {
+        Session session = getSignerSession(accountId).orElseThrow(() -> new ServiceException("帐号已离线"));
+        // 被踢登录者 会在切面中通过自身的当前会话ID找个这个标识，找到后直接调用Shiro登出
+        redisCache.setCacheWithExpireTime("killed:session:" + session.getId(), "killed",
+                SessionConfig.SESSION_EXPIRE_SECONDS);
+    }
+
+    /**
+     * 根据登录时存的PRINCIPAL_NAME_INDEX_NAME的值，通过Spring Session提供的API找到登录者的会话，
+     * 会话不存在则代表未登录
+     */
+    private Optional<Session> getSignerSession(Long accountId) {
+        String username = this.get(accountId).orElseThrow(() ->
+                new ServiceException("帐号不存在或是已被删除")).getUsername();
+        Collection<? extends Session> signerSessions = this.finder.findByIndexNameAndIndexValue(
+                FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, username).values();
+        // 只可能找到一个，或找不到
+        if (signerSessions.size() > 0) {
+            return Optional.ofNullable(signerSessions.toArray(new Session[0])[0]);
+        } else {
+            return Optional.empty();
+        }
     }
 
 }

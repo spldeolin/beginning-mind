@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -127,8 +128,13 @@ public class ControllerAspect {
     }
 
     private void checkKilled() {
-        if (redisCache.getCache("killed:session:" + RequestContextUtil.session().getId(), String.class) != null) {
-            SecurityUtils.getSubject().logout();
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated() || subject.isRemembered()) {
+            String cacheKey = "killed:session:" + RequestContextUtil.session().getId();
+            if (redisCache.getCache(cacheKey, String.class) != null) {
+                subject.logout();
+                redisCache.deleteCache(cacheKey);
+            }
         }
     }
 

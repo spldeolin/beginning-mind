@@ -60,8 +60,14 @@ public interface SecurityAccountService extends CommonService<SecurityAccount> {
      */
     List<String> listAccountPermissionMappings(Long accountId);
 
-    // TODO 获取指定帐号的在线情况
+    /**
+     * 获取指定帐号的在线情况
+     */
+    Boolean isAccountSigning(Long accountId);
 
-    // TODO 将指定帐号踢下线
+    /**
+     * 将指定帐号踢下线
+     */
+    void killSigner(Long accountId);
 
 }

@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
+import org.apache.shiro.authc.UsernamePasswordToken;
 import org.hibernate.validator.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,5 +23,11 @@ public class SignInInput implements Serializable {
     private String password;
 
     private static final long serialVersionUID = 1L;
+
+    public UsernamePasswordToken toToken() {
+        UsernamePasswordToken token = new UsernamePasswordToken(username, password);
+        token.setRememberMe(false);
+        return token;
+    }
 
 }
