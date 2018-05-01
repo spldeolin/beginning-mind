@@ -14,7 +14,7 @@ public class RedirectController implements ErrorController {
 
     @GetMapping("unauthc")
     public RequestResult unauthc() {
-        return RequestResult.failure(ResultCode.UNAUTHORIZED);
+        return RequestResult.failure(ResultCode.UNAUTHENTICATED);
     }
 
     @RequestMapping(ERROR_MAPPING)
