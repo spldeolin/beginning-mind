@@ -11,9 +11,11 @@ import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 @RestController
 @RequestMapping("test")
+@Log4j2
 public class TestController {
 
     @GetMapping("time")
@@ -42,6 +44,10 @@ public class TestController {
     @RequiresPermissions("test/get")
     @GetMapping("get")
     public String getSes(HttpSession ses) {
+        log.info("asd");
+        log.info("asd");
+        log.info("asd");
+        log.info("asd");
         return (String) ses.getAttribute("one-cookie");
     }
 
