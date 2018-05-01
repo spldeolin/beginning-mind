@@ -13,6 +13,7 @@ import org.crazycake.shiro.RedisManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.TinyCredentialsMatcher;
 
@@ -26,7 +27,9 @@ public class SecurityConfig {
         // 重定向到RestController
         shiroFilterFactoryBean.setLoginUrl("/unauthc");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
+        // 放行登录请求、404页面
         filterChainDefinitionMap.put("/security/sign_in", "anon");
+        filterChainDefinitionMap.put(RedirectController.ERROR_MAPPING, "anon");
         filterChainDefinitionMap.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
         return shiroFilterFactoryBean;

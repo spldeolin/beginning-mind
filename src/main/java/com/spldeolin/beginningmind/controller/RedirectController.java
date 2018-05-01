@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.controller;
 
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
@@ -16,7 +17,7 @@ public class RedirectController implements ErrorController {
         return RequestResult.failure(ResultCode.UNAUTHORIZED);
     }
 
-    @GetMapping(ERROR_MAPPING)
+    @RequestMapping(ERROR_MAPPING)
     public RequestResult notFound() {
         return RequestResult.failure(ResultCode.NOT_FOUND);
     }
