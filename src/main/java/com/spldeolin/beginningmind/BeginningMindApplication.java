@@ -9,4 +9,5 @@ public class BeginningMindApplication {
     public static void main(String[] args) {
         SpringApplication.run(BeginningMindApplication.class, args);
     }
+
 }
