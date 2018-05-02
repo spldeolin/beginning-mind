@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.controller.dto;
+package com.spldeolin.beginningmind.filter;
 
 import java.io.IOException;
 import javax.servlet.Filter;
@@ -7,10 +7,10 @@ import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.util.RequestContextUtil;
 
 /**
  * 过滤器：用于请求结束后，获取请求回应的HTTP STATUS
@@ -58,7 +58,11 @@ public class HttpStatusReportingFilter implements Filter {
         chain.doFilter(req, response);
         int status = response.getStatus();
         if (0 != status) {
-            RequestContextUtil.request().setAttribute("{HTTP_STATUS_CODE}", status);
+            // 供“/error”获取
+            HttpServletRequest request = (HttpServletRequest) req;
+            request.setAttribute("{HTTP_STATUS_CODE}", status);
+            request.setAttribute("{HTTP_URL}", request.getRequestURI());
+            request.setAttribute("{HTTP_METHOD}", request.getMethod());
         }
     }
 
