@@ -31,6 +31,7 @@ public class ControllerListener implements ApplicationListener<ServletRequestHan
         if (controllerInfo == null) {
             return;
         }
+        // 打印请求的执行时间
         log.info("[" + event.getMethod() + "]" + event.getRequestUrl() + SEP +
                 controllerInfo.getInsignia() + SEP + event.getProcessingTimeMillis());
     }

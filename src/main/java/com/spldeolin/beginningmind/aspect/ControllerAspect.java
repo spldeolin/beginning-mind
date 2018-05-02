@@ -17,7 +17,6 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,8 +28,6 @@ import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
-import com.spldeolin.beginningmind.constant.CoupledConstant;
-import com.spldeolin.beginningmind.controller.RedirectController;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import com.spldeolin.beginningmind.util.StringRandomUtil;
 import lombok.extern.log4j.Log4j2;
@@ -52,10 +49,7 @@ public class ControllerAspect {
     @Autowired
     private RedisCache redisCache;
 
-    @Value("${management.context-path}")
-    private String actuatorContextPath;
-
-    @Pointcut("execution(* com.spldeolin.beginningmind.controller.*.*(..))")
+    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*Controller.*(..)) && !execution(* com.spldeolin.beginningmind.controller.RedirectController.*(..))")
     public void controllerMethod() {}
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
@@ -63,11 +57,6 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        String url = RequestContextUtil.request().getRequestURI();
-        // 忽略error请求（这类请求是重定向请求，RequestContextUtil.request()会报错）
-        if (CoupledConstant.ERROR_PAGE_URL.equals(url)) {
-            return point.proceed(point.getArgs());
-        }
         // 解析切点
         ControllerInfo controllerInfo = analyzePoint(point);
         RequestContextUtil.setControllerInfo(controllerInfo);

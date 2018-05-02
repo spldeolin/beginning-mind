@@ -76,4 +76,9 @@ public class SecurityController {
         return RequestResult.success();
     }
 
+    @GetMapping("anon")
+    public RequestResult anon() {
+        return RequestResult.success("初心");
+    }
+
 }
