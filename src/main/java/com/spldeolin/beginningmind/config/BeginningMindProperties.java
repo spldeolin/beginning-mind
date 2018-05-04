@@ -30,26 +30,6 @@ public class BeginningMindProperties {
     private String pageSizeParamName;
 
     /**
-     * 数据库 数据插入时间的字段名
-     */
-    private String insertTimeColumnName;
-
-    /**
-     * 数据库 数据更新时间的字段名
-     */
-    private String updateTimeColumnName;
-
-    /**
-     * 数据库 数据删除标识的字段名
-     */
-    private String deleteFlagColumnName;
-
-    /**
-     * 数据库 数据删除标识满足什么条件才算数据被删除
-     */
-    private String HowDeleteIsDelete;
-
-    /**
      * IP地址
      */
     private String ip;
@@ -68,6 +48,11 @@ public class BeginningMindProperties {
      * 使用一分钱支付
      */
     private Boolean useOneCentWhenPay;
+
+    /**
+     * 文件支持
+     */
+    private File file;
 
     /**
      * “时间”格式
@@ -98,6 +83,19 @@ public class BeginningMindProperties {
      * 各种类型的构造体
      */
     private Struct struct;
+
+    /*
+     *              内部类
+     */
+
+    @Data
+    public static class File {
+
+        private String mapping;
+
+        private String location;
+
+    }
 
     @Data
     public static class Time {

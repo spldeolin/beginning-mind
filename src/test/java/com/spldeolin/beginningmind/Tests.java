@@ -1,8 +1,11 @@
 package com.spldeolin.beginningmind;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +23,7 @@ import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.ApplicationContext;
 import com.spldeolin.beginningmind.util.JsonUtil;
 import com.spldeolin.beginningmind.util.StringRandomUtil;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
@@ -88,6 +92,16 @@ public class Tests {
         log.info(JsonUtil.toObject(json, Goods.class, om));
         log.info(JsonUtil.toObject(snakeJson, Goods.class));
         log.info(JsonUtil.toObject(snakeJson, Goods.class, om));
+    }
+
+    @Test
+    @SneakyThrows
+    public void io() {
+        BeginningMindProperties properties = ApplicationContext.getBean(BeginningMindProperties.class);
+        FileUtils.writeStringToFile(new File(properties.getFile().getLocation() + File.separator + "a.txt"), "你好",
+                StandardCharsets.UTF_8);
+        log.info("映射路径" + properties.getFile().getMapping() + "/a.txt");
+        log.info("hold on");
     }
 
 }
