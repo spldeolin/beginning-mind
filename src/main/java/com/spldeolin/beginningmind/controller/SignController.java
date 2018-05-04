@@ -23,10 +23,10 @@ import com.spldeolin.beginningmind.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping("security")
+@RequestMapping("sign")
 @Log4j2
 @Validated
-public class SecurityController {
+public class SignController {
 
     @Autowired
     private SecurityAccountService securityAccountService;
@@ -63,7 +63,7 @@ public class SecurityController {
     /**
      * 指定用户是否登录中
      */
-    @GetMapping("is_sign")
+    @GetMapping("is_signing")
     public RequestResult isSign(@RequestParam("account_id") Long accountId) {
         return RequestResult.success(securityAccountService.isAccountSigning(accountId));
     }
