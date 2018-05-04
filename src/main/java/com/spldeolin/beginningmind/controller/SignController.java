@@ -36,6 +36,8 @@ import lombok.extern.log4j.Log4j2;
 @Validated
 public class SignController {
 
+    private static final String VERIFY_CODE = "{VERIFY_CODE}";
+
     @Autowired
     private SecurityAccountService securityAccountService;
 
@@ -45,12 +47,15 @@ public class SignController {
     @Autowired
     private BeginningMindProperties beginningMindProperties;
 
+    /**
+     * 获取验证码
+     */
     @GetMapping("verify_code")
     @SneakyThrows
     public RequestResult verifyCode() {
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         String createText = defaultKaptcha.createText();
-        RequestContextUtil.session().setAttribute("verifyCode", createText);
+        RequestContextUtil.session().setAttribute(VERIFY_CODE, createText);
         //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
         BufferedImage challenge = defaultKaptcha.createImage(createText);
         ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -67,10 +72,16 @@ public class SignController {
      */
     @PostMapping("sign_in")
     public RequestResult signIn(@RequestBody @Valid SignInput input) {
+        // 验证码、重复登录校验
+        String createText = (String) RequestContextUtil.session().getAttribute(VERIFY_CODE);
+        if (!input.getVerifyCode().equals(createText)) {
+            throw new ServiceException("验证码错误");
+        }
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");
         }
+        // 登录
         try {
             subject.login(input.toToken());
         } catch (AuthenticationException e) {

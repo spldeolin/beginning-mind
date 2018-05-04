@@ -28,6 +28,12 @@ public class SignInput implements Serializable {
     @NotBlank
     private String password;
 
+    /**
+     * 验证码
+     */
+    @NotBlank
+    private String verifyCode;
+
     private static final long serialVersionUID = 1L;
 
     /**
