@@ -25,8 +25,8 @@ import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
-import com.spldeolin.beginningmind.util.RequestContextUtil;
-import com.spldeolin.beginningmind.util.StringCaseUtil;
+import com.spldeolin.beginningmind.util.RequestContextUtils;
+import com.spldeolin.beginningmind.util.StringCaseUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -71,7 +71,7 @@ public class GlobalExceptionAdvance {
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public RequestResult handle(MissingServletRequestParameterException e) {
         return RequestResult.failure(ResultCode.BAD_REQEUST,
-                "缺少请求参数" + StringCaseUtil.camelToSnake(e.getParameterName()));
+                "缺少请求参数" + StringCaseUtils.camelToSnake(e.getParameterName()));
     }
 
     /**
@@ -88,7 +88,7 @@ public class GlobalExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        ControllerInfo controllerInfo = RequestContextUtil.getControllerInfo();
+        ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         String[] paramNames = controllerInfo.getParameterNames();
         Object[] paramValues = controllerInfo.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
@@ -97,7 +97,7 @@ public class GlobalExceptionAdvance {
             PathImpl pathImpl = (PathImpl) cv.getPropertyPath();
             // 参数下标
             int paramIndex = pathImpl.getLeafNode().getParameterIndex();
-            invalids.add(Invalid.builder().name(StringCaseUtil.camelToSnake(paramNames[paramIndex])).value(
+            invalids.add(Invalid.builder().name(StringCaseUtils.camelToSnake(paramNames[paramIndex])).value(
                     paramValues[paramIndex]).cause(cv.getMessage()).build());
         }
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
@@ -125,7 +125,7 @@ public class GlobalExceptionAdvance {
         BindingResult bindingResult = e.getBindingResult();
         List<Invalid> invalids = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            invalids.add(Invalid.builder().name(StringCaseUtil.camelToSnake(fieldError.getField())).value(
+            invalids.add(Invalid.builder().name(StringCaseUtils.camelToSnake(fieldError.getField())).value(
                     fieldError.getRejectedValue()).cause(fieldError.getDefaultMessage()).build());
         }
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
@@ -160,7 +160,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        ControllerInfo controllerInfo = RequestContextUtil.getControllerInfo();
+        ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         if (controllerInfo == null) {
             return RequestResult.failure(ResultCode.INTERNAL_ERROR);
         }

@@ -12,14 +12,14 @@ import lombok.experimental.UtilityClass;
 /**
  * 英语名词的单复数转化工具类
  * <pre>
- * e.g.1: PluralUtil.pluralize("woman");   // 返回women
- * e.g.2: PluralUtil.singularize("boxes"); // 返回box
+ * e.g.1: PluralUtils.pluralize("woman");   // 返回women
+ * e.g.2: PluralUtils.singularize("boxes"); // 返回box
  * </pre>
  *
  * @author Web
  */
 @UtilityClass
-public class PluralUtil {
+public class PluralUtils {
 
     private static List<RuleAndReplacement> plurals = new ArrayList<>();
 
@@ -128,12 +128,12 @@ public class PluralUtil {
 
     public static void main(String[] args) {
         // 单数转复数
-        System.out.println(PluralUtil.pluralize("basic_woman"));
-        System.out.println(PluralUtil.pluralize("box"));
-        System.out.println(PluralUtil.pluralize("tomato"));
+        System.out.println(PluralUtils.pluralize("basic_woman"));
+        System.out.println(PluralUtils.pluralize("box"));
+        System.out.println(PluralUtils.pluralize("tomato"));
         // 复数转单数
-        System.out.println(PluralUtil.singularize("women"));
-        System.out.println(PluralUtil.singularize("boxes"));
+        System.out.println(PluralUtils.singularize("women"));
+        System.out.println(PluralUtils.singularize("boxes"));
     }
 
 }

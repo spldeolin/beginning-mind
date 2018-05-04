@@ -7,7 +7,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.util.SerializationUtil;
+import com.spldeolin.beginningmind.util.SerializationUtils;
 
 @Component
 public class RedisCache {
@@ -17,7 +17,7 @@ public class RedisCache {
 
     public <T> void setCache(String key, T obj) {
         final byte[] bkey = key.getBytes();
-        final byte[] bvalue = SerializationUtil.serialize(obj);
+        final byte[] bvalue = SerializationUtils.serialize(obj);
         redisTemplate.execute(new RedisCallback<Object>() {
             @Override
             public Object doInRedis(RedisConnection connection) throws DataAccessException {
@@ -32,7 +32,7 @@ public class RedisCache {
      */
     public <T> boolean setNXCache(String key, T obj) {
         final byte[] bkey = key.getBytes();
-        final byte[] bvalue = SerializationUtil.serialize(obj);
+        final byte[] bvalue = SerializationUtils.serialize(obj);
         boolean result = redisTemplate.execute(new RedisCallback<Boolean>() {
             @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
@@ -47,7 +47,7 @@ public class RedisCache {
      */
     public <T> void setCacheWithExpireTime(String key, T obj, final long expireTime) {
         final byte[] bkey = key.getBytes();
-        final byte[] bvalue = SerializationUtil.serialize(obj);
+        final byte[] bvalue = SerializationUtils.serialize(obj);
         redisTemplate.execute(new RedisCallback<Boolean>() {
             @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
@@ -67,7 +67,7 @@ public class RedisCache {
         if (result == null) {
             return null;
         }
-        return SerializationUtil.deserialize(result, targetClass);
+        return SerializationUtils.deserialize(result, targetClass);
     }
 
     /**

@@ -7,7 +7,7 @@ import lombok.experimental.UtilityClass;
  * 随机字符串
  */
 @UtilityClass
-public class StringRandomUtil {
+public class StringRandomUtils {
 
     /**
      * 随机选取可见ASCII字符，生成随机字符串

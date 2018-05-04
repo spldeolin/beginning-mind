@@ -10,7 +10,7 @@ import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class RequestContextUtil {
+public class RequestContextUtils {
 
     public static HttpServletRequest request() {
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();

@@ -3,8 +3,8 @@ package com.spldeolin.beginningmind.api.mapper.provider;
 import java.util.Set;
 import org.apache.ibatis.mapping.MappedStatement;
 import org.springframework.util.ReflectionUtils;
-import com.spldeolin.beginningmind.util.SqlUtil;
-import com.spldeolin.beginningmind.util.StringCaseUtil;
+import com.spldeolin.beginningmind.util.SqlUtils;
+import com.spldeolin.beginningmind.util.StringCaseUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
@@ -26,14 +26,14 @@ public class DeleteMapperProvider extends MapperTemplate {
      */
     public String deleteById(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        if (ReflectionUtils.findField(entityClass, StringCaseUtil.snakeToLowerCamel("is_deleted")) == null) {
+        if (ReflectionUtils.findField(entityClass, StringCaseUtils.snakeToLowerCamel("is_deleted")) == null) {
             log.warn("Model[" + entityClass.getCanonicalName() + "]中没有删除标识字段[" + "is_deleted" +
                     "]，调用mapper.deleted()将会抛出异常");
             return null;
         }
-        String sql = SqlUtil.updateTable(entityClass, tableName(entityClass));
-        sql += SqlUtil.deleteFlagWhenDelete();
-        sql += SqlUtil.wherePKColumns(entityClass, false); // 不使用乐观锁
+        String sql = SqlUtils.updateTable(entityClass, tableName(entityClass));
+        sql += SqlUtils.deleteFlagWhenDelete();
+        sql += SqlUtils.wherePKColumns(entityClass, false); // 不使用乐观锁
         return sql;
     }
 
@@ -42,14 +42,14 @@ public class DeleteMapperProvider extends MapperTemplate {
      */
     public String deleteBatchByIds(MappedStatement ms) {
         Class<?> entityClass = getEntityClass(ms);
-        if (ReflectionUtils.findField(entityClass, StringCaseUtil.snakeToLowerCamel("is_deleted")) == null) {
+        if (ReflectionUtils.findField(entityClass, StringCaseUtils.snakeToLowerCamel("is_deleted")) == null) {
             log.warn("Model[" + entityClass + "]中没有删除标识字段[" + "is_deleted" + "]，调用mapper.deleted()将会抛出异常");
             return null;
         }
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
-        String sql = SqlUtil.updateTable(entityClass, tableName(entityClass));
+        String sql = SqlUtils.updateTable(entityClass, tableName(entityClass));
         if (columnList.size() == 1) {
-            sql += SqlUtil.deleteFlagWhenDelete();
+            sql += SqlUtils.deleteFlagWhenDelete();
             sql += " where ";
             sql += columnList.iterator().next().getColumn();
             sql += " in (${_parameter})";

@@ -17,7 +17,7 @@ import lombok.experimental.UtilityClass;
  * @author Deolin
  */
 @UtilityClass
-public class JsonUtil {
+public class JSONUtils {
 
     private static ObjectMapper defaultObjectMapper;
 
@@ -68,7 +68,7 @@ public class JsonUtil {
      * 这个方法返回的是String格式。
      * 建议使用这个方法来方便地取得目标值，而不是转化为临时的Map对象后通过map.get("key")取得。
      * 例如，想要从下面的JSON从取到第二个user的id，可以调用
-     * JsonUtil.getValue(Integer.class, json, "users", "1", "user_id");
+     * JSONUtils.getValue(Integer.class, json, "users", "1", "user_id");
      *
      * {
      *      "organization_id": "112",

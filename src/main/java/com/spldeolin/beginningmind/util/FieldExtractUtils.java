@@ -10,7 +10,7 @@ import lombok.experimental.UtilityClass;
  * 抽取对象中的属性值
  */
 @UtilityClass
-public class FieldExtractUtil {
+public class FieldExtractUtils {
 
     /**
      * 抽取对象集合中所有的ID属性

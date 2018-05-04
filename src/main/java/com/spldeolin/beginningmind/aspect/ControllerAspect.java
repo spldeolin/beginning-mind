@@ -29,8 +29,8 @@ import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
-import com.spldeolin.beginningmind.util.RequestContextUtil;
-import com.spldeolin.beginningmind.util.StringRandomUtil;
+import com.spldeolin.beginningmind.util.RequestContextUtils;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -60,7 +60,7 @@ public class ControllerAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         // 解析切点
         ControllerInfo controllerInfo = analyzePoint(point);
-        RequestContextUtil.setControllerInfo(controllerInfo);
+        RequestContextUtils.setControllerInfo(controllerInfo);
         // 开始日志
         logBefore(controllerInfo);
         // 检查会话是否被击杀
@@ -83,7 +83,7 @@ public class ControllerAspect {
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(Object requestResult) {
-        ControllerInfo controllerInfo = RequestContextUtil.getControllerInfo();
+        ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         // 未进入解析切面的异常，开始日志是不会有的，也没必要打印返回日志（如body不可读异常）
         if (controllerInfo == null) {
             return;
@@ -104,12 +104,12 @@ public class ControllerAspect {
         // 生成请求标识，构造ControllerInfo对象
         ControllerInfo controllerInfo = ControllerInfo.builder().controllerTarget(controllerTarget).method(
                 method).parameterNames(parameterNames).parameterValues(parameterValues).insignia(
-                StringRandomUtil.generateEnNum(6)).build();
+                StringRandomUtils.generateEnNum(6)).build();
         return controllerInfo;
     }
 
     private void logBefore(ControllerInfo controllerInfo) {
-        HttpServletRequest request = RequestContextUtil.request();
+        HttpServletRequest request = RequestContextUtils.request();
         log.info("收到请求。(" + controllerInfo.getInsignia() + ")");
         log.info("[协议] URL：" + request.getRequestURI());
         log.info("[协议] 动词：" + request.getMethod());
@@ -126,7 +126,7 @@ public class ControllerAspect {
     private void checkKilled() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
-            String cacheKey = "killed:session:" + RequestContextUtil.session().getId();
+            String cacheKey = "killed:session:" + RequestContextUtils.session().getId();
             if (redisCache.getCache(cacheKey, String.class) != null) {
                 subject.logout();
                 redisCache.deleteCache(cacheKey);
@@ -136,7 +136,7 @@ public class ControllerAspect {
     }
 
     private void reflashSessionExpire() {
-        HttpSession session = RequestContextUtil.session();
+        HttpSession session = RequestContextUtils.session();
         session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
@@ -149,7 +149,7 @@ public class ControllerAspect {
     private void logThrowing(ControllerInfo controllerInfo, Object requestResult) {
         log.info("...处理中断");
         log.info("统一异常处理返回值：" + requestResult);
-        log.info("返回响应。" + RequestContextUtil.getControllerInfo().getInsignia());
+        log.info("返回响应。" + RequestContextUtils.getControllerInfo().getInsignia());
     }
 
     private List<Invalid> handleExtraAnnotation(ControllerInfo controllerInfo) {
@@ -170,7 +170,7 @@ public class ControllerAspect {
                         pageNoParamName = "page_no";
                     }
                     parameterValue = handlePageNo(
-                            RequestContextUtil.request().getParameter(pageNoParamName));
+                            RequestContextUtils.request().getParameter(pageNoParamName));
                 }
                 // 处理PageSize注解
                 if (annotation instanceof PageSize) {
@@ -179,7 +179,7 @@ public class ControllerAspect {
                         pageSizeParamName = "page_size";
                     }
                     parameterValue = handlePageSize(annotation,
-                            RequestContextUtil.request().getParameter(pageSizeParamName));
+                            RequestContextUtils.request().getParameter(pageSizeParamName));
                 }
                 // 处理RequireId注解
                 //if (annotation instanceof RequireId) {

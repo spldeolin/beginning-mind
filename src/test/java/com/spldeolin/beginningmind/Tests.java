@@ -21,8 +21,8 @@ import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.ApplicationContext;
-import com.spldeolin.beginningmind.util.JsonUtil;
-import com.spldeolin.beginningmind.util.StringRandomUtil;
+import com.spldeolin.beginningmind.util.JSONUtils;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,7 +53,7 @@ public class Tests {
         String passwordEX = DigestUtils.sha512Hex(rawPassword);
         List<SecurityAccount> accounts = securityAccountService.listAll();
         for (SecurityAccount account : accounts) {
-            String salt = StringRandomUtil.generateVisibleAscii(32);
+            String salt = StringRandomUtils.generateVisibleAscii(32);
             String passwordEX2 = DigestUtils.sha512Hex(passwordEX + salt);
             account.setSalt(salt).setPassword(passwordEX2);
             securityAccountService.update(account);
@@ -83,15 +83,15 @@ public class Tests {
     public void testJsonUtil() {
         ObjectMapper om = new ObjectMapper();
         Goods user = Goods.builder().name("aaa_bbb").updatedAt(LocalDateTime.MAX).build();
-        log.info(JsonUtil.toJson(user));
-        log.info(JsonUtil.toJson(user, om));
+        log.info(JSONUtils.toJson(user));
+        log.info(JSONUtils.toJson(user, om));
 
         String json = "{\"id\":null,\"updatedAt\":\"+999999999-12-31 23:59:59\",\"name\":\"aaa_bbb\",\"salt\":null,\"sex\":null,\"age\":null,\"flag\":null,\"ymd\":null,\"hms\":null,\"ymdhms\":null,\"money\":null,\"serialNumber\":null,\"percent\":null,\"richText\":null}";
         String snakeJson = "{\"id\":null,\"updated_at\":\"+999999999-12-31 23:59:59\",\"name\":\"aaa_bbb\",\"salt\":null,\"sex\":null,\"age\":null,\"flag\":null,\"ymd\":null,\"hms\":null,\"ymdhms\":null,\"money\":null,\"serial_number\":null,\"percent\":null,\"rich_text\":null}";
-        log.info(JsonUtil.toObject(json, Goods.class));
-        log.info(JsonUtil.toObject(json, Goods.class, om));
-        log.info(JsonUtil.toObject(snakeJson, Goods.class));
-        log.info(JsonUtil.toObject(snakeJson, Goods.class, om));
+        log.info(JSONUtils.toObject(json, Goods.class));
+        log.info(JSONUtils.toObject(json, Goods.class, om));
+        log.info(JSONUtils.toObject(snakeJson, Goods.class));
+        log.info(JSONUtils.toObject(snakeJson, Goods.class, om));
     }
 
     @Test

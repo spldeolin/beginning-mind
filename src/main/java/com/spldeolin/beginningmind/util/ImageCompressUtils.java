@@ -19,7 +19,7 @@ import lombok.experimental.UtilityClass;
  * @author Deolin
  */
 @UtilityClass
-public class ImageCompressUtil {
+public class ImageCompressUtils {
 
     /***
      * 按指定的比例缩放图片

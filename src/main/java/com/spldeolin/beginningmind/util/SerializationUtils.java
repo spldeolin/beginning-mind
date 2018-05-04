@@ -12,7 +12,7 @@ import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
-public class SerializationUtil {
+public class SerializationUtils {
 
     private static Map<Class<?>, Schema<?>> cachedSchema = new ConcurrentHashMap<>();
 

@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @UtilityClass
 @Log4j2
-public class QRCodeUtil {
+public class QRCodeUtils {
 
     /**
      * 生成二维码(QRCode)图片
@@ -41,7 +41,7 @@ public class QRCodeUtil {
         try {
             log.info(content);
             log.info(imgPath);
-            QRCodeUtil.encode(content, null, imgPath, true);
+            QRCodeUtils.encode(content, null, imgPath, true);
         } catch (Exception e) {
             throw new RuntimeException("生成二维码失败", e);
         }
@@ -74,7 +74,7 @@ public class QRCodeUtil {
             return image;
         }
         // 插入图片
-        QRCodeUtil.insertImage(image, logoPath, needCompress);
+        QRCodeUtils.insertImage(image, logoPath, needCompress);
         return image;
     }
 
@@ -129,7 +129,7 @@ public class QRCodeUtil {
      */
     public static String encode(String content, String logoPath, String destPath,
             boolean needCompress) throws Exception {
-        BufferedImage image = QRCodeUtil.createImage(content, logoPath, needCompress);
+        BufferedImage image = QRCodeUtils.createImage(content, logoPath, needCompress);
         File destFile = new File(destPath);
         ImageIO.write(image, FORMAT, destFile);
         return destFile.getName();
@@ -147,7 +147,7 @@ public class QRCodeUtil {
      */
     public static String encode(String content, String logoPath, String destPath, String fileName,
             boolean needCompress) throws Exception {
-        BufferedImage image = QRCodeUtil.createImage(content, logoPath, needCompress);
+        BufferedImage image = QRCodeUtils.createImage(content, logoPath, needCompress);
         mkdirs(destPath);
         fileName = fileName.substring(0, fileName.indexOf(".") > 0 ? fileName.indexOf(".") : fileName.length())
                 + "." + FORMAT.toLowerCase();
@@ -176,7 +176,7 @@ public class QRCodeUtil {
      * @param destPath 存储地址
      */
     public static String encode(String content, String logoPath, String destPath) throws Exception {
-        return QRCodeUtil.encode(content, logoPath, destPath, false);
+        return QRCodeUtils.encode(content, logoPath, destPath, false);
     }
 
     /**
@@ -187,7 +187,7 @@ public class QRCodeUtil {
      * @param needCompress 是否压缩LOGO
      */
     public static String encode(String content, String destPath, boolean needCompress) throws Exception {
-        return QRCodeUtil.encode(content, null, destPath, needCompress);
+        return QRCodeUtils.encode(content, null, destPath, needCompress);
     }
 
     /**
@@ -197,7 +197,7 @@ public class QRCodeUtil {
      * @param destPath 存储地址
      */
     public static String encode(String content, String destPath) throws Exception {
-        return QRCodeUtil.encode(content, null, destPath, false);
+        return QRCodeUtils.encode(content, null, destPath, false);
     }
 
     /**
@@ -210,7 +210,7 @@ public class QRCodeUtil {
      */
     public static void encode(String content, String logoPath, OutputStream output, boolean needCompress)
             throws Exception {
-        BufferedImage image = QRCodeUtil.createImage(content, logoPath, needCompress);
+        BufferedImage image = QRCodeUtils.createImage(content, logoPath, needCompress);
         ImageIO.write(image, FORMAT, output);
     }
 
@@ -221,7 +221,7 @@ public class QRCodeUtil {
      * @param output 输出流
      */
     public static void encode(String content, OutputStream output) throws Exception {
-        QRCodeUtil.encode(content, null, output, false);
+        QRCodeUtils.encode(content, null, output, false);
     }
 
     /**
@@ -250,7 +250,7 @@ public class QRCodeUtil {
      * @param path 二维码图片地址
      */
     public static String decode(String path) throws Exception {
-        return QRCodeUtil.decode(new File(path));
+        return QRCodeUtils.decode(new File(path));
     }
 
 }

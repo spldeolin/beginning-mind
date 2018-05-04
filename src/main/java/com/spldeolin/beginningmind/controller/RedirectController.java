@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
-import com.spldeolin.beginningmind.util.RequestContextUtil;
+import com.spldeolin.beginningmind.util.RequestContextUtils;
 
 @RestController
 public class RedirectController implements ErrorController {
@@ -20,7 +20,7 @@ public class RedirectController implements ErrorController {
 
     @RequestMapping(CoupledConstant.ERROR_PAGE_URL)
     public RequestResult notFound() {
-        HttpServletRequest request = RequestContextUtil.request();
+        HttpServletRequest request = RequestContextUtils.request();
         // 特殊对待HTTP404以外的错误
         int status = (int) request.getAttribute("{HTTP_STATUS_CODE}");
         if (status != 404) {

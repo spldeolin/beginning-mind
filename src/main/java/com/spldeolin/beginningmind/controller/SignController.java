@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
-import com.spldeolin.beginningmind.util.RequestContextUtil;
+import com.spldeolin.beginningmind.util.RequestContextUtils;
 import com.spldeolin.beginningmind.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
@@ -54,7 +54,7 @@ public class SignController {
     public RequestResult verifyCode() {
         try (ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream()) {
             String createText = defaultKaptcha.createText();
-            RequestContextUtil.session().setAttribute(VERIFY_CODE, createText);
+            RequestContextUtils.session().setAttribute(VERIFY_CODE, createText);
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -75,7 +75,7 @@ public class SignController {
     @PostMapping("sign_in")
     public RequestResult signIn(@RequestBody @Valid SignInput input) {
         // 验证码、重复登录校验
-        String createText = (String) RequestContextUtil.session().getAttribute(VERIFY_CODE);
+        String createText = (String) RequestContextUtils.session().getAttribute(VERIFY_CODE);
         if (!input.getVerifyCode().equals(createText)) {
             throw new ServiceException("验证码错误");
         }
@@ -90,7 +90,7 @@ public class SignController {
             throw new ServiceException(e.getMessage());
         }
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
-        RequestContextUtil.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
+        RequestContextUtils.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
                 Signer.current().getSecurityAccount().getId().toString());
         return RequestResult.success();
     }

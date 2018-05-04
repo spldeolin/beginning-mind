@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.api.mapper.provider;
 
 import java.util.Set;
 import org.apache.ibatis.mapping.MappedStatement;
-import com.spldeolin.beginningmind.util.SqlUtil;
+import com.spldeolin.beginningmind.util.SqlUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
@@ -28,9 +28,9 @@ public class SelectMapperProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         //将返回值修改为实体类型
         setResultType(ms, entityClass);
-        String sql = SqlUtil.selectAllColumns(entityClass) +
-                SqlUtil.fromTable(entityClass, tableName(entityClass)) +
-                SqlUtil.wherePKColumns(entityClass);
+        String sql = SqlUtils.selectAllColumns(entityClass) +
+                SqlUtils.fromTable(entityClass, tableName(entityClass)) +
+                SqlUtils.wherePKColumns(entityClass);
         return sql;
     }
 
@@ -41,8 +41,8 @@ public class SelectMapperProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder();
-        sql.append(SqlUtil.selectAllColumns(entityClass));
-        sql.append(SqlUtil.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlUtils.selectAllColumns(entityClass));
+        sql.append(SqlUtils.fromTable(entityClass, tableName(entityClass)));
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         if (columnList.size() == 1) {
             EntityColumn column = columnList.iterator().next();
@@ -64,10 +64,10 @@ public class SelectMapperProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         //修改返回值类型为实体类型
         setResultType(ms, entityClass);
-        String sql = SqlUtil.selectAllColumns(entityClass) +
-                SqlUtil.fromTable(entityClass, tableName(entityClass)) +
+        String sql = SqlUtils.selectAllColumns(entityClass) +
+                SqlUtils.fromTable(entityClass, tableName(entityClass)) +
                 " where " + "is_deleted" + "=FALSE " +
-                SqlUtil.orderByDefault(entityClass);
+                SqlUtils.orderByDefault(entityClass);
         return sql;
     }
 
@@ -77,9 +77,9 @@ public class SelectMapperProvider extends MapperTemplate {
     public String selectBatchByModel(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
         setResultType(ms, entityClass);
-        String sql = SqlUtil.selectAllColumns(entityClass) +
-                SqlUtil.fromTable(entityClass, tableName(entityClass)) +
-                SqlUtil.whereAllIfColumns(entityClass, isNotEmpty());
+        String sql = SqlUtils.selectAllColumns(entityClass) +
+                SqlUtils.fromTable(entityClass, tableName(entityClass)) +
+                SqlUtils.whereAllIfColumns(entityClass, isNotEmpty());
         return sql;
     }
 
@@ -91,14 +91,14 @@ public class SelectMapperProvider extends MapperTemplate {
         setResultType(ms, entityClass);
         StringBuilder sql = new StringBuilder("SELECT ");
         if (isCheckExampleEntityClass()) {
-            sql.append(SqlUtil.exampleCheck(entityClass));
+            sql.append(SqlUtils.exampleCheck(entityClass));
         }
         sql.append("<if test=\"distinct\">distinct</if>");
-        sql.append(SqlUtil.exampleSelectColumns(entityClass));
-        sql.append(SqlUtil.fromTable(entityClass, tableName(entityClass)));
-        sql.append(SqlUtil.exampleWhereClause());
-        sql.append(SqlUtil.exampleOrderBy(entityClass));
-        sql.append(SqlUtil.exampleForUpdate());
+        sql.append(SqlUtils.exampleSelectColumns(entityClass));
+        sql.append(SqlUtils.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlUtils.exampleWhereClause());
+        sql.append(SqlUtils.exampleOrderBy(entityClass));
+        sql.append(SqlUtils.exampleForUpdate());
         return sql.toString();
     }
 
@@ -107,8 +107,8 @@ public class SelectMapperProvider extends MapperTemplate {
      */
     public String selectCountByModel(MappedStatement ms) {
         final Class<?> entityClass = getEntityClass(ms);
-        String sql = SqlUtil.selectCount(entityClass) + SqlUtil.fromTable(entityClass, tableName(entityClass)) +
-                SqlUtil.whereAllIfColumns(entityClass, isNotEmpty());
+        String sql = SqlUtils.selectCount(entityClass) + SqlUtils.fromTable(entityClass, tableName(entityClass)) +
+                SqlUtils.whereAllIfColumns(entityClass, isNotEmpty());
         return sql;
     }
 
@@ -119,12 +119,12 @@ public class SelectMapperProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         StringBuilder sql = new StringBuilder();
         if (isCheckExampleEntityClass()) {
-            sql.append(SqlUtil.exampleCheck(entityClass));
+            sql.append(SqlUtils.exampleCheck(entityClass));
         }
-        sql.append(SqlUtil.selectCount(entityClass));
-        sql.append(SqlUtil.fromTable(entityClass, tableName(entityClass)));
-        sql.append(SqlUtil.exampleWhereClause());
-        sql.append(SqlUtil.exampleForUpdate());
+        sql.append(SqlUtils.selectCount(entityClass));
+        sql.append(SqlUtils.fromTable(entityClass, tableName(entityClass)));
+        sql.append(SqlUtils.exampleWhereClause());
+        sql.append(SqlUtils.exampleForUpdate());
         return sql.toString();
     }
 

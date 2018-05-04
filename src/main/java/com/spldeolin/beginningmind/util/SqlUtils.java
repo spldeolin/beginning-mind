@@ -11,7 +11,7 @@ import tk.mybatis.mapper.util.StringUtil;
 import tk.mybatis.mapper.version.VersionException;
 
 @UtilityClass
-public class SqlUtil {
+public class SqlUtils {
 
     /**
      * 获取表名 - 支持动态表名
