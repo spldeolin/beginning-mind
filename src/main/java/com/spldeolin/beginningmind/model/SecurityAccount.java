@@ -74,6 +74,10 @@ public class SecurityAccount implements Serializable {
      */
     private String username;
 
+    private String mobile;
+
+    private String email;
+
     /**
      * 密码
      */

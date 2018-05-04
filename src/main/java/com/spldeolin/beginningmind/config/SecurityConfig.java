@@ -18,8 +18,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
-import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
+import com.spldeolin.beginningmind.security.ServiceRealm;
 
 @Configuration
 public class SecurityConfig {

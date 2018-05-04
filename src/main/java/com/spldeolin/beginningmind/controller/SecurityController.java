@@ -19,6 +19,7 @@ import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
+import com.spldeolin.beginningmind.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
@@ -44,9 +45,9 @@ public class SecurityController {
         } catch (AuthenticationException e) {
             throw new ServiceException(e.getMessage());
         }
-        // 用于定位当前会话
+        // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         RequestContextUtil.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
-                input.getUsername());
+                Signer.current().getSecurityAccount().getId().toString());
         return RequestResult.success();
     }
 

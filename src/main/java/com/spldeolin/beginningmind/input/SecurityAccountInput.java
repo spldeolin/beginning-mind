@@ -25,6 +25,12 @@ public class SecurityAccountInput implements Serializable {
     private Long id;
 
     /**
+     * 能否登录
+     */
+    @JsonProperty("enable_sign")
+    private Boolean enableSign;
+
+    /**
      * 审计字段 更新时间
      */
     @JsonProperty("updated_at")
@@ -54,6 +60,12 @@ public class SecurityAccountInput implements Serializable {
     @Size(max = 16)
     private String username;
 
+    @Size(max = 20)
+    private String mobile;
+
+    @Size(max = 255)
+    private String email;
+
     /**
      * 密码
      */
@@ -62,12 +74,6 @@ public class SecurityAccountInput implements Serializable {
 
     @Size(max = 32)
     private String salt;
-
-    /**
-     * 能否登录
-     */
-    @JsonProperty("enable_sign")
-    private Boolean enableSign;
 
     private static final long serialVersionUID = 1L;
 

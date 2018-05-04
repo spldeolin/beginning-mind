@@ -101,6 +101,18 @@ public class SecurityAccountServiceImpl extends CommonServiceImpl<SecurityAccoun
     }
 
     @Override
+    public Optional<SecurityAccount> searchOneByPrincipal(String principal) {
+        Condition condition = new Condition(SecurityAccount.class);
+        condition.createCriteria().orEqualTo("username", principal).orEqualTo("mobile", principal).orEqualTo("email",
+                principal);
+        List<SecurityAccount> securityAccounts = securityAccountMapper.selectBatchByCondition(condition);
+        if (securityAccounts.size() == 0) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(securityAccounts.get(0));
+    }
+
+    @Override
     public List<String> listAccountPermissionMappings(Long accountId) {
         List<String> result = Lists.newArrayList();
         // account
@@ -155,10 +167,8 @@ public class SecurityAccountServiceImpl extends CommonServiceImpl<SecurityAccoun
      * 会话不存在则代表未登录
      */
     private Optional<Session> getSignerSession(Long accountId) {
-        String username = this.get(accountId).orElseThrow(() ->
-                new ServiceException("帐号不存在或是已被删除")).getUsername();
         Collection<? extends Session> signerSessions = this.finder.findByIndexNameAndIndexValue(
-                FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, username).values();
+                FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, accountId.toString()).values();
         // 只可能找到一个，或找不到
         if (signerSessions.size() > 0) {
             return Optional.ofNullable(signerSessions.toArray(new Session[0])[0]);

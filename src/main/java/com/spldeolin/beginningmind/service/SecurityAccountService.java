@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.List;
+import java.util.Optional;
 import com.spldeolin.beginningmind.api.CommonService;
 import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.model.SecurityAccount;
@@ -54,6 +55,11 @@ public interface SecurityAccountService extends CommonService<SecurityAccount> {
      * @return Page 分页对象
      */
     Page<SecurityAccount> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
+
+    /**
+     * 通过用户名或手机号或email搜索帐号
+     */
+    Optional<SecurityAccount> searchOneByPrincipal(String principal);
 
     /**
      * 获取帐号关联到的权限的@RequiresPermissions映射

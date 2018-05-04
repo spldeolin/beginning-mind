@@ -46,13 +46,15 @@ public class ServiceRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
             throws AuthenticationException {
+        // 通过principal查找帐号
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
-        String username = token.getUsername();
-        SecurityAccount securityAccount = securityAccountService.searchOne("username", username).orElseThrow(
-                () -> new UnknownAccountException("用户不存在或密码错误"));
+        String principal = token.getUsername();
+        SecurityAccount securityAccount = securityAccountService.searchOneByPrincipal(principal).orElseThrow(
+                () -> new UnknownAccountException("帐号不存在或密码错误"));
         if (!securityAccount.getEnableSign()) {
-            throw new DisabledAccountException("用户已被禁用");
+            throw new DisabledAccountException("帐号已被禁用");
         }
+        // 组装当前登录用户对象
         CurrentSigner currentSigner = CurrentSigner.builder().sessionId(
                 RequestContextUtil.session().getId()).securityAccount(securityAccount).signedAt(
                 LocalDateTime.now()).build();

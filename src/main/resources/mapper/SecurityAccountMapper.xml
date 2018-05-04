@@ -9,6 +9,8 @@
         <result column="signer_type" jdbcType="INTEGER" property="signerType"/>
         <result column="signer_id" jdbcType="BIGINT" property="signerId"/>
         <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
+        <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="password" jdbcType="CHAR" property="password"/>
         <result column="salt" jdbcType="CHAR" property="salt"/>
         <result column="enable_sign" jdbcType="BIT" property="enableSign"/>
