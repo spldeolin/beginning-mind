@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 /**
  * 帐号（用于登录的信息）
  *
- * @author Deolin 2018/5/1
+ * @author Deolin 2018/5/4
  * @generator Cadeau Support
  */
 @Data
@@ -78,6 +78,11 @@ public class SecurityAccount implements Serializable {
      * 密码
      */
     private String password;
+
+    /**
+     * 盐
+     */
+    private String salt;
 
     /**
      * 能否登录

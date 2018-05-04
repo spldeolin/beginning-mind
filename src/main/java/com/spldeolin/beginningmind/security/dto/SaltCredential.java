@@ -15,9 +15,17 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-public class FinalCredential implements Serializable {
+public class SaltCredential implements Serializable {
 
-    private String finalPassword;
+    /**
+     * 数据库内保存的“密码”字段
+     */
+    private String password;
+
+    /**
+     * 盐
+     */
+    private String salt;
 
     private static final long serialVersionUID = 1L;
 

@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 /**
  * “帐号（用于登录的信息）”Input类
  *
- * @author Deolin 2018/5/1
+ * @author Deolin 2018/5/4
  * @generator Cadeau Support
  */
 @Data
@@ -57,8 +57,11 @@ public class SecurityAccountInput implements Serializable {
     /**
      * 密码
      */
-    @Size(max = 16)
+    @Size(max = 128)
     private String password;
+
+    @Size(max = 32)
+    private String salt;
 
     /**
      * 能否登录

@@ -7,7 +7,7 @@ import com.spldeolin.beginningmind.model.SecurityAccount;
 /**
  * “帐号（用于登录的信息）”数据库映射
  *
- * @author Deolin 2018/5/1
+ * @author Deolin 2018/5/4
  * @generator Cadeau Support
  */
 @Mapper

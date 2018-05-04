@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.security.dto.CurrentSigner;
-import com.spldeolin.beginningmind.security.dto.FinalCredential;
+import com.spldeolin.beginningmind.security.dto.SaltCredential;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 
@@ -44,8 +44,8 @@ public class ServiceRealm extends AuthorizingRealm {
      * 认证
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(
-            AuthenticationToken authenticationToken) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
+            throws AuthenticationException {
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String username = token.getUsername();
         SecurityAccount securityAccount = securityAccountService.searchOne("username", username).orElseThrow(
@@ -56,9 +56,9 @@ public class ServiceRealm extends AuthorizingRealm {
         CurrentSigner currentSigner = CurrentSigner.builder().sessionId(
                 RequestContextUtil.session().getId()).securityAccount(securityAccount).signedAt(
                 LocalDateTime.now()).build();
-        FinalCredential finalCredential = FinalCredential.builder().finalPassword(
-                securityAccount.getPassword()).build();
-        return new SimpleAuthenticationInfo(currentSigner, finalCredential, getName());
+        SaltCredential saltCredential = SaltCredential.builder().password(securityAccount.getPassword()).salt(
+                securityAccount.getSalt()).build();
+        return new SimpleAuthenticationInfo(currentSigner, saltCredential, getName());
     }
 
 }

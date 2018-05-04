@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,10 +13,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.model.Goods;
-import com.spldeolin.beginningmind.util.ApplicationContext;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.model.Goods;
+import com.spldeolin.beginningmind.model.SecurityAccount;
+import com.spldeolin.beginningmind.service.SecurityAccountService;
+import com.spldeolin.beginningmind.util.ApplicationContext;
 import com.spldeolin.beginningmind.util.JsonUtil;
+import com.spldeolin.beginningmind.util.StringRandomUtil;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
@@ -30,10 +34,26 @@ public class Tests {
     @Autowired
     private BeginningMindProperties beginningMindProperties;
 
+    @Autowired
+    private SecurityAccountService securityAccountService;
+
     @Test
     public void contextLoads() {
         log.info(beginningMindProperties);
         log.info(ApplicationContext.getBean(BeginningMindProperties.class));
+    }
+
+    @Test
+    public void generateAccountsPasswordAndSalt() {
+        String rawPassword = "000000";
+        String passwordEX = DigestUtils.sha512Hex(rawPassword);
+        List<SecurityAccount> accounts = securityAccountService.listAll();
+        for (SecurityAccount account : accounts) {
+            String salt = StringRandomUtil.generateVisibleAscii(32);
+            String passwordEX2 = DigestUtils.sha512Hex(passwordEX + salt);
+            account.setSalt(salt).setPassword(passwordEX2);
+            securityAccountService.update(account);
+        }
     }
 
     @Test

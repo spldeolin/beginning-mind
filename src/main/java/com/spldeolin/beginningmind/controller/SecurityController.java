@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
-import com.spldeolin.beginningmind.input.SignInInput;
+import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import lombok.extern.log4j.Log4j2;
@@ -34,7 +34,7 @@ public class SecurityController {
      * 登录
      */
     @PostMapping("sign_in")
-    public RequestResult signIn(@RequestBody @Valid SignInInput input) {
+    public RequestResult signIn(@RequestBody @Valid SignInput input) {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");

@@ -19,7 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.security.ServiceRealm;
-import com.spldeolin.beginningmind.security.TinyCredentialsMatcher;
+import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
 
 @Configuration
 public class SecurityConfig {
@@ -67,7 +67,7 @@ public class SecurityConfig {
     @Bean
     public AuthorizingRealm realm(CacheManager cacheManager) {
         AuthorizingRealm realm = new ServiceRealm();
-        realm.setCredentialsMatcher(new TinyCredentialsMatcher());
+        realm.setCredentialsMatcher(new SaltSha512CredentialsMatcher());
         realm.setCacheManager(cacheManager);
         return realm;
     }

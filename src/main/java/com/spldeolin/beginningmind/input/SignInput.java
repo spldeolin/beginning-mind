@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-public class SignInInput implements Serializable {
+public class SignInput implements Serializable {
 
     @NotBlank
     private String username;
@@ -24,6 +24,9 @@ public class SignInInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 转化为UsernamePasswordToken对象，作为subject.login()的参数
+     */
     public UsernamePasswordToken toToken() {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(false);
