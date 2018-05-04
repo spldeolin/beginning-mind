@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.annotation.PageNo;
 import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
@@ -129,6 +130,7 @@ public class ControllerAspect {
             if (redisCache.getCache(cacheKey, String.class) != null) {
                 subject.logout();
                 redisCache.deleteCache(cacheKey);
+                throw new ServiceException("已被管理员请离，请重新登录");
             }
         }
     }
