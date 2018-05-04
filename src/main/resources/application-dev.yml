@@ -2,6 +2,8 @@ beginning-mind:
 
   one-cookie: 一个开发中的曲奇饼干
 
+  address: http://localhost:2333
+
   file:
     mapping: /static
     location: C:/beginning-mind-static

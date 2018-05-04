@@ -37,9 +37,11 @@ public class SecurityConfig {
         // 重定向到RestController
         shiroFilterFactoryBean.setLoginUrl("/unauthc");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 放行登录请求、404页面、特殊请求
+        // 放行验证码请求、登录请求、error页面、静态资源.... 以及一些临时测试的简单请求
+        filterChainDefinitionMap.put("/sign/verify_code", "anon");
         filterChainDefinitionMap.put("/sign/sign_in", "anon");
         filterChainDefinitionMap.put(CoupledConstant.ERROR_PAGE_URL, "anon");
+        filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/sign/anon", "anon");
         if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {
             // 非prod环境放行actuator相关请求

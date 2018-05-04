@@ -20,6 +20,11 @@ public class BeginningMindProperties {
     private String oneCookie;
 
     /**
+     * 本项目的当期的地址（IP:端口号）
+     */
+    private String address;
+
+    /**
      * HTTP请求 页码的URL参数名
      */
     private String pageNoParamName;
