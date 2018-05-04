@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.controller;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.validation.Valid;
 import org.apache.commons.io.FileUtils;
@@ -27,7 +28,6 @@ import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtil;
 import com.spldeolin.beginningmind.util.Signer;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
@@ -51,20 +51,22 @@ public class SignController {
      * 获取验证码
      */
     @GetMapping("verify_code")
-    @SneakyThrows
     public RequestResult verifyCode() {
-        ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
-        String createText = defaultKaptcha.createText();
-        RequestContextUtil.session().setAttribute(VERIFY_CODE, createText);
-        //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
-        BufferedImage challenge = defaultKaptcha.createImage(createText);
-        ImageIO.write(challenge, "jpg", jpegOutputStream);
-        String location = beginningMindProperties.getFile().getLocation();
-        String fullFileName = System.currentTimeMillis() + ".jpg";
-        FileUtils.writeByteArrayToFile(new File(location + File.separator + fullFileName),
-                jpegOutputStream.toByteArray());
-        String fullMapping = beginningMindProperties.getAddress() + beginningMindProperties.getFile().getMapping();
-        return RequestResult.success(fullMapping + "/" + fullFileName);
+        try (ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream()) {
+            String createText = defaultKaptcha.createText();
+            RequestContextUtil.session().setAttribute(VERIFY_CODE, createText);
+            //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
+            BufferedImage challenge = defaultKaptcha.createImage(createText);
+            ImageIO.write(challenge, "jpg", jpegOutputStream);
+            String location = beginningMindProperties.getFile().getLocation();
+            String fullFileName = System.currentTimeMillis() + ".jpg";
+            FileUtils.writeByteArrayToFile(new File(location + File.separator + fullFileName),
+                    jpegOutputStream.toByteArray());
+            String fullMapping = beginningMindProperties.getAddress() + beginningMindProperties.getFile().getMapping();
+            return RequestResult.success(fullMapping + "/" + fullFileName);
+        } catch (IOException e) {
+            throw new ServiceException(e);
+        }
     }
 
     /**

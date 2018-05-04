@@ -8,4 +8,8 @@ public class ServiceException extends RuntimeException {
         super(message);
     }
 
+    public ServiceException(Throwable cause) {
+        super(cause);
+    }
+
 }
