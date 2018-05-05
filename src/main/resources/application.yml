@@ -56,9 +56,15 @@ pagehelper:
   supportMethodsArguments: true
   params: count=countSql
 
+logging:
+
+  config: 占位
+
 beginning-mind:
 
-  one-cookie: 一个曲奇饼干
+  one-cookie: 占位
+
+  address: 占位
 
   page-no-param-name: page_no
 
@@ -70,55 +76,6 @@ beginning-mind:
     default-datetime-pattern: yyyy-MM-dd HH:mm:ss
     serialize-java-util-date-to-timestamp: true
 
-  # 以下配置用于演示配置管理
-
-  # 未分类
-  ip: sssad
-  version: 233
-  price: 9.15
-  use-one-cent-when-pay: true
-
-  # 中文简体文案
-  text-zh-hans:
-    hello: 你好
-    excellent: 优秀
-
-  # 日语文案
-  text-ja-jp:
-    hello: こんにちは
-    excellent: 素晴らしい
-
-  # 微信
-  wechat:
-    appid: asdfas22
-    appsecret: asdfa232
-
-  # 阿里大鱼
-  alidayu:
-    appid: asdasd
-    appsecret: asdfasdf
-    sign-name: dssd
-    template-code: sdfsd
-
-  struct:
-    array:
-      strings:
-      - a
-      - b
-      - c
-      integers:
-      - 0
-      - 10
-      - 999
-
-    key-value-array:
-      high-caloric-food:
-      - name: cola
-        calorie: 100000000
-      - name: chicken
-        calorie: 99999
-      low-caloric-food:
-      - name: cucumber
-        calorie: 0.1
-      - name: tomato
-        calorie: 20
+  file:
+      mapping: 占位
+      location: 占位
