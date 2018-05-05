@@ -17,4 +17,9 @@ public class CoupledConstant {
      */
     public static final String ERROR_PAGE_URL = "/error";
 
+    /**
+     * 必须与log4j2-*.yml的PatternLayout.pattern中的%X{username}占位符相同
+     */
+    public static final String LOG_PATTERN_PARAM = "username";
+
 }

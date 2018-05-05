@@ -19,7 +19,7 @@ Configuration:
         onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss} %4p [%t][%file:%L] - %m%n"
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %4p [%t][%file:%L]%X{username} - %m%n"
 
     RollingFile:
     # WARN日志

@@ -5,8 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.apache.commons.io.FileUtils;
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
@@ -23,13 +25,20 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SignInput;
+import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 import com.spldeolin.beginningmind.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 登录、登出、踢出相关控制
+ *
+ * @author Deolin
+ */
 @RestController
 @RequestMapping("sign")
 @Log4j2
@@ -72,16 +81,18 @@ public class SignController {
     /**
      * 登录
      */
-    @PostMapping("sign_in")
+    @PostMapping("in")
     public RequestResult signIn(@RequestBody @Valid SignInput input) {
-        // 验证码、重复登录校验
-        String createText = (String) RequestContextUtils.session().getAttribute(VERIFY_CODE);
-        if (!input.getVerifyCode().equals(createText)) {
-            throw new ServiceException("验证码错误");
-        }
+        HttpSession session = RequestContextUtils.session();
+        // 重复登录、验证码校验
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");
+        }
+        String createText = (String) session.getAttribute(VERIFY_CODE);
+        session.removeAttribute(VERIFY_CODE);
+        if (!input.getVerifyCode().equals(createText)) {
+            throw new ServiceException("验证码错误");
         }
         // 登录
         try {
@@ -89,16 +100,19 @@ public class SignController {
         } catch (AuthenticationException e) {
             throw new ServiceException(e.getMessage());
         }
+        SecurityAccount account = Signer.current().getSecurityAccount();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         RequestContextUtils.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
-                Signer.current().getSecurityAccount().getId().toString());
+                account.getId().toString());
+        // 登录成功后，为日志追加username标识
+        ThreadContext.put(CoupledConstant.LOG_PATTERN_PARAM, "[" + account.getUsername() + "]");
         return RequestResult.success();
     }
 
     /**
      * 登出
      */
-    @DeleteMapping("sign_out")
+    @DeleteMapping("out")
     public RequestResult signOut() {
         SecurityUtils.getSubject().logout();
         return RequestResult.success();
