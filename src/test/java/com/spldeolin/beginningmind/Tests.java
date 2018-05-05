@@ -28,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@ActiveProfiles("dev")
+@ActiveProfiles("prod")
 @Log4j2
 public class Tests {
 

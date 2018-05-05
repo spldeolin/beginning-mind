@@ -7,6 +7,8 @@ Configuration:
       value: /opt/beginning-mind-logs
     - name: log.name
       value: beginning-mind
+    - name: pattern
+      value: "%d{yyyy-MM-dd HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E} [%t][%c{1.}:%L]%X{username} - %m%n"
 
   Appenders:
     # 控制台
@@ -19,7 +21,7 @@ Configuration:
         onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss} %4p [%t][%file:%L]%X{username} - %m%n"
+        pattern: ${pattern}
 
     RollingFile:
     # WARN日志
@@ -39,7 +41,7 @@ Configuration:
           onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        pattern: ${pattern}
       Policies:
         TimeBasedTriggeringPolicy:
           modulate: true
@@ -61,7 +63,7 @@ Configuration:
           onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        pattern: ${pattern}
       Policies:
         TimeBasedTriggeringPolicy:
           modulate: true
@@ -83,7 +85,7 @@ Configuration:
           onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        pattern: ${pattern}
       Policies:
         TimeBasedTriggeringPolicy:
           modulate: true
@@ -105,7 +107,7 @@ Configuration:
           onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %4p [%t][%file:%L] - %m%n"
+        pattern: ${pattern}
       Policies:
         TimeBasedTriggeringPolicy:
           modulate: true

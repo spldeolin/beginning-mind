@@ -11,7 +11,7 @@ Configuration:
         onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%d{HH:mm:ss} %4p [%t][%file:%L]%X{username} - %m%n"
+        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{username} - %m%n"    # 追加“%t”可打印线程名
 
   Loggers:
     Root:
