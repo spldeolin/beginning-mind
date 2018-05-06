@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -32,6 +35,10 @@ import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 import com.spldeolin.beginningmind.util.Signer;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -63,7 +70,8 @@ public class SignController {
     public RequestResult verifyCode() {
         try (ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream()) {
             String createText = defaultKaptcha.createText();
-            RequestContextUtils.session().setAttribute(VERIFY_CODE, createText);
+            RequestContextUtils.session().setAttribute(VERIFY_CODE,
+                    VerifyCodeDTO.builder().verifyCode(createText).generatedAt(LocalDateTime.now()).build());
             //使用生产的验证码字符串返回一个BufferedImage对象并转为byte写入到byte数组中
             BufferedImage challenge = defaultKaptcha.createImage(createText);
             ImageIO.write(challenge, "jpg", jpegOutputStream);
@@ -89,9 +97,14 @@ public class SignController {
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");
         }
-        String createText = (String) session.getAttribute(VERIFY_CODE);
+        VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) session.getAttribute(VERIFY_CODE);
         session.removeAttribute(VERIFY_CODE);
-        if (!input.getVerifyCode().equals(createText)) {
+        if (verifyCodeDTO == null ||
+                ChronoUnit.MINUTES.between(LocalDateTime.now(), verifyCodeDTO.getGeneratedAt()) > 5) {
+            throw new ServiceException("验证码超时");
+        }
+        String verifyCode = verifyCodeDTO.getVerifyCode();
+        if (!verifyCode.equals(input.getVerifyCode())) {
             throw new ServiceException("验证码错误");
         }
         // 登录
@@ -138,6 +151,20 @@ public class SignController {
     @GetMapping("anon")
     public RequestResult anon() {
         return RequestResult.success("初心");
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    private static class VerifyCodeDTO implements Serializable {
+
+        private String verifyCode;
+
+        private LocalDateTime generatedAt;
+
+        private static final long serialVersionUID = 1L;
+
     }
 
 }

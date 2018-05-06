@@ -21,9 +21,13 @@ public class RedirectController implements ErrorController {
     @RequestMapping(CoupledConstant.ERROR_PAGE_URL)
     public RequestResult notFound() {
         HttpServletRequest request = RequestContextUtils.request();
+        Integer status = (Integer) request.getAttribute("{HTTP_STATUS_CODE}");
+        // 浏览器直接访问这个请求时，直接返回
+        if (status == null) {
+            return RequestResult.failure(ResultCode.NOT_FOUND);
+        }
         // 特殊对待HTTP404以外的错误
-        int status = (int) request.getAttribute("{HTTP_STATUS_CODE}");
-        if (status != 404) {
+        if (!status.equals(404)) {
             return RequestResult.failure(ResultCode.INTERNAL_ERROR, "FRAMEWORK ERROR!");
         }
         return RequestResult.failure(ResultCode.NOT_FOUND,
