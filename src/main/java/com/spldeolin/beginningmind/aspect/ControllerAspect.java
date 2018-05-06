@@ -30,6 +30,7 @@ import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
+import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
@@ -61,10 +62,12 @@ public class ControllerAspect {
         // 解析切点
         ControllerInfo controllerInfo = analyzePoint(point);
         RequestContextUtils.setControllerInfo(controllerInfo);
+        // 分布式情况下确保日志MDC存在
+        insureLogMDC();
         // 开始日志
         logBefore(controllerInfo);
-        // 检查会话是否被击杀
-        checkKilled();
+        // 检查登录者是否被踢出
+        checkKill();
         // 刷新会话
         reflashSessionExpire();
         // 拓展注解处理
@@ -108,6 +111,15 @@ public class ControllerAspect {
         return controllerInfo;
     }
 
+    private void insureLogMDC() {
+        if (!Signer.existMDC()) {
+            Subject subject = SecurityUtils.getSubject();
+            if (subject.isAuthenticated() || subject.isRemembered()) {
+                Signer.mdc();
+            }
+        }
+    }
+
     private void logBefore(ControllerInfo controllerInfo) {
         HttpServletRequest request = RequestContextUtils.request();
         log.info("收到请求。(" + controllerInfo.getInsignia() + ")");
@@ -123,13 +135,19 @@ public class ControllerAspect {
         log.info("开始处理...");
     }
 
-    private void checkKilled() {
+    private void checkKill() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
             String cacheKey = "killed:session:" + RequestContextUtils.session().getId();
+            // 被踢出
             if (redisCache.getCache(cacheKey, String.class) != null) {
+                // 登出
                 subject.logout();
+                // 清除MDC
+                Signer.removeMDC();
+                // 删除标识
                 redisCache.deleteCache(cacheKey);
+                // 不再执行后续操作
                 throw new ServiceException("已被管理员请离，请重新登录");
             }
         }

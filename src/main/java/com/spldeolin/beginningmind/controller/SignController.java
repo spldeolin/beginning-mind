@@ -11,7 +11,6 @@ import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import org.apache.commons.io.FileUtils;
-import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
@@ -28,7 +27,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
-import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.model.SecurityAccount;
@@ -117,8 +115,6 @@ public class SignController {
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         RequestContextUtils.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
                 account.getId().toString());
-        // 登录成功后，为日志追加username标识
-        ThreadContext.put(CoupledConstant.LOG_PATTERN_PARAM, "[" + account.getUsername() + "]");
         return RequestResult.success();
     }
 
@@ -128,6 +124,8 @@ public class SignController {
     @DeleteMapping("out")
     public RequestResult signOut() {
         SecurityUtils.getSubject().logout();
+        // 清除MDC
+        Signer.removeMDC();
         return RequestResult.success();
     }
 
