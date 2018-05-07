@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.service.SecurityAccountService;
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("security_accounts")
+@RequestMapping("/security_accounts")
 @Validated
 public class SecurityAccountController {
 
@@ -36,7 +36,7 @@ public class SecurityAccountController {
     /**
      * 创建一个“帐号（用于登录的信息）”
      */
-    @PostMapping
+    @PostMapping("/")
     public RequestResult create(@RequestBody @Valid SecurityAccountInput securityAccountInput) {
         return RequestResult.success(securityAccountService.createEX(securityAccountInput.toModel()));
     }
@@ -44,7 +44,7 @@ public class SecurityAccountController {
     /**
      * 获取一个“帐号（用于登录的信息）”
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public RequestResult get(@PathVariable Long id) {
         return RequestResult.success(
                 securityAccountService.get(id).orElseThrow(() -> new ServiceException("帐号（用于登录的信息）不存在或是已被删除")));
@@ -53,7 +53,7 @@ public class SecurityAccountController {
     /**
      * 更新一个“帐号（用于登录的信息）”
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public RequestResult update(@PathVariable Long id, @RequestBody @Valid SecurityAccountInput securityAccountInput) {
         securityAccountService.updateEX(securityAccountInput.toModel().setId(id));
         return RequestResult.success();
@@ -62,7 +62,7 @@ public class SecurityAccountController {
     /**
      * 删除一个“帐号（用于登录的信息）”
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public RequestResult delete(@PathVariable Long id) {
         securityAccountService.deleteEX(id);
         return RequestResult.success();
@@ -71,7 +71,7 @@ public class SecurityAccountController {
     /**
      * 获取一批“帐号（用于登录的信息）”
      */
-    @GetMapping
+    @GetMapping("/")
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
         return RequestResult.success(securityAccountService.page(pageNo, pageSize));
     }
@@ -79,7 +79,7 @@ public class SecurityAccountController {
     /**
      * 删除一批“帐号（用于登录的信息）”
      */
-    @PutMapping("batch_delete")
+    @PutMapping("/batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
         return RequestResult.success(securityAccountService.deleteEX(ids));
     }

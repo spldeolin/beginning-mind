@@ -11,9 +11,10 @@ import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 
 @RestController
+@RequestMapping("/")
 public class RedirectController implements ErrorController {
 
-    @GetMapping("unauthc")
+    @GetMapping("/unauthc")
     public RequestResult unauthc() {
         return RequestResult.failure(ResultCode.UNAUTHENTICATED);
     }

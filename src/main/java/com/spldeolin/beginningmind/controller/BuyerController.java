@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.service.BuyerService;
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("buyers")
+@RequestMapping("/buyers")
 @Validated
 public class BuyerController {
 
@@ -36,7 +36,7 @@ public class BuyerController {
     /**
      * 创建一个“买家”
      */
-    @PostMapping
+    @PostMapping("/")
     public RequestResult create(@RequestBody @Valid BuyerInput buyerInput) {
         return RequestResult.success(buyerService.createEX(buyerInput.toModel()));
     }
@@ -44,7 +44,7 @@ public class BuyerController {
     /**
      * 获取一个“买家”
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public RequestResult get(@PathVariable Long id) {
         return RequestResult.success(buyerService.get(id).orElseThrow(() -> new ServiceException("买家不存在或是已被删除")));
     }
@@ -52,7 +52,7 @@ public class BuyerController {
     /**
      * 更新一个“买家”
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public RequestResult update(@PathVariable Long id, @RequestBody @Valid BuyerInput buyerInput) {
         buyerService.updateEX(buyerInput.toModel().setId(id));
         return RequestResult.success();
@@ -61,7 +61,7 @@ public class BuyerController {
     /**
      * 删除一个“买家”
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public RequestResult delete(@PathVariable Long id) {
         buyerService.deleteEX(id);
         return RequestResult.success();
@@ -70,7 +70,7 @@ public class BuyerController {
     /**
      * 获取一批“买家”
      */
-    @GetMapping
+    @GetMapping("/")
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
         return RequestResult.success(buyerService.page(pageNo, pageSize));
     }
@@ -78,7 +78,7 @@ public class BuyerController {
     /**
      * 删除一批“买家”
      */
-    @PutMapping("batch_delete")
+    @PutMapping("/batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
         return RequestResult.success(buyerService.deleteEX(ids));
     }

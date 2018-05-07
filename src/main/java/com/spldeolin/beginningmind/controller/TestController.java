@@ -14,11 +14,11 @@ import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
-@RequestMapping("test")
+@RequestMapping("/test")
 @Log4j2
 public class TestController {
 
-    @GetMapping("time")
+    @GetMapping("/time")
     public RequestResult time() {
         return RequestResult.success(TimeOutput.builder().localDateTime(LocalDateTime.now()).date(new Date()).build());
     }
@@ -34,15 +34,15 @@ public class TestController {
 
     }
 
-    @RequiresPermissions("test/set")
-    @GetMapping("set")
+    @RequiresPermissions("/test/set")
+    @GetMapping("/set")
     public String setSes(HttpSession ses) {
         ses.setAttribute("one-cookie", "会话中的曲奇饼干");
         return "SUCCESS";
     }
 
-    @RequiresPermissions("test/get")
-    @GetMapping("get")
+    @RequiresPermissions("/test/get")
+    @GetMapping("/get")
     public String getSes(HttpSession ses) {
         log.info("asd");
         log.info("asd");

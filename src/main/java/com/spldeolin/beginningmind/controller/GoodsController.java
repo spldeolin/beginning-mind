@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.service.GoodsService;
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("goods")
+@RequestMapping("/goods")
 @Validated
 public class GoodsController {
 
@@ -36,7 +36,7 @@ public class GoodsController {
     /**
      * 创建一个“商品”
      */
-    @PostMapping
+    @PostMapping("/")
     public RequestResult create(@RequestBody @Valid GoodsInput goodsInput) {
         return RequestResult.success(goodsService.createEX(goodsInput.toModel()));
     }
@@ -44,7 +44,7 @@ public class GoodsController {
     /**
      * 获取一个“商品”
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public RequestResult get(@PathVariable Long id) {
         return RequestResult.success(goodsService.get(id).orElseThrow(() -> new ServiceException("商品不存在或是已被删除")));
     }
@@ -52,7 +52,7 @@ public class GoodsController {
     /**
      * 更新一个“商品”
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public RequestResult update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
         goodsService.updateEX(goodsInput.toModel().setId(id));
         return RequestResult.success();
@@ -61,7 +61,7 @@ public class GoodsController {
     /**
      * 删除一个“商品”
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public RequestResult delete(@PathVariable Long id) {
         goodsService.deleteEX(id);
         return RequestResult.success();
@@ -70,7 +70,7 @@ public class GoodsController {
     /**
      * 获取一批“商品”
      */
-    @GetMapping
+    @GetMapping("/")
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
         return RequestResult.success(goodsService.page(pageNo, pageSize));
     }
@@ -78,7 +78,7 @@ public class GoodsController {
     /**
      * 删除一批“商品”
      */
-    @PutMapping("batch_delete")
+    @PutMapping("/batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
         return RequestResult.success(goodsService.deleteEX(ids));
     }

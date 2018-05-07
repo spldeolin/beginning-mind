@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin
  */
 @RestController
-@RequestMapping("sign")
+@RequestMapping("/sign")
 @Log4j2
 @Validated
 public class SignController {
@@ -64,7 +64,7 @@ public class SignController {
     /**
      * 获取验证码
      */
-    @GetMapping("verify_code")
+    @GetMapping("/verify_code")
     public RequestResult verifyCode() {
         try (ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream()) {
             String createText = defaultKaptcha.createText();
@@ -87,7 +87,7 @@ public class SignController {
     /**
      * 登录
      */
-    @PostMapping("in")
+    @PostMapping("/in")
     public RequestResult signIn(@RequestBody @Valid SignInput input) {
         HttpSession session = RequestContextUtils.session();
         // 重复登录、验证码校验
@@ -122,7 +122,7 @@ public class SignController {
     /**
      * 登出
      */
-    @DeleteMapping("out")
+    @DeleteMapping("/out")
     public RequestResult signOut() {
         SecurityUtils.getSubject().logout();
         // 清除MDC
@@ -133,7 +133,7 @@ public class SignController {
     /**
      * 指定用户是否登录中
      */
-    @GetMapping("is_signing")
+    @GetMapping("/is_signing")
     public RequestResult isSign(@RequestParam("account_id") Long accountId) {
         return RequestResult.success(securityAccountService.isAccountSigning(accountId));
     }
@@ -141,13 +141,13 @@ public class SignController {
     /**
      * 将指定用户踢下线
      */
-    @DeleteMapping("kill")
+    @DeleteMapping("/kill")
     public RequestResult kill(@RequestParam("account_id") Long accountId) {
         securityAccountService.killSigner(accountId);
         return RequestResult.success();
     }
 
-    @GetMapping("anon")
+    @GetMapping("/anon")
     public RequestResult anon() {
         return RequestResult.success("初心");
     }
