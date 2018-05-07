@@ -23,11 +23,14 @@ public class RedirectController implements ErrorController {
     public RequestResult notFound() {
         HttpServletRequest request = RequestContextUtils.request();
         Integer status = (Integer) request.getAttribute("{HTTP_STATUS_CODE}");
-        // 浏览器直接访问这个请求时，直接返回
+        // 浏览器直接访问/error时，直接返回
         if (status == null) {
             return RequestResult.failure(ResultCode.NOT_FOUND);
         }
-        // 特殊对待HTTP404以外的错误
+        // Spring Boot捕获到未被统一异常处理捕获的异常时，
+        // 会以其他的HTTP CODE进入/error请求。
+        // 这种情况只会在集成涉及到访问控制的框架（如actuator未设置management.security.enabled=false）时，
+        // 或者底层BUG（过滤器BUG等），才会发生。
         if (!status.equals(404)) {
             return RequestResult.failure(ResultCode.INTERNAL_ERROR, "FRAMEWORK ERROR!");
         }
