@@ -17,12 +17,12 @@ import com.spldeolin.beginningmind.service.SecurityAccountService;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 登录、登出、踢出相关控制
+ * 登录、登出、踢出、登录状态等相关管理
  *
  * @author Deolin
  */
 @RestController
-@RequestMapping("sign")
+@RequestMapping("/sign")
 @Log4j2
 @Validated
 public class SignController {
@@ -36,7 +36,7 @@ public class SignController {
     /**
      * 获取验证码
      */
-    @GetMapping("verify_code")
+    @GetMapping("/verify_code")
     public RequestResult verifyCode() {
         return RequestResult.success(signManager.verifyCode());
     }
@@ -44,7 +44,7 @@ public class SignController {
     /**
      * 登录
      */
-    @PostMapping("in")
+    @PostMapping("/in")
     public RequestResult signIn(@RequestBody @Valid SignInput input) {
         signManager.signIn(input);
         return RequestResult.success();
@@ -53,7 +53,7 @@ public class SignController {
     /**
      * 登出
      */
-    @DeleteMapping("out")
+    @DeleteMapping("/out")
     public RequestResult signOut() {
         signManager.signOut();
         return RequestResult.success();
@@ -62,7 +62,7 @@ public class SignController {
     /**
      * 指定用户是否登录中
      */
-    @GetMapping("is_signing")
+    @GetMapping("/is_signing")
     public RequestResult isSign(@RequestParam("account_id") Long accountId) {
         return RequestResult.success(securityAccountService.isAccountSigning(accountId));
     }
@@ -70,7 +70,7 @@ public class SignController {
     /**
      * 将指定用户踢下线
      */
-    @DeleteMapping("kill")
+    @DeleteMapping("/kill")
     public RequestResult kill(@RequestParam("account_id") Long accountId) {
         securityAccountService.killSigner(accountId);
         return RequestResult.success();
@@ -79,7 +79,7 @@ public class SignController {
     /**
      * 匿名接口
      */
-    @GetMapping("anon")
+    @GetMapping("/anon")
     public RequestResult anon() {
         return RequestResult.success("初心");
     }
