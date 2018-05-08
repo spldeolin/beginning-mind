@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.service.SecurityRoleService;
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("security_roles")
+@RequestMapping("/security_roles")
 @Validated
 public class SecurityRoleController {
 
@@ -36,7 +36,7 @@ public class SecurityRoleController {
     /**
      * 创建一个“角色”
      */
-    @PostMapping
+    @PostMapping("/")
     public RequestResult create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
         return RequestResult.success(securityRoleService.createEX(securityRoleInput.toModel()));
     }
@@ -44,7 +44,7 @@ public class SecurityRoleController {
     /**
      * 获取一个“角色”
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public RequestResult get(@PathVariable Long id) {
         return RequestResult.success(
                 securityRoleService.get(id).orElseThrow(() -> new ServiceException("角色不存在或是已被删除")));
@@ -53,7 +53,7 @@ public class SecurityRoleController {
     /**
      * 更新一个“角色”
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public RequestResult update(@PathVariable Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
         securityRoleService.updateEX(securityRoleInput.toModel().setId(id));
         return RequestResult.success();
@@ -62,7 +62,7 @@ public class SecurityRoleController {
     /**
      * 删除一个“角色”
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public RequestResult delete(@PathVariable Long id) {
         securityRoleService.deleteEX(id);
         return RequestResult.success();
@@ -71,7 +71,7 @@ public class SecurityRoleController {
     /**
      * 获取一批“角色”
      */
-    @GetMapping
+    @GetMapping("/")
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
         return RequestResult.success(securityRoleService.page(pageNo, pageSize));
     }
@@ -79,7 +79,7 @@ public class SecurityRoleController {
     /**
      * 删除一批“角色”
      */
-    @PutMapping("batch_delete")
+    @PutMapping("/batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
         return RequestResult.success(securityRoleService.deleteEX(ids));
     }

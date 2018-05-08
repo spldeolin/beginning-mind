@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.service.SellerService;
  * @generator Cadeau Support
  */
 @RestController
-@RequestMapping("sellers")
+@RequestMapping("/sellers")
 @Validated
 public class SellerController {
 
@@ -36,7 +36,7 @@ public class SellerController {
     /**
      * 创建一个“卖家”
      */
-    @PostMapping
+    @PostMapping("/")
     public RequestResult create(@RequestBody @Valid SellerInput sellerInput) {
         return RequestResult.success(sellerService.createEX(sellerInput.toModel()));
     }
@@ -44,7 +44,7 @@ public class SellerController {
     /**
      * 获取一个“卖家”
      */
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public RequestResult get(@PathVariable Long id) {
         return RequestResult.success(sellerService.get(id).orElseThrow(() -> new ServiceException("卖家不存在或是已被删除")));
     }
@@ -52,7 +52,7 @@ public class SellerController {
     /**
      * 更新一个“卖家”
      */
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public RequestResult update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
         sellerService.updateEX(sellerInput.toModel().setId(id));
         return RequestResult.success();
@@ -61,7 +61,7 @@ public class SellerController {
     /**
      * 删除一个“卖家”
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public RequestResult delete(@PathVariable Long id) {
         sellerService.deleteEX(id);
         return RequestResult.success();
@@ -70,7 +70,7 @@ public class SellerController {
     /**
      * 获取一批“卖家”
      */
-    @GetMapping
+    @GetMapping("/")
     public RequestResult page(@PageNo Integer pageNo, @PageSize Integer pageSize) {
         return RequestResult.success(sellerService.page(pageNo, pageSize));
     }
@@ -78,7 +78,7 @@ public class SellerController {
     /**
      * 删除一批“卖家”
      */
-    @PutMapping("batch_delete")
+    @PutMapping("/batch_delete")
     public RequestResult delete(@RequestBody List<Long> ids) {
         return RequestResult.success(sellerService.deleteEX(ids));
     }
