@@ -17,6 +17,8 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.dao.bm1.BuyerMapper;
+import com.spldeolin.beginningmind.dao.bm2.ExMapper;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
@@ -102,6 +104,22 @@ public class Tests {
                 StandardCharsets.UTF_8);
         log.info("映射路径" + properties.getFile().getMapping() + "/a.txt");
         log.info("hold on");
+    }
+
+    @Autowired
+    private ExMapper exMapper;
+
+    @Test
+    public void bm2() {
+        log.info(exMapper.names());
+    }
+
+    @Autowired
+    private BuyerMapper buyerMapper;
+
+    @Test
+    public void bm1() {
+        log.info(buyerMapper.selectAll());
     }
 
 }

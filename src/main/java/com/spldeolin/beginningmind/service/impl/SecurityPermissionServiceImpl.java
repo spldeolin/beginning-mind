@@ -7,7 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.dao.SecurityPermissionMapper;
+import com.spldeolin.beginningmind.dao.bm1.SecurityPermissionMapper;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.service.SecurityPermissionService;
 import lombok.extern.log4j.Log4j2;

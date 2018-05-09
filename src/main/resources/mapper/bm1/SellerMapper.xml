@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spldeolin.beginningmind.dao.SellerMapper">
+<mapper namespace="com.spldeolin.beginningmind.dao.bm1.SellerMapper">
     <resultMap id="BaseResultMap" type="com.spldeolin.beginningmind.model.Seller">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="inserted_at" jdbcType="DATETIME" property="insertedAt"/>
-        <result column="updated_at" jdbcType="DATETIME" property="updatedAt"/>
+        <result column="inserted_at" jdbcType="TIMESTAMP" property="insertedAt"/>
+        <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="is_deleted" jdbcType="BIT" property="isDeleted"/>
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
     </resultMap>

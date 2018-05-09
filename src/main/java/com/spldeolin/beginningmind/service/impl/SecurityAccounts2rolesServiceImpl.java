@@ -7,7 +7,7 @@ import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.dao.SecurityAccounts2rolesMapper;
+import com.spldeolin.beginningmind.dao.bm1.SecurityAccounts2rolesMapper;
 import com.spldeolin.beginningmind.model.SecurityAccounts2roles;
 import com.spldeolin.beginningmind.service.SecurityAccounts2rolesService;
 import lombok.extern.log4j.Log4j2;

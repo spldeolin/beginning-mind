@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.dao;
+package com.spldeolin.beginningmind.dao.bm1;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.api.CommonMapper;
