@@ -38,7 +38,7 @@ public class SignController {
      */
     @GetMapping("/verify_code")
     public RequestResult verifyCode() {
-        return RequestResult.success(signManager.verifyCode());
+        return RequestResult.success(signManager.captcha());
     }
 
     /**
