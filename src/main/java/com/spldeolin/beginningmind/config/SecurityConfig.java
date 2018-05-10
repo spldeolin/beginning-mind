@@ -38,7 +38,7 @@ public class SecurityConfig {
         shiroFilterFactoryBean.setLoginUrl("/unauthc");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
         // 放行验证码请求、登录请求、error页面、静态资源.... 以及一些临时测试的简单请求
-        filterChainDefinitionMap.put("/sign/verify_code", "anon");
+        filterChainDefinitionMap.put("/sign/captcha", "anon");
         filterChainDefinitionMap.put("/sign/in", "anon");
         filterChainDefinitionMap.put(CoupledConstant.ERROR_PAGE_URL, "anon");
         filterChainDefinitionMap.put("/static/**", "anon");

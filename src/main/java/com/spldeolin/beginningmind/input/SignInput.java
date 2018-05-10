@@ -32,7 +32,7 @@ public class SignInput implements Serializable {
      * 验证码
      */
     @NotBlank
-    private String verifyCode;
+    private String captcha;
 
     private static final long serialVersionUID = 1L;
 

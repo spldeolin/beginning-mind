@@ -36,8 +36,8 @@ public class SignController {
     /**
      * 获取验证码
      */
-    @GetMapping("/verify_code")
-    public RequestResult verifyCode() {
+    @GetMapping("/captcha")
+    public RequestResult captcha() {
         return RequestResult.success(signManager.captcha());
     }
 

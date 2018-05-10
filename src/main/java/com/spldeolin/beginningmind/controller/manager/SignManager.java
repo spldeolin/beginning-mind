@@ -52,7 +52,7 @@ public class SignManager {
             GifCaptcha gifCaptcha = new GifCaptcha();
             gifCaptcha.out(os);
             RequestContextUtils.session().setAttribute(CAPTCHA,
-                    VerifyCodeDTO.builder().verifyCode(gifCaptcha.getCode()).generatedAt(LocalDateTime.now()).build());
+                    CaptchaDTO.builder().captcha(gifCaptcha.getCode()).generatedAt(LocalDateTime.now()).build());
             // 映射URL
             String fullMapping = beginningMindProperties.getAddress() + beginningMindProperties.getFile().getMapping()
                     + "/" + fullFileName;
@@ -72,14 +72,14 @@ public class SignManager {
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");
         }
-        VerifyCodeDTO verifyCodeDTO = (VerifyCodeDTO) session.getAttribute(CAPTCHA);
+        CaptchaDTO captchaDTO = (CaptchaDTO) session.getAttribute(CAPTCHA);
         session.removeAttribute(CAPTCHA);
-        if (verifyCodeDTO == null ||
-                ChronoUnit.MINUTES.between(LocalDateTime.now(), verifyCodeDTO.getGeneratedAt()) > 5) {
+        if (captchaDTO == null ||
+                ChronoUnit.MINUTES.between(LocalDateTime.now(), captchaDTO.getGeneratedAt()) > 5) {
             throw new ServiceException("验证码超时");
         }
-        String verifyCode = verifyCodeDTO.getVerifyCode();
-        if (!verifyCode.equals(input.getVerifyCode())) {
+        String captcha = captchaDTO.getCaptcha();
+        if (!captcha.equals(input.getCaptcha())) {
             throw new ServiceException("验证码错误");
         }
         // 登录
@@ -130,9 +130,9 @@ public class SignManager {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    private static class VerifyCodeDTO implements Serializable {
+    private static class CaptchaDTO implements Serializable {
 
-        private String verifyCode;
+        private String captcha;
 
         private LocalDateTime generatedAt;
 
