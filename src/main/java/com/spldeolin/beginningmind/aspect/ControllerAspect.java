@@ -51,7 +51,7 @@ public class ControllerAspect {
     @Autowired
     private RedisCache redisCache;
 
-    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*Controller.*(..)) && !execution(* com.spldeolin.beginningmind.controller.RedirectController.*(..))")
+    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*Controller.*(..)) && !execution(* com.spldeolin.beginningmind.controller.FailureController.*(..))")
     public void controllerMethod() {}
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
