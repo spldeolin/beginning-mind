@@ -149,7 +149,7 @@ Configuration:
       - ref: infoFile
       - ref: debugFile
     Logger:
-    - name: com.spldeolin.beginningmind.aspect.ControllerListener
+    - name: com.spldeolin.beginningmind.aspect.util.ProcessingTimeLogger
       additivity: true
       level: all
       AppenderRef:
