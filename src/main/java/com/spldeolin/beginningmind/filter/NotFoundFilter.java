@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.controller.FailureController;
 
 /**
@@ -32,9 +33,18 @@ public class NotFoundFilter implements Filter {
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
+    @Autowired
+    private BeginningMindProperties properties;
+
     @Override
     public void doFilter(ServletRequest req, ServletResponse res,
             FilterChain chain) throws IOException, ServletException {
+        HttpServletRequest request = (HttpServletRequest) req;
+        String requestUrl = request.getRequestURI();
+        // 放行静态资源请求
+        if (requestUrl.startsWith(properties.getFile().getMapping())) {
+            chain.doFilter(req, res);
+        }
         // 匹配
         boolean findable = false;
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : requestMappingHandlerMapping.getHandlerMethods()
@@ -46,13 +56,13 @@ public class NotFoundFilter implements Filter {
         }
         // 匹配不到
         if (!findable) {
-            HttpServletRequest request = (HttpServletRequest) req;
             String forwardUrl = FailureController.NOT_FOUND_MAPPING +
                     "?" + FailureController.NOT_FOUND_PARAM_METHOD + "=" + request.getMethod() +
-                    "&" + FailureController.NOT_FOUND_PARAM_URL + "=" + request.getRequestURI();
+                    "&" + FailureController.NOT_FOUND_PARAM_URL + "=" + requestUrl;
 
             req.getRequestDispatcher(forwardUrl).forward(req, res);
         } else {
+            // 放行匹配到的请求
             chain.doFilter(req, res);
         }
     }

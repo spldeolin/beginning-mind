@@ -28,6 +28,9 @@ public class SecurityConfig {
     @Autowired
     private Environment environment;
 
+    @Autowired
+    private BeginningMindProperties properties;
+
     @Value("${management.context-path}")
     private String actuatorContextPath;
 
@@ -38,11 +41,11 @@ public class SecurityConfig {
         // 重定向到RestController
         shiroFilterFactoryBean.setLoginUrl("/unauthc");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 放行404“页面”、验证码请求、登录请求、静态资源.... 以及一些临时测试的简单请求
+        // 放行404“页面”、静态资源、验证码请求、登录请求.... 以及一些临时测试的简单请求
         filterChainDefinitionMap.put(FailureController.NOT_FOUND_MAPPING, "anon");
+        filterChainDefinitionMap.put(properties.getFile().getMapping() + "/**", "anon");
         filterChainDefinitionMap.put("/sign/captcha", "anon");
         filterChainDefinitionMap.put("/sign/in", "anon");
-        filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/sign/anon", "anon");
         if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {
             // 非prod环境放行actuator相关请求
