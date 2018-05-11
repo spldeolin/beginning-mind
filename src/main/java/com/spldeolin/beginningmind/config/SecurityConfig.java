@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
+import com.spldeolin.beginningmind.controller.FailureController;
 import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 
@@ -37,10 +38,10 @@ public class SecurityConfig {
         // 重定向到RestController
         shiroFilterFactoryBean.setLoginUrl("/unauthc");
         Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 放行验证码请求、登录请求、error页面、静态资源.... 以及一些临时测试的简单请求
+        // 放行404“页面”、验证码请求、登录请求、静态资源.... 以及一些临时测试的简单请求
+        filterChainDefinitionMap.put(FailureController.NOT_FOUND_MAPPING, "anon");
         filterChainDefinitionMap.put("/sign/captcha", "anon");
         filterChainDefinitionMap.put("/sign/in", "anon");
-        filterChainDefinitionMap.put(CoupledConstant.ERROR_PAGE_URL, "anon");
         filterChainDefinitionMap.put("/static/**", "anon");
         filterChainDefinitionMap.put("/sign/anon", "anon");
         if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {

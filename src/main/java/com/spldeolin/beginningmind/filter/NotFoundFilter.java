@@ -10,6 +10,8 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
@@ -24,7 +26,8 @@ import com.spldeolin.beginningmind.controller.FailureController;
  * </pre>
  */
 @Component
-public class NotFoundRequestFilter implements Filter {
+@Order(Ordered.HIGHEST_PRECEDENCE)
+public class NotFoundFilter implements Filter {
 
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;

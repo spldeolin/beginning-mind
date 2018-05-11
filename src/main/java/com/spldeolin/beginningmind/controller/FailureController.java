@@ -33,7 +33,7 @@ public class FailureController {
         return RequestResult.failure(ResultCode.UNAUTHENTICATED);
     }
 
-    @GetMapping(NOT_FOUND_MAPPING)
+    @RequestMapping(NOT_FOUND_MAPPING)
     public RequestResult notFound(@RequestParam(value = NOT_FOUND_PARAM_METHOD, required = false) String method,
             @RequestParam(value = NOT_FOUND_PARAM_URL, required = false) String url) {
         if (StringUtils.isNoneEmpty(method, url)) {
