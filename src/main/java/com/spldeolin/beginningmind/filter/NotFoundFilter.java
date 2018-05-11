@@ -44,6 +44,7 @@ public class NotFoundFilter implements Filter {
         // 放行静态资源请求
         if (requestUrl.startsWith(properties.getFile().getMapping())) {
             chain.doFilter(req, res);
+            return;
         }
         // 匹配
         boolean findable = false;
