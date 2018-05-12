@@ -22,7 +22,7 @@ import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 
 @Configuration
-public class SecurityConfig {
+public class ShiroConfig {
 
     @Autowired
     private Environment environment;
