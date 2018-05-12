@@ -26,6 +26,7 @@ import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
+import com.spldeolin.beginningmind.aspect.util.ProcessingTimeLogger;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
@@ -51,7 +52,7 @@ public class ControllerAspect {
     @Autowired
     private RedisCache redisCache;
 
-    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*Controller.*(..)) && !execution(* com.spldeolin.beginningmind.controller.RedirectController.*(..))")
+    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*Controller.*(..)) && !execution(* com.spldeolin.beginningmind.controller.FailureController.*(..))")
     public void controllerMethod() {}
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
@@ -75,10 +76,13 @@ public class ControllerAspect {
         if (invalids.size() > 0) {
             throw new ExtraInvalidException().setInvalids(invalids);
         } else {
+            // 记录开始时间
+            long proceedAt = System.currentTimeMillis();
             // 执行切点
             Object requestResult = point.proceed(controllerInfo.getParameterValues());
+            // 执行时间日志
             // 结束日志
-            logAfter(controllerInfo, requestResult);
+            logAfter(controllerInfo, requestResult, proceedAt);
             return requestResult;
         }
 
@@ -158,8 +162,9 @@ public class ControllerAspect {
         session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
-    private void logAfter(ControllerInfo controllerInfo, Object requestResult) {
+    private void logAfter(ControllerInfo controllerInfo, Object requestResult, long proceedAt) {
         log.info("...处理完毕");
+        ProcessingTimeLogger.logProcessingTime(controllerInfo.getInsignia(), System.currentTimeMillis() - proceedAt);
         log.info("[Java] 请求方法返回值：" + requestResult);
         log.info("返回响应。(" + controllerInfo.getInsignia() + ")");
     }
@@ -167,7 +172,7 @@ public class ControllerAspect {
     private void logThrowing(ControllerInfo controllerInfo, Object requestResult) {
         log.info("...处理中断");
         log.info("统一异常处理返回值：" + requestResult);
-        log.info("返回响应。" + RequestContextUtils.getControllerInfo().getInsignia());
+        log.info("返回响应。" + controllerInfo.getInsignia());
     }
 
     private List<Invalid> handleExtraAnnotation(ControllerInfo controllerInfo) {

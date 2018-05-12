@@ -79,7 +79,7 @@ public class SignManager {
             throw new ServiceException("验证码超时");
         }
         String captcha = captchaDTO.getCaptcha();
-        if (!captcha.equals(input.getCaptcha())) {
+        if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
             throw new ServiceException("验证码错误");
         }
         // 登录

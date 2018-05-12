@@ -16,7 +16,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     private BeginningMindProperties properties;
 
     /**
-     * 追加额外监听路径
+     * 额外监听路径
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -29,13 +29,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         registry.addResourceHandler(mapping + "/**").addResourceLocations("file:" + location);
     }
 
+    /**
+     * 跨域
+     */
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         return new WebMvcConfigurerAdapter() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*")
-                        .allowedMethods("*").allowedHeaders("*");
+                registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
             }
         };
     }
