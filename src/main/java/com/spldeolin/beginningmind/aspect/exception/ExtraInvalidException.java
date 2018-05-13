@@ -2,9 +2,8 @@ package com.spldeolin.beginningmind.aspect.exception;
 
 import java.util.List;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -12,9 +11,8 @@ import lombok.experimental.Accessors;
  *
  * @author Deolin
  */
-@Getter
-@Setter
-@ToString
+@Data
+@EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 public class ExtraInvalidException extends RuntimeException {
 

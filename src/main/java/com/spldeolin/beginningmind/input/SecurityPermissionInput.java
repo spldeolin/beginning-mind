@@ -7,7 +7,6 @@ import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * “权限”Input类
@@ -16,7 +15,6 @@ import lombok.NoArgsConstructor;
  * @generator Cadeau Support
  */
 @Data
-@NoArgsConstructor
 public class SecurityPermissionInput implements Serializable {
 
     /**

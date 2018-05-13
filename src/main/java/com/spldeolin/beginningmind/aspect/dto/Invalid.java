@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.aspect.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -10,7 +9,6 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
-@AllArgsConstructor
 @Builder
 public class Invalid {
 

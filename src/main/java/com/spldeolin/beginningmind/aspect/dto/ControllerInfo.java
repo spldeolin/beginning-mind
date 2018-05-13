@@ -1,10 +1,8 @@
 package com.spldeolin.beginningmind.aspect.dto;
 
 import java.lang.reflect.Method;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -13,8 +11,6 @@ import lombok.experimental.Accessors;
  * @author Deolin
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Accessors(chain = true)
 public class ControllerInfo {

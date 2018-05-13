@@ -6,7 +6,6 @@ import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * “角色与权限的关联”Input类
@@ -15,7 +14,6 @@ import lombok.NoArgsConstructor;
  * @generator Cadeau Support
  */
 @Data
-@NoArgsConstructor
 public class SecurityRoles2permissionsInput implements Serializable {
 
     /**

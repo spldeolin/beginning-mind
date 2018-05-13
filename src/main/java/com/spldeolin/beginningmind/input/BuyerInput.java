@@ -9,7 +9,6 @@ import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.Buyer;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 /**
  * “买家”Input类
@@ -18,7 +17,6 @@ import lombok.NoArgsConstructor;
  * @generator Cadeau Support
  */
 @Data
-@NoArgsConstructor
 public class BuyerInput implements Serializable {
 
     /**

@@ -16,11 +16,13 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.dao.bm1.BuyerMapper;
 import com.spldeolin.beginningmind.dao.bm2.ExMapper;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.model.SecurityAccount;
+import com.spldeolin.beginningmind.model.Seller;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.ApplicationContext;
 import com.spldeolin.beginningmind.util.JSONUtils;
@@ -42,6 +44,10 @@ public class Tests {
 
     @Autowired
     private SecurityAccountService securityAccountService;
+
+    public static void main(String[] args) {
+        System.out.println(Goods.builder().name("曲奇饼干").build());
+    }
 
     @Test
     public void contextLoads() {
@@ -120,6 +126,14 @@ public class Tests {
     @Test
     public void bm1() {
         log.info(buyerMapper.selectAll());
+    }
+
+    @Autowired
+    private RedisCache redisCache;
+
+    @Test
+    public void redis() {
+        redisCache.setCacheWithExpireTime("b", Seller.builder().nickname("鬼方").build(), 500);
     }
 
 }

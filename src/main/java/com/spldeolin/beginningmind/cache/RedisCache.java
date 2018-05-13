@@ -45,13 +45,13 @@ public class RedisCache {
     /**
      * 单位：秒
      */
-    public <T> void setCacheWithExpireTime(String key, T obj, final long expireTime) {
+    public <T> void setCacheWithExpireTime(String key, T obj, final long expireSeconds) {
         final byte[] bkey = key.getBytes();
         final byte[] bvalue = SerializationUtils.serialize(obj);
         redisTemplate.execute(new RedisCallback<Boolean>() {
             @Override
             public Boolean doInRedis(RedisConnection connection) throws DataAccessException {
-                connection.setEx(bkey, expireTime, bvalue);
+                connection.setEx(bkey, expireSeconds, bvalue);
                 return true;
             }
         });
