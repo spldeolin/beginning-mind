@@ -37,7 +37,8 @@ public class FailureController {
     public RequestResult notFound(@RequestParam(value = NOT_FOUND_PARAM_METHOD, required = false) String method,
             @RequestParam(value = NOT_FOUND_PARAM_URL, required = false) String url) {
         if (StringUtils.isNoneEmpty(method, url)) {
-            return RequestResult.failure(ResultCode.NOT_FOUND, "请求不存在。[" + getFirstPart(method) + "]" + getFirstPart(url));
+            return RequestResult.failure(ResultCode.NOT_FOUND,
+                    "请求不存在。[" + getFirstPart(method) + "]" + getFirstPart(url));
         } else {
             return RequestResult.failure(ResultCode.NOT_FOUND);
         }

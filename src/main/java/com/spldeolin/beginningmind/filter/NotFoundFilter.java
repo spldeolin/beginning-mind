@@ -9,6 +9,7 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -43,6 +44,11 @@ public class NotFoundFilter implements Filter {
         String requestUrl = request.getRequestURI();
         // 放行静态资源请求
         if (requestUrl.startsWith(properties.getFile().getMapping())) {
+            chain.doFilter(req, res);
+            return;
+        }
+        // 放行swagger
+        if (StringUtils.containsAny(requestUrl, "swagger", "api-docs")) {
             chain.doFilter(req, res);
             return;
         }

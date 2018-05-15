@@ -9,17 +9,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 帐号（用于登录的信息）
+ * 帐号
  *
- * @author Deolin 2018/5/4
- * @generator Cadeau Support
+ * @author Deolin 2018/5/15
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Accessors(chain = true)
 @Table(name = "security_account")

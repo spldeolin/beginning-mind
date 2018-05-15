@@ -10,17 +10,20 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
  * 买家
  *
- * @author Deolin 2018/5/1
- * @generator Cadeau Support
+ * @author Deolin 2018/5/15
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 @Accessors(chain = true)
 @Table(name = "buyer")
