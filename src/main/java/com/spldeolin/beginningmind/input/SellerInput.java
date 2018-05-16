@@ -8,17 +8,18 @@ package com.spldeolin.beginningmind.input;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.Seller;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * “卖家”Input类
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/5/16
  */
 @Data
+@Accessors(chain = true)
 public class SellerInput implements Serializable {
 
     /**
@@ -41,9 +42,7 @@ public class SellerInput implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public Seller toModel() {
-        Seller model = Seller.builder().build();
-        BeanUtils.copyProperties(this, model);
-        return model;
+        return Seller.builder().id(id).updatedAt(updatedAt).nickname(nickname).build();
     }
 
 }

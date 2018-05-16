@@ -7,17 +7,18 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * “角色与权限的关联”Input类
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/5/16
  */
 @Data
+@Accessors(chain = true)
 public class SecurityRoles2permissionsInput implements Serializable {
 
     /**
@@ -40,9 +41,8 @@ public class SecurityRoles2permissionsInput implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public SecurityRoles2permissions toModel() {
-        SecurityRoles2permissions model = SecurityRoles2permissions.builder().build();
-        BeanUtils.copyProperties(this, model);
-        return model;
+        return SecurityRoles2permissions.builder().id(id).updatedAt(updatedAt).roleId(roleId).permissionId(
+                permissionId).build();
     }
 
 }

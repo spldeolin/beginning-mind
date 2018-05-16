@@ -8,17 +8,18 @@ package com.spldeolin.beginningmind.input;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityRole;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * “角色”Input类
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/5/16
  */
 @Data
+@Accessors(chain = true)
 public class SecurityRoleInput implements Serializable {
 
     /**
@@ -41,9 +42,7 @@ public class SecurityRoleInput implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public SecurityRole toModel() {
-        SecurityRole model = SecurityRole.builder().build();
-        BeanUtils.copyProperties(this, model);
-        return model;
+        return SecurityRole.builder().id(id).updatedAt(updatedAt).name(name).build();
     }
 
 }

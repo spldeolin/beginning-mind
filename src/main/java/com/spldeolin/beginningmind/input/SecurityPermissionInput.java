@@ -8,17 +8,18 @@ package com.spldeolin.beginningmind.input;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-import org.springframework.beans.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * “权限”Input类
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/5/16
  */
 @Data
+@Accessors(chain = true)
 public class SecurityPermissionInput implements Serializable {
 
     /**
@@ -48,9 +49,8 @@ public class SecurityPermissionInput implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public SecurityPermission toModel() {
-        SecurityPermission model = SecurityPermission.builder().build();
-        BeanUtils.copyProperties(this, model);
-        return model;
+        return SecurityPermission.builder().id(id).updatedAt(updatedAt).name(name).requiresPermissionsMapping(
+                requiresPermissionsMapping).build();
     }
 
 }
