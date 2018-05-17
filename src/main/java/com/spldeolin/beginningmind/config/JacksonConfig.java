@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -48,8 +47,6 @@ public class JacksonConfig {
                 true)) {
             builder.simpleDateFormat(beginningMindProperties.getTime().getDefaultDatetimePattern());
         }
-        // 蛇形分割的属性名
-        builder.propertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
         // 忽略不认识的属性名
         builder.failOnUnknownProperties(true);
         // 时区

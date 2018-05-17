@@ -26,7 +26,6 @@ import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
-import com.spldeolin.beginningmind.util.StringCaseUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -63,15 +62,14 @@ public class GlobalExceptionAdvance {
     /**
      * 400 缺少RequestParam参数
      * <pre>
-     *     但以下情况不会被捕获：
-     *     /user?type
-     *     /user?type=
+     * 但以下情况不会被捕获：
+     * /user?type
+     * /user?type=
      * </pre>
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public RequestResult handle(MissingServletRequestParameterException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST,
-                "缺少请求参数" + StringCaseUtils.camelToSnake(e.getParameterName()));
+        return RequestResult.failure(ResultCode.BAD_REQEUST, "缺少请求参数" + e.getParameterName());
     }
 
     /**
@@ -83,7 +81,7 @@ public class GlobalExceptionAdvance {
     }
 
     /**
-     * 400 RequestParam参数没有通过注解校验
+     * 400 RequestParam参数没有通过注解校验（控制器声明@Validated时）
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
@@ -97,8 +95,8 @@ public class GlobalExceptionAdvance {
             PathImpl pathImpl = (PathImpl) cv.getPropertyPath();
             // 参数下标
             int paramIndex = pathImpl.getLeafNode().getParameterIndex();
-            invalids.add(Invalid.builder().name(StringCaseUtils.camelToSnake(paramNames[paramIndex])).value(
-                    paramValues[paramIndex]).cause(cv.getMessage()).build());
+            invalids.add(Invalid.builder().name(paramNames[paramIndex]).value(paramValues[paramIndex]).cause(
+                    cv.getMessage()).build());
         }
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
@@ -106,10 +104,10 @@ public class GlobalExceptionAdvance {
     /**
      * 400 请求Body格式错误
      * <pre>
-     *     以下情况时，被捕获：
-     *     alkdjfaldfjlalkajkdklf
-     *     (空)
-     *     {"user_age"="word"}
+     * 以下情况时，会被捕获：
+     * alkdjfaldfjlalkajkdklf
+     * (空)
+     * {"userAge"="notNumberValue"}
      * </pre>
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
@@ -118,21 +116,21 @@ public class GlobalExceptionAdvance {
     }
 
     /**
-     * 400 请求Body内字段没有通过注解校验
+     * 400 请求Body内字段没有通过注解校验（形参声明@Valid时）
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         List<Invalid> invalids = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            invalids.add(Invalid.builder().name(StringCaseUtils.camelToSnake(fieldError.getField())).value(
-                    fieldError.getRejectedValue()).cause(fieldError.getDefaultMessage()).build());
+            invalids.add(Invalid.builder().name(fieldError.getField()).value(fieldError.getRejectedValue()).cause(
+                    fieldError.getDefaultMessage()).build());
         }
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
 
     /**
-     * 400 RequestParam参数或请求Body内字段没有通过额外的检验
+     * 400 成功绑定并通过校验的请求方法参数，没有通过切面的额外校验（如?temp&foo=这样的情况）
      */
     @ExceptionHandler(ExtraInvalidException.class)
     public RequestResult handle(ExtraInvalidException e) {
