@@ -13,15 +13,30 @@ public class Page<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 页码
+     */
     private Integer pageNo;
 
+    /**
+     * 是否有上一页
+     */
     private Boolean hasPreviousPage;
 
+    /**
+     * 是否有下一页
+     */
     private Boolean hasNextPage;
 
+    /**
+     * 本页的条目一览
+     */
     private List<T> entitiesInPage;
 
-    private Integer pagesSize;
+    /**
+     * 一共有几页
+     */
+    private Integer pagesCount;
 
     private Page() {}
 
@@ -32,7 +47,7 @@ public class Page<T> implements Serializable {
         page.hasPreviousPage = pageInfo.isHasPreviousPage();
         page.hasNextPage = pageInfo.isHasNextPage();
         page.entitiesInPage = pageInfo.getList();
-        page.pagesSize = pageInfo.getPages();
+        page.pagesCount = pageInfo.getPages();
         return page;
     }
 
