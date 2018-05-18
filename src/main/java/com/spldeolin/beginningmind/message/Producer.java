@@ -4,7 +4,6 @@ import javax.jms.Queue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jms.core.JmsMessagingTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.model.Goods;
 import lombok.extern.log4j.Log4j2;
@@ -24,7 +23,7 @@ public class Producer {
     @Qualifier("cheeseQueue")
     private Queue cheeseQueue;
 
-    @Scheduled(fixedDelay = 3000)
+    //@Scheduled(fixedDelay = 3000)
     public void send() {
         log.info("准备发送一个曲奇饼干与芝士");
         jmsMessagingTemplate.convertAndSend(queue, "队列中的曲奇饼干");

@@ -1,9 +1,8 @@
 package com.spldeolin.beginningmind.config;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 import java.util.Map;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.StringUtils;
+import javax.servlet.Filter;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -16,50 +15,65 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
-import com.spldeolin.beginningmind.controller.FailureController;
+import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.security.ActuatorFilter;
 import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
 import com.spldeolin.beginningmind.security.ServiceRealm;
+import com.spldeolin.beginningmind.security.SignFilter;
 
 @Configuration
 public class ShiroConfig {
 
-    @Autowired
-    private Environment environment;
+    @Value("${management.context-path}")
+    private String actuatorUrlPrefix;
 
     @Autowired
     private BeginningMindProperties properties;
-
-    @Value("${management.context-path}")
-    private String actuatorContextPath;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        // 重定向到RestController
-        shiroFilterFactoryBean.setLoginUrl("/unauthc");
-        Map<String, String> filterChainDefinitionMap = new LinkedHashMap<>();
-        // 放行404“页面”、静态资源、验证码请求、登录请求.... 以及一些临时测试的简单请求
-        filterChainDefinitionMap.put(FailureController.NOT_FOUND_MAPPING, "anon");
-        filterChainDefinitionMap.put(properties.getFile().getMapping() + "/**", "anon");
-        filterChainDefinitionMap.put("/sign/captcha", "anon");
-        filterChainDefinitionMap.put("/sign/in", "anon");
-        filterChainDefinitionMap.put("/sign/anon", "anon");
-        if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {
-            // 非prod环境放行actuator相关请求
-            if (StringUtils.isNotBlank(actuatorContextPath)) {
-                filterChainDefinitionMap.put(actuatorContextPath + "/**", "anon");
-            }
-            // 非prod环境放行swagger相关请求
-            for (String swaggerUrlMatchingPrefix : CoupledConstant.SWAGGER_URL_MATCHING_PREFIXES) {
-                filterChainDefinitionMap.put(swaggerUrlMatchingPrefix + "**", "anon");
-            }
-        }
-        filterChainDefinitionMap.put("/**", "authc");
-        shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionMap);
+        // 过滤器
+        shiroFilterFactoryBean.setFilters(createFilters());
+        // 过滤器链
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(createFilterChainDefinitions());
         return shiroFilterFactoryBean;
+    }
+
+    /**
+     * @return 过滤器一览
+     */
+    private Map<String, Filter> createFilters() {
+        Map<String, Filter> filters = new HashMap<>();
+        filters.put(SignFilter.MARK, new SignFilter());
+        filters.put(ActuatorFilter.MARK, new ActuatorFilter());
+        return filters;
+    }
+
+    /**
+     * @return 过滤器链
+     */
+    private Map<String, String> createFilterChainDefinitions() {
+        Map<String, String> filterChainDefinitions = new HashMap<>();
+        // 放行error、静态资源、验证码请求、登录请求.... 以及一些临时测试的简单请求
+        filterChainDefinitions.put(UrlForwardToExceptionController.ERROR_PATH, "anon");
+        filterChainDefinitions.put(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL, "anon");
+        filterChainDefinitions.put(UrlForwardToExceptionController.UNAUTHORIZED_URL, "anon");
+        filterChainDefinitions.put(properties.getFile().getMapping() + "/**", "anon");
+        filterChainDefinitions.put("/sign/captcha", "anon");
+        filterChainDefinitions.put("/sign/in", "anon");
+        filterChainDefinitions.put("/sign/anon", "anon");
+        // 放行swagger相关请求（swagger配置中可以根据profile决定是否启用）
+        for (String swaggerUrlPrefix : CoupledConstant.SWAGGER_URL_PREFIXES) {
+            filterChainDefinitions.put(swaggerUrlPrefix + "**", "anon");
+        }
+        // actuator相关请求使用专门的过滤器
+        filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
+        // 其他请求默认闭环
+        filterChainDefinitions.put("/**", SignFilter.MARK);
+        return filterChainDefinitions;
     }
 
     @Bean

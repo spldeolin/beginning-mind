@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.controller;
 
 import javax.validation.Valid;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -69,6 +70,7 @@ public class SignController {
      * 将指定用户踢下线
      */
     @DeleteMapping("/kill")
+    @RequiresPermissions("sign_kill")
     public RequestResult kill(@RequestParam("account_id") Long accountId) {
         securityAccountService.killSigner(accountId);
         return RequestResult.success();

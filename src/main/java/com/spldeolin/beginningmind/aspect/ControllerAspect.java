@@ -52,10 +52,24 @@ public class ControllerAspect {
     @Autowired
     private RedisCache redisCache;
 
-    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*Controller.*(..)) && !execution(* com.spldeolin.beginningmind.controller.FailureController.*(..))")
+    /**
+     * Spring可扫描的，
+     * com.spldeolin.beginningmind.controller包及其子包下的，
+     * 声明了@RestController注解的类，
+     * 中的所有方法
+     */
+    @Pointcut("execution(* com.spldeolin.beginningmind.controller..*.*(..))" +
+            " && @within(org.springframework.web.bind.annotation.RestController)")
     public void controllerMethod() {}
 
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice) && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
+    /**
+     * Spring可扫描的，
+     * 声明了@RestControllerAdvice注解的类，
+     * 中声明了ExceptionHandler注解的，
+     * 所有方法
+     */
+    @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice)" +
+            " && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
     public void exceptionHandler() {}
 
     @Around("controllerMethod()")

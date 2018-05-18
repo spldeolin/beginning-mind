@@ -23,8 +23,10 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
+import com.spldeolin.beginningmind.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
+import com.spldeolin.beginningmind.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 import lombok.extern.log4j.Log4j2;
 
@@ -138,11 +140,27 @@ public class GlobalExceptionAdvance {
     }
 
     /**
-     * 403 登录者没有某个请求的权限
+     * 401 未登录
+     */
+    @ExceptionHandler(UnsignedException.class)
+    public RequestResult handleUnsignException() {
+        return RequestResult.failure(ResultCode.UNSIGNED);
+    }
+
+    /**
+     * 403 没权限或是请求actuator时提供的token不正确
      */
     @ExceptionHandler(AuthorizationException.class)
-    public RequestResult handle() {
+    public RequestResult handleAuthorizationException() {
         return RequestResult.failure(ResultCode.FORBIDDEN);
+    }
+
+    /**
+     * 404 找不到请求
+     */
+    @ExceptionHandler(RequestNotFoundException.class)
+    public RequestResult handleRequestNotFoundException() {
+        return RequestResult.failure(ResultCode.NOT_FOUND);
     }
 
     /**
@@ -155,11 +173,16 @@ public class GlobalExceptionAdvance {
 
     /**
      * 500 内部BUG
+     * <pre>
+     * 控制层上方发生的BUG（如过滤器中的BUG），无法返回标识符。因为没有进入切面
+     * 控制层下方发生的BUG（如果业务层、持久层的BUG），能够返回标识符
+     * </pre>
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
         ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         if (controllerInfo == null) {
+            log.error("统一异常处理被击穿！", e);
             return RequestResult.failure(ResultCode.INTERNAL_ERROR);
         }
         String insignia = controllerInfo.getInsignia();

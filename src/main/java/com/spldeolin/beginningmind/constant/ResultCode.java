@@ -18,9 +18,9 @@ public enum ResultCode {
 
     OK(200, null),
     BAD_REQEUST(400, "交互错误"),
-    UNAUTHENTICATED(401, "未登录或登录超时"),
+    UNSIGNED(401, "未登录或登录超时"),
     FORBIDDEN(403, "权限不足"),
-    NOT_FOUND(404, "请求不存在"),
+    NOT_FOUND(404, "请求或资源不存在"),
     INTERNAL_ERROR(500, "内部错误"),
     SERVICE_ERROR(1001, "业务异常");
 
