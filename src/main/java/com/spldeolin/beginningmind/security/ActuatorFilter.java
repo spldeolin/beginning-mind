@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.util.ApplicationContext;
 
 /**
- * 系统信息过滤器。
+ * Actuator相关请求过滤器。
  * <pre>
  * 用于处理actuator提供的相关请求，为这类请求专门提供过滤策略
  * </pre>
