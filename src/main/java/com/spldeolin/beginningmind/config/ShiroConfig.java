@@ -15,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.security.ActuatorFilter;
 import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.SignFilter;
+import com.spldeolin.beginningmind.security.TempTokenHolder;
 
 @Configuration
 public class ShiroConfig {
@@ -30,6 +32,12 @@ public class ShiroConfig {
 
     @Autowired
     private BeginningMindProperties properties;
+
+    @Autowired
+    private Environment environment;
+
+    @Autowired
+    private TempTokenHolder tempTokenHolder;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -48,7 +56,7 @@ public class ShiroConfig {
     private Map<String, Filter> createFilters() {
         Map<String, Filter> filters = new HashMap<>();
         filters.put(SignFilter.MARK, new SignFilter());
-        filters.put(ActuatorFilter.MARK, new ActuatorFilter());
+        filters.put(ActuatorFilter.MARK, new ActuatorFilter(environment, tempTokenHolder));
         return filters;
     }
 

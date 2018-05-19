@@ -9,7 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.spldeolin.beginningmind.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;
-import lombok.extern.log4j.Log4j2;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -18,7 +17,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @Controller
 @RequestMapping
 @ApiIgnore
-@Log4j2
 public class UrlForwardToExceptionController implements ErrorController {
 
     public static final String ERROR_PATH = "/error";

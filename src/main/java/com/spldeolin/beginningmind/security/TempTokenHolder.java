@@ -11,13 +11,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class TempTokenHolder {
 
-    private String systemInfoToken;
+    private String actuatorToken;
 
     @Scheduled(fixedDelay = 24 * 3600 * 1000)
     public void initTokenWhenAppStartUp() {
-        systemInfoToken = UUID.randomUUID().toString();
-        log.info("systemInfoToken");
-        log.info(systemInfoToken);
+        actuatorToken = UUID.randomUUID().toString();
+        log.info("actuatorToken");
+        log.info(actuatorToken);
     }
 
 }
