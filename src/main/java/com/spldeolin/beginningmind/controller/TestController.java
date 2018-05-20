@@ -4,10 +4,14 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
+import com.spldeolin.beginningmind.model.Goods;
+import com.spldeolin.beginningmind.valid.annotation.Require;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @RestController
 @RequestMapping("/test")
 @Log4j2
+@Validated
 public class TestController {
 
     @GetMapping("/time")
@@ -49,6 +54,11 @@ public class TestController {
         log.info("asd");
         log.info("asd");
         return (String) ses.getAttribute("one-cookie");
+    }
+
+    @PostMapping("require")
+    public RequestResult testRequire(@Require(value = {"id", "name"}, message = "id或name为null") Goods goods) {
+        return RequestResult.success(goods);
     }
 
 }
