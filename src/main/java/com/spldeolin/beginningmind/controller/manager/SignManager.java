@@ -92,7 +92,6 @@ public class SignManager {
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         RequestContextUtils.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
                 account.getId().toString());
-        Signer.mdc();
     }
 
     /**
@@ -100,8 +99,6 @@ public class SignManager {
      */
     public void signOut() {
         SecurityUtils.getSubject().logout();
-        // 清除MDC
-        Signer.removeMDC();
     }
 
     /**

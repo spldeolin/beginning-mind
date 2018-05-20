@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,6 +31,7 @@ import com.spldeolin.beginningmind.aspect.util.ProcessingTimeLogger;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
+import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
@@ -77,12 +79,14 @@ public class ControllerAspect {
         // 解析切点
         ControllerInfo controllerInfo = analyzePoint(point);
         RequestContextUtils.setControllerInfo(controllerInfo);
-        // 分布式情况下确保日志MDC存在
-        insureLogMDC();
+        // 设置Log MDC
+        setSignerLogMDC();
         // 开始日志
         logBefore(controllerInfo);
         // 检查登录者是否被踢出
-        checkKill();
+        if (isKilled()) {
+            throw new ServiceException("已被管理员请离，请重新登录");
+        }
         // 刷新会话
         reflashSessionExpire();
         // 拓展注解处理
@@ -94,23 +98,26 @@ public class ControllerAspect {
             long proceedAt = System.currentTimeMillis();
             // 执行切点
             Object requestResult = point.proceed(controllerInfo.getParameterValues());
-            // 执行时间日志
             // 结束日志
             logAfter(controllerInfo, requestResult, proceedAt);
+            // 清除MDC
+            removeSignerLogMDC();
             return requestResult;
         }
-
     }
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(Object requestResult) {
         ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         // 未进入解析切面的异常，开始日志是不会有的，也没必要打印返回日志（如body不可读异常）
-        if (controllerInfo == null) {
-            return;
+        if (controllerInfo != null) {
+            // 异常日志
+            logThrowing(controllerInfo, requestResult);
+            // 清除MDC
+            removeSignerLogMDC();
         }
-        // 异常日志
-        logThrowing(controllerInfo, requestResult);
+        // 确保本线程的Log MDC被清除
+        removeSignerLogMDC();
     }
 
     private ControllerInfo analyzePoint(ProceedingJoinPoint point) {
@@ -129,13 +136,16 @@ public class ControllerAspect {
         return controllerInfo;
     }
 
-    private void insureLogMDC() {
-        if (!Signer.existMDC()) {
-            Subject subject = SecurityUtils.getSubject();
-            if (subject.isAuthenticated() || subject.isRemembered()) {
-                Signer.mdc();
-            }
+    private void setSignerLogMDC() {
+        Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated() || subject.isRemembered()) {
+            ThreadContext.put(CoupledConstant.LOG_PATTERN_PARAM,
+                    "[" + Signer.current().getSecurityAccount().getUsername() + "]");
         }
+    }
+
+    private void removeSignerLogMDC() {
+        ThreadContext.remove(CoupledConstant.LOG_PATTERN_PARAM);
     }
 
     private void logBefore(ControllerInfo controllerInfo) {
@@ -153,7 +163,10 @@ public class ControllerAspect {
         log.info("开始处理...");
     }
 
-    private void checkKill() {
+    /**
+     * @return true：已被踢出，false：未被踢出
+     */
+    private boolean isKilled() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
             String cacheKey = "killed:session:" + RequestContextUtils.session().getId();
@@ -161,14 +174,12 @@ public class ControllerAspect {
             if (redisCache.getCache(cacheKey, String.class) != null) {
                 // 登出
                 subject.logout();
-                // 清除MDC
-                Signer.removeMDC();
                 // 删除标识
                 redisCache.deleteCache(cacheKey);
-                // 不再执行后续操作
-                throw new ServiceException("已被管理员请离，请重新登录");
+                return true;
             }
         }
+        return false;
     }
 
     private void reflashSessionExpire() {
