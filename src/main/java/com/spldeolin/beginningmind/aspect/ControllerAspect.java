@@ -6,8 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -22,8 +20,6 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.aspect.annotation.PageNo;
-import com.spldeolin.beginningmind.aspect.annotation.PageSize;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
@@ -89,8 +85,8 @@ public class ControllerAspect {
         }
         // 刷新会话
         reflashSessionExpire();
-        // 拓展注解处理
-        List<Invalid> invalids = handleExtraAnnotation(controllerInfo);
+        // 解析注解，做一些额外处理
+        List<Invalid> invalids = handleAnnotations(controllerInfo);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException().setInvalids(invalids);
         } else {
@@ -200,7 +196,7 @@ public class ControllerAspect {
         log.info("返回响应。" + controllerInfo.getInsignia());
     }
 
-    private List<Invalid> handleExtraAnnotation(ControllerInfo controllerInfo) {
+    private List<Invalid> handleAnnotations(ControllerInfo controllerInfo) {
         List<Invalid> invalids = new ArrayList<>();
         Annotation[][] annotationsEachParams = controllerInfo.getMethod().getParameterAnnotations();
         String[] parameterNames = controllerInfo.getParameterNames();
@@ -211,28 +207,6 @@ public class ControllerAspect {
             // 已绑定的参数值（副本）
             Object parameterValue = parameterValues[i];
             for (Annotation annotation : annotations) {
-                // 处理PageNo注解
-                if (annotation instanceof PageNo) {
-                    String pageNoParamName = properties.getPageNoParamName();
-                    if (StringUtils.isBlank(pageNoParamName)) {
-                        pageNoParamName = "page_no";
-                    }
-                    parameterValue = handlePageNo(
-                            RequestContextUtils.request().getParameter(pageNoParamName));
-                }
-                // 处理PageSize注解
-                if (annotation instanceof PageSize) {
-                    String pageSizeParamName = properties.getPageSizeParamName();
-                    if (StringUtils.isBlank(pageSizeParamName)) {
-                        pageSizeParamName = "page_size";
-                    }
-                    parameterValue = handlePageSize(annotation,
-                            RequestContextUtils.request().getParameter(pageSizeParamName));
-                }
-                // 处理RequireId注解
-                //if (annotation instanceof RequireId) {
-                //    handleRequireId(parameterValue, invalids);
-                //}
                 // 进行RequestParam注解的空检验
                 if (annotation instanceof RequestParam) {
                     handleRequestParam(annotation, parameterName, parameterValue, invalids);
@@ -241,50 +215,6 @@ public class ControllerAspect {
             }
         }
         return invalids;
-    }
-
-    /**
-     * 处理PageNo注解
-     *
-     * @param urlParamValue 未绑定的URL参数
-     * @return 处理后的值
-     */
-    private Object handlePageNo(String urlParamValue) {
-        // 不是数字
-        if (!NumberUtils.isCreatable(urlParamValue)) {
-            return 1;
-        }
-        int value = Integer.parseInt(urlParamValue);
-        // 超出范围
-        if (value < 1) {
-            return 1;
-        }
-        return value;
-    }
-
-    /**
-     * 处理PageSize注解
-     *
-     * @param annotation PageSize注解对象
-     * @param urlParamValue PageSize修饰的参数的值
-     * @return 处理后的值
-     */
-    private Object handlePageSize(Annotation annotation, String urlParamValue) {
-        // 不是数字
-        if (!NumberUtils.isCreatable(urlParamValue)) {
-            return ((PageSize) annotation).defaultSize();
-        }
-        int limit = ((PageSize) annotation).limit();
-        int value = Integer.parseInt(urlParamValue);
-        // 超出范围
-        if (value < 1) {
-            return 1;
-        }
-        // 超出范围
-        if (value > limit) {
-            return limit;
-        }
-        return value;
     }
 
     /**
