@@ -2,12 +2,10 @@ package com.spldeolin.beginningmind.security;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.springframework.core.env.Environment;
-import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.util.ActiveProfile;
 import lombok.AllArgsConstructor;
 
 /**
@@ -21,14 +19,12 @@ public class ActuatorFilter extends AccessControlFilter {
 
     public static final String MARK = "actuator";
 
-    private Environment environment;
-
     private TempTokenHolder tempTokenHolder;
 
     @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object mappedValue) {
         // 非生产环境直接放行
-        if (!ArrayUtils.contains(environment.getActiveProfiles(), CoupledConstant.PROD_PROFILE_NAME)) {
+        if (ActiveProfile.isNotProd()) {
             return true;
         }
         // 生产环境需要专门的token

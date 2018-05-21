@@ -76,12 +76,4 @@ public class SignController {
         return RequestResult.success();
     }
 
-    /**
-     * 匿名接口
-     */
-    @GetMapping("/anon")
-    public RequestResult anon() {
-        return RequestResult.success("初心");
-    }
-
 }

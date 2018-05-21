@@ -1,10 +1,8 @@
 package com.spldeolin.beginningmind.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
-import com.spldeolin.beginningmind.constant.CoupledConstant;
+import com.spldeolin.beginningmind.util.ActiveProfile;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -17,30 +15,15 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 public class SwaggerConfig {
 
-    @Autowired
-    private Environment environment;
-
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(enable())    // 启用/禁用开关
+                .enable(ActiveProfile.isNotProd())    // 启用/禁用开关
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.spldeolin.beginningmind"))
                 .paths(PathSelectors.any())
                 .build();
-    }
-
-    /**
-     * @return 生产环境返回false，其他环境返回true
-     */
-    private boolean enable() {
-        for (String activeProfile : environment.getActiveProfiles()) {
-            if (CoupledConstant.PROD_PROFILE_NAME.equals(activeProfile)) {
-                return false;
-            }
-        }
-        return true;
     }
 
     private ApiInfo apiInfo() {

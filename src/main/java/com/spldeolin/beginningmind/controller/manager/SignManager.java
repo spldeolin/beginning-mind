@@ -105,7 +105,7 @@ public class SignManager {
      * 指定用户是否登录中
      */
     @GetMapping("is_signing")
-    public RequestResult isSign(@RequestParam("account_id") Long accountId) {
+    public RequestResult isSign(@RequestParam Long accountId) {
         return RequestResult.success(securityAccountService.isAccountSigning(accountId));
     }
 
@@ -113,14 +113,9 @@ public class SignManager {
      * 将指定用户踢下线
      */
     @DeleteMapping("kill")
-    public RequestResult kill(@RequestParam("account_id") Long accountId) {
+    public RequestResult kill(@RequestParam Long accountId) {
         securityAccountService.killSigner(accountId);
         return RequestResult.success();
-    }
-
-    @GetMapping("anon")
-    public RequestResult anon() {
-        return RequestResult.success("初心");
     }
 
     @Data

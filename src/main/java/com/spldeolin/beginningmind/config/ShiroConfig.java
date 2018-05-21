@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.security.ActuatorFilter;
@@ -32,9 +31,6 @@ public class ShiroConfig {
 
     @Autowired
     private BeginningMindProperties properties;
-
-    @Autowired
-    private Environment environment;
 
     @Autowired
     private TempTokenHolder tempTokenHolder;
@@ -56,7 +52,7 @@ public class ShiroConfig {
     private Map<String, Filter> createFilters() {
         Map<String, Filter> filters = new HashMap<>();
         filters.put(SignFilter.MARK, new SignFilter());
-        filters.put(ActuatorFilter.MARK, new ActuatorFilter(environment, tempTokenHolder));
+        filters.put(ActuatorFilter.MARK, new ActuatorFilter(tempTokenHolder));
         return filters;
     }
 
@@ -65,14 +61,13 @@ public class ShiroConfig {
      */
     private Map<String, String> createFilterChainDefinitions() {
         Map<String, String> filterChainDefinitions = new HashMap<>();
-        // 放行error、静态资源、验证码请求、登录请求.... 以及一些临时测试的简单请求
+        // 放行error、静态资源、验证码请求、登录请求....
         filterChainDefinitions.put(UrlForwardToExceptionController.ERROR_PATH, "anon");
         filterChainDefinitions.put(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL, "anon");
         filterChainDefinitions.put(UrlForwardToExceptionController.UNAUTHORIZED_URL, "anon");
         filterChainDefinitions.put(properties.getFile().getMapping() + "/**", "anon");
         filterChainDefinitions.put("/sign/captcha", "anon");
         filterChainDefinitions.put("/sign/in", "anon");
-        filterChainDefinitions.put("/sign/anon", "anon");
         // 放行swagger相关请求（swagger配置中可以根据profile决定是否启用）
         for (String swaggerUrlPrefix : CoupledConstant.SWAGGER_URL_PREFIXES) {
             filterChainDefinitions.put(swaggerUrlPrefix + "**", "anon");
