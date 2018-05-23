@@ -8,9 +8,11 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.model.Goods;
+import com.spldeolin.beginningmind.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.valid.annotation.Require;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -59,6 +61,10 @@ public class TestController {
     @PostMapping("require")
     public RequestResult testRequire(@Require(value = {"id", "name"}, message = "id或name为null") Goods goods) {
         return RequestResult.success(goods);
+    }
+
+    public RequestResult testMobile(@RequestParam @Mobile String mobile) {
+        return RequestResult.success(mobile);
     }
 
 }

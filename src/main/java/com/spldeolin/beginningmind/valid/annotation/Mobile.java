@@ -29,8 +29,6 @@ public @interface Mobile{
 
     String message() default "不是正确的手机号";
 
-    boolean nullable() default false;
-
     Class<?>[] groups() default {};
 
     Class<? extends Payload>[] payload() default {};
