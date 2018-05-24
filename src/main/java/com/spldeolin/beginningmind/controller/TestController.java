@@ -86,5 +86,10 @@ public class TestController {
         return properties.getAddress() + relativeMapping;
     }
 
+    @GetMapping("/e")
+    void e() {
+        log.info(Integer.valueOf("a"));
+    }
+
 }
 

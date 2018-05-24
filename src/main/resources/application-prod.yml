@@ -1,9 +1,11 @@
+debug: false
+
 beginning-mind:
 
   one-cookie: 一个投入生产曲奇饼干
 
   file:
-    mapping: /static
-    location: /opt/beginning-mind-static
+    mapping: /static/
+    location: /opt/beginning-mind-static/
 
 logging.config: classpath:log4j2/log4j2-prod.yml

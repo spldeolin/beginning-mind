@@ -136,4 +136,9 @@ public class Tests {
         redisCache.setCacheWithExpireTime("b", Seller.builder().nickname("鬼方").build(), 500);
     }
 
+    @Test
+    public void debug() {
+        log.info(beginningMindProperties.isDebug());
+    }
+
 }

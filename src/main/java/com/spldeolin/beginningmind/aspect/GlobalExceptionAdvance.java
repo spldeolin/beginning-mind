@@ -3,11 +3,14 @@ package com.spldeolin.beginningmind.aspect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -18,12 +21,14 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.aspect.exception.RequestNotFoundException;
+import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;
@@ -40,6 +45,12 @@ import lombok.extern.log4j.Log4j2;
 @RestControllerAdvice
 @Log4j2
 public class GlobalExceptionAdvance {
+
+    @Autowired
+    private ErrorAttributes errorAttributes;
+
+    @Autowired
+    private BeginningMindProperties properties;
 
     /**
      * 400 请求动词错误
@@ -179,15 +190,26 @@ public class GlobalExceptionAdvance {
      * </pre>
      */
     @ExceptionHandler(Throwable.class)
-    public RequestResult handle(Throwable e) {
+    public RequestResult handle(Throwable e, WebRequest webRequest) {
         ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
+        RequestResult requestResult;
         if (controllerInfo == null) {
             log.error("统一异常处理被击穿！", e);
-            return RequestResult.failure(ResultCode.INTERNAL_ERROR);
+            requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR);
+        } else {
+            String insignia = controllerInfo.getInsignia();
+            log.error("统一异常处理被击穿！标识：" + insignia, e);
+            requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
         }
-        String insignia = controllerInfo.getInsignia();
-        log.error("统一异常处理被击穿！标识：" + insignia, e);
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
+        // 堆栈轨迹
+        if (properties.isDebug()) {
+            requestResult.setData(getStacks(webRequest).get("trace"));
+        }
+        return requestResult;
+    }
+
+    private Map<String, Object> getStacks(WebRequest webRequest) {
+        return errorAttributes.getErrorAttributes(webRequest, true);
     }
 
 }

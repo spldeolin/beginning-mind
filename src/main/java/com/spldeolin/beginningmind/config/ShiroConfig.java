@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.config;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.Filter;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -57,7 +56,7 @@ public class ShiroConfig {
     private Map<String, Filter> createFilters() {
         Map<String, Filter> filters = new HashMap<>();
         filters.put(SignFilter.MARK, new SignFilter());
-        filters.put(ActuatorFilter.MARK, new ActuatorFilter(tempTokenHolder));
+        filters.put(ActuatorFilter.MARK, new ActuatorFilter(tempTokenHolder, properties.isDebug()));
         return filters;
     }
 
@@ -79,8 +78,8 @@ public class ShiroConfig {
         }
         // actuator相关请求使用专门的过滤器
         filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
-        // 其他请求非开发环境默认闭环
-        if (!ArrayUtils.contains(environment.getActiveProfiles(), "dev")) {
+        // 非debug场合闭环
+        if (!properties.isDebug()) {
             filterChainDefinitions.put("/**", SignFilter.MARK);
         }
         return filterChainDefinitions;

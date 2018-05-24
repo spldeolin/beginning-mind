@@ -18,6 +18,12 @@ import lombok.extern.log4j.Log4j2;
 public class BeginningMindProperties {
 
     /**
+     * 是否处于debug场合
+     */
+    @Value("${debug}")
+    private boolean debug;
+
+    /**
      * “一个曲奇”
      */
     private String oneCookie;

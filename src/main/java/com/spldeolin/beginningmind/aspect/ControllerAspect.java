@@ -28,6 +28,8 @@ import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
+import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
@@ -103,7 +105,7 @@ public class ControllerAspect {
     }
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
-    public void afterReturning(Object requestResult) {
+    public void afterReturning(RequestResult requestResult) {
         ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         // 未进入解析切面的异常，开始日志是不会有的，也没必要打印返回日志（如body不可读异常）
         if (controllerInfo != null) {
@@ -190,9 +192,15 @@ public class ControllerAspect {
         log.info("返回响应。(" + controllerInfo.getInsignia() + ")");
     }
 
-    private void logThrowing(ControllerInfo controllerInfo, Object requestResult) {
+    private void logThrowing(ControllerInfo controllerInfo, RequestResult requestResult) {
         log.info("...处理中断");
-        log.info("统一异常处理返回值：" + requestResult);
+        // debug模式下，内部错误的返回值的data会包含非常长的堆栈轨迹，这些堆栈轨迹已经在统一异常处理中打印过了
+        // 所以这里不再打印data
+        if (ResultCode.INTERNAL_ERROR.getCode().equals(requestResult.getCode()) && properties.isDebug()) {
+            log.info("统一异常处理返回值：" + RequestResult.failure(requestResult.getCode(), requestResult.getMessage()));
+        } else {
+            log.info("统一异常处理返回值：" + requestResult);
+        }
         log.info("返回响应。" + controllerInfo.getInsignia());
     }
 

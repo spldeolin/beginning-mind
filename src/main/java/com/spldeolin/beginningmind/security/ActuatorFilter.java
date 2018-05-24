@@ -5,7 +5,6 @@ import javax.servlet.ServletResponse;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
-import com.spldeolin.beginningmind.util.ActiveProfile;
 import lombok.AllArgsConstructor;
 
 /**
@@ -21,10 +20,12 @@ public class ActuatorFilter extends AccessControlFilter {
 
     private TempTokenHolder tempTokenHolder;
 
+    private boolean debug;
+
     @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object mappedValue) {
-        // 非生产环境直接放行
-        if (ActiveProfile.isNotProd()) {
+        // debug场合直接放行
+        if (debug) {
             return true;
         }
         // 生产环境需要专门的token
