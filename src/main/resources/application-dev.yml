@@ -5,7 +5,7 @@ beginning-mind:
   address: http://localhost:2333
 
   file:
-    mapping: /static
-    location: C:/beginning-mind-static
+    mapping: /static/
+    location: C:/beginning-mind-static/
 
 logging.config: classpath:log4j2/log4j2-dev.yml

@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.config;
 
+import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
@@ -62,6 +63,19 @@ public class BeginningMindProperties {
 
         private Boolean serializeJavaUtilDateToTimestamp;
 
+    }
+
+    @PostConstruct
+    public void validateValues() {
+        if (!file.getMapping().endsWith("/")) {
+            throw new IllegalArgumentException("beginning-mind.file.mapping必须以 / 结尾");
+        }
+        if (!file.getLocation().endsWith("/")) {
+            throw new IllegalArgumentException("beginning-mind.file.location必须以 / 结尾");
+        }
+        if (!file.getMapping().endsWith("/")) {
+            throw new IllegalArgumentException("beginning-mind.file.mapping必须以 / 开头");
+        }
     }
 
 }
