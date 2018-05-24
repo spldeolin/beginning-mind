@@ -48,7 +48,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @UtilityClass
 @Log4j2
-public class ExcelUtils {
+public class Excels {
 
     private static final SimpleDateFormat ISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
 
