@@ -55,7 +55,7 @@ public class SignManager {
                     CaptchaDTO.builder().captcha(gifCaptcha.getCode()).generatedAt(LocalDateTime.now()).build());
             // 映射URL
             String fullMapping = beginningMindProperties.getAddress() + beginningMindProperties.getFile().getMapping()
-                    + "/" + fullFileName;
+                    + fullFileName;
             return fullMapping;
         } catch (IOException e) {
             throw new RuntimeException(e);

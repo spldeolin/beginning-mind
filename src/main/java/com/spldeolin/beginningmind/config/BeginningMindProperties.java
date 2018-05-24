@@ -1,6 +1,8 @@
 package com.spldeolin.beginningmind.config;
 
 import javax.annotation.PostConstruct;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
@@ -63,6 +65,15 @@ public class BeginningMindProperties {
 
         private Boolean serializeJavaUtilDateToTimestamp;
 
+    }
+
+    @Value("${server.context-path}") String serverContextPath;
+
+    @PostConstruct
+    public void mappingAppendContextPath() {
+        if (StringUtils.isNotBlank(serverContextPath) && !serverContextPath.equals("/")) {
+            file.setMapping(serverContextPath + file.getMapping());
+        }
     }
 
     @PostConstruct

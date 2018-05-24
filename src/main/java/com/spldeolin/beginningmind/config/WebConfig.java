@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.config;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -15,12 +16,14 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private BeginningMindProperties properties;
 
+    @Value("${beginning-mind.file.mapping}")
+    private String mapping;
+
     /**
      * 额外监听路径
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String mapping = properties.getFile().getMapping();
         String location = properties.getFile().getLocation();
         //  addResourceLocations参数必须以/结果，否则识别不到
         if (!StringUtils.endsWith(location, "/")) {
