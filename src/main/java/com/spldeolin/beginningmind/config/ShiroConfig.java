@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.config;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import javax.servlet.Filter;
 import org.apache.shiro.cache.CacheManager;
@@ -64,7 +65,7 @@ public class ShiroConfig {
      * @return 过滤器链
      */
     private Map<String, String> createFilterChainDefinitions() {
-        Map<String, String> filterChainDefinitions = new HashMap<>();
+        Map<String, String> filterChainDefinitions = new LinkedHashMap<>();
         // 放行error、静态资源、验证码请求、登录请求....
         filterChainDefinitions.put(UrlForwardToExceptionController.ERROR_PATH, "anon");
         filterChainDefinitions.put(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL, "anon");
