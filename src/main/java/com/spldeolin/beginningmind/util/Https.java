@@ -22,7 +22,7 @@ import okhttp3.Response;
  * @author Deolin
  */
 @UtilityClass
-public class HTTPUtils {
+public class Https {
 
     private static OkHttpClient client;
 
@@ -33,7 +33,7 @@ public class HTTPUtils {
     /**
      * 发送一个GET请求
      * <pre>
-     * e.g.: HTTPUtils.get("http://spldeolin.com/reply/123?page=5");
+     * e.g.: Https.get("http://spldeolin.com/reply/123?page=5");
      * </pre>
      */
     @SneakyThrows
@@ -47,7 +47,7 @@ public class HTTPUtils {
     /**
      * 发送一个POST请求，请求Body的格式是JSON
      * <pre>
-     * e.g.: HTTPUtils.post("http://spldeolin.com/post/start", JSONUtils.toJson(userDTO));
+     * e.g.: Https.post("http://spldeolin.com/post/start", Jsons.toJson(userDTO));
      * </pre>
      */
     @SneakyThrows
@@ -62,17 +62,17 @@ public class HTTPUtils {
     /**
      * 发送一个POST请求，请求Body的格式是JSON
      * <pre>
-     * e.g.: HTTPUtils.post("http://spldeolin.com/post/start", userDTO);
+     * e.g.: Https.post("http://spldeolin.com/post/start", userDTO);
      * </pre>
      */
     public static String postJson(String url, Object object) {
-        return postJson(url, JSONUtils.toJson(object));
+        return postJson(url, Jsons.toJson(object));
     }
 
     /**
      * 发送一个POST请求，请求Body的格式是Form表单
      * <pre>
-     * e.g.: HTTPUtils.post("http://spldeolin.com/post/like", userDTO);
+     * e.g.: Https.post("http://spldeolin.com/post/like", userDTO);
      * </pre>
      */
     @SneakyThrows

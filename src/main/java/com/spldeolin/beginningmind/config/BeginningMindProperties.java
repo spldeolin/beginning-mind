@@ -19,7 +19,7 @@ public class BeginningMindProperties {
     private String oneCookie;
 
     /**
-     * 本项目的访问地址（IP:端口号，e.g.: http:localhot:2333）
+     * 本项目的访问地址（IP:端口号，e.g.: http:localhost:2333）
      */
     private String address;
 

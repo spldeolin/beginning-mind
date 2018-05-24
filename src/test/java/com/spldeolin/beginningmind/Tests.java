@@ -25,7 +25,7 @@ import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.model.Seller;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.ApplicationContext;
-import com.spldeolin.beginningmind.util.JSONUtils;
+import com.spldeolin.beginningmind.util.Jsons;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -91,15 +91,15 @@ public class Tests {
     public void testJsonUtil() {
         ObjectMapper om = new ObjectMapper();
         Goods user = Goods.builder().name("aaa_bbb").updatedAt(LocalDateTime.MAX).build();
-        log.info(JSONUtils.toJson(user));
-        log.info(JSONUtils.toJson(user, om));
+        log.info(Jsons.toJson(user));
+        log.info(Jsons.toJson(user, om));
 
         String json = "{\"id\":null,\"updatedAt\":\"+999999999-12-31 23:59:59\",\"name\":\"aaa_bbb\",\"salt\":null,\"sex\":null,\"age\":null,\"flag\":null,\"ymd\":null,\"hms\":null,\"ymdhms\":null,\"money\":null,\"serialNumber\":null,\"percent\":null,\"richText\":null}";
         String snakeJson = "{\"id\":null,\"updated_at\":\"+999999999-12-31 23:59:59\",\"name\":\"aaa_bbb\",\"salt\":null,\"sex\":null,\"age\":null,\"flag\":null,\"ymd\":null,\"hms\":null,\"ymdhms\":null,\"money\":null,\"serial_number\":null,\"percent\":null,\"rich_text\":null}";
-        log.info(JSONUtils.toObject(json, Goods.class));
-        log.info(JSONUtils.toObject(json, Goods.class, om));
-        log.info(JSONUtils.toObject(snakeJson, Goods.class));
-        log.info(JSONUtils.toObject(snakeJson, Goods.class, om));
+        log.info(Jsons.toObject(json, Goods.class));
+        log.info(Jsons.toObject(json, Goods.class, om));
+        log.info(Jsons.toObject(snakeJson, Goods.class));
+        log.info(Jsons.toObject(snakeJson, Goods.class, om));
     }
 
     @Test

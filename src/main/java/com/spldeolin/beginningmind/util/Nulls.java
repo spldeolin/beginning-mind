@@ -8,7 +8,7 @@ import lombok.experimental.UtilityClass;
  * @author Deolin
  */
 @UtilityClass
-public class NullUtils {
+public class Nulls {
 
     public static Integer nullToZero(Integer i) {
         if (null == i) {
