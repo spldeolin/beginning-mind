@@ -197,7 +197,7 @@ public class ControllerAspect {
         // debug模式下，内部错误的返回值的data会包含非常长的堆栈轨迹，这些堆栈轨迹已经在统一异常处理中打印过了
         // 所以这里不再打印data
         if (ResultCode.INTERNAL_ERROR.getCode().equals(requestResult.getCode()) && properties.isDebug()) {
-            log.info("统一异常处理返回值：" + RequestResult.failure(requestResult.getCode(), requestResult.getMessage()));
+            log.info("统一异常处理返回值：" + RequestResult.failure(ResultCode.INTERNAL_ERROR, requestResult.getMessage()));
         } else {
             log.info("统一异常处理返回值：" + requestResult);
         }
