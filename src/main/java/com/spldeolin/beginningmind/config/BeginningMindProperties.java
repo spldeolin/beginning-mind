@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 配置一览
@@ -13,6 +14,7 @@ import lombok.Data;
 @Component
 @ConfigurationProperties(value = "beginning-mind")
 @Data
+@Log4j2
 public class BeginningMindProperties {
 
     /**
@@ -67,17 +69,20 @@ public class BeginningMindProperties {
 
     }
 
-    @Value("${server.context-path}") String serverContextPath;
+    @Value("${server.context-path}")
+    private String serverContextPath;
 
     @PostConstruct
     public void mappingAppendContextPath() {
         if (StringUtils.isNotBlank(serverContextPath) && !serverContextPath.equals("/")) {
-            file.setMapping(serverContextPath + file.getMapping());
+            String mapping = serverContextPath + file.getMapping();
+            log.info("由于指定了context-path为" + serverContextPath + "，故file.mapping变更为" + mapping);
+            file.setMapping(mapping);
         }
     }
 
     @PostConstruct
-    public void validateValues() {
+    public void validateProperties() {
         if (!file.getMapping().endsWith("/")) {
             throw new IllegalArgumentException("beginning-mind.file.mapping必须以 / 结尾");
         }
