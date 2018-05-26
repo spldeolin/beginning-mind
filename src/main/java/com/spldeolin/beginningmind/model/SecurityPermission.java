@@ -57,15 +57,20 @@ public class SecurityPermission implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 权限名
+     * 用于展示的名称
      */
-    private String name;
+    @Column(name = "display_name")
+    private String displayName;
 
     /**
-     * 请求方法@RequiresPermissions注解属性的映射
+     * 请求方法的全路由（控制器路由+方法路由）
      */
-    @Column(name = "requires_permissions_mapping")
-    private String requiresPermissionsMapping;
+    private String mapping;
+
+    /**
+     * 权限标记（perms[xxxx]）
+     */
+    private String mark;
 
     private static final long serialVersionUID = 1L;
 }

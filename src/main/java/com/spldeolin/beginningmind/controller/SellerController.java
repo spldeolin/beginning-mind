@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
 import com.spldeolin.beginningmind.input.SellerInput;
 import com.spldeolin.beginningmind.service.SellerService;
 
@@ -38,6 +39,7 @@ public class SellerController {
     /**
      * 创建一个“卖家”
      */
+    @PermissionDisplayName("创建卖家")
     @PostMapping("/create")
     Object create(@RequestBody @Valid SellerInput sellerInput) {
         return sellerService.createEX(sellerInput.toModel());
@@ -46,6 +48,7 @@ public class SellerController {
     /**
      * 获取一个“卖家”
      */
+    @PermissionDisplayName("卖家详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
         return sellerService.get(id).orElseThrow(() -> new ServiceException("卖家不存在或是已被删除"));
@@ -54,6 +57,7 @@ public class SellerController {
     /**
      * 更新一个“卖家”
      */
+    @PermissionDisplayName("更新卖家")
     @PostMapping("/update/{id}")
     void update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
         sellerService.updateEX(sellerInput.toModel().setId(id));
@@ -62,6 +66,7 @@ public class SellerController {
     /**
      * 删除一个“卖家”
      */
+    @PermissionDisplayName("删除卖家")
     @PostMapping("/delete/{id}")
     void delete(@PathVariable Long id) {
         sellerService.deleteEX(id);
@@ -70,6 +75,7 @@ public class SellerController {
     /**
      * 获取一批“卖家”
      */
+    @PermissionDisplayName("卖家列表")
     @GetMapping("/search")
     Object page(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
@@ -79,6 +85,7 @@ public class SellerController {
     /**
      * 删除一批“卖家”
      */
+    @PermissionDisplayName("批量删除卖家")
     @PostMapping("/batchDelete")
     Object delete(@RequestBody List<Long> ids) {
         return sellerService.deleteEX(ids);

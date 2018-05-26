@@ -95,7 +95,9 @@ public class ControllerAspect {
             // 记录开始时间
             long proceedAt = System.currentTimeMillis();
             // 执行切点
-            Object requestResult = point.proceed(controllerInfo.getParameterValues());
+            Object object = point.proceed(controllerInfo.getParameterValues());
+            // 确保返回值是RequestResult
+            RequestResult requestResult = ensureRequestResult(object);
             // 结束日志
             logAfter(controllerInfo, requestResult, proceedAt);
             // 清除MDC
@@ -183,6 +185,13 @@ public class ControllerAspect {
     private void reflashSessionExpire() {
         HttpSession session = RequestContextUtils.session();
         session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
+    }
+
+    private RequestResult ensureRequestResult(Object object) {
+        if (object instanceof RequestResult) {
+            return (RequestResult) object;
+        }
+        return RequestResult.success(object);
     }
 
     private void logAfter(ControllerInfo controllerInfo, Object requestResult, long proceedAt) {

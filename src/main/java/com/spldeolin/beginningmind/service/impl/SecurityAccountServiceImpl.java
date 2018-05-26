@@ -144,7 +144,7 @@ public class SecurityAccountServiceImpl extends CommonServiceImpl<SecurityAccoun
         }
         // perm mapping
         for (SecurityPermission permission : permissions) {
-            result.add(permission.getRequiresPermissionsMapping());
+            result.add(permission.getMark());
         }
         return result;
     }

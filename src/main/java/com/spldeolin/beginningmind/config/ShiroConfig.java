@@ -16,14 +16,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.security.ActuatorFilter;
 import com.spldeolin.beginningmind.security.SaltSha512CredentialsMatcher;
 import com.spldeolin.beginningmind.security.ServiceRealm;
 import com.spldeolin.beginningmind.security.SignFilter;
 import com.spldeolin.beginningmind.security.TempTokenHolder;
+import com.spldeolin.beginningmind.service.SecurityPermissionService;
 
 @Configuration
 public class ShiroConfig {
@@ -38,12 +39,13 @@ public class ShiroConfig {
     private TempTokenHolder tempTokenHolder;
 
     @Autowired
-    private Environment environment;
+    private SecurityPermissionService securityPermissionService;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
+        shiroFilterFactoryBean.setUnauthorizedUrl(UrlForwardToExceptionController.UNAUTHORIZED_URL);
         // 过滤器
         shiroFilterFactoryBean.setFilters(createFilters());
         // 过滤器链
@@ -66,7 +68,13 @@ public class ShiroConfig {
      */
     private Map<String, String> createFilterChainDefinitions() {
         Map<String, String> filterChainDefinitions = new LinkedHashMap<>();
-        // 放行error、静态资源、验证码请求、登录请求....
+        // 【特殊】放行swagger相关请求（swagger配置中可以根据profile决定是否启用）
+        for (String swaggerUrlPrefix : CoupledConstant.SWAGGER_URL_PREFIXES) {
+            filterChainDefinitions.put(swaggerUrlPrefix + "**", "anon");
+        }
+        // 【特殊】actuator相关请求使用专门的过滤器
+        filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
+        // 【匿名】放行error、静态资源、验证码请求、登录请求....
         filterChainDefinitions.put(UrlForwardToExceptionController.ERROR_PATH, "anon");
         filterChainDefinitions.put(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL, "anon");
         filterChainDefinitions.put(UrlForwardToExceptionController.UNAUTHORIZED_URL, "anon");
@@ -74,15 +82,12 @@ public class ShiroConfig {
         filterChainDefinitions.put("/isSigning/current", "anon");
         filterChainDefinitions.put("/sign/captcha", "anon");
         filterChainDefinitions.put("/sign/in", "anon");
-        // 放行swagger相关请求（swagger配置中可以根据profile决定是否启用）
-        for (String swaggerUrlPrefix : CoupledConstant.SWAGGER_URL_PREFIXES) {
-            filterChainDefinitions.put(swaggerUrlPrefix + "**", "anon");
-        }
-        // actuator相关请求使用专门的过滤器
-        filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
-        // 非debug场合闭环
-        if (!properties.isDebug()) {
-            filterChainDefinitions.put("/**", SignFilter.MARK);
+        // 【登录】登出请求是唯一一个无需权限、需要登录的请求
+        filterChainDefinitions.put("/sign/out", SignFilter.MARK);
+        // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
+        for (SecurityPermission securityPermission : securityPermissionService.searchBatch(new SecurityPermission())) {
+            filterChainDefinitions.put(securityPermission.getMapping(),
+                    SignFilter.MARK + ", perms[" + securityPermission.getMark() + "]");
         }
         return filterChainDefinitions;
     }

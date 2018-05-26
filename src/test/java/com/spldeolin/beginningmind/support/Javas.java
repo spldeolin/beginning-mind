@@ -17,10 +17,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.apache.commons.lang3.ArrayUtils;
 import org.assertj.core.util.Lists;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.stereotype.Controller;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,61 +34,55 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.controller.SignController;
 import com.spldeolin.beginningmind.controller.TestController;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
 import com.spldeolin.beginningmind.model.SecurityPermission;
+import com.spldeolin.beginningmind.service.SecurityPermissionService;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
+import lombok.extern.log4j.Log4j2;
+import tk.mybatis.mapper.entity.Condition;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@ActiveProfiles("dev")
+@Log4j2
 public class Javas {
 
-    private static final Class[] EXCLUDED_CLASSES = {UrlForwardToExceptionController.class, TestController.class};
+    private final Class[] EXCLUDED_CLASS = {UrlForwardToExceptionController.class, TestController.class, SignController.class};
 
-    public static void main(String[] args) {
+    @Autowired
+    private SecurityPermissionService securityPermissionService;
+
+    @Test
+    public void insert() {
         String packageName = "com.spldeolin.beginningmind.controller";
         // 获取所有Class
         List<Class> classes = listClasses(packageName, true);
-        // 过滤掉范围外的类和无效控制器（没有注解声明或内部没有请求方法）
-        Iterator<Class> it = classes.iterator();
-        while (it.hasNext()) {
-            Class clazz = it.next();
-            if (ArrayUtils.contains(EXCLUDED_CLASSES, clazz)) {
-                it.remove();
-                break;
-            }
-            boolean isController = false;
-            for (Annotation annotation : clazz.getAnnotations()) {
-                if (annotation instanceof RestController || annotation instanceof Controller) {
-                    isController = true;
-                    break;
-                }
-            }
-            if (!isController) {
-                it.remove();
-                break;
-            }
-            Iterator<Method> it2 = Lists.newArrayList(clazz.getMethods()).iterator();
-            while (it2.hasNext()) {
-                Method method = it2.next();
-                boolean isRequestMethod = false;
-                for (Annotation annotation : method.getAnnotations()) {
-                    if (annotation instanceof RequestMapping || annotation instanceof GetMapping ||
-                            annotation instanceof PostMapping || annotation instanceof PutMapping ||
-                            annotation instanceof DeleteMapping) {
-                        isRequestMethod = true;
-                        break;
+        // 找出所有符合要求的控制器与请求方法
+        List<ControllerDefinition> controllerDefinitions = new ArrayList<>();
+        classes.removeAll(Lists.newArrayList(EXCLUDED_CLASS));
+        for (Class clazz : classes) {
+            if (isContoller(clazz)) {
+                List<Method> requestMethods = new ArrayList<>();
+                for (Method method : clazz.getDeclaredMethods()) {
+                    if (isRequestMethod(method)) {
+                        requestMethods.add(method);
                     }
                 }
-                if (!isRequestMethod) {
-                    it2.remove();
+                if (requestMethods.size() > 0) {
+                    ControllerDefinition controllerDefinition = new ControllerDefinition();
+                    controllerDefinition.setController(clazz);
+                    controllerDefinition.setRequestMethods(requestMethods);
+                    controllerDefinitions.add(controllerDefinition);
                 }
             }
-            // 没有请求方法
-            if (Lists.newArrayList(it2).size() == 0) {
-                it.remove();
-            }
         }
-        // 开始解析控制器
-        for (Class controller : classes) {
+        List<SecurityPermission> securityPermissions = new ArrayList<>();
+        // 解析控制器
+        for (ControllerDefinition controllerDefinition : controllerDefinitions) {
+            Class controller = controllerDefinition.getController();
             RequestMapping requestMapping = (RequestMapping) controller.getAnnotation(RequestMapping.class);
             String[] controllerMappings = requestMapping == null ? new String[] {""} : requestMapping.value();
             if (controllerMappings.length > 1) {
@@ -90,26 +90,66 @@ public class Javas {
             }
             String controllerMapping = checkMappingSepChar(controllerMappings[0]);
 
-            for (Method requestMethod : controller.getMethods()) {
+            for (Method requestMethod : controllerDefinition.getRequestMethods()) {
+                String permissionMapping = controllerMapping + getMapping(requestMethod);
+                permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
                 PermissionDisplayName PermissionDisplayName = requestMethod.getAnnotation(PermissionDisplayName.class);
-                String permName;
+                String displayName;
                 if (PermissionDisplayName == null) {
                     //throw new ServiceException("请求方法" + requestMapping + "未声明@PermissionDisplayName");
-                    permName = controllerMapping + getMapping(requestMethod);
+                    log.warn("请求方法" + requestMapping + "未声明@PermissionDisplayName，使用缺省方式命名");
+                    displayName = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
                 } else {
-                    permName = PermissionDisplayName.value();
+                    displayName = PermissionDisplayName.value();
                 }
-                String permMapping = controllerMapping + getMapping(requestMethod);
-                permMapping = permMapping.replace('/', ':').substring(1, permMapping.length());
-                SecurityPermission securityPermission = SecurityPermission.builder().name(
-                        permName).requiresPermissionsMapping(permMapping).build();
-                System.out.println(securityPermission);
+                String mark = generateUniqueMark();
+                SecurityPermission securityPermission = SecurityPermission.builder().displayName(
+                        displayName).mapping(permissionMapping).mark(mark).build();
+                securityPermissions.add(securityPermission);
+                log.info(securityPermission);
             }
         }
-
+        // `security_permission`清空数据
+        Condition condition = new Condition(SecurityPermission.class);
+        condition.selectProperties("id");
+        List<Long> ids = securityPermissionService.searchBatch(condition).stream().map(
+                SecurityPermission::getId).collect(Collectors.toList());
+        for (Long id : ids) {
+            securityPermissionService.physicallyDelete(id);
+        }
+        // 插入`security_permission`
+        for (SecurityPermission securityPermission : securityPermissions) {
+            String mapping = securityPermission.getMapping();
+            securityPermissionService.create(securityPermission);
+            log.info(securityPermission.getDisplayName() + "[" + mapping + "] 插入数据库");
+        }
     }
 
-    private static String getMapping(Method requestMethod) {
+    private boolean isContoller(Class clazz) {
+        boolean isController = false;
+        for (Annotation annotation : clazz.getAnnotations()) {
+            if (annotation instanceof RestController || annotation instanceof Controller) {
+                isController = true;
+                break;
+            }
+        }
+        return isController;
+    }
+
+    private boolean isRequestMethod(Method method) {
+        boolean isRequestMethod = false;
+        for (Annotation annotation : method.getAnnotations()) {
+            if (annotation instanceof RequestMapping || annotation instanceof GetMapping ||
+                    annotation instanceof PostMapping || annotation instanceof PutMapping ||
+                    annotation instanceof DeleteMapping) {
+                isRequestMethod = true;
+                break;
+            }
+        }
+        return isRequestMethod;
+    }
+
+    private String getMapping(Method requestMethod) {
         String[] mappings = null;
         for (Annotation annotation : requestMethod.getAnnotations()) {
             if (annotation instanceof RequestMapping) {
@@ -149,7 +189,7 @@ public class Javas {
         return checkMappingSepChar(mappings[0]);
     }
 
-    private static String checkMappingSepChar(String mapping) {
+    private String checkMappingSepChar(String mapping) {
         if (mapping.length() > 0) {
             if (!mapping.startsWith("/")) {
                 mapping = "/" + mapping;
@@ -161,15 +201,23 @@ public class Javas {
         return mapping;
     }
 
+    private String generateUniqueMark() {
+        String mark = StringRandomUtils.generateLowEnNum(3);
+        while (securityPermissionService.searchOne("mark", mark).isPresent()) {
+            mark = StringRandomUtils.generateLowEnNum(3);
+        }
+        return mark;
+    }
+
     /**
      * jar中的文件路径分隔符
      */
-    private static final char SEP = '/';
+    private final char SEP = '/';
 
     /**
      * 包名分隔符
      */
-    private static final char DOT = '.';
+    private final char DOT = '.';
 
     /**
      * 在当前项目中寻找指定包下的所有类
@@ -178,7 +226,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class> listClasses(String packageName, boolean recursive) {
+    public List<Class> listClasses(String packageName, boolean recursive) {
         List<Class> classList = new ArrayList<>();
         try {
             //获取当前线程的类装载器中相应包名对应的资源
@@ -187,7 +235,6 @@ public class Javas {
             while (iterator.hasMoreElements()) {
                 URL url = iterator.nextElement();
                 String protocol = url.getProtocol();
-                System.out.println(protocol);
                 List<Class<?>> childClassList = Collections.emptyList();
                 switch (protocol) {
                     case "file":
@@ -198,7 +245,7 @@ public class Javas {
                         break;
                     default:
                         //在某些WEB服务器中运行WAR包时，它不会像TOMCAT一样将WAR包解压为目录的，如JBOSS7，它是使用了一种叫VFS的协议
-                        System.out.println("unknown protocol " + protocol);
+                        log.info("unknown protocol " + protocol);
                         break;
                 }
                 classList.addAll(childClassList);
@@ -217,7 +264,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class<?>> getClassInFile(String filePath, String packageName, boolean recursive) {
+    public List<Class<?>> getClassInFile(String filePath, String packageName, boolean recursive) {
         Path path = Paths.get(filePath);
         return getClassInFile(path, packageName, recursive);
     }
@@ -230,7 +277,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class<?>> getClassInFile(URL url, String packageName, boolean recursive) {
+    public List<Class<?>> getClassInFile(URL url, String packageName, boolean recursive) {
         try {
             Path path = Paths.get(url.toURI());
             return getClassInFile(path, packageName, recursive);
@@ -248,7 +295,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class<?>> getClassInFile(Path path, String packageName, boolean recursive) {
+    public List<Class<?>> getClassInFile(Path path, String packageName, boolean recursive) {
         if (!Files.exists(path)) {
             return Collections.emptyList();
         }
@@ -301,7 +348,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class<?>> getClassInJar(String filePath, String packageName, boolean recursive) {
+    public List<Class<?>> getClassInJar(String filePath, String packageName, boolean recursive) {
         try {
             JarFile jar = new JarFile(filePath);
             return getClassInJar(jar, packageName, recursive);
@@ -319,7 +366,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class<?>> getClassInJar(URL url, String packageName, boolean recursive) {
+    public List<Class<?>> getClassInJar(URL url, String packageName, boolean recursive) {
         try {
             JarFile jar = ((JarURLConnection) url.openConnection()).getJarFile();
             return getClassInJar(jar, packageName, recursive);
@@ -337,7 +384,7 @@ public class Javas {
      * @param recursive 是否递归搜索
      * @return 该包名下的所有类
      */
-    public static List<Class<?>> getClassInJar(JarFile jar, String packageName, boolean recursive) {
+    public List<Class<?>> getClassInJar(JarFile jar, String packageName, boolean recursive) {
         List<Class<?>> classList = new ArrayList<Class<?>>();
         //该迭代器会递归得到该jar底下所有的目录和文件
         Enumeration<JarEntry> iterator = jar.entries();
@@ -354,7 +401,7 @@ public class Javas {
                     if (name.startsWith(packageName)) {
                         if (recursive || packageName.length() == lastSlashIndex) {
                             String className = name.substring(0, lastDotClassIndex);
-                            System.out.println(className);
+                            log.info(className);
                             try {
                                 classList.add(Class.forName(className));
                             } catch (ClassNotFoundException e) {

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
+import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
 import com.spldeolin.beginningmind.input.SecurityAccountInput;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 
@@ -38,6 +39,7 @@ public class SecurityAccountController {
     /**
      * 创建一个“帐号”
      */
+    @PermissionDisplayName("创建帐号")
     @PostMapping("/create")
     Object create(@RequestBody @Valid SecurityAccountInput securityAccountInput) {
         return securityAccountService.createEX(securityAccountInput.toModel());
@@ -46,6 +48,7 @@ public class SecurityAccountController {
     /**
      * 获取一个“帐号”
      */
+    @PermissionDisplayName("帐号详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
         return securityAccountService.get(id).orElseThrow(() -> new ServiceException("帐号不存在或是已被删除"));
@@ -54,6 +57,7 @@ public class SecurityAccountController {
     /**
      * 更新一个“帐号”
      */
+    @PermissionDisplayName("更新帐号")
     @PostMapping("/update/{id}")
     void update(@PathVariable Long id, @RequestBody @Valid SecurityAccountInput securityAccountInput) {
         securityAccountService.updateEX(securityAccountInput.toModel().setId(id));
@@ -62,6 +66,7 @@ public class SecurityAccountController {
     /**
      * 删除一个“帐号”
      */
+    @PermissionDisplayName("删除帐号")
     @PostMapping("/delete/{id}")
     void delete(@PathVariable Long id) {
         securityAccountService.deleteEX(id);
@@ -70,6 +75,7 @@ public class SecurityAccountController {
     /**
      * 获取一批“帐号”
      */
+    @PermissionDisplayName("帐号列表")
     @GetMapping("/search")
     Object page(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
@@ -79,6 +85,7 @@ public class SecurityAccountController {
     /**
      * 删除一批“帐号”
      */
+    @PermissionDisplayName("批量删除帐号")
     @PostMapping("/batchDelete")
     Object delete(@RequestBody List<Long> ids) {
         return securityAccountService.deleteEX(ids);

@@ -13,22 +13,21 @@
     返回是的正确实例化的RequestMappingHandlerMapping单例对象，那样就没有问题了。
 
     Deolin 2018/05/18
+
+    由于重构了过滤器链，没有/**=anon了，所以在这个过滤器中不用考虑Not Found了。上面这段话可以认为过时了。
+
+    Deolin 2018/05/26
+
  */
 
 package com.spldeolin.beginningmind.security;
 
-import java.util.Map;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
-import org.springframework.web.method.HandlerMethod;
-import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
-import com.spldeolin.beginningmind.util.ApplicationContext;
 
 /**
  * 登录过滤器
@@ -62,19 +61,19 @@ public class SignFilter extends AccessControlFilter {
         }
 
         // 判断请求是否NotFound
-        boolean notFound = true;
-        Map<RequestMappingInfo, HandlerMethod> handlerMethods = ApplicationContext.getBean(
-                RequestMappingHandlerMapping.class).getHandlerMethods();
-        for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
-            RequestMappingInfo info = entry.getKey();
-            if (null != info.getMatchingCondition((HttpServletRequest) req)) {
-                notFound = false;
-            }
-        }
-        // 放行NotFound请求
-        if (notFound) {
-            return true;
-        }
+        //boolean notFound = true;
+        //Map<RequestMappingInfo, HandlerMethod> handlerMethods = ApplicationContext.getBean(
+        //        RequestMappingHandlerMapping.class).getHandlerMethods();
+        //for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
+        //    RequestMappingInfo info = entry.getKey();
+        //    if (null != info.getMatchingCondition((HttpServletRequest) req)) {
+        //        notFound = false;
+        //    }
+        //}
+        //// 放行NotFound请求
+        //if (notFound) {
+        //    return true;
+        //}
         return false;
     }
 

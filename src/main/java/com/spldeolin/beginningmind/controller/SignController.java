@@ -13,14 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.controller.manager.SignManager;
 import com.spldeolin.beginningmind.input.SignInput;
-import com.spldeolin.beginningmind.service.SecurityAccountService;
 
 /**
- * 登录、登出、踢出、登录状态等相关管理
+ * 登录、登出、登录状态等
  *
  * @author Deolin 2018/05/26
  */
@@ -31,9 +29,6 @@ public class SignController {
 
     @Autowired
     private SignManager signManager;
-
-    @Autowired
-    private SecurityAccountService securityAccountService;
 
     /**
      * 获取验证码
@@ -55,33 +50,18 @@ public class SignController {
      * 登出
      */
     @PostMapping("/out")
-    void signOut() {
+    Object signOut() {
         signManager.signOut();
+        return null;
     }
 
     /**
      * 当前调用者是否登录中
      */
-    @GetMapping("/isSigning/current")
+    @GetMapping("/isSigning")
     Object isSign() {
         Subject subject = SecurityUtils.getSubject();
         return subject.isAuthenticated() || subject.isRemembered();
-    }
-
-    /**
-     * 指定用户是否登录中
-     */
-    @GetMapping("/isSigning")
-    Object isSign(@RequestParam Long accountId) {
-        return securityAccountService.isAccountSigning(accountId);
-    }
-
-    /**
-     * 将指定用户踢下线
-     */
-    @PostMapping("/kill")
-    void kill(@RequestParam Long accountId) {
-        securityAccountService.killSigner(accountId);
     }
 
 }
