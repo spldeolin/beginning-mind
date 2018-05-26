@@ -48,7 +48,7 @@ import tk.mybatis.mapper.entity.Condition;
 @SpringBootTest
 @ActiveProfiles("dev")
 @Log4j2
-public class Javas {
+public class PermissionsInserter {
 
     private final Class[] EXCLUDED_CLASS = {UrlForwardToExceptionController.class, TestController.class, SignController.class};
 

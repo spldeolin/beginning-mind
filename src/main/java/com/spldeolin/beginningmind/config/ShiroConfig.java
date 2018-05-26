@@ -16,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.security.ActuatorFilter;
@@ -59,7 +58,7 @@ public class ShiroConfig {
     private Map<String, Filter> createFilters() {
         Map<String, Filter> filters = new HashMap<>();
         filters.put(SignFilter.MARK, new SignFilter());
-        filters.put(ActuatorFilter.MARK, new ActuatorFilter(tempTokenHolder, properties.isDebug()));
+        filters.put(ActuatorFilter.MARK, new ActuatorFilter(tempTokenHolder));
         return filters;
     }
 
@@ -68,11 +67,7 @@ public class ShiroConfig {
      */
     private Map<String, String> createFilterChainDefinitions() {
         Map<String, String> filterChainDefinitions = new LinkedHashMap<>();
-        // 【特殊】放行swagger相关请求（swagger配置中可以根据profile决定是否启用）
-        for (String swaggerUrlPrefix : CoupledConstant.SWAGGER_URL_PREFIXES) {
-            filterChainDefinitions.put(swaggerUrlPrefix + "**", "anon");
-        }
-        // 【特殊】actuator相关请求使用专门的过滤器
+        // 【TOKEN】actuator相关请求使用TOKEN的过滤器
         filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
         // 【匿名】放行error、静态资源、验证码请求、登录请求....
         filterChainDefinitions.put(UrlForwardToExceptionController.ERROR_PATH, "anon");
@@ -88,6 +83,12 @@ public class ShiroConfig {
         for (SecurityPermission securityPermission : securityPermissionService.searchBatch(new SecurityPermission())) {
             filterChainDefinitions.put(securityPermission.getMapping(),
                     SignFilter.MARK + ", perms[" + securityPermission.getMark() + "]");
+        }
+        // DEBUG环境下放行一切请求
+        if (properties.isDebug()) {
+            for (String key : filterChainDefinitions.keySet()) {
+                filterChainDefinitions.put(key, "anon");
+            }
         }
         return filterChainDefinitions;
     }

@@ -20,20 +20,10 @@ public class ActuatorFilter extends AccessControlFilter {
 
     private TempTokenHolder tempTokenHolder;
 
-    private boolean debug;
-
     @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object mappedValue) {
-        // debug场合直接放行
-        if (debug) {
-            return true;
-        }
-        // 生产环境需要专门的token
         String token = req.getParameter("token");
-        if (tempTokenHolder.getActuatorToken().equals(token)) {
-            return true;
-        }
-        return false;
+        return tempTokenHolder.getActuatorToken().equals(token);
     }
 
     // 如果isAccessAllowed()返回false，则调用这个方法

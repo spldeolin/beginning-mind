@@ -79,8 +79,11 @@ public class SignManager {
             throw new ServiceException("验证码超时");
         }
         String captcha = captchaDTO.getCaptcha();
-        if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
-            throw new ServiceException("验证码错误");
+        // DEBUG环境下，验证码可以随便填
+        if (!beginningMindProperties.isDebug()) {
+            if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
+                throw new ServiceException("验证码错误");
+            }
         }
         // 登录
         try {
