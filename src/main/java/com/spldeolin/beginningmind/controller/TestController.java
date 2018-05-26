@@ -6,8 +6,8 @@ import java.time.LocalDateTime;
 import java.util.Date;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,6 +25,7 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
+@Profile("dev") // 仅dev环境注册这个Controller
 @RestController
 @RequestMapping("/test")
 @Log4j2
@@ -47,14 +48,12 @@ public class TestController {
 
     }
 
-    @RequiresPermissions("/test/set")
     @GetMapping("/set")
     public String setSes(HttpSession ses) {
         ses.setAttribute("one-cookie", "会话中的曲奇饼干");
         return "SUCCESS";
     }
 
-    @RequiresPermissions("/test/get")
     @GetMapping("/get")
     public String getSes(HttpSession ses) {
         log.info("asd");

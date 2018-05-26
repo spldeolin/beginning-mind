@@ -10,11 +10,9 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,6 +21,8 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SecurityAccountInput;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
  * “帐号”管理
@@ -32,6 +32,7 @@ import com.spldeolin.beginningmind.service.SecurityAccountService;
 @RestController
 @RequestMapping("/securityAccount")
 @Validated
+@Api(description = "帐号管理")
 public class SecurityAccountController {
 
     @Autowired
@@ -40,7 +41,8 @@ public class SecurityAccountController {
     /**
      * 创建一个“帐号”
      */
-    @PostMapping
+    @ApiOperation("创建一个“帐号”")
+    @PostMapping("/create")
     public RequestResult create(@RequestBody @Valid SecurityAccountInput securityAccountInput) {
         return RequestResult.success(securityAccountService.createEX(securityAccountInput.toModel()));
     }
@@ -48,7 +50,8 @@ public class SecurityAccountController {
     /**
      * 获取一个“帐号”
      */
-    @GetMapping("/{id}")
+    @ApiOperation("获取一个“帐号”")
+    @GetMapping("/get/{id}")
     public RequestResult get(@PathVariable Long id) {
         return RequestResult.success(
                 securityAccountService.get(id).orElseThrow(() -> new ServiceException("帐号不存在或是已被删除")));
@@ -57,7 +60,8 @@ public class SecurityAccountController {
     /**
      * 更新一个“帐号”
      */
-    @PutMapping("/{id}")
+    @ApiOperation("更新一个“帐号”")
+    @PostMapping("/update/{id}")
     public RequestResult update(@PathVariable Long id, @RequestBody @Valid SecurityAccountInput securityAccountInput) {
         securityAccountService.updateEX(securityAccountInput.toModel().setId(id));
         return RequestResult.success();
@@ -66,7 +70,8 @@ public class SecurityAccountController {
     /**
      * 删除一个“帐号”
      */
-    @DeleteMapping("/{id}")
+    @ApiOperation("删除一个“帐号”")
+    @PostMapping("/delete/{id}")
     public RequestResult delete(@PathVariable Long id) {
         securityAccountService.deleteEX(id);
         return RequestResult.success();
@@ -75,8 +80,9 @@ public class SecurityAccountController {
     /**
      * 获取一批“帐号”
      */
-    @GetMapping
-    public RequestResult page(@RequestParam(defaultValue = "1") Integer pageNo,
+    @ApiOperation("获取一批“帐号”")
+    @GetMapping("/search")
+    public RequestResult search(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
         return RequestResult.success(securityAccountService.page(pageNo, pageSize));
     }
@@ -84,7 +90,8 @@ public class SecurityAccountController {
     /**
      * 删除一批“帐号”
      */
-    @PutMapping("/batchDelete")
+    @ApiOperation("删除一批“帐号”")
+    @PostMapping("/deleteBatch")
     public RequestResult delete(@RequestBody List<Long> ids) {
         return RequestResult.success(securityAccountService.deleteEX(ids));
     }
