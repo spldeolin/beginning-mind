@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.model.Goods;
+import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.valid.annotation.Email;
 import com.spldeolin.beginningmind.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.valid.annotation.Require;
@@ -105,6 +106,11 @@ public class TestController {
     Object email(@RequestParam @Email String email) {
         log.info(email);
         return null;
+    }
+
+    @GetMapping("signer")
+    Object signer() {
+        return Signer.current();
     }
 
 }
