@@ -41,8 +41,9 @@ public class SignAdminController {
      */
     @PermissionDisplayName("将指定用户踢下线")
     @PostMapping("/kill")
-    void kill(@RequestParam Long accountId) {
+    Object kill(@RequestParam Long accountId) {
         securityAccountService.killSigner(accountId);
+        return null;
     }
 
 }

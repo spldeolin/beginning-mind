@@ -42,8 +42,9 @@ public class SignController {
      * 登录
      */
     @PostMapping("/in")
-    void signIn(@RequestBody @Valid SignInput input) {
+    Object signIn(@RequestBody @Valid SignInput input) {
         signManager.signIn(input);
+        return null;
     }
 
     /**

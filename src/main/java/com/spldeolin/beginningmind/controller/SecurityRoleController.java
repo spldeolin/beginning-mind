@@ -59,8 +59,9 @@ public class SecurityRoleController {
      */
     @PermissionDisplayName("更新角色")
     @PostMapping("/update/{id}")
-    void update(@PathVariable Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
+    Object update(@PathVariable Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
         securityRoleService.updateEX(securityRoleInput.toModel().setId(id));
+        return null;
     }
 
     /**
@@ -68,8 +69,9 @@ public class SecurityRoleController {
      */
     @PermissionDisplayName("删除角色")
     @PostMapping("/delete/{id}")
-    void delete(@PathVariable Long id) {
+    Object delete(@PathVariable Long id) {
         securityRoleService.deleteEX(id);
+        return null;
     }
 
     /**

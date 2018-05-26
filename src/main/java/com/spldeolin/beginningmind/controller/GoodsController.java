@@ -59,8 +59,9 @@ public class GoodsController {
      */
     @PermissionDisplayName("更新商品")
     @PostMapping("/update/{id}")
-    void update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
+    Object update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
         goodsService.updateEX(goodsInput.toModel().setId(id));
+        return null;
     }
 
     /**
@@ -68,8 +69,9 @@ public class GoodsController {
      */
     @PermissionDisplayName("删除商品")
     @PostMapping("/delete/{id}")
-    void delete(@PathVariable Long id) {
+    Object delete(@PathVariable Long id) {
         goodsService.deleteEX(id);
+        return null;
     }
 
     /**

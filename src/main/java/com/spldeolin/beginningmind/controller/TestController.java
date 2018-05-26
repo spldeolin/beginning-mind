@@ -102,8 +102,9 @@ public class TestController {
     }
 
     @GetMapping("email")
-    void email(@RequestParam @Email String email) {
+    Object email(@RequestParam @Email String email) {
         log.info(email);
+        return null;
     }
 
 }

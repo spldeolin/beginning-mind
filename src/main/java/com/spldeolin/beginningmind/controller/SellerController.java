@@ -59,8 +59,9 @@ public class SellerController {
      */
     @PermissionDisplayName("更新卖家")
     @PostMapping("/update/{id}")
-    void update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
+    Object update(@PathVariable Long id, @RequestBody @Valid SellerInput sellerInput) {
         sellerService.updateEX(sellerInput.toModel().setId(id));
+        return null;
     }
 
     /**
@@ -68,8 +69,9 @@ public class SellerController {
      */
     @PermissionDisplayName("删除卖家")
     @PostMapping("/delete/{id}")
-    void delete(@PathVariable Long id) {
+    Object delete(@PathVariable Long id) {
         sellerService.deleteEX(id);
+        return null;
     }
 
     /**

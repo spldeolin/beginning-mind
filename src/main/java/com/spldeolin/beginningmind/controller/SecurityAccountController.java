@@ -59,8 +59,9 @@ public class SecurityAccountController {
      */
     @PermissionDisplayName("更新帐号")
     @PostMapping("/update/{id}")
-    void update(@PathVariable Long id, @RequestBody @Valid SecurityAccountInput securityAccountInput) {
+    Object update(@PathVariable Long id, @RequestBody @Valid SecurityAccountInput securityAccountInput) {
         securityAccountService.updateEX(securityAccountInput.toModel().setId(id));
+        return null;
     }
 
     /**
@@ -68,8 +69,9 @@ public class SecurityAccountController {
      */
     @PermissionDisplayName("删除帐号")
     @PostMapping("/delete/{id}")
-    void delete(@PathVariable Long id) {
+    Object delete(@PathVariable Long id) {
         securityAccountService.deleteEX(id);
+        return null;
     }
 
     /**
