@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import javax.servlet.http.HttpSession;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
@@ -24,7 +23,7 @@ import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.security.GifCaptcha;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
-import com.spldeolin.beginningmind.util.RequestContextUtils;
+import com.spldeolin.beginningmind.util.Sessions;
 import com.spldeolin.beginningmind.util.Signer;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -51,8 +50,8 @@ public class SignManager {
         try (OutputStream os = FileUtils.openOutputStream(captchaFile)) {
             GifCaptcha gifCaptcha = new GifCaptcha();
             gifCaptcha.out(os);
-            RequestContextUtils.session().setAttribute(CAPTCHA,
-                    CaptchaDTO.builder().captcha(gifCaptcha.getCode()).generatedAt(LocalDateTime.now()).build());
+            Sessions.set(CAPTCHA, CaptchaDTO.builder().captcha(gifCaptcha.getCode()).generatedAt(
+                    LocalDateTime.now()).build());
             // 映射URL
             String fullMapping = beginningMindProperties.getAddress() + beginningMindProperties.getFile().getMapping()
                     + fullFileName;
@@ -66,14 +65,13 @@ public class SignManager {
      * 登录
      */
     public void signIn(SignInput input) {
-        HttpSession session = RequestContextUtils.session();
         // 重复登录、验证码校验
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");
         }
-        CaptchaDTO captchaDTO = (CaptchaDTO) session.getAttribute(CAPTCHA);
-        session.removeAttribute(CAPTCHA);
+        CaptchaDTO captchaDTO = Sessions.get(CAPTCHA);
+        Sessions.remove(CAPTCHA);
         if (captchaDTO == null ||
                 ChronoUnit.MINUTES.between(LocalDateTime.now(), captchaDTO.getGeneratedAt()) > 5) {
             throw new ServiceException("验证码超时");
@@ -93,8 +91,7 @@ public class SignManager {
         }
         SecurityAccount account = Signer.current().getSecurityAccount();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
-        RequestContextUtils.session().setAttribute(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME,
-                account.getId().toString());
+        Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, account.getId().toString());
     }
 
     /**

@@ -19,4 +19,8 @@ public class Sessions {
         return (T) RequestContextUtils.session().getAttribute(key);
     }
 
+    public static void remove(String key) {
+        RequestContextUtils.session().removeAttribute(key);
+    }
+
 }
