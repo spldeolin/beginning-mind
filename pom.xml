@@ -189,6 +189,11 @@
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
         </dependency>
+        <!--commons validator-->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+        </dependency>
         <!--zxing-->
         <dependency>
             <groupId>com.google.zxing</groupId>
@@ -361,6 +366,12 @@
                 <artifactId>commons-codec</artifactId>
                 <version>1.11</version>
             </dependency>
+            <!--commons validator-->
+            <dependency>
+                <groupId>commons-validator</groupId>
+                <artifactId>commons-validator</artifactId>
+                <version>1.6</version>
+            </dependency>
             <!--zxing-->
             <dependency>
                 <groupId>com.google.zxing</groupId>
@@ -379,6 +390,7 @@
                 <artifactId>simple-java-mail</artifactId>
                 <version>5.0.3</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 
