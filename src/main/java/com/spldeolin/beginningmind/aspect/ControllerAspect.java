@@ -184,7 +184,11 @@ public class ControllerAspect {
 
     private void reflashSessionExpire() {
         HttpSession session = RequestContextUtils.session();
-        session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
+        if (properties.isDebug()) {
+            session.setMaxInactiveInterval(86400);
+        } else {
+            session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
+        }
     }
 
     private RequestResult ensureRequestResult(Object object) {
