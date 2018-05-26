@@ -3,6 +3,7 @@
  *
  * https://github.com/spldeolin/cadeau-support
  */
+
 package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;

@@ -25,7 +25,7 @@ import com.spldeolin.beginningmind.valid.validator.MobileValidator;
 @Constraint(validatedBy = {MobileValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
-public @interface Mobile{
+public @interface Mobile {
 
     String message() default "不是正确的手机号";
 
