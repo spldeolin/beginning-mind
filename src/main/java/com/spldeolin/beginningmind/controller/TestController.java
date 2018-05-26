@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.model.Goods;
+import com.spldeolin.beginningmind.valid.annotation.Email;
 import com.spldeolin.beginningmind.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.valid.annotation.Require;
 import lombok.AllArgsConstructor;
@@ -88,6 +89,10 @@ public class TestController {
     @GetMapping("/e")
     void e() {
         log.info(Integer.valueOf("a"));
+    }
+
+    @GetMapping("email")
+    void email(@RequestParam @Email String email) {
     }
 
 }

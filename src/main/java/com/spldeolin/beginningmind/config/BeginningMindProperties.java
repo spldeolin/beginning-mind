@@ -58,6 +58,26 @@ public class BeginningMindProperties {
     }
 
     /**
+     * E-Mail
+     */
+    private Email email;
+
+    @Data
+    public static class Email {
+
+        private String serverHost;
+
+        private Integer serverPort;
+
+        private String addresserName;
+
+        private String addresserEmail;
+
+        private String addresserAuthCode;
+
+    }
+
+    /**
      * “时间”格式
      */
     private Time time;
