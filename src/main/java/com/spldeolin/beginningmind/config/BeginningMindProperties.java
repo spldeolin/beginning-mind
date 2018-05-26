@@ -1,11 +1,13 @@
 package com.spldeolin.beginningmind.config;
 
+import java.net.InetAddress;
 import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
+import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -98,6 +100,17 @@ public class BeginningMindProperties {
     @Value("${server.context-path}")
     private String serverContextPath;
 
+    /**
+     * 将配置中出现的所有localhost替换为本地IP
+     */
+    @SneakyThrows
+    public void localhostToLocalIp() {
+        address = address.replace("localhost", InetAddress.getLocalHost().getHostAddress());
+    }
+
+    /**
+     * 在file.mapping前追加content-path
+     */
     @PostConstruct
     public void mappingAppendContextPath() {
         if (StringUtils.isNotBlank(serverContextPath) && !serverContextPath.equals("/")) {
@@ -107,6 +120,9 @@ public class BeginningMindProperties {
         }
     }
 
+    /**
+     * 确保file.mapping以 / 开头和结尾，确保file.location以 / 结尾
+     */
     @PostConstruct
     public void validateProperties() {
         if (!file.getMapping().endsWith("/")) {
