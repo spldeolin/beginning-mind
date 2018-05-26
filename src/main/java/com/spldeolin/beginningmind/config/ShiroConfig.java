@@ -71,6 +71,7 @@ public class ShiroConfig {
         filterChainDefinitions.put(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL, "anon");
         filterChainDefinitions.put(UrlForwardToExceptionController.UNAUTHORIZED_URL, "anon");
         filterChainDefinitions.put(properties.getFile().getMapping() + "/**", "anon");
+        filterChainDefinitions.put("/isSigning/current", "anon");
         filterChainDefinitions.put("/sign/captcha", "anon");
         filterChainDefinitions.put("/sign/in", "anon");
         // 放行swagger相关请求（swagger配置中可以根据profile决定是否启用）

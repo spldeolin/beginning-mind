@@ -1,3 +1,7 @@
+/*
+ * Created by IntelliJ IDEA File Templates.
+ */
+
 package com.spldeolin.beginningmind.controller;
 
 import javax.servlet.http.HttpServletRequest;
@@ -13,9 +17,11 @@ import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 控制器：提供URL转发到统一异常处理的映射
+ *
+ * @author Deolin 2018/05/26
  */
 @Controller
-@RequestMapping
+@RequestMapping("/")
 @ApiIgnore
 public class UrlForwardToExceptionController implements ErrorController {
 
@@ -38,7 +44,7 @@ public class UrlForwardToExceptionController implements ErrorController {
      * @see DefaultErrorAttributes#getError(org.springframework.web.context.request.RequestAttributes)
      */
     @RequestMapping(ERROR_PATH)
-    public void error(HttpServletRequest request) throws Throwable {
+    void error(HttpServletRequest request) throws Throwable {
         int status = (Integer) request.getAttribute("javax.servlet.error.status_code");
         if (status == HttpStatus.NOT_FOUND.value()) {
             throw new RequestNotFoundException();
@@ -56,7 +62,7 @@ public class UrlForwardToExceptionController implements ErrorController {
      * 直接转发
      */
     @RequestMapping(SHIROFILTER_LOGINURL_URL)
-    public void unsigned() {
+    void unsigned() {
         throw new UnsignedException();
     }
 
@@ -64,7 +70,7 @@ public class UrlForwardToExceptionController implements ErrorController {
      * 直接转发
      */
     @RequestMapping(UNAUTHORIZED_URL)
-    public void unauth() {
+    void unauth() {
         throw new AuthorizationException();
     }
 

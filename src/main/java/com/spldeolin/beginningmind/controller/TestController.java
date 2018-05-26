@@ -1,3 +1,7 @@
+/*
+ * Created by IntelliJ IDEA File Templates.
+ */
+
 package com.spldeolin.beginningmind.controller;
 
 import java.io.File;
@@ -15,7 +19,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
-import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.valid.annotation.Email;
 import com.spldeolin.beginningmind.valid.annotation.Mobile;
@@ -26,16 +29,22 @@ import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
-@Profile("dev") // 仅dev环境注册这个Controller
+/**
+ * 测试
+ * 仅dev环境可用
+ *
+ * @author Deolin 2018/05/26
+ */
+@Profile("dev")
 @RestController
-@RequestMapping("/test")
-@Log4j2
+@RequestMapping("/test2")
 @Validated
+@Log4j2
 public class TestController {
 
     @GetMapping("/time")
-    public RequestResult time() {
-        return RequestResult.success(TimeOutput.builder().localDateTime(LocalDateTime.now()).date(new Date()).build());
+    Object time() {
+        return TimeOutput.builder().localDateTime(LocalDateTime.now()).date(new Date()).build();
     }
 
     @Data
@@ -50,25 +59,26 @@ public class TestController {
     }
 
     @GetMapping("/set")
-    public String setSes(HttpSession ses) {
+    Object setSes(HttpSession ses) {
         ses.setAttribute("one-cookie", "会话中的曲奇饼干");
         return "SUCCESS";
     }
 
     @GetMapping("/get")
-    public String getSes(HttpSession ses) {
+    Object getSes(HttpSession ses) {
         log.info("asd");
         log.info("asd");
         log.info("asd");
         log.info("asd");
-        return (String) ses.getAttribute("one-cookie");
+        return ses.getAttribute("one-cookie");
     }
 
     @PostMapping("require")
-    public RequestResult testRequire(@Require(value = {"id", "name"}, message = "id或name为null") Goods goods) {
-        return RequestResult.success(goods);
+    Object testRequire(@Require(value = {"id", "name"}, message = "id或name为null") Goods goods) {
+        return goods;
     }
 
+    @GetMapping("mobile")
     Object testMobile(@RequestParam @Mobile String mobile) {
         return mobile;
     }
@@ -93,7 +103,7 @@ public class TestController {
 
     @GetMapping("email")
     void email(@RequestParam @Email String email) {
+        log.info(email);
     }
 
 }
-
