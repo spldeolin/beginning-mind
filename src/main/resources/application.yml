@@ -95,5 +95,12 @@ beginning-mind:
     serialize-java-util-date-to-timestamp: true
 
   file:
-      mapping: 占位
-      location: 占位
+    mapping: 占位
+    location: 占位
+
+  email:
+    server-host: smtp.163.com
+    server-port: 25
+    addresser-name: Beginning::Mind
+    addresser-email: 占位
+    addresser-auth-code: 占位

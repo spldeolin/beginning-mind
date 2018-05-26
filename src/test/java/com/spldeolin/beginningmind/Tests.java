@@ -16,6 +16,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.dao.bm1.BuyerMapper;
@@ -23,6 +24,7 @@ import com.spldeolin.beginningmind.dao.bm2.ExMapper;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.model.SecurityAccount;
 import com.spldeolin.beginningmind.model.Seller;
+import com.spldeolin.beginningmind.service.EmailService;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.ApplicationContext;
 import com.spldeolin.beginningmind.util.Jsons;
@@ -139,6 +141,16 @@ public class Tests {
     @Test
     public void debug() {
         log.info(beginningMindProperties.isDebug());
+    }
+
+    @Autowired
+    private EmailService emailService;
+
+    @Test
+    public void testEmail() {
+        emailService.sendEmail(
+                Lists.newArrayList("deolin@foxmail.com", "splendid.deolin@gmail.com", "3126575878@qq.com"), "汉字",
+                "汉字啊啊啊啊");
     }
 
 }
