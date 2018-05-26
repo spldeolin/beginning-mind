@@ -37,7 +37,7 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.controller.SignController;
 import com.spldeolin.beginningmind.controller.TestController;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
-import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
+import com.spldeolin.beginningmind.controller.annotation.Permission;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.service.SecurityPermissionService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
@@ -93,14 +93,14 @@ public class Javas {
             for (Method requestMethod : controllerDefinition.getRequestMethods()) {
                 String permissionMapping = controllerMapping + getMapping(requestMethod);
                 permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
-                PermissionDisplayName PermissionDisplayName = requestMethod.getAnnotation(PermissionDisplayName.class);
+                Permission Permission = requestMethod.getAnnotation(Permission.class);
                 String displayName;
-                if (PermissionDisplayName == null) {
-                    //throw new ServiceException("请求方法" + requestMapping + "未声明@PermissionDisplayName");
-                    log.warn("请求方法" + requestMapping + "未声明@PermissionDisplayName，使用缺省方式命名");
+                if (Permission == null) {
+                    //throw new ServiceException("请求方法" + requestMapping + "未声明@Permission");
+                    log.warn("请求方法" + requestMapping + "未声明@Permission，使用缺省方式命名");
                     displayName = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
                 } else {
-                    displayName = PermissionDisplayName.value();
+                    displayName = Permission.displayName();
                 }
                 String mark = generateUniqueMark();
                 SecurityPermission securityPermission = SecurityPermission.builder().displayName(

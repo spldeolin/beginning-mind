@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
+import com.spldeolin.beginningmind.controller.annotation.Permission;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 
 /**
@@ -30,7 +30,7 @@ public class SignAdminController {
     /**
      * 指定用户是否登录中
      */
-    @PermissionDisplayName("查看指定用户是否登录中")
+    @Permission(displayName = "查看指定用户是否登录中")
     @GetMapping("/isSigning")
     Object isSign(@RequestParam Long accountId) {
         return securityAccountService.isAccountSigning(accountId);
@@ -39,7 +39,7 @@ public class SignAdminController {
     /**
      * 将指定用户踢下线
      */
-    @PermissionDisplayName("将指定用户踢下线")
+    @Permission(displayName = "将指定用户踢下线")
     @PostMapping("/kill")
     Object kill(@RequestParam Long accountId) {
         securityAccountService.killSigner(accountId);

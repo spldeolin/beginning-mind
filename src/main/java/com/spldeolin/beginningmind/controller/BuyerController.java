@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
+import com.spldeolin.beginningmind.controller.annotation.Permission;
 import com.spldeolin.beginningmind.input.BuyerInput;
 import com.spldeolin.beginningmind.service.BuyerService;
 
@@ -39,7 +39,7 @@ public class BuyerController {
     /**
      * 创建一个“买家”
      */
-    @PermissionDisplayName("创建买家")
+    @Permission(displayName = "创建买家")
     @PostMapping("/create")
     Object create(@RequestBody @Valid BuyerInput buyerInput) {
         return buyerService.createEX(buyerInput.toModel());
@@ -48,7 +48,7 @@ public class BuyerController {
     /**
      * 获取一个“买家”
      */
-    @PermissionDisplayName("买家详情")
+    @Permission(displayName = "买家详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
         return buyerService.get(id).orElseThrow(() -> new ServiceException("买家不存在或是已被删除"));
@@ -57,7 +57,7 @@ public class BuyerController {
     /**
      * 更新一个“买家”
      */
-    @PermissionDisplayName("更新买家")
+    @Permission(displayName = "更新买家")
     @PostMapping("/update/{id}")
     Object update(@PathVariable Long id, @RequestBody @Valid BuyerInput buyerInput) {
         buyerService.updateEX(buyerInput.toModel().setId(id));
@@ -67,7 +67,7 @@ public class BuyerController {
     /**
      * 删除一个“买家”
      */
-    @PermissionDisplayName("删除买家")
+    @Permission(displayName = "删除买家")
     @PostMapping("/delete/{id}")
     Object delete(@PathVariable Long id) {
         buyerService.deleteEX(id);
@@ -77,7 +77,7 @@ public class BuyerController {
     /**
      * 获取一批“买家”
      */
-    @PermissionDisplayName("买家列表")
+    @Permission(displayName = "买家列表")
     @GetMapping("/search")
     Object page(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
@@ -87,7 +87,7 @@ public class BuyerController {
     /**
      * 删除一批“买家”
      */
-    @PermissionDisplayName("批量删除买家")
+    @Permission(displayName = "批量删除买家")
     @PostMapping("/batchDelete")
     Object delete(@RequestBody List<Long> ids) {
         return buyerService.deleteEX(ids);

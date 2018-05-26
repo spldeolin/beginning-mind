@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.controller.annotation.PermissionDisplayName;
+import com.spldeolin.beginningmind.controller.annotation.Permission;
 import com.spldeolin.beginningmind.input.GoodsInput;
 import com.spldeolin.beginningmind.service.GoodsService;
 
@@ -39,7 +39,7 @@ public class GoodsController {
     /**
      * 创建一个“商品”
      */
-    @PermissionDisplayName("创建商品")
+    @Permission(displayName = "创建商品")
     @PostMapping("/create")
     Object create(@RequestBody @Valid GoodsInput goodsInput) {
         return goodsService.createEX(goodsInput.toModel());
@@ -48,7 +48,7 @@ public class GoodsController {
     /**
      * 获取一个“商品”
      */
-    @PermissionDisplayName("商品详情")
+    @Permission(displayName = "商品详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
         return goodsService.get(id).orElseThrow(() -> new ServiceException("商品不存在或是已被删除"));
@@ -57,7 +57,7 @@ public class GoodsController {
     /**
      * 更新一个“商品”
      */
-    @PermissionDisplayName("更新商品")
+    @Permission(displayName = "更新商品")
     @PostMapping("/update/{id}")
     Object update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
         goodsService.updateEX(goodsInput.toModel().setId(id));
@@ -67,7 +67,7 @@ public class GoodsController {
     /**
      * 删除一个“商品”
      */
-    @PermissionDisplayName("删除商品")
+    @Permission(displayName = "删除商品")
     @PostMapping("/delete/{id}")
     Object delete(@PathVariable Long id) {
         goodsService.deleteEX(id);
@@ -77,7 +77,7 @@ public class GoodsController {
     /**
      * 获取一批“商品”
      */
-    @PermissionDisplayName("商品列表")
+    @Permission(displayName = "商品列表")
     @GetMapping("/search")
     Object page(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
@@ -87,7 +87,7 @@ public class GoodsController {
     /**
      * 删除一批“商品”
      */
-    @PermissionDisplayName("批量删除商品")
+    @Permission(displayName = "批量删除商品")
     @PostMapping("/batchDelete")
     Object delete(@RequestBody List<Long> ids) {
         return goodsService.deleteEX(ids);
