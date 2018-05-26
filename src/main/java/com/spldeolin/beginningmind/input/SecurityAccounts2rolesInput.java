@@ -7,7 +7,6 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityAccounts2roles;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,7 +14,7 @@ import lombok.experimental.Accessors;
 /**
  * “帐号与权限的关联”Input类
  *
- * @author Deolin 2018/5/16
+ * @author Deolin 2018/5/26
  */
 @Data
 @Accessors(chain = true)
@@ -29,13 +28,10 @@ public class SecurityAccounts2rolesInput implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
-    @JsonProperty("account_id")
     private Long accountId;
 
-    @JsonProperty("role_id")
     private Long roleId;
 
     private static final long serialVersionUID = 1L;

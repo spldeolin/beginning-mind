@@ -8,7 +8,6 @@ package com.spldeolin.beginningmind.input;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,7 +15,7 @@ import lombok.experimental.Accessors;
 /**
  * “权限”Input类
  *
- * @author Deolin 2018/5/16
+ * @author Deolin 2018/5/26
  */
 @Data
 @Accessors(chain = true)
@@ -30,7 +29,6 @@ public class SecurityPermissionInput implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     /**
@@ -42,7 +40,6 @@ public class SecurityPermissionInput implements Serializable {
     /**
      * 请求方法@RequiresPermissions注解属性的映射
      */
-    @JsonProperty("requires_permissions_mapping")
     @Size(max = 255)
     private String requiresPermissionsMapping;
 

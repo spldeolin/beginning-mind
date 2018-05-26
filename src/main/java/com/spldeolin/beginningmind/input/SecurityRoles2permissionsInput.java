@@ -7,7 +7,6 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -15,7 +14,7 @@ import lombok.experimental.Accessors;
 /**
  * “角色与权限的关联”Input类
  *
- * @author Deolin 2018/5/16
+ * @author Deolin 2018/5/26
  */
 @Data
 @Accessors(chain = true)
@@ -29,13 +28,10 @@ public class SecurityRoles2permissionsInput implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
-    @JsonProperty("role_id")
     private Long roleId;
 
-    @JsonProperty("permission_id")
     private Long permissionId;
 
     private static final long serialVersionUID = 1L;

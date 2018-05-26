@@ -8,7 +8,6 @@ package com.spldeolin.beginningmind.input;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.Seller;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -16,7 +15,7 @@ import lombok.experimental.Accessors;
 /**
  * “卖家”Input类
  *
- * @author Deolin 2018/5/16
+ * @author Deolin 2018/5/26
  */
 @Data
 @Accessors(chain = true)
@@ -30,7 +29,6 @@ public class SellerInput implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     /**

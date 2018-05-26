@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.Buyer;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,7 +17,7 @@ import lombok.experimental.Accessors;
 /**
  * “买家”Input类
  *
- * @author Deolin 2018/5/16
+ * @author Deolin 2018/5/26
  */
 @Data
 @Accessors(chain = true)
@@ -32,7 +31,6 @@ public class BuyerInput implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     /**
@@ -44,14 +42,12 @@ public class BuyerInput implements Serializable {
     /**
      * 钱包余额
      */
-    @JsonProperty("wallet_balance")
     @Digits(integer = 8, fraction = 2)
     private BigDecimal walletBalance;
 
     /**
      * VIP等级（最低0，代表非VIP）
      */
-    @JsonProperty("vip_level")
     private Integer vipLevel;
 
     private static final long serialVersionUID = 1L;

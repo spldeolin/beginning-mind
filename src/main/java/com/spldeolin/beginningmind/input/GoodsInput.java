@@ -10,7 +10,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.Size;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.model.Goods;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,7 +17,7 @@ import lombok.experimental.Accessors;
 /**
  * “商品”Input类
  *
- * @author Deolin 2018/5/16
+ * @author Deolin 2018/5/26
  */
 @Data
 @Accessors(chain = true)
@@ -32,7 +31,6 @@ public class GoodsInput implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @JsonProperty("updated_at")
     private LocalDateTime updatedAt;
 
     /**
@@ -44,20 +42,17 @@ public class GoodsInput implements Serializable {
     /**
      * 净重（单位g）
      */
-    @JsonProperty("net_weight")
     private Integer netWeight;
 
     /**
      * 单价
      */
-    @JsonProperty("unit_price")
     @Digits(integer = 8, fraction = 2)
     private BigDecimal unitPrice;
 
     /**
      * 库存余量
      */
-    @JsonProperty("stock_balance")
     private Integer stockBalance;
 
     private static final long serialVersionUID = 1L;
