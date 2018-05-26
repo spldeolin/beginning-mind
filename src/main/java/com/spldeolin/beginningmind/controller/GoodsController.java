@@ -10,24 +10,21 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.GoodsInput;
 import com.spldeolin.beginningmind.service.GoodsService;
 
 /**
  * “商品”管理
  *
- * @author Deolin 2018/5/17
+ * @author Deolin 2018/5/26
  */
 @RestController
 @RequestMapping("/goods")
@@ -40,52 +37,50 @@ public class GoodsController {
     /**
      * 创建一个“商品”
      */
-    @PostMapping
-    public RequestResult create(@RequestBody @Valid GoodsInput goodsInput) {
-        return RequestResult.success(goodsService.createEX(goodsInput.toModel()));
+    @PostMapping("/create")
+    Object create(@RequestBody @Valid GoodsInput goodsInput) {
+        return goodsService.createEX(goodsInput.toModel());
     }
 
     /**
      * 获取一个“商品”
      */
-    @GetMapping("/{id}")
-    public RequestResult get(@PathVariable Long id) {
-        return RequestResult.success(goodsService.get(id).orElseThrow(() -> new ServiceException("商品不存在或是已被删除")));
+    @GetMapping("/get/{id}")
+    Object get(@PathVariable Long id) {
+        return goodsService.get(id).orElseThrow(() -> new ServiceException("商品不存在或是已被删除"));
     }
 
     /**
      * 更新一个“商品”
      */
-    @PutMapping("/{id}")
-    public RequestResult update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
+    @PostMapping("/update/{id}")
+    void update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
         goodsService.updateEX(goodsInput.toModel().setId(id));
-        return RequestResult.success();
     }
 
     /**
      * 删除一个“商品”
      */
-    @DeleteMapping("/{id}")
-    public RequestResult delete(@PathVariable Long id) {
+    @PostMapping("/delete/{id}")
+    void delete(@PathVariable Long id) {
         goodsService.deleteEX(id);
-        return RequestResult.success();
     }
 
     /**
      * 获取一批“商品”
      */
-    @GetMapping
-    public RequestResult page(@RequestParam(defaultValue = "1") Integer pageNo,
+    @GetMapping("/search")
+    Object page(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
-        return RequestResult.success(goodsService.page(pageNo, pageSize));
+        return goodsService.page(pageNo, pageSize);
     }
 
     /**
      * 删除一批“商品”
      */
-    @PutMapping("/batchDelete")
-    public RequestResult delete(@RequestBody List<Long> ids) {
-        return RequestResult.success(goodsService.deleteEX(ids));
+    @PostMapping("/batchDelete")
+    Object delete(@RequestBody List<Long> ids) {
+        return goodsService.deleteEX(ids);
     }
 
 }

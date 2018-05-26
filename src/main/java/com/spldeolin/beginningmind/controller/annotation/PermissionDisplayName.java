@@ -8,7 +8,7 @@ import java.lang.annotation.Target;
 /**
  * 所有“是一个权限资源”的控制层请求方法，都需要声明这个注解，
  * 以此对外声明，“我的权限名是xxx”。
- *
+ * <p>
  * 遗漏该注解的请求方法，将会以控制器路由+方法路由作为缺省权限名。
  */
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
