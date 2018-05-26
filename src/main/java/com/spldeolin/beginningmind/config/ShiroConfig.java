@@ -86,9 +86,8 @@ public class ShiroConfig {
         }
         // DEBUG环境下放行一切请求
         if (properties.isDebug()) {
-            for (String key : filterChainDefinitions.keySet()) {
-                filterChainDefinitions.put(key, "anon");
-            }
+            filterChainDefinitions = new LinkedHashMap<>();
+            filterChainDefinitions.put("/**", "anon");
         }
         return filterChainDefinitions;
     }
