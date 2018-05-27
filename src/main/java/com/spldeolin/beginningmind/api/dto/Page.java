@@ -40,6 +40,13 @@ public class Page<T> implements Serializable {
 
     private Page() {}
 
+    /**
+     * 空页
+     */
+    public static <T> Page<T> empty() {
+        return new Page<>();
+    }
+
     public static <T> Page<T> wrap(List<T> entities) {
         PageInfo<T> pageInfo = new PageInfo<>(entities);
         Page<T> page = new Page<>();
@@ -49,6 +56,16 @@ public class Page<T> implements Serializable {
         page.entitiesInPage = pageInfo.getList();
         page.pagesCount = pageInfo.getPages();
         return page;
+    }
+
+    public static <T> Page<T> overWriteEntities(Page page, List<T> entities) {
+        Page<T> newPage = new Page<>();
+        newPage.pageNo = page.pageNo;
+        newPage.hasPreviousPage = page.hasPreviousPage;
+        newPage.hasNextPage = page.hasNextPage;
+        newPage.entitiesInPage = entities;
+        newPage.pagesCount = page.pagesCount;
+        return newPage;
     }
 
 }
