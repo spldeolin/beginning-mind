@@ -36,14 +36,22 @@ public class BeginningMindProperties {
     private String address;
 
     /**
-     * HTTP请求 页码的URL参数名
+     * “时间”格式
      */
-    private String pageNoParamName;
+    private Time time;
 
-    /**
-     * HTTP请求 分页尺寸的URL参数名
-     */
-    private String pageSizeParamName;
+    @Data
+    public static class Time {
+
+        private String defaultDatePattern;
+
+        private String defaultTimePattern;
+
+        private String defaultDatetimePattern;
+
+        private Boolean serializeJavaUtilDateToTimestamp;
+
+    }
 
     /**
      * 文件支持
@@ -76,24 +84,6 @@ public class BeginningMindProperties {
         private String addresserEmail;
 
         private String addresserAuthCode;
-
-    }
-
-    /**
-     * “时间”格式
-     */
-    private Time time;
-
-    @Data
-    public static class Time {
-
-        private String defaultDatePattern;
-
-        private String defaultTimePattern;
-
-        private String defaultDatetimePattern;
-
-        private Boolean serializeJavaUtilDateToTimestamp;
 
     }
 

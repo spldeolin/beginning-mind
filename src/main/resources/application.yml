@@ -84,10 +84,6 @@ beginning-mind:
 
   address: 占位
 
-  page-no-param-name: page_no
-
-  page-size-param-name: page_size
-
   time:
     default-date-pattern: yyyy-MM-dd
     default-time-pattern: HH:mm:ss

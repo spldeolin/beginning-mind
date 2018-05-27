@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.config;
 
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -25,10 +24,6 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         String location = properties.getFile().getLocation();
-        //  addResourceLocations参数必须以/结果，否则识别不到
-        if (!StringUtils.endsWith(location, "/")) {
-            location += "/";
-        }
         registry.addResourceHandler(mapping + "/**").addResourceLocations("file:" + location);
     }
 
