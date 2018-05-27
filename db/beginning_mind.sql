@@ -2,15 +2,15 @@
 Navicat MySQL Data Transfer
 
 Source Server         : 本地
-Source Server Version : 50721
+Source Server Version : 50719
 Source Host           : localhost:3306
 Source Database       : beginning_mind
 
 Target Server Type    : MYSQL
-Target Server Version : 50721
+Target Server Version : 50719
 File Encoding         : 65001
 
-Date: 2018-05-04 16:46:02
+Date: 2018-05-27 17:52:51
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -33,7 +33,7 @@ CREATE TABLE `buyer` (
 -- ----------------------------
 -- Records of buyer
 -- ----------------------------
-INSERT INTO `buyer` VALUES ('1', '2018-04-30 07:27:24', '2018-04-30 07:35:08', '0', 'Shimarisu', '9999.00', '1');
+INSERT INTO `buyer` VALUES ('1', '2018-04-30 07:27:24', '2018-05-26 10:40:21', '0', 'Shimarisu', '9998.00', '1');
 INSERT INTO `buyer` VALUES ('2', '2018-04-30 07:27:26', '2018-04-30 07:35:08', '0', 'Abe', '9998.00', '0');
 INSERT INTO `buyer` VALUES ('3', '2018-04-30 07:34:48', '2018-04-30 07:35:08', '0', 'jeandiata', '9997.00', '0');
 INSERT INTO `buyer` VALUES ('4', '2018-04-30 07:34:49', '2018-04-30 07:35:08', '0', 'Dan', '9996.00', '0');
@@ -57,7 +57,7 @@ CREATE TABLE `goods` (
 -- ----------------------------
 -- Records of goods
 -- ----------------------------
-INSERT INTO `goods` VALUES ('1', '2018-04-30 07:13:39', '2018-04-30 08:25:15', '0', '111', '1000', '390.00', '2350');
+INSERT INTO `goods` VALUES ('1', '2018-04-30 07:13:39', '2018-05-26 20:41:07', '0', '西冷牛排', '1000', '390.00', '2350');
 INSERT INTO `goods` VALUES ('2', '2018-04-30 07:13:39', '2018-04-30 07:19:18', '0', '黄油', '200', '23.80', '2816');
 INSERT INTO `goods` VALUES ('3', '2018-04-30 07:13:40', '2018-04-30 07:20:35', '0', '可可豆', '1000', '235.00', '128');
 INSERT INTO `goods` VALUES ('4', '2018-04-30 07:13:40', '2018-04-30 07:21:16', '0', '西兰花', '500', '7.50', '255');
@@ -110,11 +110,12 @@ CREATE TABLE `security_accounts2roles` (
   `account_id` bigint(20) DEFAULT NULL,
   `role_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号与权限的关联';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号与角色的关联';
 
 -- ----------------------------
 -- Records of security_accounts2roles
 -- ----------------------------
+INSERT INTO `security_accounts2roles` VALUES ('1', '2018-05-26 17:10:18', '2018-05-26 17:11:10', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for security_permission
@@ -125,14 +126,50 @@ CREATE TABLE `security_permission` (
   `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
-  `name` varchar(255) DEFAULT NULL COMMENT '权限名',
-  `requires_permissions_mapping` varchar(255) DEFAULT NULL COMMENT '请求方法@RequiresPermissions注解属性的映射',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限';
+  `display_name` varchar(255) DEFAULT NULL COMMENT '用于展示的名称',
+  `mapping` varchar(255) DEFAULT NULL COMMENT '请求方法的全路由（控制器路由+方法路由）',
+  `mark` varchar(255) DEFAULT NULL COMMENT '权限标记（perms[xxxx]）',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `index_display_name` (`display_name`) USING BTREE,
+  UNIQUE KEY `index_mapping` (`mapping`) USING BTREE,
+  UNIQUE KEY `index_mark` (`mark`) USING BTREE
+) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限';
 
 -- ----------------------------
 -- Records of security_permission
 -- ----------------------------
+INSERT INTO `security_permission` VALUES ('227', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '买家详情', '/buyer/get/*', 'om8');
+INSERT INTO `security_permission` VALUES ('228', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '更新买家', '/buyer/update/*', 'izx');
+INSERT INTO `security_permission` VALUES ('229', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '批量删除买家', '/buyer/batchDelete', '3ow');
+INSERT INTO `security_permission` VALUES ('230', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '删除买家', '/buyer/delete/*', 'bqt');
+INSERT INTO `security_permission` VALUES ('231', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '创建买家', '/buyer/create', 'hq8');
+INSERT INTO `security_permission` VALUES ('232', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '买家列表', '/buyer/search', 'wtc');
+INSERT INTO `security_permission` VALUES ('233', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '商品详情', '/goods/get/*', '2py');
+INSERT INTO `security_permission` VALUES ('234', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '更新商品', '/goods/update/*', 'zql');
+INSERT INTO `security_permission` VALUES ('235', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '批量删除商品', '/goods/batchDelete', 'duy');
+INSERT INTO `security_permission` VALUES ('236', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '删除商品', '/goods/delete/*', 'dqa');
+INSERT INTO `security_permission` VALUES ('237', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '创建商品', '/goods/create', 'tcp');
+INSERT INTO `security_permission` VALUES ('238', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '商品列表', '/goods/search', 'zxy');
+INSERT INTO `security_permission` VALUES ('239', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '帐号详情', '/securityAccount/get/*', '2ea');
+INSERT INTO `security_permission` VALUES ('240', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '更新帐号', '/securityAccount/update/*', 'qlr');
+INSERT INTO `security_permission` VALUES ('241', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '批量删除帐号', '/securityAccount/batchDelete', '1fm');
+INSERT INTO `security_permission` VALUES ('242', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '删除帐号', '/securityAccount/delete/*', 'zx2');
+INSERT INTO `security_permission` VALUES ('243', '2018-05-26 16:40:08', '2018-05-26 16:40:08', '0', '创建帐号', '/securityAccount/create', 'm50');
+INSERT INTO `security_permission` VALUES ('244', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '帐号列表', '/securityAccount/search', 'qtk');
+INSERT INTO `security_permission` VALUES ('245', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '角色详情', '/securityRole/get/*', 'qyp');
+INSERT INTO `security_permission` VALUES ('246', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '更新角色', '/securityRole/update/*', 'm7n');
+INSERT INTO `security_permission` VALUES ('247', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '批量删除角色', '/securityRole/batchDelete', 's2d');
+INSERT INTO `security_permission` VALUES ('248', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '删除角色', '/securityRole/delete/*', '65a');
+INSERT INTO `security_permission` VALUES ('249', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '创建角色', '/securityRole/create', '0yb');
+INSERT INTO `security_permission` VALUES ('250', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '角色列表', '/securityRole/search', 'zni');
+INSERT INTO `security_permission` VALUES ('251', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '卖家详情', '/seller/get/*', '17c');
+INSERT INTO `security_permission` VALUES ('252', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '更新卖家', '/seller/update/*', 'lmx');
+INSERT INTO `security_permission` VALUES ('253', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '批量删除卖家', '/seller/batchDelete', 'mzw');
+INSERT INTO `security_permission` VALUES ('254', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '删除卖家', '/seller/delete/*', 'j1r');
+INSERT INTO `security_permission` VALUES ('255', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '创建卖家', '/seller/create', 'm48');
+INSERT INTO `security_permission` VALUES ('256', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '卖家列表', '/seller/search', 'q0p');
+INSERT INTO `security_permission` VALUES ('257', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '查看指定用户是否登录中', '/signAdmin/isSigning', 'o4t');
+INSERT INTO `security_permission` VALUES ('258', '2018-05-26 16:40:09', '2018-05-26 16:40:09', '0', '将指定用户踢下线', '/signAdmin/kill', 'lld');
 
 -- ----------------------------
 -- Table structure for security_role
@@ -145,11 +182,12 @@ CREATE TABLE `security_role` (
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
   `name` varchar(255) DEFAULT NULL COMMENT '角色名',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色';
 
 -- ----------------------------
 -- Records of security_role
 -- ----------------------------
+INSERT INTO `security_role` VALUES ('1', '2018-05-26 17:10:27', '2018-05-26 17:10:30', '0', 's');
 
 -- ----------------------------
 -- Table structure for security_roles2permissions
@@ -163,11 +201,12 @@ CREATE TABLE `security_roles2permissions` (
   `role_id` bigint(20) DEFAULT NULL,
   `permission_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色与权限的关联';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='角色与权限的关联';
 
 -- ----------------------------
 -- Records of security_roles2permissions
 -- ----------------------------
+INSERT INTO `security_roles2permissions` VALUES ('1', '2018-05-26 17:10:33', '2018-05-26 17:11:08', '0', '1', '257');
 
 -- ----------------------------
 -- Table structure for seller
