@@ -97,16 +97,17 @@ public class BeginningMindProperties {
 
     }
 
-    @Value("${server.context-path}")
-    private String serverContextPath;
-
     /**
      * 将配置中出现的所有localhost替换为本地IP
      */
+    @PostConstruct
     @SneakyThrows
     public void localhostToLocalIp() {
         address = address.replace("localhost", InetAddress.getLocalHost().getHostAddress());
     }
+
+    @Value("${server.context-path}")
+    private String serverContextPath;
 
     /**
      * 在file.mapping前追加content-path
