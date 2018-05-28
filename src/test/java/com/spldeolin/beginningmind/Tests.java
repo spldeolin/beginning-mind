@@ -22,10 +22,10 @@ import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.dao.bm1.BuyerMapper;
 import com.spldeolin.beginningmind.dao.bm2.ExMapper;
 import com.spldeolin.beginningmind.model.Goods;
-import com.spldeolin.beginningmind.model.SecurityAccount;
+import com.spldeolin.beginningmind.model.SecurityUser;
 import com.spldeolin.beginningmind.model.Seller;
 import com.spldeolin.beginningmind.service.EmailService;
-import com.spldeolin.beginningmind.service.SecurityAccountService;
+import com.spldeolin.beginningmind.service.SecurityUserService;
 import com.spldeolin.beginningmind.util.ApplicationContext;
 import com.spldeolin.beginningmind.util.Jsons;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
@@ -45,7 +45,7 @@ public class Tests {
     private BeginningMindProperties beginningMindProperties;
 
     @Autowired
-    private SecurityAccountService securityAccountService;
+    private SecurityUserService securityAccountService;
 
     public static void main(String[] args) {
         System.out.println(Goods.builder().name("曲奇饼干").build());
@@ -61,12 +61,12 @@ public class Tests {
     public void generateAccountsPasswordAndSalt() {
         String rawPassword = "000000";
         String passwordEX = DigestUtils.sha512Hex(rawPassword);
-        List<SecurityAccount> accounts = securityAccountService.listAll();
-        for (SecurityAccount account : accounts) {
+        List<SecurityUser> users = securityAccountService.listAll();
+        for (SecurityUser user : users) {
             String salt = StringRandomUtils.generateVisibleAscii(32);
             String passwordEX2 = DigestUtils.sha512Hex(passwordEX + salt);
-            account.setSalt(salt).setPassword(passwordEX2);
-            securityAccountService.update(account);
+            user.setSalt(salt).setPassword(passwordEX2);
+            securityAccountService.update(user);
         }
     }
 

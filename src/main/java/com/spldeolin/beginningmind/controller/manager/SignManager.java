@@ -20,9 +20,9 @@ import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SignInput;
-import com.spldeolin.beginningmind.model.SecurityAccount;
+import com.spldeolin.beginningmind.model.SecurityUser;
 import com.spldeolin.beginningmind.security.GifCaptcha;
-import com.spldeolin.beginningmind.service.SecurityAccountService;
+import com.spldeolin.beginningmind.service.SecurityUserService;
 import com.spldeolin.beginningmind.util.Sessions;
 import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.vo.SignerProfileVO;
@@ -40,7 +40,7 @@ public class SignManager {
     private static final String CAPTCHA = "{CAPTCHA}";
 
     @Autowired
-    private SecurityAccountService securityAccountService;
+    private SecurityUserService securityAccountService;
 
     @Autowired
     private BeginningMindProperties beginningMindProperties;
@@ -91,11 +91,11 @@ public class SignManager {
         } catch (AuthenticationException e) {
             throw new ServiceException(e.getMessage());
         }
-        SecurityAccount account = Signer.current().getSecurityAccount();
+        SecurityUser user = Signer.current().getSecurityUser();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
-        Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, account.getId().toString());
+        Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, user.getId().toString());
         // profile
-        return SignerProfileVO.builder().username(account.getUsername()).build();
+        return SignerProfileVO.builder().username(user.getUsername()).build();
     }
 
     /**
@@ -109,16 +109,16 @@ public class SignManager {
      * 指定用户是否登录中
      */
     @GetMapping("is_signing")
-    public RequestResult isSign(@RequestParam Long accountId) {
-        return RequestResult.success(securityAccountService.isAccountSigning(accountId));
+    public RequestResult isSign(@RequestParam Long userId) {
+        return RequestResult.success(securityAccountService.isAccountSigning(userId));
     }
 
     /**
      * 将指定用户踢下线
      */
     @DeleteMapping("kill")
-    public RequestResult kill(@RequestParam Long accountId) {
-        securityAccountService.killSigner(accountId);
+    public RequestResult kill(@RequestParam Long userId) {
+        securityAccountService.killSigner(userId);
         return RequestResult.success();
     }
 

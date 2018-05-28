@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 帐号
+ * 用户
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/5/28
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "security_account")
-public class SecurityAccount implements Serializable {
+@Table(name = "security_user")
+public class SecurityUser implements Serializable {
 
     /**
      * ID
@@ -57,24 +57,18 @@ public class SecurityAccount implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 登录者类型（1买家 2卖家）
-     */
-    @Column(name = "signer_type")
-    private Integer signerType;
-
-    /**
-     * 登录者ID（逻辑外键）
-     */
-    @Column(name = "signer_id")
-    private Long signerId;
-
-    /**
      * “用户名”
      */
     private String username;
 
+    /**
+     * 手机号
+     */
     private String mobile;
 
+    /**
+     * E-Mail
+     */
     private String email;
 
     /**
@@ -92,6 +86,27 @@ public class SecurityAccount implements Serializable {
      */
     @Column(name = "enable_sign")
     private Boolean enableSign;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
+     * 头像URL
+     */
+    @Column(name = "headerUrl")
+    private String headerurl;
+
+    /**
+     * 性别
+     */
+    private String sex;
+
+    /**
+     * 联系地址
+     */
+    private String address;
 
     private static final long serialVersionUID = 1L;
 }

@@ -8,18 +8,18 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import com.spldeolin.beginningmind.model.SecurityAccounts2roles;
+import com.spldeolin.beginningmind.model.SecurityUsers2roles;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * “帐号与权限的关联”Input类
+ * “用户与权限的关联”Input类
  *
- * @author Deolin 2018/5/26
+ * @author Deolin 2018/5/28
  */
 @Data
 @Accessors(chain = true)
-public class SecurityAccounts2rolesInput implements Serializable {
+public class SecurityUsers2rolesInput implements Serializable {
 
     /**
      * ID
@@ -31,14 +31,14 @@ public class SecurityAccounts2rolesInput implements Serializable {
      */
     private LocalDateTime updatedAt;
 
-    private Long accountId;
+    private Long userId;
 
     private Long roleId;
 
     private static final long serialVersionUID = 1L;
 
-    public SecurityAccounts2roles toModel() {
-        return SecurityAccounts2roles.builder().id(id).updatedAt(updatedAt).accountId(accountId).roleId(roleId).build();
+    public SecurityUsers2roles toModel() {
+        return SecurityUsers2roles.builder().id(id).updatedAt(updatedAt).userId(userId).roleId(roleId).build();
     }
 
 }

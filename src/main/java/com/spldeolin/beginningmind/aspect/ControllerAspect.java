@@ -140,7 +140,7 @@ public class ControllerAspect {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
             ThreadContext.put(CoupledConstant.LOG_PATTERN_PARAM,
-                    "[" + Signer.current().getSecurityAccount().getUsername() + "]");
+                    "[" + Signer.current().getSecurityUser().getUsername() + "]");
         }
     }
 

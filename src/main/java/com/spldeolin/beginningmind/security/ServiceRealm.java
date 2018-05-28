@@ -16,25 +16,25 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Sets;
-import com.spldeolin.beginningmind.model.SecurityAccount;
+import com.spldeolin.beginningmind.model.SecurityUser;
 import com.spldeolin.beginningmind.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.security.dto.SaltCredential;
-import com.spldeolin.beginningmind.service.SecurityAccountService;
+import com.spldeolin.beginningmind.service.SecurityUserService;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 
 public class ServiceRealm extends AuthorizingRealm {
 
     @Autowired
-    private SecurityAccountService securityAccountService;
+    private SecurityUserService securityUserService;
 
     /**
      * 认证后授权
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long accountId = ((CurrentSigner) principals.getPrimaryPrincipal()).getSecurityAccount().getId();
+        Long userId = ((CurrentSigner) principals.getPrimaryPrincipal()).getSecurityUser().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        List<String> permissionMappings = securityAccountService.listAccountPermissionMappings(accountId);
+        List<String> permissionMappings = securityUserService.listUserPermissions(userId);
         Set<String> permissionNames = Sets.newHashSet(permissionMappings);
         info.setStringPermissions(permissionNames);
         return info;
@@ -46,20 +46,20 @@ public class ServiceRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken authenticationToken)
             throws AuthenticationException {
-        // 通过principal查找帐号
+        // 通过principal查找用户
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String principal = token.getUsername();
-        SecurityAccount securityAccount = securityAccountService.searchOneByPrincipal(principal).orElseThrow(
-                () -> new UnknownAccountException("帐号不存在或密码错误"));
-        if (!securityAccount.getEnableSign()) {
-            throw new DisabledAccountException("帐号已被禁用");
+        SecurityUser securityUser = securityUserService.searchOneByPrincipal(principal).orElseThrow(
+                () -> new UnknownAccountException("用户不存在或密码错误"));
+        if (!securityUser.getEnableSign()) {
+            throw new DisabledAccountException("用户已被禁用");
         }
         // 组装当前登录用户对象
         CurrentSigner currentSigner = CurrentSigner.builder().sessionId(
-                RequestContextUtils.session().getId()).securityAccount(securityAccount).signedAt(
+                RequestContextUtils.session().getId()).securityUser(securityUser).signedAt(
                 LocalDateTime.now()).build();
-        SaltCredential saltCredential = SaltCredential.builder().password(securityAccount.getPassword()).salt(
-                securityAccount.getSalt()).build();
+        SaltCredential saltCredential = SaltCredential.builder().password(securityUser.getPassword()).salt(
+                securityUser.getSalt()).build();
         return new SimpleAuthenticationInfo(currentSigner, saltCredential, getName());
     }
 

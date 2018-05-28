@@ -24,7 +24,7 @@ public class SaltSha512CredentialsMatcher implements CredentialsMatcher {
         String password = dto.getPassword();
         // 匹配
         if (!passwordEX2.equals(password)) {
-            throw new IncorrectCredentialsException("帐号不存在或密码错误");
+            throw new IncorrectCredentialsException("用户不存在或密码错误");
         }
         return true;
     }

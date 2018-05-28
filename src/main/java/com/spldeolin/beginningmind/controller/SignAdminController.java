@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.controller.annotation.Permission;
-import com.spldeolin.beginningmind.service.SecurityAccountService;
+import com.spldeolin.beginningmind.service.SecurityUserService;
 
 /**
  * 登录管理
@@ -25,15 +25,15 @@ import com.spldeolin.beginningmind.service.SecurityAccountService;
 public class SignAdminController {
 
     @Autowired
-    private SecurityAccountService securityAccountService;
+    private SecurityUserService securityAccountService;
 
     /**
      * 指定用户是否登录中
      */
     @Permission(displayName = "查看指定用户是否登录中")
     @GetMapping("/isSigning")
-    Object isSign(@RequestParam Long accountId) {
-        return securityAccountService.isAccountSigning(accountId);
+    Object isSign(@RequestParam Long userId) {
+        return securityAccountService.isAccountSigning(userId);
     }
 
     /**
@@ -41,8 +41,8 @@ public class SignAdminController {
      */
     @Permission(displayName = "将指定用户踢下线")
     @PostMapping("/kill")
-    Object kill(@RequestParam Long accountId) {
-        securityAccountService.killSigner(accountId);
+    Object kill(@RequestParam Long userId) {
+        securityAccountService.killSigner(userId);
         return null;
     }
 

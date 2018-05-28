@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 帐号与权限的关联
+ * 用户与权限的关联
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/5/28
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "security_accounts2roles")
-public class SecurityAccounts2roles implements Serializable {
+@Table(name = "security_users2roles")
+public class SecurityUsers2roles implements Serializable {
 
     /**
      * ID
@@ -56,8 +56,8 @@ public class SecurityAccounts2roles implements Serializable {
     @JsonIgnore
     private Boolean isDeleted;
 
-    @Column(name = "account_id")
-    private Long accountId;
+    @Column(name = "user_id")
+    private Long userId;
 
     @Column(name = "role_id")
     private Long roleId;

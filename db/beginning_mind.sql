@@ -66,56 +66,58 @@ INSERT INTO `goods` VALUES ('6', '2018-04-30 07:13:40', '2018-04-30 07:22:21', '
 INSERT INTO `goods` VALUES ('7', '2018-04-30 07:13:40', '2018-04-30 07:22:57', '0', '牛油果', '300', '69.80', '8365');
 
 -- ----------------------------
--- Table structure for security_account
+-- Table structure for security_user
 -- ----------------------------
-DROP TABLE IF EXISTS `security_account`;
-CREATE TABLE `security_account` (
+DROP TABLE IF EXISTS `security_user`;
+CREATE TABLE `security_user` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
-  `signer_type` int(11) DEFAULT NULL COMMENT '登录者类型（1买家 2卖家）',
-  `signer_id` bigint(20) DEFAULT NULL COMMENT '登录者ID（逻辑外键）',
   `username` varchar(16) DEFAULT NULL COMMENT '“用户名”',
-  `mobile` varchar(20) DEFAULT NULL,
-  `email` varchar(255) DEFAULT NULL,
+  `mobile` varchar(20) DEFAULT NULL COMMENT '手机号',
+  `email` varchar(255) DEFAULT NULL COMMENT 'E-Mail',
   `password` char(128) DEFAULT NULL COMMENT '密码',
   `salt` char(32) DEFAULT NULL COMMENT '盐',
   `enable_sign` tinyint(1) DEFAULT NULL COMMENT '能否登录',
+  `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
+  `headerUrl` varchar(255) DEFAULT NULL COMMENT '头像URL',
+  `sex` enum('male','female') DEFAULT NULL COMMENT '性别',
+  `address` varchar(255) DEFAULT NULL COMMENT '联系地址',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_username` (`username`) USING BTREE,
   UNIQUE KEY `index_mobile` (`mobile`) USING BTREE,
   UNIQUE KEY `index_email` (`email`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号（用于登录的信息）';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户';
 
 -- ----------------------------
--- Records of security_account
+-- Records of security_user
 -- ----------------------------
-INSERT INTO `security_account` VALUES ('1', '2018-04-30 07:26:59', '2018-05-04 16:03:35', '0', '2', '1', 'fresh2018', '13733770001', 'bm_fresh2018@gmail.com', 'a74114ebe219ec5282fe2184f688c4a72c57887e635c6f9dc41c7cc80826725562de3d2c426c8bd0c69443be8416383a6396d090b6edbbd809eb3e242499489e', '=m=/B@M/lWi:0~C\'&]J,G0NJ(r]G:P+<', '1');
-INSERT INTO `security_account` VALUES ('2', '2018-04-30 07:26:59', '2018-05-04 16:04:21', '0', '2', '2', 'like_food', '13733770002', 'bm_like_food@gmail.com', 'cb66485b929ecc40e0313c0f2f6ede165db9d749f359f465adf86adbc3362170616b1b2d30990e9987566e407a896cdfe08007da0114016f71e42b0a3dbb68f3', '#7hcw~={BR[s@gXZ,{e91b^;p^+l\\]aX', '1');
-INSERT INTO `security_account` VALUES ('3', '2018-04-30 07:26:59', '2018-05-04 16:04:26', '0', '1', '1', 'smrs', '13733770003', 'bm_smrs@gmail.com', '0fe579a13075498b2bf7fd1992b9c2b3f3b59f5a1afcca1f532810470e552039eb3c9a2453f74dcdd4a38880b32db61010587a82d4591e24c94eeafec8023894', 'i_cu3c7N3^XEj+*zPwjN%pWk^:baG1W5', '1');
-INSERT INTO `security_account` VALUES ('4', '2018-04-30 07:26:59', '2018-05-04 16:04:31', '0', '1', '2', 'abe', '13733770004', 'bm_abe@gmail.com', 'ed2e1878019be744c3da9a3da00755b790ee6eac4a633a35e2c0f575f614adfc8d504e4b7c004e43c2d4383bb695b542b32cc7c5316898d9430b1b5bbb309609', '3><^A\\zBCF?S./F*B0Zr[\'kOF\"GFWZ-P', '1');
-INSERT INTO `security_account` VALUES ('5', '2018-04-30 07:27:00', '2018-05-04 16:04:38', '0', '1', '3', 'jeandiata', '13733770005', 'bm_jeandiata@gmail.com', '52b42cfe2df957425eb158c96317400e6e50f9e2243d8712c2fc3aa9d337fe1b0ad76f7b7046cb67aacf9e7185da09004d70c28694fa5f52afe9aba0af8b564c', 'd33Wj;~#CDY}0F99w&V{b[=yon7zN6aR', '1');
-INSERT INTO `security_account` VALUES ('6', '2018-04-30 07:27:00', '2018-05-04 16:04:44', '0', '1', '4', 'dan', '13733770006', 'bm_dan@gmail.com', '44f463a626487dfc7eb131747baef7914581af4adff6190d953c73abcd4288f5b77797fa7bf32032af8b4282c662a5c676c98c78dc39798d47c53a246859ab8f', 'XK2a>^d0Tt\'1&emgFy}\'(h/eCn\'R@M\\[', '1');
+INSERT INTO `security_user` VALUES ('1', '2018-04-30 07:26:59', '2018-05-28 17:24:00', '0', 'fresh2018', '13733770001', 'bm_fresh2018@gmail.com', 'a74114ebe219ec5282fe2184f688c4a72c57887e635c6f9dc41c7cc80826725562de3d2c426c8bd0c69443be8416383a6396d090b6edbbd809eb3e242499489e', '=m=/B@M/lWi:0~C\'&]J,G0NJ(r]G:P+<', '1', '可爱', null, null, null);
+INSERT INTO `security_user` VALUES ('2', '2018-04-30 07:26:59', '2018-05-28 17:24:00', '0', 'like_food', '13733770002', 'bm_like_food@gmail.com', 'cb66485b929ecc40e0313c0f2f6ede165db9d749f359f465adf86adbc3362170616b1b2d30990e9987566e407a896cdfe08007da0114016f71e42b0a3dbb68f3', '#7hcw~={BR[s@gXZ,{e91b^;p^+l\\]aX', '1', '专注', null, null, null);
+INSERT INTO `security_user` VALUES ('3', '2018-04-30 07:26:59', '2018-05-28 17:24:00', '0', 'smrs', '13733770003', 'bm_smrs@gmail.com', '0fe579a13075498b2bf7fd1992b9c2b3f3b59f5a1afcca1f532810470e552039eb3c9a2453f74dcdd4a38880b32db61010587a82d4591e24c94eeafec8023894', 'i_cu3c7N3^XEj+*zPwjN%pWk^:baG1W5', '1', '佐見リサ', null, null, null);
+INSERT INTO `security_user` VALUES ('4', '2018-04-30 07:26:59', '2018-05-28 17:24:00', '0', 'abe', '13733770004', 'bm_abe@gmail.com', 'ed2e1878019be744c3da9a3da00755b790ee6eac4a633a35e2c0f575f614adfc8d504e4b7c004e43c2d4383bb695b542b32cc7c5316898d9430b1b5bbb309609', '3><^A\\zBCF?S./F*B0Zr[\'kOF\"GFWZ-P', '1', 'Mr. Abe', null, null, null);
+INSERT INTO `security_user` VALUES ('5', '2018-04-30 07:27:00', '2018-05-28 17:24:00', '0', 'jeandiata', '13733770005', 'bm_jeandiata@gmail.com', '52b42cfe2df957425eb158c96317400e6e50f9e2243d8712c2fc3aa9d337fe1b0ad76f7b7046cb67aacf9e7185da09004d70c28694fa5f52afe9aba0af8b564c', 'd33Wj;~#CDY}0F99w&V{b[=yon7zN6aR', '1', 'Jean Diata', null, null, null);
+INSERT INTO `security_user` VALUES ('6', '2018-04-30 07:27:00', '2018-05-28 17:24:00', '0', 'dan', '13733770006', 'bm_dan@gmail.com', '44f463a626487dfc7eb131747baef7914581af4adff6190d953c73abcd4288f5b77797fa7bf32032af8b4282c662a5c676c98c78dc39798d47c53a246859ab8f', 'XK2a>^d0Tt\'1&emgFy}\'(h/eCn\'R@M\\[', '1', '丹', null, null, null);
 
 -- ----------------------------
--- Table structure for security_accounts2roles
+-- Table structure for security_users2roles
 -- ----------------------------
-DROP TABLE IF EXISTS `security_accounts2roles`;
-CREATE TABLE `security_accounts2roles` (
+DROP TABLE IF EXISTS `security_users2roles`;
+CREATE TABLE `security_users2roles` (
   `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '审计字段 插入时间',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '审计字段 更新时间',
   `is_deleted` tinyint(1) NOT NULL DEFAULT '0' COMMENT '审计字段 是否被删除',
-  `account_id` bigint(20) DEFAULT NULL,
+  `user_id` bigint(20) DEFAULT NULL,
   `role_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='帐号与角色的关联';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='用户与角色的关联';
 
 -- ----------------------------
--- Records of security_accounts2roles
+-- Records of security_users2roles
 -- ----------------------------
-INSERT INTO `security_accounts2roles` VALUES ('1', '2018-05-26 17:10:18', '2018-05-26 17:11:10', '0', '1', '1');
+INSERT INTO `security_users2roles` VALUES ('1', '2018-05-26 17:10:18', '2018-05-26 17:11:10', '0', '1', '1');
 
 -- ----------------------------
 -- Table structure for security_permission
