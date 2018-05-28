@@ -63,7 +63,7 @@ public class UrlForwardToExceptionController implements ErrorController {
      */
     @RequestMapping(SHIROFILTER_LOGINURL_URL)
     void unsigned() {
-        throw new UnsignedException();
+        throw new UnsignedException("未登录或登录超时");
     }
 
     /**

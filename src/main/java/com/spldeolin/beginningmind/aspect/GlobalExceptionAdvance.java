@@ -154,8 +154,8 @@ public class GlobalExceptionAdvance {
      * 401 未登录
      */
     @ExceptionHandler(UnsignedException.class)
-    public RequestResult handleUnsignException() {
-        return RequestResult.failure(ResultCode.UNSIGNED);
+    public RequestResult handleUnsignException(UnsignedException e) {
+        return RequestResult.failure(ResultCode.UNSIGNED, e.getMessage());
     }
 
     /**

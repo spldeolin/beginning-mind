@@ -19,7 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
@@ -30,6 +29,7 @@ import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
+import com.spldeolin.beginningmind.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.util.RequestContextUtils;
 import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
@@ -83,7 +83,7 @@ public class ControllerAspect {
         logBefore(controllerInfo);
         // 检查登录者是否被踢出
         if (isKilled()) {
-            throw new ServiceException("已被管理员请离，请重新登录");
+            throw new UnsignedException("已被管理员请离，请重新登录");
         }
         // 刷新会话
         reflashSessionExpire();

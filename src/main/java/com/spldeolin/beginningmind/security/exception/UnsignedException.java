@@ -9,4 +9,8 @@ public class UnsignedException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
+    public UnsignedException(String message) {
+        super(message);
+    }
+
 }

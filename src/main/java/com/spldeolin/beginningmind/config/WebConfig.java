@@ -1,7 +1,9 @@
 package com.spldeolin.beginningmind.config;
 
+import javax.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -38,6 +40,19 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 registry.addMapping("/**").allowedOrigins("*").allowedMethods("*").allowedHeaders("*");
             }
         };
+    }
+
+    /**
+     * 文件上传
+     */
+    @Bean
+    public MultipartConfigElement multipartConfigElement() {
+        MultipartConfigFactory factory = new MultipartConfigFactory();
+        // 单文件限制
+        factory.setMaxFileSize("5MB");
+        // 总文件限制
+        factory.setMaxRequestSize("10MB");
+        return factory.createMultipartConfig();
     }
 
 }

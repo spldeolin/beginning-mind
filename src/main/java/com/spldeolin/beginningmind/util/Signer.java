@@ -19,7 +19,7 @@ public class Signer {
     public static CurrentSigner current() {
         CurrentSigner currentSigner = (CurrentSigner) SecurityUtils.getSubject().getPrincipal();
         if (currentSigner == null) {
-            throw new UnsignedException();
+            throw new UnsignedException("未登录或登录超时");
         }
         return currentSigner;
     }
