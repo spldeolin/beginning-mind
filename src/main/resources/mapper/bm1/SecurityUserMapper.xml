@@ -19,6 +19,8 @@
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
         <result column="headerUrl" jdbcType="VARCHAR" property="headerurl"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
-        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="province" jdbcType="INTEGER" property="province"/>
+        <result column="city" jdbcType="INTEGER" property="city"/>
+        <result column="area" jdbcType="INTEGER" property="area"/>
     </resultMap>
 </mapper>

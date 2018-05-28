@@ -11,7 +11,13 @@ import javax.validation.Valid;
 import javax.validation.constraints.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.input.SecurityUserInput;
 import com.spldeolin.beginningmind.service.SecurityUserService;
@@ -67,7 +73,8 @@ public class SecurityUserController {
      * 获取一批“用户”
      */
     @GetMapping("/search")
-    Object page(@RequestParam(defaultValue = "1") int pageNo, @RequestParam(defaultValue = "10") @Max(1000) int pageSize) {
+    Object page(@RequestParam(defaultValue = "1") int pageNo,
+            @RequestParam(defaultValue = "10") @Max(1000) int pageSize) {
         return securityUserService.page(pageNo, pageSize);
     }
 

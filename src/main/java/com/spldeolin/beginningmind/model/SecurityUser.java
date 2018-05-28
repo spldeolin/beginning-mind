@@ -104,9 +104,19 @@ public class SecurityUser implements Serializable {
     private String sex;
 
     /**
-     * 联系地址
+     * 联系地址（省）
      */
-    private String address;
+    private Integer province;
+
+    /**
+     * 联系地址（市）
+     */
+    private Integer city;
+
+    /**
+     * 联系地址（区）
+     */
+    private Integer area;
 
     private static final long serialVersionUID = 1L;
 }
