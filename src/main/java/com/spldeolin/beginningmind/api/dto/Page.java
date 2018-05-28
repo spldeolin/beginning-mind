@@ -38,6 +38,11 @@ public class Page<T> implements Serializable {
      */
     private Integer pagesCount;
 
+    /**
+     * 总共多少条目
+     */
+    private Long total;
+
     private Page() {}
 
     /**
@@ -55,6 +60,7 @@ public class Page<T> implements Serializable {
         page.hasNextPage = pageInfo.isHasNextPage();
         page.entitiesInPage = pageInfo.getList();
         page.pagesCount = pageInfo.getPages();
+        page.total = pageInfo.getTotal();
         return page;
     }
 
@@ -65,6 +71,7 @@ public class Page<T> implements Serializable {
         newPage.hasNextPage = page.hasNextPage;
         newPage.entitiesInPage = entities;
         newPage.pagesCount = page.pagesCount;
+        newPage.total = page.total;
         return newPage;
     }
 
