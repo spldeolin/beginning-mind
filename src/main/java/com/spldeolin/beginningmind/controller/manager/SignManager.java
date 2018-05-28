@@ -25,6 +25,7 @@ import com.spldeolin.beginningmind.security.GifCaptcha;
 import com.spldeolin.beginningmind.service.SecurityAccountService;
 import com.spldeolin.beginningmind.util.Sessions;
 import com.spldeolin.beginningmind.util.Signer;
+import com.spldeolin.beginningmind.vo.SignerProfileVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -64,7 +65,7 @@ public class SignManager {
     /**
      * 登录
      */
-    public void signIn(SignInput input) {
+    public SignerProfileVO signIn(SignInput input) {
         // 重复登录、验证码校验
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
@@ -92,6 +93,8 @@ public class SignManager {
         SecurityAccount account = Signer.current().getSecurityAccount();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, account.getId().toString());
+        // profile
+        return SignerProfileVO.builder().username(account.getUsername()).build();
     }
 
     /**

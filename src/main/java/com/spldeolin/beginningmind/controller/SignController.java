@@ -43,8 +43,7 @@ public class SignController {
      */
     @PostMapping("/in")
     Object signIn(@RequestBody @Valid SignInput input) {
-        signManager.signIn(input);
-        return null;
+        return signManager.signIn(input);
     }
 
     /**
