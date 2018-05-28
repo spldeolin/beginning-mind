@@ -20,7 +20,7 @@ import lombok.SneakyThrows;
 @Service
 public class ImageManager {
 
-    public static final String IMAGE_DIRECTORY = "img";
+    public static final String IMAGE_DIRECTORY = "image";
 
     @Autowired
     private BeginningMindProperties beginningMindProperties;
@@ -37,13 +37,16 @@ public class ImageManager {
         String location = beginningMindProperties.getFile().getLocation();
         String mapping = beginningMindProperties.getFile().getMapping();
         try (InputStream in = multipartFile.getInputStream()) {
+            // 文件名
             String fileMd5 = DigestUtils.md5Hex(in);
             String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
             String destFileName = fileMd5 + FilenameUtils.EXTENSION_SEPARATOR + fileExtension;
+            // 生成文件
             File destFile = new File(location + IMAGE_DIRECTORY + File.separator + destFileName);
             if (!destFile.exists()) {
                 multipartFile.transferTo(destFile);
             }
+            // 映射
             return beginningMindProperties.getAddress() + mapping + IMAGE_DIRECTORY + "/" + destFileName;
         }
     }
