@@ -3,9 +3,12 @@ package com.spldeolin.beginningmind.config;
 import java.net.InetAddress;
 import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.core.util.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import com.spldeolin.beginningmind.controller.manager.ImageManager;
+import com.spldeolin.beginningmind.controller.manager.SignManager;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -125,6 +128,16 @@ public class BeginningMindProperties {
         if (!file.getMapping().endsWith("/")) {
             throw new IllegalArgumentException("beginning-mind.file.mapping必须以 / 开头");
         }
+    }
+
+    /**
+     * 确保本地文件夹存在
+     */
+    @PostConstruct
+    @SneakyThrows
+    public void ensureDirectoryExist() {
+        FileUtils.mkdir(new java.io.File(file.getLocation() + ImageManager.IMAGE_DIRECTORY), true);
+        FileUtils.mkdir(new java.io.File(file.getLocation() + SignManager.CAPTCHA_DIRECTORY), true);
     }
 
 }
