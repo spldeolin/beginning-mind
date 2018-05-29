@@ -187,6 +187,12 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
                 SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
+    @Override
+    public void banPick(Long userId) {
+        SecurityUser securityUser = get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+        super.update(securityUser.setEnableSign(!securityUser.getEnableSign()));
+    }
+
     /**
      * 根据登录时存的PRINCIPAL_NAME_INDEX_NAME的值，通过Spring Session提供的API找到登录者的会话，
      * 会话不存在则代表未登录

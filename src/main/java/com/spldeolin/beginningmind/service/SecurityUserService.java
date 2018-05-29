@@ -81,4 +81,9 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
      */
     void killSigner(Long userId);
 
+    /**
+     * 启用/禁用用户
+     */
+    void banPick(Long userId);
+
 }

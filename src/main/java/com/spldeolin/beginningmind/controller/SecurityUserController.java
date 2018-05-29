@@ -87,4 +87,13 @@ public class SecurityUserController {
         return securityUserService.deleteEX(ids);
     }
 
+    /**
+     * 启用/禁用用户
+     */
+    @PostMapping("/banPick/{id}")
+    Object banPick(@PathVariable Long id) {
+        securityUserService.banPick(id);
+        return null;
+    }
+
 }
