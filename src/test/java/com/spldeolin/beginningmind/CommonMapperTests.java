@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.spldeolin.beginningmind.dao.bm1.GoodsMapper;
+import com.spldeolin.beginningmind.dao.GoodsMapper;
 import com.spldeolin.beginningmind.model.Goods;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;

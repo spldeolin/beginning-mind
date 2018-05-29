@@ -20,7 +20,7 @@ import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.SessionConfig;
-import com.spldeolin.beginningmind.dao.bm1.SecurityUserMapper;
+import com.spldeolin.beginningmind.dao.SecurityUserMapper;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.model.SecurityUser;

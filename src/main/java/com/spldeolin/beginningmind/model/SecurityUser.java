@@ -74,11 +74,13 @@ public class SecurityUser implements Serializable {
     /**
      * 密码
      */
+    @JsonIgnore
     private String password;
 
     /**
      * 盐
      */
+    @JsonIgnore
     private String salt;
 
     /**

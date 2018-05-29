@@ -19,8 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.BeginningMindProperties;
-import com.spldeolin.beginningmind.dao.bm1.BuyerMapper;
-import com.spldeolin.beginningmind.dao.bm2.ExMapper;
+import com.spldeolin.beginningmind.dao.BuyerMapper;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.model.SecurityUser;
 import com.spldeolin.beginningmind.model.Seller;
@@ -112,14 +111,6 @@ public class Tests {
                 StandardCharsets.UTF_8);
         log.info("映射路径" + properties.getFile().getMapping() + "/a.txt");
         log.info("hold on");
-    }
-
-    @Autowired
-    private ExMapper exMapper;
-
-    @Test
-    public void bm2() {
-        log.info(exMapper.names());
     }
 
     @Autowired

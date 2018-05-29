@@ -15,35 +15,35 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import tk.mybatis.spring.annotation.MapperScan;
 
 @Configuration
-@MapperScan(basePackages = "com.spldeolin.beginningmind.dao.bm1", sqlSessionTemplateRef = "bm1SessionTemplate")
+@MapperScan(basePackages = "com.spldeolin.beginningmind.dao", sqlSessionTemplateRef = "sessionTemplate1")
 public class DataSource1Config {
 
-    @Bean(name = "bm1DataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.bm1")
+    @Bean(name = "dataSource1")
+    @ConfigurationProperties(prefix = "spring.datasource.source1")
     @Primary
     public DataSource testDataSource() {
         return DataSourceBuilder.create().build();
     }
 
-    @Bean(name = "bm1SqlSessionFactory")
+    @Bean(name = "sqlSessionFactory1")
     @Primary
-    public SqlSessionFactory testSqlSessionFactory(@Qualifier("bm1DataSource") DataSource dataSource) throws Exception {
+    public SqlSessionFactory testSqlSessionFactory(@Qualifier("dataSource1") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/bm1/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/*.xml"));
         return bean.getObject();
     }
 
-    @Bean(name = "bm1TransactionManager")
+    @Bean(name = "transactionManager1")
     @Primary
-    public DataSourceTransactionManager testTransactionManager(@Qualifier("bm1DataSource") DataSource dataSource) {
+    public DataSourceTransactionManager testTransactionManager(@Qualifier("dataSource1") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean(name = "bm1SessionTemplate")
+    @Bean(name = "sessionTemplate1")
     @Primary
     public SqlSessionTemplate test1SqlSessionTemplate(
-            @Qualifier("bm1SqlSessionFactory") SqlSessionFactory sqlSessionFactory) {
+            @Qualifier("sqlSessionFactory1") SqlSessionFactory sqlSessionFactory) {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 

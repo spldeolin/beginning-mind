@@ -3,7 +3,7 @@
  * * https://github.com/spldeolin/cadeau-support
  */
 
-package com.spldeolin.beginningmind.dao.bm1;
+package com.spldeolin.beginningmind.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.api.CommonMapper;

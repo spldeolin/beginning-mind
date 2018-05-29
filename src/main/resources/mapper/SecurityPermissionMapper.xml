@@ -4,14 +4,14 @@
   https://github.com/spldeolin/cadeau-support
 -->
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spldeolin.beginningmind.dao.bm1.BuyerMapper">
-    <resultMap id="BaseResultMap" type="com.spldeolin.beginningmind.model.Buyer">
+<mapper namespace="com.spldeolin.beginningmind.dao.SecurityPermissionMapper">
+    <resultMap id="BaseResultMap" type="com.spldeolin.beginningmind.model.SecurityPermission">
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="inserted_at" jdbcType="TIMESTAMP" property="insertedAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="is_deleted" jdbcType="BIT" property="isDeleted"/>
-        <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
-        <result column="wallet_balance" jdbcType="DECIMAL" property="walletBalance"/>
-        <result column="vip_level" jdbcType="INTEGER" property="vipLevel"/>
+        <result column="display_name" jdbcType="VARCHAR" property="displayName"/>
+        <result column="mapping" jdbcType="VARCHAR" property="mapping"/>
+        <result column="mark" jdbcType="VARCHAR" property="mark"/>
     </resultMap>
 </mapper>

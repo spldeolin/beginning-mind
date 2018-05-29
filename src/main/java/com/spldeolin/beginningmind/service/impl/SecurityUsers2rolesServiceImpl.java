@@ -13,7 +13,7 @@ import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.dao.bm1.SecurityUsers2rolesMapper;
+import com.spldeolin.beginningmind.dao.SecurityUsers2rolesMapper;
 import com.spldeolin.beginningmind.model.SecurityUsers2roles;
 import com.spldeolin.beginningmind.service.SecurityUsers2rolesService;
 import lombok.extern.log4j.Log4j2;
