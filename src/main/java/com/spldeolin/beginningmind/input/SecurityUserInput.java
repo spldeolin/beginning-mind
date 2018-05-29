@@ -8,8 +8,12 @@ package com.spldeolin.beginningmind.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 import com.spldeolin.beginningmind.model.SecurityUser;
+import com.spldeolin.beginningmind.valid.annotation.Email;
+import com.spldeolin.beginningmind.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.valid.annotation.TextOption;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -17,7 +21,7 @@ import lombok.experimental.Accessors;
 /**
  * “用户”Input类
  *
- * @author Deolin 2018/5/28
+ * @author Deolin 2018/5/29
  */
 @Data
 @Accessors(chain = true)
@@ -34,44 +38,75 @@ public class SecurityUserInput implements Serializable {
     private LocalDateTime updatedAt;
 
     /**
+     * “用户名”
+     */
+    @NotBlank
+    @Length(max = 16)
+    private String username;
+
+    /**
+     * 手机号
+     */
+    @Mobile
+    @Length(max = 20)
+    private String mobile;
+
+    /**
+     * E-Mail
+     */
+    @Email
+    @Length(max = 255)
+    private String email;
+
+    /**
+     * 能否登录
+     */
+    @NotNull
+    private Boolean enableSign;
+
+    /**
      * 昵称
      */
-    @Size(max = 255)
+    @Length(max = 255)
     private String nickname;
 
     /**
      * 头像URL
      */
-    @Size(max = 255)
+    @Length(max = 255)
     private String headerurl;
 
     /**
      * 性别
      */
-    @Size(max = 6)
-    @TextOption({"male", "female"})
+    @Length(max = 6)
+    @TextOption({"", "male", "female"})
     private String sex;
 
     /**
      * 联系地址（省）
      */
-    private Integer province;
+    @Length(max = 6)
+    private String province;
 
     /**
      * 联系地址（市）
      */
-    private Integer city;
+    @Length(max = 6)
+    private String city;
 
     /**
      * 联系地址（区）
      */
-    private Integer area;
+    @Length(max = 6)
+    private String area;
 
     private static final long serialVersionUID = 1L;
 
     public SecurityUser toModel() {
-        return SecurityUser.builder().id(id).updatedAt(updatedAt).nickname(nickname).headerurl(headerurl).sex(
-                sex).province(province).city(city).area(area).build();
+        return SecurityUser.builder().id(id).updatedAt(updatedAt).username(username).mobile(mobile).email(
+                email).enableSign(enableSign).nickname(nickname).headerurl(headerurl).sex(sex).province(province).city(
+                city).area(area).build();
     }
 
 }

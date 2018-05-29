@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 /**
  * 用户
  *
- * @author Deolin 2018/5/28
+ * @author Deolin 2018/5/29
  */
 @Data
 @NoArgsConstructor
@@ -108,17 +108,17 @@ public class SecurityUser implements Serializable {
     /**
      * 联系地址（省）
      */
-    private Integer province;
+    private String province;
 
     /**
      * 联系地址（市）
      */
-    private Integer city;
+    private String city;
 
     /**
      * 联系地址（区）
      */
-    private Integer area;
+    private String area;
 
     private static final long serialVersionUID = 1L;
 }

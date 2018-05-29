@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.input.SecurityUserInput;
 import com.spldeolin.beginningmind.service.SecurityUserService;
+import com.spldeolin.beginningmind.valid.annotation.Require;
 
 /**
  * “用户”管理
@@ -55,7 +56,7 @@ public class SecurityUserController {
      * 更新一个“用户”
      */
     @PostMapping("/update/{id}")
-    Object update(@PathVariable Long id, @RequestBody @Valid SecurityUserInput securityUserInput) {
+    Object update(@PathVariable Long id, @RequestBody @Valid @Require("updatedAt") SecurityUserInput securityUserInput) {
         securityUserService.updateEX(securityUserInput.toModel().setId(id));
         return null;
     }

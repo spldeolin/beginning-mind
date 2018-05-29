@@ -12,7 +12,7 @@ import com.spldeolin.beginningmind.model.SecurityUser;
 /**
  * “用户”数据库映射
  *
- * @author Deolin 2018/5/28
+ * @author Deolin 2018/5/29
  */
 @Mapper
 public interface SecurityUserMapper extends CommonMapper<SecurityUser> {

@@ -1,3 +1,4 @@
+// @formatter:off
 package com.spldeolin.beginningmind.util.gif;
 
 /**

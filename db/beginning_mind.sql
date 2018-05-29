@@ -82,7 +82,7 @@ CREATE TABLE `security_user` (
   `enable_sign` tinyint(1) DEFAULT NULL COMMENT '能否登录',
   `nickname` varchar(255) DEFAULT NULL COMMENT '昵称',
   `headerUrl` varchar(255) DEFAULT NULL COMMENT '头像URL',
-  `sex` enum('male','female') DEFAULT NULL COMMENT '性别',
+  `sex` enum('','male','female') DEFAULT NULL COMMENT '性别',
   `province` char(6) DEFAULT NULL COMMENT '联系地址（省）',
   `city` char(6) DEFAULT NULL COMMENT '联系地址（市）',
   `area` char(6) DEFAULT NULL COMMENT '联系地址（区）',

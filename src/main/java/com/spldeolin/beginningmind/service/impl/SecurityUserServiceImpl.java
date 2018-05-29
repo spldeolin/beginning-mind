@@ -9,6 +9,7 @@ package com.spldeolin.beginningmind.service.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
@@ -20,6 +21,7 @@ import com.spldeolin.beginningmind.api.dto.Page;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
 import com.spldeolin.beginningmind.cache.RedisCache;
 import com.spldeolin.beginningmind.config.SessionConfig;
+import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.dao.SecurityUserMapper;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
@@ -29,6 +31,7 @@ import com.spldeolin.beginningmind.service.SecurityPermissionService;
 import com.spldeolin.beginningmind.service.SecurityRoles2permissionsService;
 import com.spldeolin.beginningmind.service.SecurityUserService;
 import com.spldeolin.beginningmind.service.SecurityUsers2rolesService;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -61,17 +64,27 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
 
     @Override
     public Long createEX(SecurityUser securityUser) {
-        /* 业务校验 */
+        checkOccupationForCreating(securityUser);
+        // 生成盐与密码
+        String salt = StringRandomUtils.generateVisibleAscii(32);
+        securityUser.setSalt(salt);
+        String password = DigestUtils.sha512Hex(CoupledConstant.DEFAULT_PASSWORD_EX + salt);
+        securityUser.setPassword(password);
+        // insert
         super.create(securityUser);
         return securityUser.getId();
     }
 
     @Override
     public void updateEX(SecurityUser securityUser) {
-        if (!isExist(securityUser.getId())) {
+        Long id = securityUser.getId();
+        if (!isExist(id)) {
             throw new ServiceException("用户不存在或是已被删除");
         }
-        /* 业务校验 */
+        if (getSignerSession(id).isPresent()) {
+            throw new ServiceException("用户登录中，等待用户退出或是将用户请离后再次操作");
+        }
+        checkOccupationForUpdating(securityUser);
         if (!super.update(securityUser)) {
             throw new ServiceException("用户数据过时");
         }
@@ -82,17 +95,23 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
         if (!isExist(id)) {
             throw new ServiceException("用户不存在或是已被删除");
         }
-        /* 业务校验 */
+        if (getSignerSession(id).isPresent()) {
+            throw new ServiceException("用户登录中，等待用户退出或是将用户请离后再次操作");
+        }
         super.delete(id);
     }
 
     @Override
     public String deleteEX(List<Long> ids) {
         List<SecurityUser> exist = super.get(ids);
-        if (exist.size() == 0) {
-            throw new ServiceException("选中的用户全部不存在或是已被删除");
+        if (exist.size() < ids.size()) {
+            throw new ServiceException("部分用户不存在或是已被删除");
         }
-        /* 业务校验 */
+        for (Long id : ids) {
+            if (getSignerSession(id).isPresent()) {
+                throw new ServiceException("部分用户登录中，无法删除");
+            }
+        }
         super.delete(ids);
         return "操作成功";
     }
@@ -100,7 +119,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     @Override
     public Page<SecurityUser> page(Integer pageNo, Integer pageSize) {
         Condition condition = new Condition(SecurityUser.class);
-        condition.createCriteria()/* 添加条件 */;
+        condition.createCriteria();
         PageHelper.startPage(pageNo, pageSize);
         return Page.wrap(securityUserMapper.selectBatchByCondition(condition));
     }
@@ -180,6 +199,46 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
             return Optional.ofNullable(signerSessions.toArray(new Session[0])[0]);
         } else {
             return Optional.empty();
+        }
+    }
+
+    /**
+     * 创建场合下的用户名、手机号、E-Mail占用校验
+     */
+    private void checkOccupationForCreating(SecurityUser securityUser) {
+        if (searchOne("username", securityUser.getUsername()).isPresent()) {
+            throw new ServiceException("用户名已被占用");
+        }
+        String mobile = securityUser.getMobile();
+        if (mobile != null && searchOne("mobile", mobile).isPresent()) {
+            throw new ServiceException("手机号已被占用");
+        }
+        String email = securityUser.getEmail();
+        if (email != null && searchOne("email", email).isPresent()) {
+            throw new ServiceException("E-Mail已被占用");
+        }
+    }
+
+    /**
+     * 更新场合下的用户名、手机号、E-Mail占用校验
+     */
+    private void checkOccupationForUpdating(SecurityUser securityUser) {
+        Long id = securityUser.getId();
+        String username = securityUser.getUsername();
+        if (!id.equals(searchOne("username", username).orElse(new SecurityUser()).getId())) {
+            throw new ServiceException("用户名已被占用");
+        }
+        String mobile = securityUser.getMobile();
+        if (mobile != null) {
+            if (!id.equals(searchOne("mobile", mobile).orElse(new SecurityUser()).getId())) {
+                throw new ServiceException("手机号已被占用");
+            }
+        }
+        String email = securityUser.getEmail();
+        if (email != null) {
+            if (!id.equals(searchOne("email", email).orElse(new SecurityUser()).getId())) {
+                throw new ServiceException("E-Mail已被占用");
+            }
         }
     }
 
