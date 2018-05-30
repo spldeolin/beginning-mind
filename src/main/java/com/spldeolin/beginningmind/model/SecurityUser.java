@@ -97,8 +97,8 @@ public class SecurityUser implements Serializable {
     /**
      * 头像URL
      */
-    @Column(name = "headerUrl")
-    private String headerurl;
+    @Column(name = "header_url")
+    private String headerUrl;
 
     /**
      * 性别

@@ -74,7 +74,7 @@ public class SecurityUserInput implements Serializable {
      * 头像URL
      */
     @Length(max = 255)
-    private String headerurl;
+    private String headerUrl;
 
     /**
      * 性别
@@ -105,7 +105,7 @@ public class SecurityUserInput implements Serializable {
 
     public SecurityUser toModel() {
         return SecurityUser.builder().id(id).updatedAt(updatedAt).username(username).mobile(mobile).email(
-                email).enableSign(enableSign).nickname(nickname).headerurl(headerurl).sex(sex).province(province).city(
+                email).enableSign(enableSign).nickname(nickname).headerUrl(headerUrl).sex(sex).province(province).city(
                 city).area(area).build();
     }
 

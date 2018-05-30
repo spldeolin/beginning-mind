@@ -17,7 +17,7 @@
         <result column="salt" jdbcType="CHAR" property="salt"/>
         <result column="enable_sign" jdbcType="BIT" property="enableSign"/>
         <result column="nickname" jdbcType="VARCHAR" property="nickname"/>
-        <result column="headerUrl" jdbcType="VARCHAR" property="headerurl"/>
+        <result column="header_url" jdbcType="VARCHAR" property="headerUrl"/>
         <result column="sex" jdbcType="CHAR" property="sex"/>
         <result column="province" jdbcType="CHAR" property="province"/>
         <result column="city" jdbcType="CHAR" property="city"/>
