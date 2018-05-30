@@ -3,14 +3,12 @@ package com.spldeolin.beginningmind.core.aspect;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindingResult;
@@ -21,7 +19,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
@@ -45,9 +42,6 @@ import lombok.extern.log4j.Log4j2;
 @RestControllerAdvice
 @Log4j2
 public class GlobalExceptionAdvance {
-
-    @Autowired
-    private ErrorAttributes errorAttributes;
 
     @Autowired
     private CoreProperties properties;
@@ -190,7 +184,7 @@ public class GlobalExceptionAdvance {
      * </pre>
      */
     @ExceptionHandler(Throwable.class)
-    public RequestResult handle(Throwable e, WebRequest webRequest) {
+    public RequestResult handle(Throwable e) {
         ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
         RequestResult requestResult;
         if (controllerInfo == null) {
@@ -201,15 +195,15 @@ public class GlobalExceptionAdvance {
             log.error("统一异常处理被击穿！标识：" + insignia, e);
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
         }
-        // 堆栈轨迹
+        // 详细错误信息
         if (properties.isDebug()) {
-            requestResult.setData(getStacks(webRequest).get("trace"));
+            String msg = e.getMessage();
+            if (msg.length() > 200) {
+                msg = msg.substring(0, 200) + " ...";
+            }
+            requestResult.setMessage(requestResult.getMessage() + "，详细信息（" + msg + "）");
         }
         return requestResult;
-    }
-
-    private Map<String, Object> getStacks(WebRequest webRequest) {
-        return errorAttributes.getErrorAttributes(webRequest, true);
     }
 
 }
