@@ -29,7 +29,7 @@ spring:
     host: 占位符
     port: 占位符
     password: 占位符
-    timeout: 5
+    timeout: 2000 #2sec
     pool:
       max-active: 8
       max-wait: -1
