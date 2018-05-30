@@ -44,7 +44,7 @@ core:
 
   file:
     mapping: /static/
-    location: C:/beginning-mind-static/ # TODO 开发环境静态文件目录（必须）
+    location: C:/beginning-mind-static/
 
   wechat:
     a: a

@@ -56,7 +56,7 @@ management:
 
 mapper:
   mappers:
-  - com.spldeolin.beginningmind.api.CommonMapper
+  - com.spldeolin.beginningmind.core.api.CommonMapper
   not-empty: false
   identity: MYSQL
 
