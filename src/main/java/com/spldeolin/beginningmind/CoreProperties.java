@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.config;
+package com.spldeolin.beginningmind;
 
 import java.net.InetAddress;
 import javax.annotation.PostConstruct;
@@ -17,10 +17,10 @@ import lombok.extern.log4j.Log4j2;
  * 配置一览
  */
 @Component
-@ConfigurationProperties(value = "beginning-mind")
+@ConfigurationProperties(value = "core")
 @Data
 @Log4j2
-public class BeginningMindProperties {
+public class CoreProperties {
 
     /**
      * 是否处于debug场合
@@ -120,13 +120,13 @@ public class BeginningMindProperties {
     @PostConstruct
     public void validateProperties() {
         if (!file.getMapping().endsWith("/")) {
-            throw new IllegalArgumentException("beginning-mind.file.mapping必须以 / 结尾");
+            throw new IllegalArgumentException("core.file.mapping必须以 / 结尾");
         }
         if (!file.getLocation().endsWith("/")) {
-            throw new IllegalArgumentException("beginning-mind.file.location必须以 / 结尾");
+            throw new IllegalArgumentException("core.file.location必须以 / 结尾");
         }
         if (!file.getMapping().endsWith("/")) {
-            throw new IllegalArgumentException("beginning-mind.file.mapping必须以 / 开头");
+            throw new IllegalArgumentException("core.file.mapping必须以 / 开头");
         }
     }
 

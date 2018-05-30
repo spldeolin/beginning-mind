@@ -10,14 +10,15 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import com.spldeolin.beginningmind.CoreProperties;
 
 @Component
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
-    private BeginningMindProperties properties;
+    private CoreProperties properties;
 
-    @Value("${beginning-mind.file.mapping}")
+    @Value("${core.file.mapping}")
     private String mapping;
 
     /**

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.util.Signer;
 import com.spldeolin.beginningmind.valid.annotation.Mobile;
@@ -85,7 +85,7 @@ public class TestController {
     }
 
     @Autowired
-    private BeginningMindProperties properties;
+    private CoreProperties properties;
 
     @GetMapping("generateTxtFile")
     @SneakyThrows

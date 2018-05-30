@@ -28,7 +28,7 @@ import com.spldeolin.beginningmind.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.aspect.exception.RequestNotFoundException;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;
@@ -50,7 +50,7 @@ public class GlobalExceptionAdvance {
     private ErrorAttributes errorAttributes;
 
     @Autowired
-    private BeginningMindProperties properties;
+    private CoreProperties properties;
 
     /**
      * 400 请求动词错误

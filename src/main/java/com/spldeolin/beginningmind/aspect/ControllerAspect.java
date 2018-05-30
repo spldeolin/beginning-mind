@@ -24,7 +24,7 @@ import com.spldeolin.beginningmind.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.aspect.util.ProcessingTimeLogger;
 import com.spldeolin.beginningmind.cache.RedisCache;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.constant.ResultCode;
@@ -47,7 +47,7 @@ import lombok.extern.log4j.Log4j2;
 public class ControllerAspect {
 
     @Autowired
-    private BeginningMindProperties properties;
+    private CoreProperties properties;
 
     @Autowired
     private RedisCache redisCache;

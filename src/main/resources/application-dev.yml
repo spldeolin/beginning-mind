@@ -1,13 +1,56 @@
+########################
+##                    ##
+##     Devlopment     ##
+##                    ##
+########################
+
 debug: true
 
-beginning-mind:
+server:
 
-  one-cookie: 一个开发中的曲奇饼干
+  port: 8080
 
-  address: http://localhost:2333
+  context-path: /
+
+spring:
+
+  datasource:
+    source1:
+      url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
+      username: root
+      password: root
+
+  redis:
+    host: localhost
+    port: 6379
+    password: root
+
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/beginning_mind
+
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
+    spring.activemq.user: admin
+    spring.activemq.password: admin
+
+logging:
+
+  config: classpath:log4j2/log4j2-dev.yml
+
+core:
+
+  address: localhost:8080
 
   file:
     mapping: /static/
-    location: C:/beginning-mind-static/
+    location: C:/beginning-mind-static/ # TODO 开发环境静态文件目录（必须）
 
-logging.config: classpath:log4j2/log4j2-dev.yml
+  wechat:
+    a: a
+
+  qiniu:
+    a: a
+
+  yunpian:
+    a: a

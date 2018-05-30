@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.CoreProperties;
 import lombok.SneakyThrows;
 
 /**
@@ -23,7 +23,7 @@ public class ImageManager {
     public static final String IMAGE_DIRECTORY = "image";
 
     @Autowired
-    private BeginningMindProperties beginningMindProperties;
+    private CoreProperties coreProperties;
 
     public String upload(MultipartFile multipartFile) {
         if (multipartFile.isEmpty() || StringUtils.isBlank(multipartFile.getOriginalFilename())) {
@@ -34,8 +34,8 @@ public class ImageManager {
 
     @SneakyThrows
     private String uploadToLocal(MultipartFile multipartFile) {
-        String location = beginningMindProperties.getFile().getLocation();
-        String mapping = beginningMindProperties.getFile().getMapping();
+        String location = coreProperties.getFile().getLocation();
+        String mapping = coreProperties.getFile().getMapping();
         try (InputStream in = multipartFile.getInputStream()) {
             // 文件名
             String fileMd5 = DigestUtils.md5Hex(in);
@@ -47,7 +47,7 @@ public class ImageManager {
                 multipartFile.transferTo(destFile);
             }
             // 映射
-            return beginningMindProperties.getAddress() + mapping + IMAGE_DIRECTORY + "/" + destFileName;
+            return coreProperties.getAddress() + mapping + IMAGE_DIRECTORY + "/" + destFileName;
         }
     }
 

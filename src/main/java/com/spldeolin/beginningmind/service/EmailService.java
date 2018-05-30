@@ -6,7 +6,7 @@ import org.simplejavamail.email.EmailPopulatingBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.CoreProperties;
 
 /**
  * E-Mail
@@ -15,7 +15,7 @@ import com.spldeolin.beginningmind.config.BeginningMindProperties;
 public class EmailService {
 
     @Autowired
-    private BeginningMindProperties beginningMindProperties;
+    private CoreProperties coreProperties;
 
     /**
      * 发送邮件
@@ -25,7 +25,7 @@ public class EmailService {
      * @param content 邮件正文
      */
     public void sendEmail(List<String> emails, String subject, String content) {
-        BeginningMindProperties.Email prop = beginningMindProperties.getEmail();
+        CoreProperties.Email prop = coreProperties.getEmail();
         EmailPopulatingBuilder builder = EmailBuilder.startingBlank()
                 .from(prop.getAddresserName(), prop.getAddresserEmail())
                 .withSubject(subject)

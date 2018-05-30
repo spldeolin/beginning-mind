@@ -6,12 +6,14 @@ Configuration:
       name: console
       target: SYSTEM_OUT
       ThresholdFilter:
-        level: info         # 修改为“debug”可查看DEBUG级日志
+        # 修改为“debug”可查看DEBUG级日志
+        level: info
         onMatch: ACCEPT
         onMismatch: DENY
       PatternLayout:
         charset: utf-8
-        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{username} - %m%n"    # 追加“%t”可打印线程名
+        # 追加“%t”可打印线程名
+        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{username} - %m%n"
 
   Loggers:
     Root:

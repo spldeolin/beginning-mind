@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.api.exception.ServiceException;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
+import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.model.SecurityUser;
@@ -43,12 +43,12 @@ public class SignManager {
     private SecurityUserService securityAccountService;
 
     @Autowired
-    private BeginningMindProperties beginningMindProperties;
+    private CoreProperties coreProperties;
 
     @SneakyThrows
     public String captcha() {
-        String location = beginningMindProperties.getFile().getLocation();
-        String mapping = beginningMindProperties.getFile().getMapping();
+        String location = coreProperties.getFile().getLocation();
+        String mapping = coreProperties.getFile().getMapping();
         // 文件名
         String fileName = DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())) + ".gif";
         // 生成文件
@@ -59,7 +59,7 @@ public class SignManager {
             Sessions.set(CAPTCHA, CaptchaDTO.builder().captcha(gifCaptcha.getCode()).generatedAt(
                     LocalDateTime.now()).build());
             // 映射
-            return beginningMindProperties.getAddress() + mapping + CAPTCHA_DIRECTORY + "/" + fileName;
+            return coreProperties.getAddress() + mapping + CAPTCHA_DIRECTORY + "/" + fileName;
         }
     }
 
@@ -80,7 +80,7 @@ public class SignManager {
         }
         String captcha = captchaDTO.getCaptcha();
         // DEBUG环境下，验证码可以随便填
-        if (!beginningMindProperties.isDebug()) {
+        if (!coreProperties.isDebug()) {
             if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
                 throw new ServiceException("验证码错误");
             }

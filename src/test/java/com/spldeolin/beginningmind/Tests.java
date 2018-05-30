@@ -18,7 +18,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.cache.RedisCache;
-import com.spldeolin.beginningmind.config.BeginningMindProperties;
 import com.spldeolin.beginningmind.dao.BuyerMapper;
 import com.spldeolin.beginningmind.model.Goods;
 import com.spldeolin.beginningmind.model.SecurityUser;
@@ -41,7 +40,7 @@ public class Tests {
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    private BeginningMindProperties beginningMindProperties;
+    private CoreProperties coreProperties;
 
     @Autowired
     private SecurityUserService securityAccountService;
@@ -52,8 +51,8 @@ public class Tests {
 
     @Test
     public void contextLoads() {
-        log.info(beginningMindProperties);
-        log.info(ApplicationContext.getBean(BeginningMindProperties.class));
+        log.info(coreProperties);
+        log.info(ApplicationContext.getBean(CoreProperties.class));
     }
 
     @Test
@@ -106,7 +105,7 @@ public class Tests {
     @Test
     @SneakyThrows
     public void io() {
-        BeginningMindProperties properties = ApplicationContext.getBean(BeginningMindProperties.class);
+        CoreProperties properties = ApplicationContext.getBean(CoreProperties.class);
         FileUtils.writeStringToFile(new File(properties.getFile().getLocation() + File.separator + "a.txt"), "你好",
                 StandardCharsets.UTF_8);
         log.info("映射路径" + properties.getFile().getMapping() + "/a.txt");
@@ -131,7 +130,7 @@ public class Tests {
 
     @Test
     public void debug() {
-        log.info(beginningMindProperties.isDebug());
+        log.info(coreProperties.isDebug());
     }
 
     @Autowired

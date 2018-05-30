@@ -1,10 +1,13 @@
-debug: 占位
+# 所有“占位符”属性均由profile指定。
+# core节点下属性映射到CoreProperties类
+
+debug: 占位符
 
 server:
 
-  port: 2333
+  port: 占位符
 
-  context-path: /
+  context-path: 占位符
 
 spring:
 
@@ -14,18 +17,18 @@ spring:
     source1:
       type: com.alibaba.druid.pool.DruidDataSource
       driver-class-name: com.mysql.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
-      username: root
-      password: root
+      url: 占位符
+      username: 占位符
+      password: 占位符
       druid:
         initialSize: 2
         minIdle: 2
         maxActive: 30
 
   redis:
-    host: localhost
-    port: 6379
-    password: root
+    host: 占位符
+    port: 占位符
+    password: 占位符
     timeout: 5
     pool:
       max-active: 8
@@ -35,23 +38,22 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://root:root@localhost:27017/beginning_mind
+      uri: 占位符
 
   activemq:
-    broker-url: tcp://127.0.0.1:61616
-    spring.activemq.user: admin
-    spring.activemq.password: admin
+    broker-url: 占位符
+    spring.activemq.user: 占位符
+    spring.activemq.password: 占位符
 
 management:
   security:
     enabled: false
-  port: 2333
+  port: ${server.port}
   context-path: /actuator
   endpoints:
     shutdown:
       enabled: true
 
-# tk.mapper
 mapper:
   mappers:
   - com.spldeolin.beginningmind.api.CommonMapper
@@ -66,13 +68,11 @@ pagehelper:
 
 logging:
 
-  config: 占位
+  config: 占位符
 
-beginning-mind:
+core:
 
-  one-cookie: 占位
-
-  address: 占位
+  app-address: 占位符
 
   time:
     default-date-pattern: yyyy-MM-dd
@@ -81,12 +81,21 @@ beginning-mind:
     serialize-java-util-date-to-timestamp: true
 
   file:
-    mapping: 占位
-    location: 占位
+    mapping: 占位符
+    location: 占位符
 
   email:
     server-host: smtp.163.com
     server-port: 25
-    addresser-name: Beginning::Mind
-    addresser-email: 占位
-    addresser-auth-code: 占位
+    addresser-name: # TODO E-Mail
+    addresser-email: # TODO E-Mail
+    addresser-auth-code: # TODO E-Mail
+
+  wechat:
+    a: a
+
+  qiniu:
+    a: a
+
+  yunpian:
+    a: a

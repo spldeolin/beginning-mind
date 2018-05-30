@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.model.SecurityPermission;
 import com.spldeolin.beginningmind.security.ActuatorFilter;
@@ -32,7 +33,7 @@ public class ShiroConfig {
     private String actuatorUrlPrefix;
 
     @Autowired
-    private BeginningMindProperties properties;
+    private CoreProperties properties;
 
     @Autowired
     private TempTokenHolder tempTokenHolder;

@@ -1,0 +1,56 @@
+########################
+##                    ##
+##        Test        ##
+##                    ##
+########################
+
+debug: true
+
+server:
+
+  port: # TODO 测试端口
+
+  context-path: /
+
+spring:
+
+  datasource:
+    source1:
+      url: # TODO 测试数据库
+      username: #TODO 测试数据库
+      password: #TODO 测试数据库
+
+  redis:
+    host: #TODO 测试Redis
+    port: #TODO 测试Redis
+    password: #TODO 测试Redis
+
+  data:
+    mongodb:
+      uri: #TODO 测试MongoDB
+
+  activemq:
+    broker-url: #TODO 测试activeMQ
+    spring.activemq.user: #TODO 测试activeMQ
+    spring.activemq.password: #TODO 测试activeMQ
+
+logging:
+
+  config: classpath:log4j2/log4j2-test.yml
+
+core:
+
+  address: # TODO 测试域名与端口
+
+  file:
+    mapping: /static/
+    location: # TODO 测试环境静态文件目录
+
+  wechat:
+    a: a
+
+  qiniu:
+    a: a
+
+  yunpian:
+    a: a

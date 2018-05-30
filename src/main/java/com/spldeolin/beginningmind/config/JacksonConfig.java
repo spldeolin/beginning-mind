@@ -17,19 +17,20 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.spldeolin.beginningmind.CoreProperties;
 
 @Configuration
 public class JacksonConfig {
 
     @Autowired
-    private BeginningMindProperties beginningMindProperties;
+    private CoreProperties coreProperties;
 
     @Bean
     public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
-        DateTimeFormatter date = DateTimeFormatter.ofPattern(beginningMindProperties.getTime().getDefaultDatePattern());
-        DateTimeFormatter time = DateTimeFormatter.ofPattern(beginningMindProperties.getTime().getDefaultTimePattern());
+        DateTimeFormatter date = DateTimeFormatter.ofPattern(coreProperties.getTime().getDefaultDatePattern());
+        DateTimeFormatter time = DateTimeFormatter.ofPattern(coreProperties.getTime().getDefaultTimePattern());
         DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(
-                beginningMindProperties.getTime().getDefaultDatetimePattern());
+                coreProperties.getTime().getDefaultDatetimePattern());
         SimpleModule javaTimeModule = new JavaTimeModule();
 
         // 三大时间对象 序列器
@@ -43,9 +44,9 @@ public class JacksonConfig {
 
         Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
         // 是否将java.util.Date对象转化为时间戳
-        if (!Optional.ofNullable(beginningMindProperties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(
+        if (!Optional.ofNullable(coreProperties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(
                 true)) {
-            builder.simpleDateFormat(beginningMindProperties.getTime().getDefaultDatetimePattern());
+            builder.simpleDateFormat(coreProperties.getTime().getDefaultDatetimePattern());
         }
         // 忽略不认识的属性名
         builder.failOnUnknownProperties(true);
