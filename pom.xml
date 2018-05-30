@@ -379,11 +379,11 @@
                 <artifactId>simple-java-mail</artifactId>
                 <version>5.0.3</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 
     <build>
+        <finalName>beginning-mind</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
