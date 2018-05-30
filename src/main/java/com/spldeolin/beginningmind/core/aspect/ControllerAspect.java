@@ -27,7 +27,6 @@ import com.spldeolin.beginningmind.core.aspect.util.ProcessingTimeLogger;
 import com.spldeolin.beginningmind.core.cache.RedisCache;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
@@ -207,13 +206,7 @@ public class ControllerAspect {
 
     private void logThrowing(ControllerInfo controllerInfo, RequestResult requestResult) {
         log.info("...处理中断");
-        // debug模式下，内部错误的返回值的data会包含非常长的堆栈轨迹，这些堆栈轨迹已经在统一异常处理中打印过了
-        // 所以这里不再打印data
-        if (ResultCode.INTERNAL_ERROR.getCode().equals(requestResult.getCode()) && properties.isDebug()) {
-            log.info("统一异常处理返回值：" + RequestResult.failure(ResultCode.INTERNAL_ERROR, requestResult.getMessage()));
-        } else {
-            log.info("统一异常处理返回值：" + requestResult);
-        }
+        log.info("统一异常处理返回值：" + requestResult);
         log.info("返回响应。" + controllerInfo.getInsignia());
     }
 
