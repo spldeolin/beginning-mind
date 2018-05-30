@@ -39,10 +39,11 @@ import com.spldeolin.beginningmind.controller.TestController;
 import com.spldeolin.beginningmind.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.controller.annotation.Permission;
 import com.spldeolin.beginningmind.model.SecurityPermission;
+import com.spldeolin.beginningmind.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.service.SecurityPermissionService;
+import com.spldeolin.beginningmind.service.SecurityRoles2permissionsService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
-import tk.mybatis.mapper.entity.Condition;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -54,6 +55,9 @@ public class PermissionsInserter {
 
     @Autowired
     private SecurityPermissionService securityPermissionService;
+
+    @Autowired
+    private SecurityRoles2permissionsService securityRoles2permissionsService;
 
     @Test
     public void insert() {
@@ -109,19 +113,28 @@ public class PermissionsInserter {
                 log.info(securityPermission);
             }
         }
-        // `security_permission`清空数据
-        Condition condition = new Condition(SecurityPermission.class);
-        condition.selectProperties("id");
-        List<Long> ids = securityPermissionService.searchBatch(condition).stream().map(
-                SecurityPermission::getId).collect(Collectors.toList());
-        for (Long id : ids) {
-            securityPermissionService.physicallyDelete(id);
+        // 删除接口已经不存在的多余权限
+        List<String> mappings = securityPermissions.stream().map(SecurityPermission::getMapping).collect(
+                Collectors.toList());
+        for (SecurityPermission existPermission : securityPermissionService.listAll()) {
+            if (!mappings.contains(existPermission.getMapping())) {
+                log.info("权限[" + existPermission.getMapping() + "] 对应接口已不存在，删除这个权限");
+                Long existPermissionId = existPermission.getId();
+                securityPermissionService.delete(existPermissionId);
+                // 删除关联关系
+                securityRoles2permissionsService.delete(securityRoles2permissionsService.searchBatch("permissionId",
+                        existPermissionId).stream().map(SecurityRoles2permissions::getId).collect(Collectors.toList()));
+            }
         }
         // 插入`security_permission`
         for (SecurityPermission securityPermission : securityPermissions) {
             String mapping = securityPermission.getMapping();
-            securityPermissionService.create(securityPermission);
-            log.info(securityPermission.getDisplayName() + "[" + mapping + "] 插入数据库");
+            if (securityPermissionService.searchOne("mapping", mapping).isPresent()) {
+                log.warn("[" + mapping + "] 已存在，不再插入");
+            } else {
+                securityPermissionService.create(securityPermission);
+                log.info(securityPermission.getDisplayName() + "[" + mapping + "] 插入数据库");
+            }
         }
     }
 
@@ -331,9 +344,7 @@ public class PermissionsInserter {
                 className = lastDotIndex == -1 ? className.substring(beginIndex) : className.substring(beginIndex,
                         lastDotIndex);
                 classList.add(Class.forName(className));
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (ClassNotFoundException e) {
+            } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
         }
