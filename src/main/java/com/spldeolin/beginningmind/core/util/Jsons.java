@@ -33,14 +33,30 @@ public class Jsons {
     }
 
     /**
-     * 将对象转化为JSON字符串，采用默认SNAKE-CASE转化方式
+     * 转化成美化的JSON
+     * <pre>
+     * e.g.:
+     * {
+     *   "name" : "Deolin",
+     *   "age" : 18,
+     *   "isVip" : true
+     * }
+     * </pre>
+     */
+    @SneakyThrows
+    public static String toBeauty(Object object) {
+        return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+    }
+
+    /**
+     * 将对象转化为JSON，采用默认SNAKE-CASE转化方式
      */
     public static String toJson(Object object) {
         return toJson(object, defaultObjectMapper);
     }
 
     /**
-     * 将对象转化为JSON字符串，支持自定义ObjectMapper
+     * 将对象转化为JSON，支持自定义ObjectMapper
      */
     @SneakyThrows
     public static String toJson(Object object, ObjectMapper om) {
@@ -48,14 +64,14 @@ public class Jsons {
     }
 
     /**
-     * 将JSON字符串转化为对象，采用默认SNAKE-CASE转化方式
+     * 将JSON转化为对象，采用默认SNAKE-CASE转化方式
      */
     public static <T> T toObject(String json, Class<T> clazz) {
         return toObject(json, clazz, defaultObjectMapper);
     }
 
     /**
-     * 将JSON字符串转化为对象，支持自定义ObjectMapper
+     * 将JSON转化为对象，支持自定义ObjectMapper
      */
     @SneakyThrows
     public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
@@ -85,7 +101,7 @@ public class Jsons {
      *  }
      * </pre>
      *
-     * @param json 目标JSON字符串
+     * @param json 目标JSON
      * @param nodeKeys 抵达目标节点所有的节点key或数组下标
      * @return 目标值
      */
