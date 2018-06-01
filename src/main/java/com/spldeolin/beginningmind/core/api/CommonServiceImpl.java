@@ -105,6 +105,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     @Override
     public boolean isExist(Long id) {
         Condition condition = new Condition(clazz);
+        condition.selectProperties("id");
         condition.createCriteria().andEqualTo("id", id);
         return mapper.selectCountByCondition(condition) > 0;
     }
