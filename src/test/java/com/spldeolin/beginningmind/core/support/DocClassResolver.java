@@ -11,7 +11,8 @@ import com.spldeolin.beginningmind.core.support.dto.annotation.DocClassDTO;
 public class DocClassResolver {
 
     public static DocClassDTO resolve(Class controller) {
-        DocClassDTO dto = DocClassDTO.builder().name("").developer("未声明").date(LocalDate.now().toString()).build();
+        DocClassDTO dto = DocClassDTO.builder().name(controller.getSimpleName().replace("Controller", "")).developer(
+                "没有感情的杀手").date(LocalDate.now().toString()).build();
         DocClass docClass = (DocClass) controller.getAnnotation(DocClass.class);
         if (docClass == null) {
             return dto;

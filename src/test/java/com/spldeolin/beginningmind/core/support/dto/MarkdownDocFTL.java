@@ -18,6 +18,14 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class MarkdownDocFTL {
 
+    /**
+     * 上传到ShowDoc的目录名，本字段不用于渲染FreeMarker
+     */
+    private String directoryName;
+
+    /**
+     * “描述”，也会作为文件名
+     */
     private String commonDesc;
 
     private String httpUrl;
@@ -34,7 +42,7 @@ public class MarkdownDocFTL {
 
     private String returnJson;
 
-    private Boolean returnFieldsShow;
+    private Boolean isRetrunSimpleType;
 
     private List<RField> returnFields;
 
@@ -69,6 +77,7 @@ public class MarkdownDocFTL {
     }
 
     public void fromDocClassDTO(DocClassDTO dto) {
+        directoryName = dto.getName();
         commonDeveloper = dto.getDeveloper();
         commonDate = dto.getDate();
     }

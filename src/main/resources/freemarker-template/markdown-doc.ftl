@@ -13,8 +13,7 @@
 ### 参数示例
 
 <#if paramShow == false>
-（无需参数）
-<br>
+- 无需参数
 </#if>
 <#if paramShow == true>
 ```json
@@ -33,16 +32,20 @@ ${paramJson}
 </#list>
 <br>
 </#if>
-
-<#if returnShow == true>
 ### 返回值示例
 
+<#if returnShow == false>
+- 没有返回值
+</#if>
+<#if returnShow == true>
 ```json
 ${returnJson}
 ```
 <br>
-<#if returnFieldsShow == true>
+</#if>
 
+<#if returnShow == true>
+<#if isRetrunSimpleType == false>
 ### 返回值说明
 
 |名称|JSON类型|描述|
@@ -56,4 +59,4 @@ ${returnJson}
 
 ### 开发者
 
-${commonDeveloper} ${commonDate}
+- ${commonDeveloper} ${commonDate}

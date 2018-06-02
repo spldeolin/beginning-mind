@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -79,6 +80,8 @@ public class Goods implements Serializable {
      */
     @Column(name = "stock_balance")
     private Integer stockBalance;
+
+    private List<Seller> sellers;
 
     private static final long serialVersionUID = 1L;
 }

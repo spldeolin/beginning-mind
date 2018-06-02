@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -60,6 +61,8 @@ public class Seller implements Serializable {
      * 昵称
      */
     private String nickname;
+
+    private List<Buyer> buyers;
 
     private static final long serialVersionUID = 1L;
 }

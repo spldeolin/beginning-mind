@@ -2,12 +2,15 @@ package com.spldeolin.beginningmind.core.support;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.objenesis.Objenesis;
 import org.springframework.objenesis.ObjenesisStd;
 import com.google.common.collect.Lists;
@@ -31,7 +34,7 @@ public class RequestMethodAnalysiser {
     @SneakyThrows
     public static void analysis(Method requestMethod, MarkdownDocFTL template) {
         RequestMethodInfoDTO dto = RequestMethodResolver.resolve(requestMethod);
-        template.setCommonDesc(Nulls.toEmpty(dto.getDesc()));
+        template.setCommonDesc(dto.getDesc());
         String mapping = dto.getMapping();
         String hUrl = template.getHttpUrl();
         if (hUrl != null) {
@@ -41,6 +44,13 @@ public class RequestMethodAnalysiser {
         }
         template.setHttpUrl(hUrl);
         template.setHttpMethod(dto.getHttpMethod());
+        String developer = dto.getDeveloper();
+        if (StringUtils.isNotBlank(developer)) {
+            template.setCommonDeveloper(developer);
+        }
+        /*
+            开始处理Return Type
+          */
         Class returnType = dto.getReturnType();
         // 用于决定 生成JSON示例时是否需要在最外层套上一层List或Page
         boolean isList = Nulls.toFalse(dto.getIsReturnList());
@@ -51,7 +61,7 @@ public class RequestMethodAnalysiser {
             template.setReturnShow(true);
             // 简单类型则不显示“返回值说明”
             if (isSimpleClass(returnType)) {
-                template.setReturnFieldsShow(false);
+                template.setIsRetrunSimpleType(true);
                 if (returnType == String.class) {
                     template.setReturnJson("\"demoString\"");
                 } else if (returnType == Integer.class || returnType == Long.class) {
@@ -63,7 +73,7 @@ public class RequestMethodAnalysiser {
                     System.exit(0);
                 }
             } else {
-                template.setReturnFieldsShow(true);
+                template.setIsRetrunSimpleType(false);
                 List<Field> allFields = new ArrayList<>();
                 loadClassSimpleFields(returnType, allFields);
                 List<MarkdownDocFTL.RField> rFields = new ArrayList<>();
@@ -88,16 +98,21 @@ public class RequestMethodAnalysiser {
                     }
                     DocField docField = field.getAnnotation(DocField.class);
                     if (docField == null) {
-                        rField.setReturnDesc("");
+                        rField.setReturnDesc("　");
                     } else {
-                        rField.setReturnDesc(Nulls.toEmpty(docField.desc()));
+                        String desc = docField.desc();
+                        if (StringUtils.isBlank(desc)) {
+                            desc = "　";
+                        }
+                        rField.setReturnDesc(desc);
                     }
                     rFields.add(rField);
                 }
                 template.setReturnFields(rFields);
                 Object returnValue = objenesis.newInstance(returnType);
+                // TODO 里面有复杂对象的情况怎么处理。
                 if (isList) {
-                    returnValue = Lists.newArrayList(returnValue, returnValue);
+                    returnValue = Lists.newArrayList(returnValue);
                 }
                 if (isPage) {
                     Page page = Page.empty();
@@ -117,6 +132,15 @@ public class RequestMethodAnalysiser {
     private static void loadClassSimpleFields(Class clazz, List<Field> fields) {
         for (Field field : clazz.getDeclaredFields()) {
             Class fieldClass = field.getType();
+            if (fieldClass == List.class || fieldClass == Page.class) {
+                Type genericFieldType = field.getGenericType();
+                if (genericFieldType instanceof ParameterizedType) {
+                    ParameterizedType aType = (ParameterizedType) genericFieldType;
+                    for (Type fieldArgType : aType.getActualTypeArguments()) {
+                        fieldClass = (Class) fieldArgType;
+                    }
+                }
+            }
             if (isSimpleClass(fieldClass)) {
                 fields.add(field);
             } else {

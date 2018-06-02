@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.commons.io.FileUtils;
 import com.spldeolin.beginningmind.core.support.dto.ControllerDefinition;
 import com.spldeolin.beginningmind.core.support.dto.MarkdownDocFTL;
-import com.spldeolin.beginningmind.core.support.dto.annotation.DocClassDTO;
 import com.spldeolin.beginningmind.core.support.util.ControllerLoadUtils;
 import com.spldeolin.beginningmind.core.support.util.FreeMarkerUtil;
 import lombok.SneakyThrows;
@@ -26,20 +25,24 @@ public class DocGenerator {
         String packageReference = "com.spldeolin.beginningmind.core.controller";
         String packagePath = "C:\\java-development\\projects-repo\\deolin-projects\\beginning-mind\\src\\main\\java\\" +
                 "com\\spldeolin\\beginningmind\\core\\controller";
+        // 获取指定包下所有的**有效**控制器
         List<ControllerDefinition> controllers = ControllerLoadUtils.loadControllers(packagePath,
                 packageReference, true);
+        // 遍历每个请求方法
         for (ControllerDefinition definition : controllers) {
             Class controller = definition.getController();
             for (Method requestMethod : definition.getRequestMethods()) {
+                // 组装数据
                 MarkdownDocFTL template = new MarkdownDocFTL();
-                DocClassDTO docClassDTO = DocClassResolver.resolve(controller);
-                template.fromDocClassDTO(docClassDTO);
+                template.fromDocClassDTO(DocClassResolver.resolve(controller));
+                template.fromClassRequestMappingDTO(ClassRequestMappingResolver.resolve(controller));
                 RequestMethodAnalysiser.analysis(requestMethod, template);
-                log.info(template);
+                // 渲染Free Marker，生成Markdown文件
                 template.setParamShow(false);
+                log.info(template);
                 String content = FreeMarkerUtil.format("markdown-doc.ftl", template);
                 FileUtils.writeStringToFile(
-                        new File("C:\\mddoc\\" + docClassDTO.getName() + "\\" + template.getCommonDesc() + ".md"), content,
+                        new File("C:\\mddoc\\" + template.getDirectoryName() + "\\" + template.getCommonDesc() + ".md"), content,
                         StandardCharsets.UTF_8);
             }
         }
