@@ -1,0 +1,22 @@
+Configuration:
+  status: warn
+
+  Appenders:
+    Console:
+      name: console
+      target: SYSTEM_OUT
+      ThresholdFilter:
+        # 修改为“debug”可查看DEBUG级日志
+        level: info
+        onMatch: ACCEPT
+        onMismatch: DENY
+      PatternLayout:
+        charset: utf-8
+        # 追加“%t”可打印线程名
+        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{username} - %m%n"
+
+  Loggers:
+    Root:
+      level: all
+      AppenderRef:
+      - ref: console

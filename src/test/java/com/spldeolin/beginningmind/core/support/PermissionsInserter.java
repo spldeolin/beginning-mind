@@ -19,12 +19,10 @@ import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import org.assertj.core.util.Lists;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.stereotype.Controller;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -32,7 +30,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.controller.SignController;
 import com.spldeolin.beginningmind.core.controller.TestController;
@@ -42,6 +39,8 @@ import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
 import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
+import com.spldeolin.beginningmind.core.support.dto.ControllerDefinition;
+import com.spldeolin.beginningmind.core.support.util.ControllerLoadUtils;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
@@ -61,31 +60,14 @@ public class PermissionsInserter {
 
     @Test
     public void insert() {
-        String packageName = "com.spldeolin.beginningmind.controller.core";
-        // 获取所有Class
-        List<Class> classes = listClasses(packageName, true);
-        // 找出所有符合要求的控制器与请求方法
-        List<ControllerDefinition> controllerDefinitions = new ArrayList<>();
-        classes.removeAll(Lists.newArrayList(EXCLUDED_CLASS));
-        for (Class clazz : classes) {
-            if (isContoller(clazz)) {
-                List<Method> requestMethods = new ArrayList<>();
-                for (Method method : clazz.getDeclaredMethods()) {
-                    if (isRequestMethod(method)) {
-                        requestMethods.add(method);
-                    }
-                }
-                if (requestMethods.size() > 0) {
-                    ControllerDefinition controllerDefinition = new ControllerDefinition();
-                    controllerDefinition.setController(clazz);
-                    controllerDefinition.setRequestMethods(requestMethods);
-                    controllerDefinitions.add(controllerDefinition);
-                }
-            }
-        }
+        String packageReference = "com.spldeolin.beginningmind.core.controller";
+        String packagePath = "C:\\java-development\\projects-repo\\deolin-projects\\beginning-mind\\src\\main\\java\\" +
+                "com\\spldeolin\\beginningmind\\core\\controller";
+        List<ControllerDefinition> controllers = ControllerLoadUtils.loadControllers(packagePath,
+                packageReference, true);
         List<SecurityPermission> securityPermissions = new ArrayList<>();
         // 解析控制器
-        for (ControllerDefinition controllerDefinition : controllerDefinitions) {
+        for (ControllerDefinition controllerDefinition : controllers) {
             Class controller = controllerDefinition.getController();
             RequestMapping requestMapping = (RequestMapping) controller.getAnnotation(RequestMapping.class);
             String[] controllerMappings = requestMapping == null ? new String[] {""} : requestMapping.value();
@@ -136,30 +118,6 @@ public class PermissionsInserter {
                 log.info(securityPermission.getDisplayName() + "[" + mapping + "] 插入数据库");
             }
         }
-    }
-
-    private boolean isContoller(Class clazz) {
-        boolean isController = false;
-        for (Annotation annotation : clazz.getAnnotations()) {
-            if (annotation instanceof RestController || annotation instanceof Controller) {
-                isController = true;
-                break;
-            }
-        }
-        return isController;
-    }
-
-    private boolean isRequestMethod(Method method) {
-        boolean isRequestMethod = false;
-        for (Annotation annotation : method.getAnnotations()) {
-            if (annotation instanceof RequestMapping || annotation instanceof GetMapping ||
-                    annotation instanceof PostMapping || annotation instanceof PutMapping ||
-                    annotation instanceof DeleteMapping) {
-                isRequestMethod = true;
-                break;
-            }
-        }
-        return isRequestMethod;
     }
 
     private String getMapping(Method requestMethod) {

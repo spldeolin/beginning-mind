@@ -31,4 +31,11 @@ public class Nulls {
         return s;
     }
 
+    public static Boolean toFalse(Boolean b) {
+        if (null == b) {
+            return Boolean.FALSE;
+        }
+        return b;
+    }
+
 }

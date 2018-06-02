@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core;
+package com.spldeolin.beginningmind.core.support;
 
 import java.io.File;
 import java.io.IOException;

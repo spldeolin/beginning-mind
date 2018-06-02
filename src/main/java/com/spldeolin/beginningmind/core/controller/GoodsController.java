@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.controller.annotation.DocClass;
+import com.spldeolin.beginningmind.core.controller.annotation.DocMethod;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
 import com.spldeolin.beginningmind.core.input.GoodsInput;
+import com.spldeolin.beginningmind.core.model.Goods;
 import com.spldeolin.beginningmind.core.service.GoodsService;
 
 /**
@@ -28,6 +31,7 @@ import com.spldeolin.beginningmind.core.service.GoodsService;
  *
  * @author Deolin 2018/5/26
  */
+@DocClass(name = "商品管理", developer = "Deolin", date = "2018/05/26")
 @RestController
 @RequestMapping("/goods")
 @Validated
@@ -39,6 +43,7 @@ public class GoodsController {
     /**
      * 创建一个“商品”
      */
+    @DocMethod(desc = "创建一个商品", returnType = Long.class)
     @Permission(displayName = "创建商品")
     @PostMapping("/create")
     Object create(@RequestBody @Valid GoodsInput goodsInput) {
@@ -48,6 +53,7 @@ public class GoodsController {
     /**
      * 获取一个“商品”
      */
+    @DocMethod(desc = "获取一个商品", returnType = Goods.class)
     @Permission(displayName = "商品详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
@@ -57,6 +63,7 @@ public class GoodsController {
     /**
      * 更新一个“商品”
      */
+    @DocMethod(desc = "更新一个商品", returnType = Void.class)
     @Permission(displayName = "更新商品")
     @PostMapping("/update/{id}")
     Object update(@PathVariable Long id, @RequestBody @Valid GoodsInput goodsInput) {
@@ -67,6 +74,7 @@ public class GoodsController {
     /**
      * 删除一个“商品”
      */
+    @DocMethod(desc = "删除一个商品", returnType = Void.class)
     @Permission(displayName = "删除商品")
     @PostMapping("/delete/{id}")
     Object delete(@PathVariable Long id) {
@@ -77,6 +85,7 @@ public class GoodsController {
     /**
      * 获取一批“商品”
      */
+    @DocMethod(desc = "获取一批商品", returnType = Goods.class, isReturnList = true)
     @Permission(displayName = "商品列表")
     @GetMapping("/search")
     Object page(@RequestParam(defaultValue = "1") Integer pageNo,
@@ -87,6 +96,7 @@ public class GoodsController {
     /**
      * 删除一批“商品”
      */
+    @DocMethod(desc = "删除一批商品", returnType = String.class)
     @Permission(displayName = "批量删除商品")
     @PostMapping("/batchDelete")
     Object delete(@RequestBody List<Long> ids) {

@@ -26,7 +26,7 @@ public class Jsons {
     }
 
     private static void initDefaultObjectMapper() {
-        defaultObjectMapper = ApplicationContext.getBean(ObjectMapper.class);
+        //defaultObjectMapper = ApplicationContext.getBean(ObjectMapper.class);
         if (defaultObjectMapper == null) {
             defaultObjectMapper = new ObjectMapper();
         }

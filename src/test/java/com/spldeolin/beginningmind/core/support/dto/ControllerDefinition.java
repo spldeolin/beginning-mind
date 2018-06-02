@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.support;
+package com.spldeolin.beginningmind.core.support.dto;
 
 import java.lang.reflect.Method;
 import java.util.List;
