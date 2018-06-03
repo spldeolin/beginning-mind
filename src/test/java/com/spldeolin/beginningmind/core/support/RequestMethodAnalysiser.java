@@ -60,7 +60,7 @@ public class RequestMethodAnalysiser {
         } else {
             template.setReturnShow(true);
             // 简单类型则不显示“返回值说明”
-            if (isSimpleClass(returnType)) {
+            if (isSimpleType(returnType)) {
                 template.setIsRetrunSimpleType(true);
                 if (returnType == String.class) {
                     template.setReturnJson("\"demoString\"");
@@ -110,7 +110,7 @@ public class RequestMethodAnalysiser {
                 }
                 template.setReturnFields(rFields);
                 Object returnValue = objenesis.newInstance(returnType);
-                // TODO 里面有复杂对象的情况怎么处理。
+                setFieldValue(returnValue);
                 if (isList) {
                     returnValue = Lists.newArrayList(returnValue);
                 }
@@ -124,7 +124,11 @@ public class RequestMethodAnalysiser {
                     page.setTotal(65535L);
                     returnValue = page;
                 }
-                template.setReturnJson(Jsons.toBeauty(returnValue).replace("null", "val"));
+                String json = Jsons.toBeauty(returnValue);
+                json = json.replace("null", "val");
+                json = json.replace("  ", "    ");
+                json = json.replace("\" :", "\":");
+                template.setReturnJson(json);
             }
         }
     }
@@ -132,16 +136,10 @@ public class RequestMethodAnalysiser {
     private static void loadClassSimpleFields(Class clazz, List<Field> fields) {
         for (Field field : clazz.getDeclaredFields()) {
             Class fieldClass = field.getType();
-            if (fieldClass == List.class || fieldClass == Page.class) {
-                Type genericFieldType = field.getGenericType();
-                if (genericFieldType instanceof ParameterizedType) {
-                    ParameterizedType aType = (ParameterizedType) genericFieldType;
-                    for (Type fieldArgType : aType.getActualTypeArguments()) {
-                        fieldClass = (Class) fieldArgType;
-                    }
-                }
+            if (isCollectionType(field)) {
+                fieldClass = getGenericType(field);
             }
-            if (isSimpleClass(fieldClass)) {
+            if (isSimpleType(fieldClass)) {
                 fields.add(field);
             } else {
                 loadClassSimpleFields(fieldClass, fields);
@@ -149,13 +147,56 @@ public class RequestMethodAnalysiser {
         }
     }
 
-    private static boolean isSimpleClass(Class clazz) {
+    private static boolean isSimpleType(Class clazz) {
         /* TODO 还应该考虑其他简单类型 */
         return clazz == String.class ||
                 clazz == Integer.class || clazz == Long.class ||
                 clazz == Double.class || clazz == BigDecimal.class ||
                 clazz == Boolean.class ||
                 clazz == LocalDate.class || clazz == LocalTime.class || clazz == LocalDateTime.class;
+    }
+
+    private static boolean isCollectionType(Field field) {
+        Class clazz = field.getType();
+        return clazz == List.class || clazz == Page.class;
+    }
+
+    private static Class getGenericType(Field field) {
+        Type genericFieldType = field.getGenericType();
+        if (genericFieldType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericFieldType;
+            return (Class) parameterizedType.getActualTypeArguments()[0];
+        }
+        return field.getType();
+    }
+
+    /**
+     * 设置值。
+     * 简单类型忽略，
+     * 复杂类型设置空对象，并递归
+     */
+    @SneakyThrows
+    private static void setFieldValue(Object object) {
+        Class clazz = object.getClass();
+        for (Field field : clazz.getDeclaredFields()) {
+            if (field.getName().equals("serialVersionUID")) {
+                continue;
+            }
+            Class fieldClass = field.getType();
+            boolean isList = fieldClass == List.class;
+            if (isList) {
+                fieldClass = getGenericType(field);
+            }
+            if (!isSimpleType(fieldClass)) {
+                Object fieldValue = objenesis.newInstance(fieldClass);
+                setFieldValue(fieldValue);
+                if (isList) {
+                    fieldValue = Lists.newArrayList(fieldValue);
+                }
+                field.setAccessible(true);
+                field.set(object, fieldValue);
+            }
+        }
     }
 
 }

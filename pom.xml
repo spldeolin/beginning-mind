@@ -206,11 +206,10 @@
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
         </dependency>
-
+        <!--freemarker-->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.23</version>
         </dependency>
 
         <!--mysql-->
@@ -235,157 +234,169 @@
 
     <dependencyManagement>
         <dependencies>
-            <!-- spring session-->
+            <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
             <dependency>
                 <groupId>org.springframework.session</groupId>
                 <artifactId>spring-session-data-redis</artifactId>
                 <version>1.3.3.RELEASE</version>
             </dependency>
-            <!--jsr310-->
+            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.datatype/jackson-datatype-jsr310 -->
             <dependency>
                 <groupId>com.fasterxml.jackson.datatype</groupId>
                 <artifactId>jackson-datatype-jsr310</artifactId>
                 <version>2.9.5</version>
             </dependency>
-            <!--log4j2 yml-->
+            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.dataformat/jackson-dataformat-yaml -->
             <dependency>
                 <groupId>com.fasterxml.jackson.dataformat</groupId>
                 <artifactId>jackson-dataformat-yaml</artifactId>
                 <version>2.9.5</version>
             </dependency>
-            <!--log adapter-->
+            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-1.2-api -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-1.2-api</artifactId>
                 <version>2.11.0</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jcl -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-jcl</artifactId>
                 <version>2.11.0</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-jul -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-jul</artifactId>
                 <version>2.11.0</version>
+                <scope>runtime</scope>
             </dependency>
-            <!--druid-->
+            <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>druid-spring-boot-starter</artifactId>
-                <version>1.1.9</version>
+                <version>1.1.10</version>
             </dependency>
-            <!--mybatis-->
+            <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
             <dependency>
                 <groupId>org.mybatis.spring.boot</groupId>
                 <artifactId>mybatis-spring-boot-starter</artifactId>
                 <version>1.3.2</version>
             </dependency>
-            <!--tk.mapper-->
+            <!-- https://mvnrepository.com/artifact/tk.mybatis/mapper-spring-boot-starter -->
             <dependency>
                 <groupId>tk.mybatis</groupId>
                 <artifactId>mapper-spring-boot-starter</artifactId>
                 <version>1.2.4</version>
             </dependency>
-            <!--tk.pagehelper-->
+            <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
                 <artifactId>pagehelper-spring-boot-starter</artifactId>
                 <version>1.2.5</version>
             </dependency>
-            <!--shiro-->
+            <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
             <dependency>
                 <groupId>org.apache.shiro</groupId>
                 <artifactId>shiro-spring</artifactId>
                 <version>1.4.0</version>
             </dependency>
-            <!--shiro redis-->
+            <!-- https://mvnrepository.com/artifact/org.crazycake/shiro-redis -->
             <dependency>
                 <groupId>org.crazycake</groupId>
                 <artifactId>shiro-redis</artifactId>
                 <version>3.0.0</version>
             </dependency>
-            <!--swagger-->
+            <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger2</artifactId>
                 <version>2.8.0</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
             <dependency>
                 <groupId>io.springfox</groupId>
                 <artifactId>springfox-swagger-ui</artifactId>
                 <version>2.8.0</version>
             </dependency>
-            <!--commons lang3-->
+            <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
             <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-lang3</artifactId>
                 <version>3.7</version>
             </dependency>
-            <!--guava-->
+            <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>25.0-jre</version>
+                <version>25.1-jre</version>
             </dependency>
-            <!--okhttp-->
+            <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
             <dependency>
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>okhttp</artifactId>
                 <version>3.10.0</version>
             </dependency>
-            <!--protostuff-->
+            <!-- https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-core -->
             <dependency>
                 <groupId>com.dyuproject.protostuff</groupId>
                 <artifactId>protostuff-core</artifactId>
                 <version>1.1.3</version>
             </dependency>
+            <!-- https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-runtime -->
             <dependency>
                 <groupId>com.dyuproject.protostuff</groupId>
                 <artifactId>protostuff-runtime</artifactId>
                 <version>1.1.3</version>
             </dependency>
-            <!--objenesis-->
+            <!-- https://mvnrepository.com/artifact/org.objenesis/objenesis -->
             <dependency>
                 <groupId>org.objenesis</groupId>
                 <artifactId>objenesis</artifactId>
                 <version>2.6</version>
+                <scope>test</scope>
             </dependency>
-            <!--poi-->
+            <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
             <dependency>
                 <groupId>org.apache.poi</groupId>
                 <artifactId>poi-ooxml</artifactId>
                 <version>3.17</version>
             </dependency>
-            <!--commons io-->
+            <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>2.6</version>
             </dependency>
-            <!--commons codec-->
+            <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.11</version>
             </dependency>
-            <!--zxing-->
+            <!-- https://mvnrepository.com/artifact/com.google.zxing/core -->
             <dependency>
                 <groupId>com.google.zxing</groupId>
-                <artifactId>javase</artifactId>
-                <version>3.3.2</version>
+                <artifactId>core</artifactId>
+                <version>3.3.3</version>
             </dependency>
-            <!--kaptcha-->
+            <!-- https://mvnrepository.com/artifact/com.github.penggle/kaptcha -->
             <dependency>
                 <groupId>com.github.penggle</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>2.3.2</version>
             </dependency>
-            <!--simple java email-->
+            <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
             <dependency>
                 <groupId>org.simplejavamail</groupId>
                 <artifactId>simple-java-mail</artifactId>
                 <version>5.0.3</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
+            <dependency>
+                <groupId>org.freemarker</groupId>
+                <artifactId>freemarker</artifactId>
+                <version>2.3.28</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
