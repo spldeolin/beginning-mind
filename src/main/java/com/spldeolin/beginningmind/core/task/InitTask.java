@@ -14,7 +14,7 @@ import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 汇总：项目刚启动执行一次的任务
+ * 项目刚启动执行一次的任务汇总
  *
  * @author Deolin 2018/05/31
  */
