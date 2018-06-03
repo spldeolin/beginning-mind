@@ -21,9 +21,11 @@ import com.spldeolin.beginningmind.core.cache.RedisCache;
 import com.spldeolin.beginningmind.core.dao.BuyerMapper;
 import com.spldeolin.beginningmind.core.model.Goods;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.SecurityUsers2permissions;
 import com.spldeolin.beginningmind.core.model.Seller;
 import com.spldeolin.beginningmind.core.service.EmailService;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
+import com.spldeolin.beginningmind.core.service.SecurityUsers2permissionsService;
 import com.spldeolin.beginningmind.core.util.ApplicationContext;
 import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
@@ -141,6 +143,21 @@ public class Tests {
         emailService.sendEmail(
                 Lists.newArrayList("deolin@foxmail.com", "splendid.deolin@gmail.com", "3126575878@qq.com"), "汉字",
                 "汉字啊啊啊啊");
+    }
+
+    @Autowired
+    private SecurityUsers2permissionsService securityUsers2permissionsService;
+
+    @Test
+    public void testU2P() {
+        Long id = securityUsers2permissionsService.createEX(
+                SecurityUsers2permissions.builder().userId(1L).permissionId(257L).build());
+        log.info(securityUsers2permissionsService.get(id));
+        log.info(securityUsers2permissionsService.searchBatch("userId", 1L));
+
+        securityUsers2permissionsService.deleteEX(id);
+        log.info(securityUsers2permissionsService.get(id));
+        log.info(securityUsers2permissionsService.searchBatch("userId", 1L));
     }
 
 }

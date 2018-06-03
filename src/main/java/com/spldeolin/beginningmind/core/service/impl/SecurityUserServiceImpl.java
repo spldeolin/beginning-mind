@@ -28,6 +28,7 @@ import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.model.SecurityUsers2roles;
 import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
+import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.service.SecurityUsers2rolesService;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
@@ -50,7 +51,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     private SecurityUsers2rolesService securityUsers2rolesService;
 
     @Autowired
-    private com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService securityRoles2permissionsService;
+    private SecurityRoles2permissionsService securityRoles2permissionsService;
 
     @Autowired
     private SecurityPermissionService securityPermissionService;
@@ -166,6 +167,8 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
         if (permissions.size() == 0) {
             return result;
         }
+        // user 2 permission
+
         // perm mapping
         for (SecurityPermission permission : permissions) {
             result.add(permission.getMark());
