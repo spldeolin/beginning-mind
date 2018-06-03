@@ -135,6 +135,9 @@ public class RequestMethodAnalysiser {
 
     private static void loadClassSimpleFields(Class clazz, List<Field> fields) {
         for (Field field : clazz.getDeclaredFields()) {
+            if(field.getName().equals("serialVersionUID")) {
+                continue;
+            }
             Class fieldClass = field.getType();
             if (isCollectionType(field)) {
                 fieldClass = getGenericType(field);

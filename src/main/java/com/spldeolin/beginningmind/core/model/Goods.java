@@ -83,5 +83,7 @@ public class Goods implements Serializable {
 
     private List<Seller> sellers;
 
+    private List<BigDecimal> moneys;
+
     private static final long serialVersionUID = 1L;
 }

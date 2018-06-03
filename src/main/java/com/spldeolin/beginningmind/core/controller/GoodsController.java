@@ -46,8 +46,8 @@ public class GoodsController {
     @DocMethod(desc = "创建一个商品", returnType = Long.class)
     @Permission(displayName = "创建商品")
     @PostMapping("/create")
-    Object create(@RequestBody @Valid GoodsInput goodsInput) {
-        return goodsService.createEX(goodsInput.toModel());
+    Object create(@RequestBody @Valid Goods goodsInput) {
+        return goodsService.createEX(goodsInput);
     }
 
     /**
