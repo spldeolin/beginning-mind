@@ -7,7 +7,7 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.util.SerializationUtils;
+import com.spldeolin.beginningmind.core.cache.util.SerializationUtils;
 
 @Component
 public class RedisCache {

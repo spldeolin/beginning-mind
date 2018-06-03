@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util;
+package com.spldeolin.beginningmind.core.cache.util;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
