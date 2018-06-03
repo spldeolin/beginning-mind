@@ -36,7 +36,7 @@ spring:
 
 logging:
 
-  config: classpath:log4j2/log4j2-dev.yml
+  config: # 不指定，使用缺省的src/main/resources/log4j2.yml
 
 core:
 

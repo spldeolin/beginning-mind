@@ -68,7 +68,7 @@ pagehelper:
 
 logging:
 
-  config: 占位符
+  config: #未被覆盖时使用默认log4j2.yml
 
 core:
 
