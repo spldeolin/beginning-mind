@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.TimeZone;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -49,9 +50,9 @@ public class JacksonConfig {
             builder.simpleDateFormat(coreProperties.getTime().getDefaultDatetimePattern());
         }
         // 忽略不认识的属性名
-        builder.failOnUnknownProperties(true);
+        builder.failOnUnknownProperties(false);
         // 时区
-        builder.timeZone("GMT+8");
+        builder.timeZone(TimeZone.getDefault());
         return builder;
     }
 

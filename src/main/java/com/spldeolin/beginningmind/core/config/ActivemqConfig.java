@@ -7,7 +7,7 @@ import org.apache.activemq.command.ActiveMQQueue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import com.beust.jcommander.internal.Lists;
+import com.google.common.collect.Lists;
 
 @Configuration
 public class ActivemqConfig {
