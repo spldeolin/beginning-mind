@@ -85,7 +85,7 @@ public class ShiroConfig {
             filterChainDefinitions.put(securityPermission.getMapping(),
                     SignFilter.MARK + ", perms[" + securityPermission.getMark() + "]");
         }
-        // DEBUG环境下放行一切请求
+        // DEBUG环境下放行一切请求（不进行任何认证和鉴权的访问控制）
         if (properties.isDebug()) {
             filterChainDefinitions = new LinkedHashMap<>();
             filterChainDefinitions.put("/**", "anon");

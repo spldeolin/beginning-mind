@@ -9,6 +9,7 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.FindByIndexNameSessionRepository;
@@ -26,10 +27,12 @@ import com.spldeolin.beginningmind.core.dao.SecurityUserMapper;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.SecurityUsers2permissions;
 import com.spldeolin.beginningmind.core.model.SecurityUsers2roles;
 import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
 import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
+import com.spldeolin.beginningmind.core.service.SecurityUsers2permissionsService;
 import com.spldeolin.beginningmind.core.service.SecurityUsers2rolesService;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
@@ -52,6 +55,9 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
 
     @Autowired
     private SecurityRoles2permissionsService securityRoles2permissionsService;
+
+    @Autowired
+    private SecurityUsers2permissionsService securityUsers2permissionsService;
 
     @Autowired
     private SecurityPermissionService securityPermissionService;
@@ -139,18 +145,15 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     @Override
     public List<String> listUserPermissions(Long userId) {
         List<String> result = Lists.newArrayList();
-        // user
+        // `user`
         SecurityUser user = this.get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
-        // user 2 role
+        // `user 2 role`
         List<SecurityUsers2roles> roleAssociations = securityUsers2rolesService.searchBatch("userId", user.getId());
         if (roleAssociations.size() == 0) {
             return result;
         }
-        // role 2 perm
-        List<Long> roleIds = Lists.newArrayList();
-        for (SecurityUsers2roles roleAssociation : roleAssociations) {
-            roleIds.add(roleAssociation.getRoleId());
-        }
+        // `role 2 perm`
+        List<Long> roleIds = roleAssociations.stream().map(SecurityUsers2roles::getRoleId).collect(Collectors.toList());
         Condition condition = new Condition(SecurityRoles2permissions.class);
         condition.createCriteria().andIn("roleId", roleIds);
         List<SecurityRoles2permissions> permissionAssociations = securityRoles2permissionsService.searchBatch(
@@ -158,18 +161,17 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
         if (permissionAssociations.size() == 0) {
             return result;
         }
-        // perm
-        List<Long> permissionIds = Lists.newArrayList();
-        for (SecurityRoles2permissions permissionAssociation : permissionAssociations) {
-            permissionIds.add(permissionAssociation.getPermissionId());
-        }
+        List<Long> permissionIds = permissionAssociations.stream().map(
+                SecurityRoles2permissions::getPermissionId).collect(Collectors.toList());
+        // `user 2 permission`
+        permissionIds.addAll(securityUsers2permissionsService.searchBatch("userId", userId).stream().map(
+                SecurityUsers2permissions::getPermissionId).collect(Collectors.toList()));
+        // `perm`
         List<SecurityPermission> permissions = securityPermissionService.get(permissionIds);
         if (permissions.size() == 0) {
             return result;
         }
-        // user 2 permission
-
-        // perm mapping
+        // 过滤器链
         for (SecurityPermission permission : permissions) {
             result.add(permission.getMark());
         }
