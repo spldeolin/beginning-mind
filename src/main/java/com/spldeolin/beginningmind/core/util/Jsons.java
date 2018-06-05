@@ -144,6 +144,9 @@ public class Jsons {
                 node = node.get(nodeKey);
             }
         }
+        if (node == null) {
+            return null;
+        }
         return node.asText();
     }
 
