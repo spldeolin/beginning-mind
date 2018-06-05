@@ -24,6 +24,9 @@ import okhttp3.Response;
 @UtilityClass
 public class Https {
 
+    private static final String DISGUISED_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Chrome/66.0.3359.181 Safari/537.36";
+
     private static OkHttpClient client;
 
     static {
@@ -38,7 +41,7 @@ public class Https {
      */
     @SneakyThrows
     public static String get(String url) {
-        Request request = new Request.Builder().url(url).build();
+        Request request = new Request.Builder().url(url).header("User-Agent", DISGUISED_USER_AGENT).build();
         Response response = client.newCall(request).execute();
         // response.body() return null impossibly
         return response.body().string();
@@ -53,7 +56,7 @@ public class Https {
     @SneakyThrows
     public static String postJson(String url, String json) {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
-        Request request = new Request.Builder().url(url).post(body).build();
+        Request request = new Request.Builder().url(url).post(body).header("User-Agent", DISGUISED_USER_AGENT).build();
         Response response = client.newCall(request).execute();
         // response.body() return null impossibly
         return response.body().string();
@@ -90,10 +93,14 @@ public class Https {
             }
         }
         okhttp3.RequestBody body = form.build();
-        Request request = new Request.Builder().url(url).post(body).build();
+        Request request = new Request.Builder().url(url).post(body).header("User-Agent", DISGUISED_USER_AGENT).build();
         Response response = client.newCall(request).execute();
         // response.body() return null impossibly
         return response.body().string();
+    }
+
+    private void disguise() {
+
     }
 
 }
