@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.util;
 
 import java.lang.reflect.Field;
 import java.util.Map;
+import org.springframework.http.HttpStatus;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import okhttp3.FormBody;
@@ -43,6 +44,9 @@ public class Https {
     public static String get(String url) {
         Request request = new Request.Builder().url(url).header("User-Agent", DISGUISED_USER_AGENT).build();
         Response response = client.newCall(request).execute();
+        if (HttpStatus.OK.value() != response.code()) {
+            throw new RuntimeException(response.message());
+        }
         // response.body() return null impossibly
         return response.body().string();
     }
@@ -58,6 +62,9 @@ public class Https {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
         Request request = new Request.Builder().url(url).post(body).header("User-Agent", DISGUISED_USER_AGENT).build();
         Response response = client.newCall(request).execute();
+        if (HttpStatus.OK.value() != response.code()) {
+            throw new RuntimeException(response.message());
+        }
         // response.body() return null impossibly
         return response.body().string();
     }
@@ -95,12 +102,11 @@ public class Https {
         okhttp3.RequestBody body = form.build();
         Request request = new Request.Builder().url(url).post(body).header("User-Agent", DISGUISED_USER_AGENT).build();
         Response response = client.newCall(request).execute();
+        if (HttpStatus.OK.value() != response.code()) {
+            throw new RuntimeException(response.message());
+        }
         // response.body() return null impossibly
         return response.body().string();
-    }
-
-    private void disguise() {
-
     }
 
 }
