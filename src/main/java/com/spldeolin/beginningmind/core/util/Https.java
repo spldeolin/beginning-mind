@@ -10,6 +10,7 @@ import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 /**
  * HTTP请求工具类
@@ -17,7 +18,7 @@ import okhttp3.Response;
  * 支持服务端发送HTTP请求，包括Get请求，Body为form的Post请求，Body为json的Post请求，
  * 请求的回应将被转化为String类型作为返回值。
  *
- * 这个类推荐与JsonUtil结合使用。
+ * 这个类推荐与Jsons结合使用。
  * </pre>
  *
  * @author Deolin
@@ -47,8 +48,11 @@ public class Https {
         if (HttpStatus.OK.value() != response.code()) {
             throw new RuntimeException(response.message());
         }
-        // response.body() return null impossibly
-        return response.body().string();
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        return responseBody.string();
     }
 
     /**
@@ -65,8 +69,11 @@ public class Https {
         if (HttpStatus.OK.value() != response.code()) {
             throw new RuntimeException(response.message());
         }
-        // response.body() return null impossibly
-        return response.body().string();
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        return responseBody.string();
     }
 
     /**
@@ -105,8 +112,11 @@ public class Https {
         if (HttpStatus.OK.value() != response.code()) {
             throw new RuntimeException(response.message());
         }
-        // response.body() return null impossibly
-        return response.body().string();
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        return responseBody.string();
     }
 
 }
