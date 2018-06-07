@@ -1,7 +1,7 @@
 /*
  * Created by IntelliJ IDEA File Templates.
  */
- 
+
 package com.spldeolin.beginningmind.core.support.dto.annotation;
 
 import java.io.Serializable;
@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 
- *
  * @author Deolin 2018/06/02
  */
 @Data

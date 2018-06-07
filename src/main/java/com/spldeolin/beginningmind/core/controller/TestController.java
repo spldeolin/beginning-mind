@@ -15,15 +15,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.model.Goods;
 import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.valid.annotation.Mobile;
-import com.spldeolin.beginningmind.core.valid.annotation.Require;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -72,11 +69,6 @@ public class TestController {
         log.info("asd");
         log.info("asd");
         return ses.getAttribute("one-cookie");
-    }
-
-    @PostMapping("require")
-    Object testRequire(@Require(value = {"id", "name"}, message = "id或name为null") Goods goods) {
-        return goods;
     }
 
     @GetMapping("mobile")

@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.spldeolin.beginningmind.core.controller.manager.ImageManager;
+import com.spldeolin.beginningmind.core.service.ImageService;
 
 /**
  * 图片
@@ -25,14 +25,14 @@ import com.spldeolin.beginningmind.core.controller.manager.ImageManager;
 public class ImageController {
 
     @Autowired
-    private ImageManager imageManager;
+    private ImageService imageService;
 
     /**
      * 普通上传
      */
     @PostMapping("/upload")
     Object create(@RequestParam("image") @NotNull MultipartFile multipartFile) {
-        return imageManager.upload(multipartFile);
+        return imageService.upload(multipartFile);
     }
 
 }

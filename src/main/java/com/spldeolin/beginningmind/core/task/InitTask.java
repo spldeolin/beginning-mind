@@ -8,8 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.controller.manager.ImageManager;
-import com.spldeolin.beginningmind.core.controller.manager.SignManager;
+import com.spldeolin.beginningmind.core.service.ImageService;
+import com.spldeolin.beginningmind.core.service.SignService;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -76,8 +76,8 @@ public class InitTask {
     @SneakyThrows
     public void ensureDirectoryExist() {
         CoreProperties.File file = properties.getFile();
-        FileUtils.mkdir(new java.io.File(file.getLocation() + ImageManager.IMAGE_DIRECTORY), true);
-        FileUtils.mkdir(new java.io.File(file.getLocation() + SignManager.CAPTCHA_DIRECTORY), true);
+        FileUtils.mkdir(new java.io.File(file.getLocation() + ImageService.IMAGE_DIRECTORY), true);
+        FileUtils.mkdir(new java.io.File(file.getLocation() + SignService.CAPTCHA_DIRECTORY), true);
     }
 
 }

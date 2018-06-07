@@ -42,7 +42,8 @@ public class DocGenerator {
                 log.info(template);
                 String content = FreeMarkerUtil.format("markdown-doc.ftl", template);
                 FileUtils.writeStringToFile(
-                        new File("C:\\mddoc\\" + template.getDirectoryName() + "\\" + template.getCommonDesc() + ".md"), content,
+                        new File("C:\\mddoc\\" + template.getDirectoryName() + "\\" + template.getCommonDesc() + ".md"),
+                        content,
                         StandardCharsets.UTF_8);
             }
         }

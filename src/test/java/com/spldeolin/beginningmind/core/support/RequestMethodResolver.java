@@ -24,8 +24,8 @@ import lombok.extern.log4j.Log4j2;
 public class RequestMethodResolver {
 
     public static RequestMethodInfoDTO resolve(Method method) {
-        RequestMethodInfoDTO dto = RequestMethodInfoDTO.builder().desc(method.getName()).returnType(Void.class).developer("").date(
-                LocalDate.now().toString()).build();
+        RequestMethodInfoDTO dto = RequestMethodInfoDTO.builder().desc(method.getName()).returnType(
+                Void.class).developer("").date(LocalDate.now().toString()).build();
         /*
             @RequestMapping, @GetMapping, @PostMapping, ...
         */

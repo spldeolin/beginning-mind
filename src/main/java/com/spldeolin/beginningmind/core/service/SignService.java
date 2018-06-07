@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.controller.manager;
+package com.spldeolin.beginningmind.core.service;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -22,7 +22,6 @@ import com.spldeolin.beginningmind.core.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.security.GifCaptcha;
-import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
@@ -33,7 +32,7 @@ import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 @Service
-public class SignManager {
+public class SignService {
 
     public static final String CAPTCHA_DIRECTORY = "captcha";
 

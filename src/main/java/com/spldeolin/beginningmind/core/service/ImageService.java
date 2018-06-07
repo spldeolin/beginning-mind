@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.controller.manager;
+package com.spldeolin.beginningmind.core.service;
 
 import java.io.File;
 import java.io.InputStream;
@@ -18,7 +18,7 @@ import lombok.SneakyThrows;
  * @author Deolin/05/28
  */
 @Service
-public class ImageManager {
+public class ImageService {
 
     public static final String IMAGE_DIRECTORY = "image";
 

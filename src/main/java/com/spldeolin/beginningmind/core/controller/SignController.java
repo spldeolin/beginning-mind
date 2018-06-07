@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.controller.manager.SignManager;
 import com.spldeolin.beginningmind.core.input.SignInput;
+import com.spldeolin.beginningmind.core.service.SignService;
 
 /**
  * 登录、登出、登录状态等
@@ -28,14 +28,14 @@ import com.spldeolin.beginningmind.core.input.SignInput;
 public class SignController {
 
     @Autowired
-    private SignManager signManager;
+    private SignService signService;
 
     /**
      * 获取验证码
      */
     @GetMapping("/captcha")
     Object captcha() {
-        return signManager.captcha();
+        return signService.captcha();
     }
 
     /**
@@ -43,7 +43,7 @@ public class SignController {
      */
     @PostMapping("/in")
     Object signIn(@RequestBody @Valid SignInput input) {
-        return signManager.signIn(input);
+        return signService.signIn(input);
     }
 
     /**
@@ -51,7 +51,7 @@ public class SignController {
      */
     @PostMapping("/out")
     Object signOut() {
-        signManager.signOut();
+        signService.signOut();
         return null;
     }
 
