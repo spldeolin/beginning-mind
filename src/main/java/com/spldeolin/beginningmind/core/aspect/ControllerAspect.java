@@ -31,7 +31,7 @@ import com.spldeolin.beginningmind.core.controller.dto.RequestResult;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import com.spldeolin.beginningmind.core.util.Signer;
-import com.spldeolin.beginningmind.core.util.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**

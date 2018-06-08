@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.core.api.mapper.provider;
 
 import java.util.Set;
 import org.apache.ibatis.mapping.MappedStatement;
-import com.spldeolin.beginningmind.core.util.SqlUtils;
+import com.spldeolin.beginningmind.core.api.mapper.util.SqlUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;

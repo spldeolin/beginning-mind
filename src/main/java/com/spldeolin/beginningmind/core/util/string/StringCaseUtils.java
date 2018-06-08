@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util;
+package com.spldeolin.beginningmind.core.util.string;
 
 import lombok.experimental.UtilityClass;
 

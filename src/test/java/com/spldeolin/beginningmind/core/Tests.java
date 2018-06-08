@@ -22,7 +22,7 @@ import com.spldeolin.beginningmind.core.service.EmailService;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.service.SecurityUsers2permissionsService;
 import com.spldeolin.beginningmind.core.util.ApplicationContext;
-import com.spldeolin.beginningmind.core.util.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.api.mapper.provider;
 
 import org.apache.ibatis.mapping.MappedStatement;
-import com.spldeolin.beginningmind.core.util.SqlUtils;
+import com.spldeolin.beginningmind.core.api.mapper.util.SqlUtils;
 import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.provider.base.BaseUpdateProvider;

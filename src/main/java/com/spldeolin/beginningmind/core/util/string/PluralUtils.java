@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util;
+package com.spldeolin.beginningmind.core.util.string;
 
 import java.util.ArrayList;
 import java.util.Collections;

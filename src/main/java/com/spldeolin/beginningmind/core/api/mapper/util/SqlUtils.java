@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util;
+package com.spldeolin.beginningmind.core.api.mapper.util;
 
 import java.util.Set;
 import javax.persistence.Version;

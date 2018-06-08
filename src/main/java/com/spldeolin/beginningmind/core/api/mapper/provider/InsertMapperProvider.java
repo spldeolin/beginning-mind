@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.core.api.mapper.provider;
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
-import com.spldeolin.beginningmind.core.util.SqlUtils;
+import com.spldeolin.beginningmind.core.api.mapper.util.SqlUtils;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;

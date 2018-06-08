@@ -42,7 +42,7 @@ import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
 import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
 import com.spldeolin.beginningmind.core.support.dto.ControllerDefinition;
 import com.spldeolin.beginningmind.core.support.util.ControllerLoadUtils;
-import com.spldeolin.beginningmind.core.util.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
