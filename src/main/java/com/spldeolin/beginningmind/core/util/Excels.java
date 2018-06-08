@@ -55,6 +55,8 @@ public class Excels {
 
     private static final SimpleDateFormat ISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
 
+    private static final Objenesis OBJENESIS = new ObjenesisStd(true);
+
     /**
      * 生成Excel
      */
@@ -224,10 +226,12 @@ public class Excels {
                         formatters.get(index)).cellIndex(cellIndex).build());
             }
         }
-        for (int rowIndex = 1; rowIndex < sheet.getLastRowNum(); rowIndex++) {
+        /*
+            如果最后一个有值的行号是8，sheet.getLastRowNum()只会是7
+          */
+        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
-            Objenesis objenesis = new ObjenesisStd(true);
-            T t = objenesis.newInstance(clazz);
+            T t = OBJENESIS.newInstance(clazz);
             for (ParseCell parseCell : parseCells) {
                 Field field = parseCell.getSrcField();
                 field.setAccessible(true);
