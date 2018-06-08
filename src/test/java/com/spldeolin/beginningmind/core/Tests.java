@@ -4,6 +4,7 @@ import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -152,6 +153,11 @@ public class Tests {
         securityUsers2permissionsService.deleteEX(id);
         log.info(securityUsers2permissionsService.get(id));
         log.info(securityUsers2permissionsService.searchBatch("userId", 1L));
+    }
+
+    @Test
+    public void assertTest() {
+        securityAccountService.get(new ArrayList<>());
     }
 
 }

@@ -30,7 +30,9 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public void create(List<M> models) {
-        assert models.size() > 0;
+        if (models.size() == 0) {
+            throw new IllegalArgumentException("ids长度为0");
+        }
         mapper.insertBatch(models);
     }
 
@@ -41,7 +43,9 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public List<M> get(List<Long> ids) {
-        assert ids.size() > 0;
+        if (ids.size() == 0) {
+            throw new IllegalArgumentException("ids长度为0");
+        }
         String idsSQL = Strings.join(ids, ',');
         return mapper.selectBatchByIds(idsSQL);
     }
@@ -58,7 +62,9 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public boolean delete(List<Long> ids) {
-        assert ids.size() > 0;
+        if (ids.size() == 0) {
+            throw new IllegalArgumentException("models长度为0");
+        }
         String idsSQL = Strings.join(ids, ',');
         return mapper.deleteBatchByIds(idsSQL) != 0;
     }
