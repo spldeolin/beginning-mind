@@ -27,6 +27,7 @@ import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -232,11 +233,18 @@ public class Excels {
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
             XSSFRow row = sheet.getRow(rowIndex);
             T t = OBJENESIS.newInstance(clazz);
+            boolean isAllCellEmptyThisRow = true;
             for (ParseCell parseCell : parseCells) {
                 Field field = parseCell.getSrcField();
                 field.setAccessible(true);
                 Formatter formatter = parseCell.getFormatter();
-                String cellContent = row.getCell(parseCell.getCellIndex()).getStringCellValue();
+                XSSFCell cell = row.getCell(parseCell.getCellIndex());
+                if (cell == null) {
+                    continue;
+                } else {
+                    isAllCellEmptyThisRow = false;
+                }
+                String cellContent = cell.getStringCellValue();
                 if (StringUtils.isNotEmpty(cellContent)) {
                     try {
                         if (formatter == null || formatter.getClass() == Formatter.class) {
@@ -285,7 +293,10 @@ public class Excels {
                     }
                 }
             }
-            list.add(t);
+            // 仅有序号，没有任何内容的行不会被导入
+            if (!isAllCellEmptyThisRow) {
+                list.add(t);
+            }
         }
         return list;
     }

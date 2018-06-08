@@ -17,7 +17,7 @@ public class ExcelsTest {
 
     @Test
     public void testExcels() {
-        File file = new File("C:\\Users\\deoli\\Desktop\\Excel.xlsx");
+        File file = new File("C:\\Users\\Deolin\\Desktop\\Excel.xlsx");
         List<Student> students = Excels.readExcel(file, Student.class);
         students.forEach(log::info);
     }
@@ -28,6 +28,9 @@ public class ExcelsTest {
 
         @ExcelColumn(columnName = "姓名")
         private String name;
+
+        @ExcelColumn(columnName = "年龄")
+        private Integer age;
 
     }
 
