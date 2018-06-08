@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.support.util;
 
-import java.io.File;
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -85,7 +86,7 @@ public class ClassLoadUtils {
                 //这里拿到的一般的"aa:\bb\...\cc.class"格式的文件名, 要去除末尾的类型后缀(.class)
                 int lastDotIndex = pathStr.lastIndexOf(DOT);
                 //Class.forName只允许使用用'.'分隔的类名的形式
-                String className = pathStr.replace(File.separatorChar, DOT);
+                String className = pathStr.replace(sep, "\\.");
                 //获取包名的起始位置
                 int beginIndex = className.indexOf(packageName);
                 if (beginIndex == -1) {

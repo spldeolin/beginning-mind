@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.core;
 
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
+
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
@@ -100,7 +102,7 @@ public class Tests {
     @SneakyThrows
     public void io() {
         CoreProperties properties = ApplicationContext.getBean(CoreProperties.class);
-        FileUtils.writeStringToFile(new File(properties.getFile().getLocation() + File.separator + "a.txt"), "你好",
+        FileUtils.writeStringToFile(new File(properties.getFile().getLocation() + sep + "a.txt"), "你好",
                 StandardCharsets.UTF_8);
         log.info("映射路径" + properties.getFile().getMapping() + "/a.txt");
         log.info("hold on");

@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.support;
 
-import java.io.File;
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
+
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -202,7 +203,7 @@ public class PermissionsInserter {
         try {
             //获取当前线程的类装载器中相应包名对应的资源
             Enumeration<URL> iterator = Thread.currentThread().getContextClassLoader().getResources(
-                    packageName.replace(DOT, File.separatorChar));
+                    packageName.replace("\\.", sep));
             while (iterator.hasMoreElements()) {
                 URL url = iterator.nextElement();
                 String protocol = url.getProtocol();
@@ -291,9 +292,9 @@ public class PermissionsInserter {
                 path = path.toRealPath();
                 String pathStr = path.toString();
                 //这里拿到的一般的"aa:\bb\...\cc.class"格式的文件名, 要去除末尾的类型后缀(.class)
-                int lastDotIndex = pathStr.lastIndexOf(DOT);
+                int lastDotIndex = pathStr.lastIndexOf("\\.");
                 //Class.forName只允许使用用'.'分隔的类名的形式
-                String className = pathStr.replace(File.separatorChar, DOT);
+                String className = pathStr.replace(sep, "\\.");
                 //获取包名的起始位置
                 int beginIndex = className.indexOf(packageName);
                 if (beginIndex == -1) {

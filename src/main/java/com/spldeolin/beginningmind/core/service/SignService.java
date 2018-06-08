@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
+
 import java.io.File;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -51,7 +53,7 @@ public class SignService {
         // 文件名
         String fileName = DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())) + ".gif";
         // 生成文件
-        File captchaFile = new File(location + CAPTCHA_DIRECTORY + File.separator + fileName);
+        File captchaFile = new File(location + CAPTCHA_DIRECTORY + sep + fileName);
         try (OutputStream out = FileUtils.openOutputStream(captchaFile)) {
             GifCaptcha gifCaptcha = new GifCaptcha();
             gifCaptcha.out(out);

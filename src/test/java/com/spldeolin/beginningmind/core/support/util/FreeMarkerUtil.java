@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.core.support.util;
 
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
@@ -11,8 +13,6 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class FreeMarkerUtil {
-
-    private static String sep = File.separator;
 
     /**
      * 根据ftl文件和数据，生成字符内容。

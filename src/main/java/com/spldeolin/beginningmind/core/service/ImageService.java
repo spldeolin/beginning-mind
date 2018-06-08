@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
+
 import java.io.File;
 import java.io.InputStream;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -42,7 +44,7 @@ public class ImageService {
             String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
             String destFileName = fileMd5 + FilenameUtils.EXTENSION_SEPARATOR + fileExtension;
             // 生成文件
-            File destFile = new File(location + IMAGE_DIRECTORY + File.separator + destFileName);
+            File destFile = new File(location + IMAGE_DIRECTORY + sep + destFileName);
             if (!destFile.exists()) {
                 multipartFile.transferTo(destFile);
             }
