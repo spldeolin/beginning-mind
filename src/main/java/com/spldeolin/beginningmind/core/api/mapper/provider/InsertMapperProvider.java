@@ -1,9 +1,15 @@
 package com.spldeolin.beginningmind.core.api.mapper.provider;
 
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.DELETION_FLAG_COLUMN_NAME;
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.INSERTED_AT_COLUMN_NAME;
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.UPDATED_AT_COLUMN_NAME;
+
 import java.util.Set;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.mapping.MappedStatement;
 import com.spldeolin.beginningmind.core.api.mapper.util.SqlUtils;
+import com.spldeolin.beginningmind.core.api.mapper.util.StringCompressUtils;
+import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.mapperhelper.EntityHelper;
@@ -15,6 +21,7 @@ import tk.mybatis.mapper.provider.SpecialProvider;
 import tk.mybatis.mapper.provider.base.BaseInsertProvider;
 import tk.mybatis.mapper.util.StringUtil;
 
+@Log4j2
 public class InsertMapperProvider extends MapperTemplate {
 
     public InsertMapperProvider(Class<?> mapperClass, MapperHelper mapperHelper) {
@@ -33,8 +40,9 @@ public class InsertMapperProvider extends MapperTemplate {
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，is_deleted初始应该为null
-            if (StringUtils.equalsAny(column.getColumn(), "id", "inserted_at", "updated_at", "is_deleted")) {
+            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
+            if (StringUtils.equalsAny(column.getColumn(), "id", INSERTED_AT_COLUMN_NAME, UPDATED_AT_COLUMN_NAME,
+                    DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (!column.isInsertable()) {
@@ -67,15 +75,16 @@ public class InsertMapperProvider extends MapperTemplate {
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，is_deleted初始应该为null
-            if (StringUtils.equalsAny(column.getColumn(), "id", "inserted_at", "updated_at", "is_deleted")) {
+            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
+            if (StringUtils.equalsAny(column.getColumn(), "id", INSERTED_AT_COLUMN_NAME, UPDATED_AT_COLUMN_NAME,
+                    DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (!column.isInsertable()) {
                 continue;
             }
             if (StringUtil.isNotEmpty(column.getSequenceName()) || column.isIdentity() || column.isUuid()) {
-                sql.append(column.getColumn() + ",");
+                sql.append(column.getColumn()).append(",");
             } else {
                 sql.append(SqlHelper.getIfNotNull(column, column.getColumn() + ",", isNotEmpty()));
             }
@@ -83,8 +92,9 @@ public class InsertMapperProvider extends MapperTemplate {
         sql.append("</trim>");
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，is_deleted初始应该为null
-            if (StringUtils.equalsAny(column.getColumn(), "id", "inserted_at", "updated_at", "is_deleted")) {
+            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
+            if (StringUtils.equalsAny(column.getColumn(), "id", INSERTED_AT_COLUMN_NAME, UPDATED_AT_COLUMN_NAME,
+                    DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (!column.isInsertable()) {
@@ -109,6 +119,7 @@ public class InsertMapperProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>");
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 
@@ -128,8 +139,9 @@ public class InsertMapperProvider extends MapperTemplate {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，is_deleted初始应该为null
-            if (StringUtils.equalsAny(column.getColumn(), "id", "inserted_at", "updated_at", "is_deleted")) {
+            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
+            if (StringUtils.equalsAny(column.getColumn(), "id", INSERTED_AT_COLUMN_NAME, UPDATED_AT_COLUMN_NAME,
+                    DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (!column.isId() && column.isInsertable()) {
@@ -138,6 +150,7 @@ public class InsertMapperProvider extends MapperTemplate {
         }
         sql.append("</trim>");
         sql.append("</foreach>");
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 

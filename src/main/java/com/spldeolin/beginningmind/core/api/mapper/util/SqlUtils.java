@@ -1,8 +1,14 @@
 package com.spldeolin.beginningmind.core.api.mapper.util;
 
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.DELETION_FLAG_COLUMN_NAME;
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.INSERTED_AT_COLUMN_NAME;
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.IS_NOT_DELETED;
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.UPDATED_AT_COLUMN_NAME;
+
 import java.util.Set;
 import javax.persistence.Version;
 import org.apache.commons.lang3.StringUtils;
+import com.spldeolin.beginningmind.core.api.mapper.constant.AuditField;
 import lombok.experimental.UtilityClass;
 import tk.mybatis.mapper.entity.EntityColumn;
 import tk.mybatis.mapper.entity.IDynamicTableName;
@@ -277,8 +283,9 @@ public class SqlUtils {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，is_deleted初始应该为null
-            if (StringUtils.equalsAny(column.getColumn(), "id", "inserted_at", "updated_at", "is_deleted")) {
+            // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
+            if (StringUtils.equalsAny(column.getColumn(), "id", INSERTED_AT_COLUMN_NAME, UPDATED_AT_COLUMN_NAME,
+                    DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (!column.isInsertable()) {
@@ -346,8 +353,9 @@ public class SqlUtils {
         EntityColumn versionColumn = null;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：inserted_at数据插入之后不应改变，updated_atMySQL会自动更新，is_deleted不应能被修改
-            if (StringUtils.equalsAny(column.getColumn(), "inserted_at", "updated_at", "is_deleted")) {
+            // 忽略以下字段，原因：inserted_at数据插入之后不应改变，updated_at MySQL会自动更新，deletion_flag不应能被修改
+            if (StringUtils.equalsAny(column.getColumn(), INSERTED_AT_COLUMN_NAME, UPDATED_AT_COLUMN_NAME,
+                    DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (column.getEntityField().isAnnotationPresent(Version.class)) {
@@ -395,7 +403,7 @@ public class SqlUtils {
         //获取全部列
         Set<EntityColumn> columnList = EntityHelper.getPKColumns(entityClass);
         // delete flag
-        sql.append(" AND ").append("is_deleted").append("=FALSE");
+        sql.append(" AND ").append(AuditField.IS_NOT_DELETED);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
             sql.append(" AND ").append(column.getColumnEqualsHolder());
@@ -424,8 +432,8 @@ public class SqlUtils {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            if ("is_deleted".equals(column.getColumn())) {
-                sql.append(" AND " + "is_deleted" + "=FALSE");
+            if (DELETION_FLAG_COLUMN_NAME.equals(column.getColumn())) {
+                sql.append(" AND " + IS_NOT_DELETED);
                 continue;
             }
             if (!useVersion || !column.getEntityField().isAnnotationPresent(Version.class)) {
@@ -553,7 +561,7 @@ public class SqlUtils {
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
-                "  is_deleted" + "=FALSE\n" +
+                IS_NOT_DELETED + "\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
                 "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
@@ -617,8 +625,8 @@ public class SqlUtils {
                 "</where>";
     }
 
-    public static String deleteFlagWhenDelete() {
-        return " set is_deleted = TRUE ";
+    public static String deletionFlagWhenDelete() {
+        return " set " + AuditField.DELETION_FLAG_COLUMN_NAME + " = id ";
     }
 
 }

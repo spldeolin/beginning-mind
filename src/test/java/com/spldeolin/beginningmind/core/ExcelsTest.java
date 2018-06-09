@@ -16,9 +16,9 @@ import lombok.extern.log4j.Log4j2;
 public class ExcelsTest {
 
     @Test
-    public void testExcels() {
-        File file = new File("C:\\Users\\Deolin\\Desktop\\Excel.xlsx");
-        List<Student> students = Excels.readExcel(file, Student.class);
+        public void testExcels() {
+            File file = new File("C:\\Users\\Deolin\\Desktop\\Excel.xlsx");
+            List<Student> students = Excels.readExcel(file, Student.class);
         students.forEach(log::info);
     }
 

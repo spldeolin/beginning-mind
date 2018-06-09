@@ -9,7 +9,7 @@
         <id column="id" jdbcType="BIGINT" property="id"/>
         <result column="inserted_at" jdbcType="TIMESTAMP" property="insertedAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
-        <result column="is_deleted" jdbcType="BIT" property="isDeleted"/>
+        <result column="deletion_flag" jdbcType="BIGINT" property="deletionFlag"/>
         <result column="role_id" jdbcType="BIGINT" property="roleId"/>
         <result column="permission_id" jdbcType="BIGINT" property="permissionId"/>
     </resultMap>

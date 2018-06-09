@@ -50,11 +50,11 @@ public class SecurityUser implements Serializable {
     private LocalDateTime updatedAt;
 
     /**
-     * 审计字段 是否被删除
+     * 审计字段 删除标记（-1代表未被删除，其他代表被删除）
      */
-    @Column(name = "is_deleted")
+    @Column(name = "deletion_flag")
     @JsonIgnore
-    private Boolean isDeleted;
+    private Long deletionFlag;
 
     /**
      * “用户名”

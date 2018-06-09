@@ -80,8 +80,8 @@ public class ShiroConfig {
         filterChainDefinitions.put("/sign/in", "anon");
         // 【登录】登出请求是唯一一个无需权限、需要登录的请求
         filterChainDefinitions.put("/sign/out", SignFilter.MARK);
-        // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
-        for (SecurityPermission securityPermission : securityPermissionService.searchBatch(new SecurityPermission())) {
+        //【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
+        for (SecurityPermission securityPermission : securityPermissionService.listAll()) {
             filterChainDefinitions.put(securityPermission.getMapping(),
                     SignFilter.MARK + ", perms[" + securityPermission.getMark() + "]");
         }

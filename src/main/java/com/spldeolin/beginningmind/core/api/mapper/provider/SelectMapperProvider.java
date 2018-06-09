@@ -1,8 +1,11 @@
 package com.spldeolin.beginningmind.core.api.mapper.provider;
 
+import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.IS_NOT_DELETED;
+
 import java.util.Set;
 import org.apache.ibatis.mapping.MappedStatement;
 import com.spldeolin.beginningmind.core.api.mapper.util.SqlUtils;
+import com.spldeolin.beginningmind.core.api.mapper.util.StringCompressUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.MapperException;
 import tk.mybatis.mapper.entity.EntityColumn;
@@ -31,6 +34,7 @@ public class SelectMapperProvider extends MapperTemplate {
         String sql = SqlUtils.selectAllColumns(entityClass) +
                 SqlUtils.fromTable(entityClass, tableName(entityClass)) +
                 SqlUtils.wherePKColumns(entityClass);
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 
@@ -49,11 +53,12 @@ public class SelectMapperProvider extends MapperTemplate {
             sql.append(" where ");
             sql.append(column.getColumn());
             sql.append(" in (${_parameter})");
-            sql.append(" and " + "is_deleted" + "=FALSE");
+            sql.append(" and " + IS_NOT_DELETED);
         } else {
             throw new MapperException(
                     "继承 selectByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
         }
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 
@@ -66,8 +71,9 @@ public class SelectMapperProvider extends MapperTemplate {
         setResultType(ms, entityClass);
         String sql = SqlUtils.selectAllColumns(entityClass) +
                 SqlUtils.fromTable(entityClass, tableName(entityClass)) +
-                " where " + "is_deleted" + "=FALSE " +
+                " where " + IS_NOT_DELETED +
                 SqlUtils.orderByDefault(entityClass);
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 
@@ -80,6 +86,7 @@ public class SelectMapperProvider extends MapperTemplate {
         String sql = SqlUtils.selectAllColumns(entityClass) +
                 SqlUtils.fromTable(entityClass, tableName(entityClass)) +
                 SqlUtils.whereAllIfColumns(entityClass, isNotEmpty());
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 
@@ -99,6 +106,7 @@ public class SelectMapperProvider extends MapperTemplate {
         sql.append(SqlUtils.exampleWhereClause());
         sql.append(SqlUtils.exampleOrderBy(entityClass));
         sql.append(SqlUtils.exampleForUpdate());
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 
@@ -109,6 +117,7 @@ public class SelectMapperProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         String sql = SqlUtils.selectCount(entityClass) + SqlUtils.fromTable(entityClass, tableName(entityClass)) +
                 SqlUtils.whereAllIfColumns(entityClass, isNotEmpty());
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 
@@ -125,6 +134,7 @@ public class SelectMapperProvider extends MapperTemplate {
         sql.append(SqlUtils.fromTable(entityClass, tableName(entityClass)));
         sql.append(SqlUtils.exampleWhereClause());
         sql.append(SqlUtils.exampleForUpdate());
+        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 
