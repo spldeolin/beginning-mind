@@ -16,11 +16,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.controller.annotation.Description;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
+import com.spldeolin.beginningmind.core.controller.annotation.ReturnStruction;
 import com.spldeolin.beginningmind.core.input.SecurityRoleInput;
+import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.service.SecurityRoleService;
 
 /**
@@ -28,8 +31,9 @@ import com.spldeolin.beginningmind.core.service.SecurityRoleService;
  *
  * @author Deolin 2018/5/26
  */
+@Description("角色管理的描述")
 @RestController
-@RequestMapping("/securityRole")
+@RequestMapping(value = "/securityRole", produces = "application/json")
 @Validated
 public class SecurityRoleController {
 
@@ -39,8 +43,10 @@ public class SecurityRoleController {
     /**
      * 创建一个“角色”
      */
+    @Description("创建角色的描述")
+    @ReturnStruction(type = SecurityRole.class)
     @Permission(displayName = "创建角色")
-    @PostMapping("/create")
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     Object create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
         return securityRoleService.createEX(securityRoleInput.toModel());
     }
@@ -51,7 +57,7 @@ public class SecurityRoleController {
     @Permission(displayName = "角色详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
-        return securityRoleService.get(id).orElseThrow(() -> new ServiceException("角色不存在或是已被删除"));
+        return securityRoleService.getEX(id);
     }
 
     /**

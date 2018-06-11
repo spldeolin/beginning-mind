@@ -82,6 +82,11 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     }
 
     @Override
+    public SecurityUser getEX(Long id) {
+        return super.get(id).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+    }
+
+    @Override
     public void updateEX(SecurityUser securityUser) {
         Long id = securityUser.getId();
         if (!isExist(id)) {

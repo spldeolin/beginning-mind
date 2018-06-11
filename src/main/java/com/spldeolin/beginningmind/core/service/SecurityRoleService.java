@@ -23,6 +23,14 @@ public interface SecurityRoleService extends CommonService<SecurityRole> {
     Long createEX(SecurityRole securityRole);
 
     /**
+     * 获取一个“角色”
+     *
+     * @param id “角色”的ID
+     * @return “角色”
+     */
+    SecurityRole getEX(Long id);
+
+    /**
      * 更新一个“角色”
      * （附带业务校验）
      *

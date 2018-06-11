@@ -29,6 +29,15 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
     Long createEX(SecurityUser securityUser);
 
     /**
+     * 获取一个“用户”
+     * （附带业务校验）
+     *
+     * @param id “用户”的ID
+     * @return “用户”
+     */
+    SecurityUser getEX(Long id);
+
+    /**
      * 更新一个“用户”
      * （附带业务校验）
      *

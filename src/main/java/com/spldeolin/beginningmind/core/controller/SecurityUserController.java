@@ -49,7 +49,7 @@ public class SecurityUserController {
      */
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
-        return securityUserService.get(id).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+        return securityUserService.getEX(id);
     }
 
     /**

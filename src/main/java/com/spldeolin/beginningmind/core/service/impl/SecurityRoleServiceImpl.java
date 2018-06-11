@@ -34,6 +34,11 @@ public class SecurityRoleServiceImpl extends CommonServiceImpl<SecurityRole> imp
     }
 
     @Override
+    public SecurityRole getEX(Long id) {
+        return super.get(id).orElseThrow(() -> new ServiceException("角色不存在或是已被删除"));
+    }
+
+    @Override
     public void updateEX(SecurityRole securityRole) {
         if (!isExist(securityRole.getId())) {
             throw new ServiceException("角色不存在或是已被删除");
