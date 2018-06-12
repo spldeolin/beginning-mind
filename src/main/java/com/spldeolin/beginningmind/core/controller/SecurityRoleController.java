@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.spldeolin.beginningmind.core.controller.annotation.Author;
 import com.spldeolin.beginningmind.core.controller.annotation.Description;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
 import com.spldeolin.beginningmind.core.controller.annotation.ReturnStruction;
@@ -32,6 +33,7 @@ import com.spldeolin.beginningmind.core.service.SecurityRoleService;
  * @author Deolin 2018/5/26
  */
 @Description("角色管理的描述")
+@Author(value = "没有名字的怪物", date = "2018/6/12")
 @RestController
 @RequestMapping(value = "/securityRole", produces = "application/json")
 @Validated
@@ -44,7 +46,7 @@ public class SecurityRoleController {
      * 创建一个“角色”
      */
     @Description("创建角色的描述")
-    @ReturnStruction(type = SecurityRole.class)
+    @ReturnStruction(type = SecurityRole.class, isPage = true)
     @Permission(displayName = "创建角色")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     Object create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
@@ -54,6 +56,8 @@ public class SecurityRoleController {
     /**
      * 获取一个“角色”
      */
+    @ReturnStruction(type = String.class, isArray = true)
+    @Author("有趣")
     @Permission(displayName = "角色详情")
     @GetMapping("/get/{id}")
     Object get(@PathVariable Long id) {
