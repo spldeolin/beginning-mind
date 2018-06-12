@@ -76,7 +76,7 @@ public class SignService {
         CaptchaDTO captchaDTO = Sessions.get(CAPTCHA);
         Sessions.remove(CAPTCHA);
         if (captchaDTO == null ||
-                ChronoUnit.MINUTES.between(LocalDateTime.now(), captchaDTO.getGeneratedAt()) > 5) {
+                ChronoUnit.MINUTES.between(captchaDTO.getGeneratedAt(), LocalDateTime.now()) > 5) {
             throw new ServiceException("验证码超时");
         }
         String captcha = captchaDTO.getCaptcha();
