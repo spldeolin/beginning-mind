@@ -198,6 +198,9 @@ public class GlobalExceptionAdvance {
         // 详细错误信息
         if (properties.isDebug()) {
             String msg = e.getMessage();
+            if (msg == null) {
+                msg = e.getClass().getSimpleName();
+            }
             if (msg.length() > 200) {
                 msg = msg.substring(0, 200) + " ...";
             }
