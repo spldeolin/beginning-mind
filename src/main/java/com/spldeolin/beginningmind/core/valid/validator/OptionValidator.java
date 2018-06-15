@@ -2,21 +2,21 @@ package com.spldeolin.beginningmind.core.valid.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import com.spldeolin.beginningmind.core.valid.annotation.TextOption;
+import com.spldeolin.beginningmind.core.valid.annotation.Option;
 
 /**
  * “文本可选项”校验器
  *
  * @author Deolin
  */
-public class TextOptionValidator implements ConstraintValidator<TextOption, CharSequence> {
+public class OptionValidator implements ConstraintValidator<Option, CharSequence> {
 
     private String[] options;
 
     private boolean ignoreCase;
 
     @Override
-    public void initialize(TextOption constraintAnnotation) {
+    public void initialize(Option constraintAnnotation) {
         options = constraintAnnotation.value();
         ignoreCase = constraintAnnotation.ignoreCase();
     }

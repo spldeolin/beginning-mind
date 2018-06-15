@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.valid.annotation.Mobile;
-import com.spldeolin.beginningmind.core.valid.annotation.TextOption;
+import com.spldeolin.beginningmind.core.valid.annotation.Option;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -80,7 +80,7 @@ public class SecurityUserInput implements Serializable {
      * 性别
      */
     @Length(max = 6)
-    @TextOption({"", "male", "female"})
+    @Option({"", "male", "female"})
     private String sex;
 
     /**
