@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,8 +31,16 @@ public class SecurityRole implements Serializable {
 
     /**
      * ID
+     * asdf
+     * asdf
+     * asdf
+     * asdf
+     * sssssssssssssssssss
+     *
+     * @Param adsf asdf
      */
     @Id
+    @JsonProperty("nasdadasdasdotAId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
