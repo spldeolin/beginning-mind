@@ -32,7 +32,7 @@ public class SignAdminController {
      */
     @Permission(displayName = "查看指定用户是否登录中")
     @GetMapping("/isSigning")
-    Object isSign(@RequestParam Long userId) {
+    Boolean isSign(@RequestParam Long userId) {
         return securityAccountService.isAccountSigning(userId);
     }
 
@@ -41,9 +41,8 @@ public class SignAdminController {
      */
     @Permission(displayName = "将指定用户踢下线")
     @PostMapping("/kill")
-    Object kill(@RequestParam Long userId) {
+    void kill(@RequestParam Long userId) {
         securityAccountService.killSigner(userId);
-        return null;
     }
 
 }

@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.CoreProperties;
+import com.spldeolin.beginningmind.core.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.valid.annotation.Mobile;
 import lombok.AllArgsConstructor;
@@ -41,7 +42,7 @@ import lombok.extern.log4j.Log4j2;
 public class TestController {
 
     @GetMapping("/time")
-    Object time() {
+    TimeOutput time() {
         return TimeOutput.builder().localDateTime(LocalDateTime.now()).date(new Date()).build();
     }
 
@@ -57,22 +58,22 @@ public class TestController {
     }
 
     @GetMapping("/set")
-    Object setSes(HttpSession ses) {
+    String setSes(HttpSession ses) {
         ses.setAttribute("one-cookie", "会话中的曲奇饼干");
         return "SUCCESS";
     }
 
     @GetMapping("/get")
-    Object getSes(HttpSession ses) {
+    String getSes(HttpSession ses) {
         log.info("asd");
         log.info("asd");
         log.info("asd");
         log.info("asd");
-        return ses.getAttribute("one-cookie");
+        return (String) ses.getAttribute("one-cookie");
     }
 
     @GetMapping("mobile")
-    Object testMobile(@RequestParam @Mobile String mobile) {
+    String testMobile(@RequestParam @Mobile String mobile) {
         return mobile;
     }
 
@@ -81,7 +82,7 @@ public class TestController {
 
     @GetMapping("generateTxtFile")
     @SneakyThrows
-    Object generateTxtFile(@RequestParam String content, @RequestParam String fileName) {
+    String generateTxtFile(@RequestParam String content, @RequestParam String fileName) {
         String fileFullName = fileName + ".txt";
         String filePath = properties.getFile().getLocation() + fileFullName;
         FileUtils.write(new File(filePath), content, StandardCharsets.UTF_8);
@@ -95,13 +96,12 @@ public class TestController {
     }
 
     @GetMapping("email")
-    Object email(@RequestParam @Email String email) {
+    void email(@RequestParam @Email String email) {
         log.info(email);
-        return null;
     }
 
     @GetMapping("signer")
-    Object signer() {
+    CurrentSigner signer() {
         return Signer.current();
     }
 

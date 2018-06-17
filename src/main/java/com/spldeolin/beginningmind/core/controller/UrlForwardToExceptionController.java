@@ -45,8 +45,12 @@ public class UrlForwardToExceptionController implements ErrorController {
      */
     @RequestMapping(ERROR_PATH)
     void error(HttpServletRequest request) throws Throwable {
-        int status = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        if (status == HttpStatus.NOT_FOUND.value()) {
+        Integer status = (Integer) request.getAttribute("javax.servlet.error.status_code");
+        // 这种情况应该是直接访问的
+        if (status == null) {
+            throw new RequestNotFoundException();
+        }
+        if (status.equals(HttpStatus.NOT_FOUND.value())) {
             throw new RequestNotFoundException();
         } else {
             Throwable throwable = (Throwable) request.getAttribute(

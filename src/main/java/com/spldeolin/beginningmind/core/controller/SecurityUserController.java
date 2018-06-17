@@ -18,8 +18,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.input.SecurityUserInput;
+import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.valid.annotation.Require;
 
@@ -40,7 +41,7 @@ public class SecurityUserController {
      * 创建一个“用户”
      */
     @PostMapping("/create")
-    Object create(@RequestBody @Valid SecurityUserInput securityUserInput) {
+    Long create(@RequestBody @Valid SecurityUserInput securityUserInput) {
         return securityUserService.createEX(securityUserInput.toModel());
     }
 
@@ -48,7 +49,7 @@ public class SecurityUserController {
      * 获取一个“用户”
      */
     @GetMapping("/get/{id}")
-    Object get(@PathVariable Long id) {
+    SecurityUser get(@PathVariable Long id) {
         return securityUserService.getEX(id);
     }
 
@@ -56,26 +57,24 @@ public class SecurityUserController {
      * 更新一个“用户”
      */
     @PostMapping("/update/{id}")
-    Object update(@PathVariable Long id,
+    void update(@PathVariable Long id,
             @RequestBody @Valid @Require("updatedAt") SecurityUserInput securityUserInput) {
         securityUserService.updateEX(securityUserInput.toModel().setId(id));
-        return null;
     }
 
     /**
      * 删除一个“用户”
      */
     @PostMapping("/delete/{id}")
-    Object delete(@PathVariable Long id) {
+    void delete(@PathVariable Long id) {
         securityUserService.deleteEX(id);
-        return null;
     }
 
     /**
      * 获取一批“用户”
      */
     @GetMapping("/search")
-    Object page(@RequestParam(defaultValue = "1") int pageNo,
+    Page<SecurityUser> page(@RequestParam(defaultValue = "1") int pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) int pageSize) {
         return securityUserService.page(pageNo, pageSize);
     }
@@ -84,7 +83,7 @@ public class SecurityUserController {
      * 删除一批“用户”
      */
     @PostMapping("/batchDelete")
-    Object delete(@RequestBody List<Long> ids) {
+    String delete(@RequestBody List<Long> ids) {
         return securityUserService.deleteEX(ids);
     }
 
@@ -92,9 +91,8 @@ public class SecurityUserController {
      * 启用/禁用用户
      */
     @PostMapping("/banPick/{id}")
-    Object banPick(@PathVariable Long id) {
+    void banPick(@PathVariable Long id) {
         securityUserService.banPick(id);
-        return null;
     }
 
 }

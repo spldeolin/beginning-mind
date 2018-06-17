@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.controller.annotation.Author;
 import com.spldeolin.beginningmind.core.controller.annotation.Description;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
@@ -49,7 +50,7 @@ public class SecurityRoleController {
     @ReturnStruction(type = SecurityRole.class, isPage = true)
     @Permission(displayName = "创建角色")
     @RequestMapping(value = "/create", method = RequestMethod.POST)
-    Object create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
+    Long create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
         return securityRoleService.createEX(securityRoleInput.toModel());
     }
 
@@ -60,7 +61,7 @@ public class SecurityRoleController {
     @Author("有趣")
     @Permission(displayName = "角色详情")
     @GetMapping("/get/{id}")
-    Object get(@PathVariable Long id) {
+    SecurityRole get(@PathVariable Long id) {
         return securityRoleService.getEX(id);
     }
 
@@ -69,9 +70,8 @@ public class SecurityRoleController {
      */
     @Permission(displayName = "更新角色")
     @PostMapping("/update/{id}")
-    Object update(@PathVariable Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
+    void update(@PathVariable Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
         securityRoleService.updateEX(securityRoleInput.toModel().setId(id));
-        return null;
     }
 
     /**
@@ -79,9 +79,8 @@ public class SecurityRoleController {
      */
     @Permission(displayName = "删除角色")
     @PostMapping("/delete/{id}")
-    Object delete(@PathVariable Long id) {
+    void delete(@PathVariable Long id) {
         securityRoleService.deleteEX(id);
-        return null;
     }
 
     /**
@@ -89,7 +88,7 @@ public class SecurityRoleController {
      */
     @Permission(displayName = "角色列表")
     @GetMapping("/search")
-    Object page(@RequestParam(defaultValue = "1") Integer pageNo,
+    Page<SecurityRole> page(@RequestParam(defaultValue = "1") Integer pageNo,
             @RequestParam(defaultValue = "10") @Max(1000) Integer pageSize) {
         return securityRoleService.page(pageNo, pageSize);
     }
@@ -99,7 +98,7 @@ public class SecurityRoleController {
      */
     @Permission(displayName = "批量删除角色")
     @PostMapping("/batchDelete")
-    Object delete(@RequestBody List<Long> ids) {
+    String delete(@RequestBody List<Long> ids) {
         return securityRoleService.deleteEX(ids);
     }
 

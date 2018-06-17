@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.service.SignService;
+import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 
 /**
  * 登录、登出、登录状态等
@@ -34,7 +35,7 @@ public class SignController {
      * 获取验证码
      */
     @GetMapping("/captcha")
-    Object captcha() {
+    String captcha() {
         return signService.captcha();
     }
 
@@ -42,7 +43,7 @@ public class SignController {
      * 登录
      */
     @PostMapping("/in")
-    Object signIn(@RequestBody @Valid SignInput input) {
+    SignerProfileVO signIn(@RequestBody @Valid SignInput input) {
         return signService.signIn(input);
     }
 
@@ -50,16 +51,15 @@ public class SignController {
      * 登出
      */
     @PostMapping("/out")
-    Object signOut() {
+    void signOut() {
         signService.signOut();
-        return null;
     }
 
     /**
      * 当前调用者是否登录中
      */
     @GetMapping("/isSigning")
-    Object isSign() {
+    Boolean isSign() {
         Subject subject = SecurityUtils.getSubject();
         return subject.isAuthenticated() || subject.isRemembered();
     }

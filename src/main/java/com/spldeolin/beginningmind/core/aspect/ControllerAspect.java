@@ -94,14 +94,12 @@ public class ControllerAspect {
             // 记录开始时间
             long proceedAt = System.currentTimeMillis();
             // 执行切点
-            Object object = point.proceed(controllerInfo.getParameterValues());
-            // 确保返回值是RequestResult
-            RequestResult requestResult = ensureRequestResult(object);
+            Object dataObject = point.proceed(controllerInfo.getParameterValues());
             // 结束日志
-            logAfter(controllerInfo, requestResult, proceedAt);
+            logAfter(controllerInfo, dataObject, proceedAt);
             // 清除MDC
             removeSignerLogMDC();
-            return requestResult;
+            return dataObject;
         }
     }
 
@@ -197,10 +195,10 @@ public class ControllerAspect {
         return RequestResult.success(object);
     }
 
-    private void logAfter(ControllerInfo controllerInfo, Object requestResult, long proceedAt) {
+    private void logAfter(ControllerInfo controllerInfo, Object dataObject, long proceedAt) {
         log.info("...处理完毕");
         ProcessingTimeLogger.logProcessingTime(controllerInfo.getInsignia(), System.currentTimeMillis() - proceedAt);
-        log.info("[Java] 请求方法返回值：" + requestResult);
+        log.info("[Java] 请求方法返回值：" + ensureRequestResult(dataObject));
         log.info("返回响应。(" + controllerInfo.getInsignia() + ")");
     }
 
