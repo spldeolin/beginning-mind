@@ -28,6 +28,8 @@ import lombok.experimental.Accessors;
 @Table(name = "security_user")
 public class SecurityUser implements Serializable {
 
+    private SecurityPermission permission;
+
     /**
      * ID
      */

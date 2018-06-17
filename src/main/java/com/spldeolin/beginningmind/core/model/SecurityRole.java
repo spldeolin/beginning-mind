@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,9 +30,11 @@ import lombok.experimental.Accessors;
 @Table(name = "security_role")
 public class SecurityRole implements Serializable {
 
+    private List<SecurityUser> user;
+
     /**
-     * ID
-     * asdf
+     * ID 你好吗
+     * asdfaa
      * asdf
      * asdf
      * asdf
