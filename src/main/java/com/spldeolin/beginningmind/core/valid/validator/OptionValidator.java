@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.valid.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
+import org.apache.commons.lang3.StringUtils;
 import com.spldeolin.beginningmind.core.valid.annotation.Option;
 
 /**
@@ -23,7 +24,7 @@ public class OptionValidator implements ConstraintValidator<Option, CharSequence
 
     @Override
     public boolean isValid(CharSequence value, ConstraintValidatorContext context) {
-        if (value == null || options == null || options.length == 0) {
+        if (StringUtils.isEmpty(value) || options.length == 0) {
             return true;
         }
         String string = value.toString();
