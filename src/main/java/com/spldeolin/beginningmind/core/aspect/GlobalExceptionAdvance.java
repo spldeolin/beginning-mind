@@ -27,7 +27,7 @@ import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.controller.dto.RequestResult;
+import com.spldeolin.beginningmind.core.dto.RequestResult;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import lombok.extern.log4j.Log4j2;

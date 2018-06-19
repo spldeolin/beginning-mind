@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core;
+package com.spldeolin.beginningmind.core.filter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -14,16 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.dto.RequestResult;
 import com.spldeolin.beginningmind.core.util.Jsons;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * 过滤器：统一返回值包装
+ *
  * @author Deolin 2018/06/17
  */
 @Log4j2
 @Component
-public class RequestResultFilter implements Filter {
+public class GlobalReturnFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) {
@@ -45,10 +48,11 @@ public class RequestResultFilter implements Filter {
         if (content.length() > 0) {
             // 认为不是RequestResult类型
             if (Jsons.getValue(content, "code") == null) {
-                content = "{\"code\":200,\"data\":" + content + "}";
+                content = RequestResult.SUCCESS_NONEMPTY_JSON_PRXFIX + content +
+                        RequestResult.SUCCESS_NONEMPTY_JSON_SUFFIX;
             }
         } else {
-            content = "{\"code\":200}";
+            content = RequestResult.SUCCESS_EMPTY_JSON;
         }
         ServletOutputStream out = response.getOutputStream();
         out.write(content.getBytes());

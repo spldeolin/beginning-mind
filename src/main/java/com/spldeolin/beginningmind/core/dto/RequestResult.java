@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.controller.dto;
+package com.spldeolin.beginningmind.core.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
@@ -14,6 +14,12 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestResult {
+
+    public static final String SUCCESS_NONEMPTY_JSON_PRXFIX = "{\"code\":200,\"data\":";
+
+    public static final String SUCCESS_NONEMPTY_JSON_SUFFIX = "}";
+
+    public static final String SUCCESS_EMPTY_JSON = "{\"code\":200}";
 
     private Integer code;
 

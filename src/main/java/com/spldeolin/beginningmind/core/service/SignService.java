@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.controller.dto.RequestResult;
+import com.spldeolin.beginningmind.core.dto.RequestResult;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.security.GifCaptcha;
@@ -109,18 +109,16 @@ public class SignService {
     /**
      * 指定用户是否登录中
      */
-    @GetMapping("is_signing")
-    public RequestResult isSign(@RequestParam Long userId) {
-        return RequestResult.success(securityAccountService.isAccountSigning(userId));
+    public Boolean isSign(@RequestParam Long userId) {
+        return securityAccountService.isAccountSigning(userId);
     }
 
     /**
      * 将指定用户踢下线
      */
     @DeleteMapping("kill")
-    public RequestResult kill(@RequestParam Long userId) {
+    public void kill(@RequestParam Long userId) {
         securityAccountService.killSigner(userId);
-        return RequestResult.success();
     }
 
     @Data
