@@ -2,7 +2,7 @@
  * Created by IntelliJ IDEA File Templates.
  */
 
-package com.spldeolin.beginningmind.core.controller;
+package com.spldeolin.beginningmind.core.controller2;
 
 import java.io.File;
 import java.nio.charset.StandardCharsets;

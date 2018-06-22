@@ -2,7 +2,7 @@
  * Created by IntelliJ IDEA File Templates.
  */
 
-package com.spldeolin.beginningmind.core.controller;
+package com.spldeolin.beginningmind.core.controller2;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.controller.annotation.Permission;
+import com.spldeolin.beginningmind.core.controller2.annotation.Permission;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 
 /**

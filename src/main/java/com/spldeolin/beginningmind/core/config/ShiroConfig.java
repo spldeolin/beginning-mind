@@ -17,7 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.controller.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.core.controller2.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.security.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.SaltSha512CredentialsMatcher;

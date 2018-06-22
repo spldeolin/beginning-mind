@@ -2,7 +2,7 @@
  * Created by IntelliJ IDEA File Templates.
  */
 
-package com.spldeolin.beginningmind.core.controller;
+package com.spldeolin.beginningmind.core.controller2;
 
 import javax.servlet.http.HttpServletRequest;
 import org.apache.shiro.authz.AuthorizationException;

@@ -4,7 +4,7 @@
  * https://github.com/spldeolin/cadeau-support
  */
 
-package com.spldeolin.beginningmind.core.controller;
+package com.spldeolin.beginningmind.core.controller2;
 
 import java.util.List;
 import javax.validation.Valid;
@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.controller.annotation.Permission;
+import com.spldeolin.beginningmind.core.controller2.annotation.Permission;
 import com.spldeolin.beginningmind.core.input.SecurityRoleInput;
 import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.service.SecurityRoleService;
