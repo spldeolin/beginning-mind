@@ -207,12 +207,6 @@
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
         </dependency>
-        <!--freemarker-->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <scope>test</scope>
-        </dependency>
         <!--pinyin4j-->
         <dependency>
             <groupId>com.belerweb</groupId>
@@ -399,12 +393,6 @@
                 <groupId>org.simplejavamail</groupId>
                 <artifactId>simple-java-mail</artifactId>
                 <version>5.0.3</version>
-            </dependency>
-            <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
-            <dependency>
-                <groupId>org.freemarker</groupId>
-                <artifactId>freemarker</artifactId>
-                <version>2.3.28</version>
             </dependency>
             <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
             <dependency>
