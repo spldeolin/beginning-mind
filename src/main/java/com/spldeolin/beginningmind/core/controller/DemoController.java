@@ -13,10 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.valid.ValidableList;
+import lombok.Data;
 
 /**
  * 示例
@@ -70,4 +72,16 @@ public class DemoController {
     void post() {
     }
 
+    @Data
+    private static class InnerDTO {
+
+        private String name;
+    }
+
+}
+
+@Data
+class DefaultDTO {
+
+    private String name;
 }
