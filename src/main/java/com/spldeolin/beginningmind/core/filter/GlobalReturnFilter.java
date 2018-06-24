@@ -14,9 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.dto.RequestResult;
-import com.spldeolin.beginningmind.core.task.holder.RequestMethodDefinitionsHolder;
+import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -121,7 +119,7 @@ public class GlobalReturnFilter implements Filter {
                 content = "{\"code\":200,\"data\":" + content + "}";
             }
         } else {
-            content = RequestResult.SUCCESS_EMPTY_JSON;
+            content = "{\"code\":200}";
         }
         return content;
     }

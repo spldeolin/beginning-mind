@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.service.ImageService;
 import com.spldeolin.beginningmind.core.service.SignService;
-import com.spldeolin.beginningmind.core.task.holder.RequestMethodDefinitionsHolder;
+import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -42,7 +42,7 @@ public class InitTask implements CommandLineRunner {
         validateProperties();
         // 确保本地目录存在
         ensureDirectoryExist();
-        // 初始化mapping一览
+        // 初始化RequestMethod信息，并载入内存
         requestMethodDefinitionsHolder.init();
         log.info("启动成功");
     }

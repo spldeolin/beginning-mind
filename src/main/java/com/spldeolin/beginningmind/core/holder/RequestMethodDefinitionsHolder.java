@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.task.holder;
+package com.spldeolin.beginningmind.core.holder;
 
 import java.util.List;
 import java.util.Map;
