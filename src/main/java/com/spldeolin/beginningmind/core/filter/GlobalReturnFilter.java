@@ -47,8 +47,9 @@ public class GlobalReturnFilter implements Filter {
         String rawContent = new String(wrapperResponse.getContent());
         String wrappedContent = wrapRequestResult(rawContent);
         ServletOutputStream out = response.getOutputStream();
-        response.setContentLengthLong(wrappedContent.length());
-        out.write(wrappedContent.getBytes());
+        byte[] bytes = wrappedContent.getBytes();
+        out.write(bytes);
+        response.setContentLengthLong(bytes.length);
         out.flush();
     }
 
