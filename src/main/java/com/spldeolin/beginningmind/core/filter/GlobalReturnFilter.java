@@ -114,8 +114,7 @@ public class GlobalReturnFilter implements Filter {
     private String wrapRequestResult(String content) {
         if (content.length() > 0) {
             if (!content.startsWith("{\"code\":200") || !content.endsWith("}")) {
-                if (!content.startsWith("{") || !content.endsWith("}") ||
-                        !content.startsWith("[") || !content.endsWith("]")) {
+                if (!isWrappedWithBrace(content) && !isWrappedWithBracket(content) && !"null".equals(content)) {
                     content = "\"" + content + "\"";
                 }
                 content = "{\"code\":200,\"data\":" + content + "}";
@@ -124,6 +123,14 @@ public class GlobalReturnFilter implements Filter {
             content = "{\"code\":200}";
         }
         return content;
+    }
+
+    private boolean isWrappedWithBrace(String content) {
+        return content.startsWith("{") && content.endsWith("}");
+    }
+
+    private boolean isWrappedWithBracket(String content) {
+        return content.startsWith("[") && content.endsWith("]");
     }
 
 }
