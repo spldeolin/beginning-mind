@@ -37,7 +37,7 @@ public class RequestMethodDefinitionsHolder {
                         pattern.startsWith(CoupledConstant.SWAGGER_URL_PREFIXES[2])) {
                     continue;
                 }
-                log.info("Holded [" + pattern + "]");
+                log.info("Holded mapping pattern [" + pattern + "]");
                 mappings.add(pattern);
             }
         }
