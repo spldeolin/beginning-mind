@@ -42,7 +42,7 @@ public class InitTask implements CommandLineRunner {
         validateProperties();
         // 确保本地目录存在
         ensureDirectoryExist();
-        // 初始化RequestMethod信息，并载入内存
+        // 读取RequestMethod信息，并载入内存
         requestMethodDefinitionsHolder.init();
         log.info("启动成功");
     }
