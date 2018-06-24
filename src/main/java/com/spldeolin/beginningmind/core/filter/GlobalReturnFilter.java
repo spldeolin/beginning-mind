@@ -12,10 +12,11 @@ import javax.servlet.WriteListener;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletResponseWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dto.RequestResult;
-import com.spldeolin.beginningmind.core.util.Jsons;
+import com.spldeolin.beginningmind.core.task.holder.RequestMethodDefinitionsHolder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -28,6 +29,9 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class GlobalReturnFilter implements Filter {
 
+    @Autowired
+    private RequestMethodDefinitionsHolder requestMethodDefinitionsHolder;
+
     @Override
     public void init(FilterConfig filterConfig) {
     }
@@ -36,26 +40,17 @@ public class GlobalReturnFilter implements Filter {
     @SneakyThrows
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
         String uri = ((HttpServletRequest) request).getRequestURI();
-        if (uri.startsWith(CoupledConstant.SWAGGER_URL_PREFIXES[0]) ||
-                uri.startsWith(CoupledConstant.SWAGGER_URL_PREFIXES[1]) ||
-                uri.startsWith(CoupledConstant.SWAGGER_URL_PREFIXES[2])) {
+        if (!requestMethodDefinitionsHolder.matchAnyMappings(uri)) {
             chain.doFilter(request, response);
             return;
         }
         ResponseWrapper wrapperResponse = new ResponseWrapper((HttpServletResponse) response);
         chain.doFilter(request, wrapperResponse);
-        String content = new String(wrapperResponse.getContent());
-        if (content.length() > 0) {
-            // 认为不是RequestResult类型
-            if (Jsons.getValue(content, "code") == null) {
-                content = RequestResult.SUCCESS_NONEMPTY_JSON_PRXFIX + content +
-                        RequestResult.SUCCESS_NONEMPTY_JSON_SUFFIX;
-            }
-        } else {
-            content = RequestResult.SUCCESS_EMPTY_JSON;
-        }
+        String rawContent = new String(wrapperResponse.getContent());
+        String wrappedContent = wrapRequestResult(rawContent);
         ServletOutputStream out = response.getOutputStream();
-        out.write(content.getBytes());
+        response.setContentLengthLong(wrappedContent.length());
+        out.write(wrappedContent.getBytes());
         out.flush();
     }
 
@@ -115,6 +110,20 @@ public class GlobalReturnFilter implements Filter {
             public void setWriteListener(WriteListener arg0) {
             }
         }
+    }
+
+    private String wrapRequestResult(String content) {
+        if (content.length() > 0) {
+            if (!content.startsWith("{\"code\":200") || !content.endsWith("}")) {
+                if (!content.startsWith("{") || !content.endsWith("}")) {
+                    content = "\"" + content + "\"";
+                }
+                content = "{\"code\":200,\"data\":" + content + "}";
+            }
+        } else {
+            content = RequestResult.SUCCESS_EMPTY_JSON;
+        }
+        return content;
     }
 
 }

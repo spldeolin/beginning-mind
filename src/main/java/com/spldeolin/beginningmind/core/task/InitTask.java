@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.service.ImageService;
 import com.spldeolin.beginningmind.core.service.SignService;
+import com.spldeolin.beginningmind.core.task.holder.RequestMethodDefinitionsHolder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -28,6 +29,9 @@ public class InitTask implements CommandLineRunner {
     @Autowired
     private CoreProperties properties;
 
+    @Autowired
+    private RequestMethodDefinitionsHolder requestMethodDefinitionsHolder;
+
     @Override
     public void run(String... args) {
         // 将配置中出现的所有localhost替换为本地IP
@@ -38,6 +42,8 @@ public class InitTask implements CommandLineRunner {
         validateProperties();
         // 确保本地目录存在
         ensureDirectoryExist();
+        // 初始化mapping一览
+        requestMethodDefinitionsHolder.init();
         log.info("启动成功");
     }
 
