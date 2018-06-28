@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.cache;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.apache.poi.ss.formula.functions.T;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.DataType;
@@ -41,11 +43,11 @@ public class RedisCache2 {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    private final StringRedisSerializer StringSerializer = new StringRedisSerializer();
+    private final StringRedisSerializer stringSerializer = new StringRedisSerializer();
 
     private byte[] rawKey(String key) {
         Assert.notNull(key, "key should not be null.");
-        return StringSerializer.serialize(key);
+        return stringSerializer.serialize(key);
     }
 
     private byte[][] rawKeys(Collection<String> keys) {
@@ -58,18 +60,13 @@ public class RedisCache2 {
         return rawKeys;
     }
 
-    private byte[] rawHashKey(String hashKey) {
-        Assert.notNull(hashKey, "Hash key should not be null.");
-        return StringSerializer.serialize(hashKey);
-    }
-
     private byte[] rawValue(Object value) {
         Assert.notNull(value, "Value should not be null.");
         if (value instanceof byte[]) {
             return (byte[]) value;
         }
         if (value instanceof String) {
-            return StringSerializer.serialize((String) value);
+            return stringSerializer.serialize((String) value);
         }
         return ProtostuffSerializationUtils.serialize(value);
     }
@@ -155,7 +152,7 @@ public class RedisCache2 {
     public Set<String> keys(String pattern) {
         final byte[] rawKey = rawKey(pattern);
         Set<byte[]> rawKeyBtyesSet = redisTemplate.execute(connection -> connection.keys(rawKey), true);
-        Set<String> rawKeys = rawKeyBtyesSet.stream().map(StringSerializer::deserialize).collect(Collectors.toSet());
+        Set<String> rawKeys = rawKeyBtyesSet.stream().map(stringSerializer::deserialize).collect(Collectors.toSet());
         return rawKeys;
     }
 
@@ -204,7 +201,7 @@ public class RedisCache2 {
      */
     public String randomKey() {
         byte[] rawKey = redisTemplate.execute(RedisKeyCommands::randomKey, true);
-        return StringSerializer.deserialize(rawKey);
+        return stringSerializer.deserialize(rawKey);
     }
 
     /**
@@ -271,7 +268,7 @@ public class RedisCache2 {
         final byte[] rawKey = rawKey(key);
         byte[] rawValue = redisTemplate.execute(
                 (RedisCallback<byte[]>) connection -> connection.getRange(rawKey, start, end));
-        return StringSerializer.deserialize(rawValue);
+        return stringSerializer.deserialize(rawValue);
     }
 
     /**
@@ -449,7 +446,7 @@ public class RedisCache2 {
      */
     public <T> T hGet(String key, String hashKey, Class<T> clazz) {
         final byte[] rawKey = rawKey(key);
-        final byte[] rawHashKey = rawHashKey(hashKey);
+        final byte[] rawHashKey = rawKey(hashKey);
         byte[] rawValue = redisTemplate.execute(connection -> connection.hGet(rawKey, rawHashKey), true);
         return ProtostuffSerializationUtils.deserialize(rawValue, clazz);
     }
@@ -457,23 +454,55 @@ public class RedisCache2 {
     /**
      * 获取所有给定字段的值
      */
-    public Map<Object, Object> hGetAll(String key) {
-        return redisTemplate.opsForHash().entries(key);
+    public Map<String, T> hGetAll(String key, Class<T> clazz) {
+        final byte[] rawKey = rawKey(key);
+        Map<byte[], byte[]> rawValuesByKey = redisTemplate.execute(connection -> connection.hGetAll(rawKey), true);
+        Map<String, T> valuesByKey = new HashMap<>(rawValuesByKey.size());
+        for (Map.Entry<byte[], byte[]> entry : rawValuesByKey.entrySet()) {
+            String targetKey = stringSerializer.deserialize(entry.getKey());
+            T targetValue = ProtostuffSerializationUtils.deserialize(entry.getValue(), clazz);
+            valuesByKey.put(targetKey, targetValue);
+        }
+        return valuesByKey;
     }
 
     /**
      * 获取所有给定字段的值
      */
-    public List<Object> hMultiGet(String key, Collection<Object> fields) {
-        return redisTemplate.opsForHash().multiGet(key, fields);
+    public <T> List<T> hMultiGet(String key, Collection<String> hashKeys, Class<T> clazz) {
+        final byte[] rawKey = rawKey(key);
+        final byte[][] rawHashKeys = rawKeys(hashKeys);
+        List<byte[]> rawValues = redisTemplate.execute(connection -> connection.hMGet(rawKey, rawHashKeys), true);
+        List<T> values = rawValues.stream().map(v -> ProtostuffSerializationUtils.deserialize(v, clazz)).collect(
+                Collectors.toList());
+        return values;
     }
 
     public void hPut(String key, String hashKey, String value) {
-        redisTemplate.opsForHash().put(key, hashKey, value);
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawHashKey = rawKey(hashKey);
+        final byte[] rawValue = rawValue(value);
+        redisTemplate.execute(connection -> {
+            connection.hSet(rawKey, rawHashKey, rawValue);
+            return null;
+        }, true);
     }
 
-    public void hPutAll(String key, Map<String, String> maps) {
-        redisTemplate.opsForHash().putAll(key, maps);
+    public void hPutAll(String key, Map<String, Object> valuesByKey) {
+        if (valuesByKey.isEmpty()) {
+            return;
+        }
+        final byte[] rawKey = rawKey(key);
+        final Map<byte[], byte[]> rawValuesByKey = new LinkedHashMap<>(valuesByKey.size());
+        for (Map.Entry<String, Object> valueByKey : valuesByKey.entrySet()) {
+            byte[] rawHashKey = rawKey(valueByKey.getKey());
+            byte[] rawValue = rawValue(valueByKey.getValue());
+            rawValuesByKey.put(rawHashKey, rawValue);
+        }
+        redisTemplate.execute(connection -> {
+            connection.hMSet(rawKey, rawValuesByKey);
+            return null;
+        }, true);
     }
 
     /**
