@@ -1,23 +1,27 @@
 package com.spldeolin.beginningmind.core.cache;
 
+import java.time.LocalDateTime;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.connection.RedisKeyCommands;
 import org.springframework.data.redis.core.Cursor;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
-import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
+import org.springframework.util.CollectionUtils;
+import com.spldeolin.beginningmind.core.cache.util.ProtostuffSerializationUtils;
+import com.spldeolin.beginningmind.core.util.Times;
 
 /**
  * Redis工具类
@@ -30,148 +34,231 @@ public class RedisCache2 {
     @Autowired
     private StringRedisTemplate redisTemplate;
 
-    @Autowired
-    private RedisTemplate redisTemplate2;
+    private final StringRedisSerializer StringSerializer = new StringRedisSerializer();
 
-    // TODO rawKey rawValue
-    private byte[] rawKey(Object key) {
+    private byte[] rawKey(String key) {
         Assert.notNull(key, "key should not be null.");
-        if (key instanceof byte[]) {
-            return (byte[]) key;
-        }
-        RedisSerializer keySerializer = new StringRedisSerializer();
-        return keySerializer.serialize(key);
+        return StringSerializer.serialize(key);
     }
 
-    //private byte[] rawValue()
+    private byte[][] rawKeys(Collection<String> keys) {
+        final byte[][] rawKeys = new byte[keys.size()][];
+        int i = 0;
+        for (String key : keys) {
+            rawKeys[i++] = rawKey(key);
+        }
+        return rawKeys;
+    }
 
+    private byte[] rawValue(Object value) {
+        Assert.notNull(value, "Value should not be null.");
+        if (value instanceof byte[]) {
+            return (byte[]) value;
+        }
+        if (value instanceof String) {
+            return StringSerializer.serialize((String) value);
+        }
+        return ProtostuffSerializationUtils.serialize(value);
+    }
 
-    /** -------------------key相关操作--------------------- */
+    /*
+        key相关操作
+    */
+
     /**
      * 删除key
      */
     public void delete(String key) {
-        redisTemplate.delete(key);
+        final byte[] rawKey = rawKey(key);
+        redisTemplate.execute(connection -> {
+            connection.del(rawKey);
+            return null;
+        }, true);
     }
 
     /**
      * 批量删除key
      */
     public void delete(Collection<String> keys) {
-        redisTemplate.delete(keys);
+        if (CollectionUtils.isEmpty(keys)) {
+            return;
+        }
+        final byte[][] rawKeys = rawKeys(keys);
+        redisTemplate.execute(connection -> {
+            connection.del(rawKeys);
+            return null;
+        }, true);
     }
 
     /**
      * 序列化key
      */
     public byte[] dump(String key) {
-        return redisTemplate.dump(key);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.dump(rawKey), true);
     }
 
     /**
      * 是否存在key
      */
     public Boolean hasKey(String key) {
-        return redisTemplate.hasKey(key);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.exists(rawKey), true);
     }
 
     /**
      * 设置过期时间
      */
     public Boolean expire(String key, long timeout, TimeUnit unit) {
-        return redisTemplate.expire(key, timeout, unit);
+        final byte[] rawKey = rawKey(key);
+        final long rawTimeout = TimeoutUtils.toMillis(timeout, unit);
+        return redisTemplate.execute(connection -> {
+            try {
+                return connection.pExpire(rawKey, rawTimeout);
+            } catch (Exception e) {
+                // Driver may not support pExpire or we may be running on Redis 2.4
+                return connection.expire(rawKey, TimeoutUtils.toSeconds(timeout, unit));
+            }
+        }, true);
     }
 
     /**
      * 设置过期时间
      */
-    public Boolean expireAt(String key, Date date) {
-        return redisTemplate.expireAt(key, date);
+    public Boolean expireAt(String key, LocalDateTime localDateTime) {
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> {
+            try {
+                return connection.pExpireAt(rawKey, Times.toUnixTimestamp(localDateTime) * 1000);
+            } catch (Exception e) {
+                return connection.expireAt(rawKey, Times.toUnixTimestamp(localDateTime));
+            }
+        }, true);
     }
 
     /**
      * 查找匹配的key
      */
     public Set<String> keys(String pattern) {
-        return redisTemplate.keys(pattern);
+        final byte[] rawKey = rawKey(pattern);
+        Set<byte[]> rawKeyBtyesSet = redisTemplate.execute(connection -> connection.keys(rawKey), true);
+        Set<String> rawKeys = rawKeyBtyesSet.stream().map(StringSerializer::deserialize).collect(Collectors.toSet());
+        return rawKeys;
     }
 
     /**
      * 将当前数据库的 key 移动到给定的数据库 db 当中
      */
     public Boolean move(String key, int dbIndex) {
-        return redisTemplate.move(key, dbIndex);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.move(rawKey, dbIndex), true);
     }
 
     /**
      * 移除 key 的过期时间，key 将持久保持
      */
     public Boolean persist(String key) {
-        return redisTemplate.persist(key);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.persist(rawKey), true);
     }
 
     /**
      * 返回 key 的剩余的过期时间
      */
-    public Long getExpire(String key, TimeUnit unit) {
-        return redisTemplate.getExpire(key, unit);
+    public Long getExpire(String key, TimeUnit timeUnit) {
+        final byte[] rawKey = rawKey(key);
+
+        return redisTemplate.execute(connection -> {
+            try {
+                return connection.pTtl(rawKey, timeUnit);
+            } catch (Exception e) {
+                // Driver may not support pTtl or we may be running on Redis 2.4
+                return connection.ttl(rawKey, timeUnit);
+            }
+        }, true);
     }
 
     /**
      * 返回 key 的剩余的过期时间
      */
     public Long getExpire(String key) {
-        return redisTemplate.getExpire(key);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.ttl(rawKey), true);
     }
 
     /**
      * 从当前数据库中随机返回一个 key
      */
     public String randomKey() {
-        return redisTemplate.randomKey();
+        byte[] rawKey = redisTemplate.execute(RedisKeyCommands::randomKey, true);
+        return StringSerializer.deserialize(rawKey);
     }
 
     /**
      * 修改 key 的名称
      */
     public void rename(String oldKey, String newKey) {
-        redisTemplate.rename(oldKey, newKey);
+        final byte[] rawOldKey = rawKey(oldKey);
+        final byte[] rawNewKey = rawKey(newKey);
+        redisTemplate.execute(connection -> {
+            connection.rename(rawOldKey, rawNewKey);
+            return null;
+        }, true);
     }
 
     /**
      * 仅当 newkey 不存在时，将 oldKey 改名为 newkey
      */
     public Boolean renameIfAbsent(String oldKey, String newKey) {
-        return redisTemplate.renameIfAbsent(oldKey, newKey);
+        final byte[] rawOldKey = rawKey(oldKey);
+        final byte[] rawNewKey = rawKey(newKey);
+        return redisTemplate.execute(connection -> connection.renameNX(rawOldKey, rawNewKey), true);
     }
 
     /**
      * 返回 key 所储存的值的类型
      */
     public DataType type(String key) {
-        return redisTemplate.type(key);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.type(rawKey), true);
     }
 
-    /** -------------------string相关操作--------------------- */
+    /*
+        string（对象）相关操作
+    */
+
     /**
      * 设置指定 key 的值
      */
     public void set(String key, String value) {
-        redisTemplate.opsForValue().set(key, value);
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawValue = rawValue(value);
+        redisTemplate.execute(connection -> {
+            connection.set(rawKey, rawValue);
+            return null;
+        }, true);
     }
 
     /**
      * 获取指定 key 的值
      */
-    public String get(String key) {
-        return redisTemplate.opsForValue().get(key);
+    public <T> T get(String key, Class<T> clazz) {
+        final byte[] rawKey = rawKey(key);
+        byte[] rawValue = redisTemplate.execute((RedisCallback<byte[]>) connection -> connection.get(rawKey));
+        if (rawValue == null) {
+            return null;
+        }
+        return ProtostuffSerializationUtils.deserialize(rawValue, clazz);
     }
 
     /**
      * 返回 key 中字符串值的子字符
      */
     public String getRange(String key, long start, long end) {
-        return redisTemplate.opsForValue().get(key, start, end);
+        final byte[] rawKey = rawKey(key);
+        byte[] rawValue = redisTemplate.execute(
+                (RedisCallback<byte[]>) connection -> connection.getRange(rawKey, start, end));
+        return StringSerializer.deserialize(rawValue);
     }
 
     /**
