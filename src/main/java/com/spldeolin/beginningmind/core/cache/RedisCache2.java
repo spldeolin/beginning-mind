@@ -14,14 +14,17 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
+import org.springframework.data.redis.serializer.RedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 
 /**
  * Redis工具类
  * <p>
  * TODO 作成中
  */
-@Component
+//@Component
 public class RedisCache2 {
 
     @Autowired
@@ -31,6 +34,17 @@ public class RedisCache2 {
     private RedisTemplate redisTemplate2;
 
     // TODO rawKey rawValue
+    private byte[] rawKey(Object key) {
+        Assert.notNull(key, "key should not be null.");
+        if (key instanceof byte[]) {
+            return (byte[]) key;
+        }
+        RedisSerializer keySerializer = new StringRedisSerializer();
+        return keySerializer.serialize(key);
+    }
+
+    //private byte[] rawValue()
+
 
     /** -------------------key相关操作--------------------- */
     /**

@@ -13,11 +13,15 @@ import org.apache.commons.io.FileUtils;
 import org.hibernate.validator.constraints.Email;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.core.util.Signer;
@@ -103,6 +107,22 @@ public class TestController {
     @GetMapping("signer")
     CurrentSigner signer() {
         return Signer.current();
+    }
+
+    @PostMapping("requestParamJavaBean")
+    String requestParamJavaBean(JavaBean query, @RequestBody JavaBean body) {
+        return query.toString() + body;
+    }
+
+    @Data
+    private static class JavaBean {
+
+        private String a;
+
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @JsonFormat(pattern = "yyyy:MM:dd'T'HH-mm-ss")
+        private LocalDateTime b;
+
     }
 
 }
