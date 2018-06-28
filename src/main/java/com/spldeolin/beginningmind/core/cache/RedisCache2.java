@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.cache;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -9,7 +10,9 @@ import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.DataType;
+import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.connection.RedisKeyCommands;
 import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisCallback;
@@ -26,7 +29,7 @@ import com.spldeolin.beginningmind.core.util.Times;
 
 /**
  * Redis操作工具
- *
+ * <p>
  * 使用StringRedisSerializer作为Key和String类型Value的序列器
  * 使用ProtostuffSerializationUtils作为非String类型Value的序列器
  *
@@ -46,12 +49,18 @@ public class RedisCache2 {
     }
 
     private byte[][] rawKeys(Collection<String> keys) {
+        Assert.notEmpty(keys, "keys should not be empty.");
         final byte[][] rawKeys = new byte[keys.size()][];
         int i = 0;
         for (String key : keys) {
             rawKeys[i++] = rawKey(key);
         }
         return rawKeys;
+    }
+
+    private byte[] rawHashKey(String hashKey) {
+        Assert.notNull(hashKey, "Hash key should not be null.");
+        return StringSerializer.serialize(hashKey);
     }
 
     private byte[] rawValue(Object value) {
@@ -268,22 +277,31 @@ public class RedisCache2 {
     /**
      * 将给定 key 的值设为 value ，并返回 key 的旧值(old value)
      */
-    public String getAndSet(String key, String value) {
-        return redisTemplate.opsForValue().getAndSet(key, value);
+    public <T> T getSet(String key, String newValue, Class<T> oldClass) {
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawNewValue = rawValue(newValue);
+        byte[] rawOldValue = redisTemplate.execute(
+                (RedisCallback<byte[]>) connection -> connection.getSet(rawKey, rawNewValue));
+        return ProtostuffSerializationUtils.deserialize(rawOldValue, oldClass);
     }
 
     /**
      * 对 key 所储存的字符串值，获取指定偏移量上的位(bit)
      */
     public Boolean getBit(String key, long offset) {
-        return redisTemplate.opsForValue().getBit(key, offset);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.getBit(rawKey, offset), true);
     }
 
     /**
      * 批量获取
      */
-    public List<String> multiGet(Collection<String> keys) {
-        return redisTemplate.opsForValue().multiGet(keys);
+    public <T> List<T> multiGet(Collection<String> keys, Class<T> clazz) {
+        final byte[][] rawKeys = rawKeys(keys);
+        List<byte[]> rawValues = redisTemplate.execute(connection -> connection.mGet(rawKeys), true);
+        List<T> values = rawValues.stream().map(v -> ProtostuffSerializationUtils.deserialize(v, clazz)).collect(
+                Collectors.toList());
+        return values;
     }
 
     /**
@@ -292,18 +310,42 @@ public class RedisCache2 {
      * @param value 值,true为1, false为0
      */
     public boolean setBit(String key, long offset, boolean value) {
-        return redisTemplate.opsForValue().setBit(key, offset, value);
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.setBit(rawKey, offset, value), true);
     }
 
     /**
      * 将值 value 关联到 key ，并将 key 的过期时间设为 timeout
      *
      * @param timeout 过期时间
-     * @param unit 时间单位, 天:TimeUnit.DAYS 小时:TimeUnit.HOURS 分钟:TimeUnit.MINUTES
-     * 秒:TimeUnit.SECONDS 毫秒:TimeUnit.MILLISECONDS
+     * @param unit 时间单位
      */
-    public void setEx(String key, String value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(key, value, timeout, unit);
+    public void setEx(String key, Object value, long timeout, TimeUnit unit) {
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawValue = rawValue(value);
+        redisTemplate.execute(new RedisCallback<Object>() {
+            public Object doInRedis(RedisConnection connection) throws DataAccessException {
+                potentiallyUsePsetEx(connection);
+                return null;
+            }
+
+            public void potentiallyUsePsetEx(RedisConnection connection) {
+                if (!TimeUnit.MILLISECONDS.equals(unit) || !failsafeInvokePsetEx(connection)) {
+                    connection.setEx(rawKey, TimeoutUtils.toSeconds(timeout, unit), rawValue);
+                }
+            }
+
+            private boolean failsafeInvokePsetEx(RedisConnection connection) {
+                boolean failed = false;
+                try {
+                    connection.pSetEx(rawKey, timeout, rawValue);
+                } catch (UnsupportedOperationException e) {
+                    // in case the connection does not support pSetEx return false to allow fallback to other operation.
+                    failed = true;
+                }
+                return !failed;
+            }
+        }, true);
     }
 
     /**
@@ -311,8 +353,10 @@ public class RedisCache2 {
      *
      * @return 之前已经存在返回false, 不存在返回true
      */
-    public boolean setIfAbsent(String key, String value) {
-        return redisTemplate.opsForValue().setIfAbsent(key, value);
+    public boolean setIfAbsent(String key, Object value) {
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawValue = rawValue(value);
+        return redisTemplate.execute(connection -> connection.setNX(rawKey, rawValue), true);
     }
 
     /**
@@ -321,21 +365,34 @@ public class RedisCache2 {
      * @param offset 从指定位置开始覆写
      */
     public void setRange(String key, String value, long offset) {
-        redisTemplate.opsForValue().set(key, value, offset);
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawValue = rawValue(value);
+        redisTemplate.execute(connection -> {
+            connection.setRange(rawKey, rawValue, offset);
+            return null;
+        }, true);
     }
 
     /**
      * 获取字符串的长度
      */
-    public Long size(String key) {
-        return redisTemplate.opsForValue().size(key);
+    public long size(String key) {
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.strLen(rawKey), true);
     }
 
     /**
      * 批量添加
      */
-    public void multiSet(Map<String, String> maps) {
-        redisTemplate.opsForValue().multiSet(maps);
+    public void multiSet(Map<String, Object> map) {
+        final Map<byte[], byte[]> rawMap = new LinkedHashMap<>(map.size());
+        for (Map.Entry<? extends String, ?> entry : map.entrySet()) {
+            rawMap.put(rawKey(entry.getKey()), rawValue(entry.getValue()));
+        }
+        redisTemplate.execute(connection -> {
+            connection.mSet(rawMap);
+            return null;
+        }, true);
     }
 
     /**
@@ -343,26 +400,44 @@ public class RedisCache2 {
      *
      * @return 之前已经存在返回false, 不存在返回true
      */
-    public boolean multiSetIfAbsent(Map<String, String> maps) {
-        return redisTemplate.opsForValue().multiSetIfAbsent(maps);
+    public boolean multiSetIfAbsent(Map<String, String> map) {
+        final Map<byte[], byte[]> rawMap = new LinkedHashMap<>(map.size());
+        for (Map.Entry<? extends String, ?> entry : map.entrySet()) {
+            rawMap.put(rawKey(entry.getKey()), rawValue(entry.getValue()));
+        }
+        return redisTemplate.execute(connection -> connection.mSetNX(rawMap), true);
     }
 
     /**
-     * 增加(自增长), 负数则为自减
+     * 让指定对象自增一个整数
+     * <p>
+     * 要求key指向的对象是数字类型
      */
-    public Long incrBy(String key, long increment) {
-        return redisTemplate.opsForValue().increment(key, increment);
+    public Long incrBy(String key, long delta) {
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.incrBy(rawKey, delta), true);
     }
 
-    public Double incrByFloat(String key, double increment) {
-        return redisTemplate.opsForValue().increment(key, increment);
+    /**
+     * 让指定对象自增一个浮点数
+     * <p>
+     * 要求key指向的对象是数字类型
+     */
+    public Double incrByFloat(String key, double delta) {
+        final byte[] rawKey = rawKey(key);
+        return redisTemplate.execute(connection -> connection.incrBy(rawKey, delta), true);
     }
 
     /**
      * 追加到末尾
      */
     public Integer append(String key, String value) {
-        return redisTemplate.opsForValue().append(key, value);
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawValue = rawKey(value);
+        return redisTemplate.execute(connection -> {
+            final Long result = connection.append(rawKey, rawValue);
+            return (result != null) ? result.intValue() : null;
+        }, true);
     }
 
     /*
@@ -372,8 +447,11 @@ public class RedisCache2 {
     /**
      * 获取存储在哈希表中指定字段的值
      */
-    public Object hGet(String key, String field) {
-        return redisTemplate.opsForHash().get(key, field);
+    public <T> T hGet(String key, String hashKey, Class<T> clazz) {
+        final byte[] rawKey = rawKey(key);
+        final byte[] rawHashKey = rawHashKey(hashKey);
+        byte[] rawValue = redisTemplate.execute(connection -> connection.hGet(rawKey, rawHashKey), true);
+        return ProtostuffSerializationUtils.deserialize(rawValue, clazz);
     }
 
     /**
