@@ -125,4 +125,23 @@ public class TestController {
 
     }
 
+    @GetMapping("multiRequestParamJavaBean")
+    String multiRequestParamJavaBean(ConditionParam conditionParam, PageParam pageParam) {
+        return conditionParam.toString() + pageParam;
+    }
+
+    @Data
+    private static class ConditionParam {
+
+        private String a;
+    }
+
+    @Data
+    private static class PageParam {
+
+        private Integer pageNo;
+
+        private Integer pageSize;
+    }
+
 }
