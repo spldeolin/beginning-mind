@@ -234,7 +234,7 @@ public class RedisCache2 {
     /**
      * 设置指定 key 的值
      */
-    public void set(String key, String value) {
+    public void set(String key, Object value) {
         final byte[] rawKey = rawKey(key);
         final byte[] rawValue = rawValue(value);
         redisTemplate.execute(connection -> {
