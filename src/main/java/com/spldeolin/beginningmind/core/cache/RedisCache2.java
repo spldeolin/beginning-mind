@@ -18,17 +18,21 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.TimeoutUtils;
 import org.springframework.data.redis.core.ZSetOperations.TypedTuple;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.stereotype.Component;
 import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import com.spldeolin.beginningmind.core.cache.util.ProtostuffSerializationUtils;
 import com.spldeolin.beginningmind.core.util.Times;
 
 /**
- * Redis工具类
- * <p>
- * TODO 作成中
+ * Redis操作工具
+ *
+ * 使用StringRedisSerializer作为Key和String类型Value的序列器
+ * 使用ProtostuffSerializationUtils作为非String类型Value的序列器
+ *
+ * @author Deolin 2018/06/27
  */
-//@Component
+@Component
 public class RedisCache2 {
 
     @Autowired
@@ -350,11 +354,6 @@ public class RedisCache2 {
         return redisTemplate.opsForValue().increment(key, increment);
     }
 
-    /**
-     *
-     * @param key
-     * @return
-     */
     public Double incrByFloat(String key, double increment) {
         return redisTemplate.opsForValue().increment(key, increment);
     }
@@ -366,7 +365,10 @@ public class RedisCache2 {
         return redisTemplate.opsForValue().append(key, value);
     }
 
-    /** -------------------hash相关操作------------------------- */
+    /*
+        hash相关操作
+    */
+
     /**
      * 获取存储在哈希表中指定字段的值
      */
@@ -459,7 +461,10 @@ public class RedisCache2 {
         return redisTemplate.opsForHash().scan(key, options);
     }
 
-    /** ------------------------list相关操作---------------------------- */
+    /*
+        list相关操作
+    */
+
     /**
      * 通过索引获取列表中的元素
      */
@@ -484,22 +489,10 @@ public class RedisCache2 {
         return redisTemplate.opsForList().leftPush(key, value);
     }
 
-    /**
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     public Long lLeftPushAll(String key, String... value) {
         return redisTemplate.opsForList().leftPushAll(key, value);
     }
 
-    /**
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     public Long lLeftPushAll(String key, Collection<String> value) {
         return redisTemplate.opsForList().leftPushAll(key, value);
     }
@@ -518,32 +511,14 @@ public class RedisCache2 {
         return redisTemplate.opsForList().leftPush(key, pivot, value);
     }
 
-    /**
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     public Long lRightPush(String key, String value) {
         return redisTemplate.opsForList().rightPush(key, value);
     }
 
-    /**
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     public Long lRightPushAll(String key, String... value) {
         return redisTemplate.opsForList().rightPushAll(key, value);
     }
 
-    /**
-     *
-     * @param key
-     * @param value
-     * @return
-     */
     public Long lRightPushAll(String key, Collection<String> value) {
         return redisTemplate.opsForList().rightPushAll(key, value);
     }
@@ -650,7 +625,10 @@ public class RedisCache2 {
         return redisTemplate.opsForList().size(key);
     }
 
-    /** --------------------set相关操作-------------------------- */
+    /*
+        set相关操作
+    */
+
     /**
      * set添加元素
      */
@@ -812,17 +790,14 @@ public class RedisCache2 {
         return redisTemplate.opsForSet().distinctRandomMembers(key, count);
     }
 
-    /**
-     *
-     * @param key
-     * @param options
-     * @return
-     */
     public Cursor<String> sScan(String key, ScanOptions options) {
         return redisTemplate.opsForSet().scan(key, options);
     }
 
-    /**------------------zSet相关操作--------------------------------*/
+    /*
+        zSet相关操作
+    */
+
     /**
      * 添加元素,有序集合是按照元素的score值由小到大排列
      */
@@ -830,22 +805,10 @@ public class RedisCache2 {
         return redisTemplate.opsForZSet().add(key, value, score);
     }
 
-    /**
-     *
-     * @param key
-     * @param values
-     * @return
-     */
     public Long zAdd(String key, Set<TypedTuple<String>> values) {
         return redisTemplate.opsForZSet().add(key, values);
     }
 
-    /**
-     *
-     * @param key
-     * @param values
-     * @return
-     */
     public Long zRemove(String key, Object... values) {
         return redisTemplate.opsForZSet().remove(key, values);
     }
@@ -912,15 +875,6 @@ public class RedisCache2 {
         return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max);
     }
 
-    /**
-     *
-     * @param key
-     * @param min
-     * @param max
-     * @param start
-     * @param end
-     * @return
-     */
     public Set<TypedTuple<String>> zRangeByScoreWithScores(String key,
             double min, double max, long start, long end) {
         return redisTemplate.opsForZSet().rangeByScoreWithScores(key, min, max,
@@ -960,15 +914,6 @@ public class RedisCache2 {
                 min, max);
     }
 
-    /**
-     *
-     * @param key
-     * @param min
-     * @param max
-     * @param start
-     * @param end
-     * @return
-     */
     public Set<String> zReverseRangeByScore(String key, double min,
             double max, long start, long end) {
         return redisTemplate.opsForZSet().reverseRangeByScore(key, min, max,
@@ -1024,13 +969,6 @@ public class RedisCache2 {
         return redisTemplate.opsForZSet().unionAndStore(key, otherKey, destKey);
     }
 
-    /**
-     *
-     * @param key
-     * @param otherKeys
-     * @param destKey
-     * @return
-     */
     public Long zUnionAndStore(String key, Collection<String> otherKeys,
             String destKey) {
         return redisTemplate.opsForZSet()
@@ -1055,12 +993,6 @@ public class RedisCache2 {
                 destKey);
     }
 
-    /**
-     *
-     * @param key
-     * @param options
-     * @return
-     */
     public Cursor<TypedTuple<String>> zScan(String key, ScanOptions options) {
         return redisTemplate.opsForZSet().scan(key, options);
     }
