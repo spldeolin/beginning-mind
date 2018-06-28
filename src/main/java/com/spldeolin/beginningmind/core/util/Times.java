@@ -31,18 +31,15 @@ public class Times {
 
     public static final String DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
 
+    /*
+        java.util.Date相关
+     */
+
     /**
      * Date转化为LocalDateTime
      */
     public static LocalDateTime toLocalDateTime(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), systemZone);
-    }
-
-    /**
-     * UNIX时间戳转化为LocalDateTime
-     */
-    public static LocalDateTime toLocalDateTime(long unixTimeStamp) {
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTimeStamp), ZoneId.systemDefault());
     }
 
     /**
@@ -65,6 +62,10 @@ public class Times {
     public static Date toDate(LocalDateTime localDateTime) {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
+
+    /*
+        格式化相关
+     */
 
     /**
      * LocalDateTime转化为String（yyyy-MM-dd HH:mm:ss）
@@ -106,6 +107,17 @@ public class Times {
      */
     public static String toString(LocalTime localTime, String pattern) {
         return DateTimeFormatter.ofPattern(pattern).format(localTime);
+    }
+
+    /*
+        UNIX时间戳相关
+     */
+
+    /**
+     * UNIX时间戳转化为LocalDateTime
+     */
+    public static LocalDateTime toLocalDateTime(long unixTimeStamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTimeStamp), ZoneId.systemDefault());
     }
 
     /**
