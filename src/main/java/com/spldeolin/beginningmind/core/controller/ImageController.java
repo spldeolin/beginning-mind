@@ -2,7 +2,7 @@
  * Created by IntelliJ IDEA File Templates.
  */
 
-package com.spldeolin.beginningmind.core.controller2;
+package com.spldeolin.beginningmind.core.controller;
 
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;

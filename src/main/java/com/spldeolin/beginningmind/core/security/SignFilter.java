@@ -27,7 +27,7 @@ import javax.servlet.ServletResponse;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
-import com.spldeolin.beginningmind.core.controller2.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.core.controller.UrlForwardToExceptionController;
 
 /**
  * 登录过滤器

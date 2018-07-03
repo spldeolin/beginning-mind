@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.controller2.annotation;
+package com.spldeolin.beginningmind.core.controller.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

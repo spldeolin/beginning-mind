@@ -4,7 +4,7 @@
  * https://github.com/spldeolin/cadeau-support
  */
 
-package com.spldeolin.beginningmind.core.controller2;
+package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
 import javax.validation.Valid;

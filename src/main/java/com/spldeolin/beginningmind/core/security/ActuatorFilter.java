@@ -4,7 +4,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
-import com.spldeolin.beginningmind.core.controller2.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.core.controller.UrlForwardToExceptionController;
 import lombok.AllArgsConstructor;
 
 /**
