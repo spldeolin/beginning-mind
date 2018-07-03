@@ -23,7 +23,7 @@ import com.spldeolin.beginningmind.core.cache.RedisCache;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dao.SecurityUserMapper;
-import com.spldeolin.beginningmind.core.dto.PageParam;
+import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.core.model.SecurityUser;

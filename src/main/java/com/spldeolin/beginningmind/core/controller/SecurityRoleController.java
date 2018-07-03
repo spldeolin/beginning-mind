@@ -15,7 +15,7 @@ import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.input.SecurityRoleInput;
 import com.spldeolin.beginningmind.core.service.SecurityRoleService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.dto.PageParam;
+import com.spldeolin.beginningmind.core.api.dto.PageParam;
 
 /**
  * “角色”管理

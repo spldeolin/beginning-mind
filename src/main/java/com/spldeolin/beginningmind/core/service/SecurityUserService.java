@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.dto.PageParam;
+import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 
 /**

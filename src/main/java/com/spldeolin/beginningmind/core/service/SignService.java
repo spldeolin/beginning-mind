@@ -15,12 +15,8 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.dto.RequestResult;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.security.GifCaptcha;
@@ -109,15 +105,14 @@ public class SignService {
     /**
      * 指定用户是否登录中
      */
-    public Boolean isSign(@RequestParam Long userId) {
+    public Boolean isSign(Long userId) {
         return securityAccountService.isAccountSigning(userId);
     }
 
     /**
      * 将指定用户踢下线
      */
-    @DeleteMapping("kill")
-    public void kill(@RequestParam Long userId) {
+    public void kill(Long userId) {
         securityAccountService.killSigner(userId);
     }
 

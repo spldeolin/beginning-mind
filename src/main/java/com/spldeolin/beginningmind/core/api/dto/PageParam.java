@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.dto;
+package com.spldeolin.beginningmind.core.api.dto;
 
 import org.apache.commons.lang3.math.NumberUtils;
 import com.github.pagehelper.PageHelper;

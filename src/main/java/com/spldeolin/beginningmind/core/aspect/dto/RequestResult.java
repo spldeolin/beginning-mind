@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.dto;
+package com.spldeolin.beginningmind.core.aspect.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.core.constant.ResultCode;

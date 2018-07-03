@@ -9,7 +9,7 @@ package com.spldeolin.beginningmind.core.service;
 import java.util.List;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.dto.PageParam;
+import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.model.SecurityRole;
 
 /**
