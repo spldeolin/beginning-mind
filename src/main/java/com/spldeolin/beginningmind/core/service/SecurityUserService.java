@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
+import com.spldeolin.beginningmind.core.dto.PageParam;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 
 /**
@@ -64,11 +65,10 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
     /**
      * 分页获取资源
      *
-     * @param pageNo 页码
-     * @param pageSize 分页尺寸
+     * @param pageParam 页码和每页条目数
      * @return Page 分页对象
      */
-    Page<SecurityUser> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
+    Page<SecurityUser> page(PageParam pageParam); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
     /**
      * 通过用户名或手机号或email搜索用户

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
-import com.github.pagehelper.PageHelper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.api.dto.Page;
@@ -24,6 +23,7 @@ import com.spldeolin.beginningmind.core.cache.RedisCache;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dao.SecurityUserMapper;
+import com.spldeolin.beginningmind.core.dto.PageParam;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
@@ -128,10 +128,10 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     }
 
     @Override
-    public Page<SecurityUser> page(Integer pageNo, Integer pageSize) {
+    public Page<SecurityUser> page(PageParam pageParam) {
         Condition condition = new Condition(SecurityUser.class);
         condition.createCriteria();
-        PageHelper.startPage(pageNo, pageSize);
+        pageParam.startPage();
         return Page.wrap(securityUserMapper.selectBatchByCondition(condition));
     }
 
