@@ -8,15 +8,19 @@ package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
 import javax.validation.Valid;
-import javax.validation.constraints.Max;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
-import com.spldeolin.beginningmind.core.input.SecurityUserInput;
-import com.spldeolin.beginningmind.core.service.SecurityUserService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.dto.PageParam;
+import com.spldeolin.beginningmind.core.input.SecurityUserInput;
+import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.service.SecurityUserService;
 
 /**
  * “用户”管理
@@ -99,8 +103,8 @@ public class SecurityUserController {
     /**
      * 启用/禁用用户
      */
-    @PostMapping("/banPick/{id}")
-    void banPick(@PathVariable Long id) {
+    @PostMapping("/banPick")
+    void banPick(@RequestParam Long id) {
         securityUserService.banPick(id);
     }
 
