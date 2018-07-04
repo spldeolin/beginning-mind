@@ -171,7 +171,9 @@ public class QRCodes {
     private static void mkdirs(String destPath) {
         File file = new File(destPath);
         if (!file.exists() && !file.isDirectory()) {
-            file.mkdirs();
+            if (!file.mkdirs()) {
+                throw new RuntimeException("创建失败");
+            }
         }
     }
 

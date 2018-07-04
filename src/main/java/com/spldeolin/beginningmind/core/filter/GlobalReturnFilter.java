@@ -86,7 +86,7 @@ public class GlobalReturnFilter implements Filter {
             return buffer.toByteArray();
         }
 
-        class WrapperOutputStream extends ServletOutputStream {
+        private static class WrapperOutputStream extends ServletOutputStream {
 
             private ByteArrayOutputStream bos;
 
