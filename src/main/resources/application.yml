@@ -1,5 +1,11 @@
-# 所有“占位符”属性均由profile指定。
+# 所有“占位符”属性均由profile指定
 # core节点下属性映射到CoreProperties类
+
+########################
+##                    ##
+##       Common       ##
+##                    ##
+########################
 
 debug: 占位符
 
@@ -24,6 +30,8 @@ spring:
         initialSize: 2
         minIdle: 2
         maxActive: 30
+        validationQuery: select 'x'
+        test-on-borrow: true
 
   redis:
     host: 占位符
@@ -91,11 +99,158 @@ core:
     addresser-email: # TODO E-Mail
     addresser-auth-code: # TODO E-Mail
 
-  wechat:
-    a: a
+---
 
-  qiniu:
-    a: a
+########################
+##                    ##
+##     Devlopment     ##
+##                    ##
+########################
 
-  yunpian:
-    a: a
+debug: true
+
+server:
+
+  port: 2333
+
+  context-path: /
+
+spring:
+
+  profiles: dev
+
+  datasource:
+    source1:
+      url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
+      username: root
+      password: root
+
+  redis:
+    host: localhost
+    port: 6379
+    password: root
+
+  data:
+    mongodb:
+      uri: mongodb://root:root@localhost:27017/beginning_mind
+
+  activemq:
+    broker-url: tcp://127.0.0.1:61616
+    spring.activemq.user: admin
+    spring.activemq.password: admin
+
+logging:
+
+  config: # 不指定，使用缺省的src/main/resources/log4j2.yml
+
+core:
+
+  address: localhost:8080
+
+  file:
+    mapping: /static/
+    location: C:/beginning-mind-static/
+
+---
+
+########################
+##                    ##
+##        Test        ##
+##                    ##
+########################
+
+debug: true
+
+server:
+
+  port: # TODO 测试端口
+
+  context-path: /
+
+spring:
+
+  profiles: test
+
+  datasource:
+    source1:
+      url: # TODO 测试数据库
+      username: #TODO 测试数据库
+      password: #TODO 测试数据库
+
+  redis:
+    host: #TODO 测试Redis
+    port: #TODO 测试Redis
+    password: #TODO 测试Redis
+
+  data:
+    mongodb:
+      uri: #TODO 测试MongoDB
+
+  activemq:
+    broker-url: #TODO 测试activeMQ
+    spring.activemq.user: #TODO 测试activeMQ
+    spring.activemq.password: #TODO 测试activeMQ
+
+logging:
+
+  config: classpath:log4j2/log4j2-test.yml
+
+core:
+
+  address: # TODO 测试域名与端口
+
+  file:
+    mapping: /static/
+    location: # TODO 测试环境静态文件目录
+
+---
+
+########################
+##                    ##
+##     Production     ##
+##                    ##
+########################
+
+debug: false
+
+server:
+
+  port: # TODO 生产端口
+
+  context-path: /
+
+spring:
+
+  profiles: prod
+
+  datasource:
+    source1:
+      url: # TODO 生产数据库
+      username: #TODO 生产数据库
+      password: #TODO 生产数据库
+
+  redis:
+    host: #TODO 生产Redis
+    port: #TODO 生产Redis
+    password: #TODO 生产Redis
+
+  data:
+    mongodb:
+      uri: #TODO 生产MongoDB
+
+  activemq:
+    broker-url: #TODO 生产activeMQ
+    spring.activemq.user: #TODO 生产activeMQ
+    spring.activemq.password: #TODO 生产activeMQ
+
+logging:
+
+  config: classpath:log4j2/log4j2-prod.yml
+
+core:
+
+  address: # TODO 生产域名与端口
+
+  file:
+    mapping: /static/
+    location: # TODO 生产环境静态文件目录
