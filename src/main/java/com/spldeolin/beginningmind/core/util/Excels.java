@@ -18,23 +18,23 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.objenesis.Objenesis;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.Formatter;
@@ -55,8 +55,6 @@ import lombok.extern.log4j.Log4j2;
 public class Excels {
 
     private static final SimpleDateFormat ISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-
-    private static final Objenesis OBJENESIS = new ObjenesisStd(true);
 
     /**
      * 生成Excel
@@ -89,7 +87,15 @@ public class Excels {
             log.info(columnNames.toString());
             log.info(formatters.toString());
             log.info(defaultValues.toString());
-            Workbook workbook = new XSSFWorkbook();
+            String fileExtension = FilenameUtils.getExtension(file.getName());
+            Workbook workbook;
+            if ("xlsx".equals(fileExtension)) {
+                workbook = new XSSFWorkbook();
+            } else if ("xls".equals(fileExtension)) {
+                workbook = new HSSFWorkbook();
+            } else {
+                throw new ServiceException("文件拓展名不正确");
+            }
             // 单元格格式（文本）
             CellStyle cellStyle = workbook.createCellStyle();
             DataFormat dataFormat = workbook.createDataFormat();
@@ -171,7 +177,7 @@ public class Excels {
      */
     public static <T> List<T> readExcel(File file, Class<T> clazz) {
         try (FileInputStream fis = new FileInputStream(file)) {
-            return readExcel(fis, clazz);
+            return readExcel(fis, FilenameUtils.getExtension(file.getName()), clazz);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -182,7 +188,8 @@ public class Excels {
      */
     public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
         try {
-            return readExcel(multipartFile.getInputStream(), clazz);
+            return readExcel(multipartFile.getInputStream(),
+                    FilenameUtils.getExtension(multipartFile.getOriginalFilename()), clazz);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -191,16 +198,31 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(InputStream inputStream, Class<T> clazz) {
+    public static <T> List<T> readExcel(InputStream inputStream, String fileExtension, Class<T> clazz) {
         List<T> list = new ArrayList<>();
-        XSSFSheet sheet;
-        try (XSSFWorkbook workBook = new XSSFWorkbook(inputStream)) {
+        Sheet sheet;
+        Workbook workBook = null;
+        try {
+            if ("xlsx".equals(fileExtension)) {
+                workBook = new XSSFWorkbook(inputStream);
+            } else if ("xls".equals(fileExtension)) {
+                workBook = new HSSFWorkbook(inputStream);
+            } else {
+                throw new ServiceException("文件拓展名不正确");
+            }
             if (workBook.getNumberOfSheets() == 0) {
                 return list;
             }
             sheet = workBook.getSheetAt(0);
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } finally {
+            if (workBook != null) {
+                try {
+                    workBook.close();
+                } catch (IOException ignored) {
+                }
+            }
         }
         // 解析clazz
         Field[] fields = clazz.getDeclaredFields();
@@ -227,24 +249,24 @@ public class Excels {
                         formatters.get(index)).cellIndex(cellIndex).build());
             }
         }
-        /*
-            如果最后一个有值的行号是8，sheet.getLastRowNum()只会是7
-          */
+        // <   <=   疑似BUG
         for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-            XSSFRow row = sheet.getRow(rowIndex);
-            T t = OBJENESIS.newInstance(clazz);
-            boolean isAllCellEmptyThisRow = true;
+            Row row = sheet.getRow(rowIndex);
+            Objenesis objenesis = new ObjenesisStd(true);
+            T t = objenesis.newInstance(clazz);
+            boolean rowAllCellsIsNull = true;
             for (ParseCell parseCell : parseCells) {
                 Field field = parseCell.getSrcField();
                 field.setAccessible(true);
                 Formatter formatter = parseCell.getFormatter();
-                XSSFCell cell = row.getCell(parseCell.getCellIndex());
+                Cell cell = row.getCell(parseCell.getCellIndex());
+                String cellContent;
                 if (cell == null) {
-                    continue;
+                    cellContent = null;
                 } else {
-                    isAllCellEmptyThisRow = false;
+                    rowAllCellsIsNull = false;
+                    cellContent = row.getCell(parseCell.getCellIndex()).getStringCellValue();
                 }
-                String cellContent = cell.getStringCellValue();
                 if (StringUtils.isNotEmpty(cellContent)) {
                     try {
                         if (formatter == null || formatter.getClass() == Formatter.class) {
@@ -293,8 +315,7 @@ public class Excels {
                     }
                 }
             }
-            // 仅有序号，没有任何内容的行不会被导入
-            if (!isAllCellEmptyThisRow) {
+            if (!rowAllCellsIsNull) {
                 list.add(t);
             }
         }
