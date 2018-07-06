@@ -10,12 +10,13 @@ import java.util.Date;
 import lombok.experimental.UtilityClass;
 
 /**
- * “时间”类型工具类
+ * java.time包下的“时间”类型工具类
  * <pre>
- * 工具类涉及java.util包和java.time包下的4种“时间”类型。
- * 简化Date转化为LocalDate、LocalTime、LocalDateTime的代码量，涉及到的时区一律为系统所在时区；
- * 简化四种“时间”类型转化为String类型的代码量；
- * 不提供返回类型为Date的方法，因为不再建议使用Date类型
+ * 涉及
+ * java.util.Date与“时间”类型的转化；
+ * String与“时间”类型的转化；
+ * Unix时间戳与“时间”类型的转化；
+ * 简化“时间”类型各种操作的代码量，一切时区均使用系统所在时区；
  * </pre>
  *
  * @author Deolin 2018/05/23
@@ -23,23 +24,75 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Times {
 
-    public static final ZoneId systemZone = ZoneId.systemDefault();
+    public static final ZoneId SYSTEM_ZONE = ZoneId.systemDefault();
 
-    public static final String DATE_PATTERN = "yyyy-MM-dd";
-
-    public static final String TIME_PATTERN = "HH:mm:ss";
-
-    public static final String DATETIME_PATTERN = "yyyy-MM-dd'T'HH:mm:ss";
-
-    /*
-        java.util.Date相关
+    /**
+     * 世界的生日 1970-01-01
      */
+    public static final LocalDate WORLD_BIRTHDAY = LocalDate.of(1970, 1, 1);
+
+    /**
+     * 一天的开始 00:00:00
+     */
+    public static final LocalTime DAY_START = LocalTime.of(0, 0, 0);
+
+    /**
+     * 一天的结束 23:59:59
+     */
+    public static final LocalTime DAY_END = LocalTime.of(23, 59, 59);
+
+    /**
+     * 世界是何时诞生的 1970-01-01 00:00:00
+     */
+    public static final LocalDateTime WORLD_BORN_ON = LocalDateTime.of(WORLD_BIRTHDAY, DAY_START);
+
+    private static final DateTimeFormatter DEFAULT_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(
+            "yyyy-MM-dd HH:mm:ss");
+
+    private static final DateTimeFormatter DEFAULT_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    private static final DateTimeFormatter DEFAULT_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**
      * Date转化为LocalDateTime
      */
     public static LocalDateTime toLocalDateTime(Date date) {
-        return LocalDateTime.ofInstant(date.toInstant(), systemZone);
+        return LocalDateTime.ofInstant(date.toInstant(), SYSTEM_ZONE);
+    }
+
+    /**
+     * UNIX时间戳转化为LocalDateTime
+     */
+    public static LocalDateTime toLocalDateTime(long unixTimeStamp) {
+        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTimeStamp), ZoneId.systemDefault());
+    }
+
+    /**
+     * String转化为LocalDateTime（yyyy-MM-dd HH:mm:ss）
+     */
+    public static LocalDateTime toLocalDateTime(String content) {
+        return LocalDateTime.parse(content, DEFAULT_DATE_TIME_FORMATTER);
+    }
+
+    /**
+     * String转化为LocalDateTime
+     */
+    public static LocalDateTime toLocalDateTime(String content, String pattern) {
+        return LocalDateTime.parse(content, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 将时间拨动到当天的00:00:00
+     */
+    public static LocalDateTime toggleToDayStart(LocalDateTime localDateTime) {
+        return LocalDateTime.of(localDateTime.toLocalDate(), DAY_START);
+    }
+
+    /**
+     * 将时间拨动到当填的23:59:59
+     */
+    public static LocalDateTime toggleToDayEnd(LocalDateTime localDateTime) {
+        return LocalDateTime.of(localDateTime.toLocalDate(), DAY_END);
     }
 
     /**
@@ -63,15 +116,11 @@ public class Times {
         return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
-    /*
-        格式化相关
-     */
-
     /**
      * LocalDateTime转化为String（yyyy-MM-dd HH:mm:ss）
      */
     public static String toString(LocalDateTime localDateTime) {
-        return DateTimeFormatter.ofPattern(DATETIME_PATTERN).format(localDateTime);
+        return DEFAULT_DATE_TIME_FORMATTER.format(localDateTime);
     }
 
     /**
@@ -85,7 +134,7 @@ public class Times {
      * LocalDate转化为String（yyyy-MM-dd）
      */
     public static String toString(LocalDate localDate) {
-        return DateTimeFormatter.ofPattern(DATE_PATTERN).format(localDate);
+        return DEFAULT_DATE_FORMATTER.format(localDate);
     }
 
     /**
@@ -99,7 +148,7 @@ public class Times {
      * LocalTime转化为String（HH:mm:ss）
      */
     public static String toString(LocalTime localTime) {
-        return DateTimeFormatter.ofPattern(TIME_PATTERN).format(localTime);
+        return DEFAULT_TIME_FORMATTER.format(localTime);
     }
 
     /**
@@ -109,22 +158,11 @@ public class Times {
         return DateTimeFormatter.ofPattern(pattern).format(localTime);
     }
 
-    /*
-        UNIX时间戳相关
-     */
-
-    /**
-     * UNIX时间戳转化为LocalDateTime
-     */
-    public static LocalDateTime toLocalDateTime(long unixTimeStamp) {
-        return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTimeStamp), ZoneId.systemDefault());
-    }
-
     /**
      * LocalDateTime转化为UNIX时间戳
      */
     public static long toUnixTimestamp(LocalDateTime localDateTime) {
-        return localDateTime.atZone(systemZone).toInstant().getEpochSecond();
+        return localDateTime.atZone(SYSTEM_ZONE).toInstant().getEpochSecond();
     }
 
 }
