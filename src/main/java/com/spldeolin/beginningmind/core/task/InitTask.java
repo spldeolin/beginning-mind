@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.CoreProperties;
+import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
 import com.spldeolin.beginningmind.core.service.ImageService;
 import com.spldeolin.beginningmind.core.service.SignService;
-import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
