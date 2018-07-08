@@ -17,9 +17,18 @@ public class ExcelsTest {
 
     @Test
     public void testExcels() {
-        File file = new File("C:\\Users\\Deolin\\Desktop\\Excel.xlsx");
-        List<Student> students = Excels.readExcel(file, Student.class);
-        students.forEach(log::info);
+        //File file = new File("C:\\Users\\Deolin\\Desktop\\Excel.xlsx");
+        //List<Student> students = Excels.readExcel(file, Student.class);
+        //students.forEach(log::info);
+
+        String columnName = "AAAAAB";
+        int sum = 0;
+
+        for (int i = 0; i < columnName.length(); i++) {
+            sum *= 26;
+            sum += (columnName.charAt(i) - 'A' + 1);
+        }
+        System.out.println(sum);
     }
 
     @ExcelSheet(sheetName = "学生")

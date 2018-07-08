@@ -12,12 +12,16 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ExcelColumn {
 
-    String value() default "";
-
     /**
      * 列首行标题
      */
+    @Deprecated
     String columnName() default "";
+
+    /**
+     * 列标题
+     */
+    String columnLetter() default "A";
 
     /**
      * 格式化器

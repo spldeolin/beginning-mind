@@ -17,4 +17,14 @@ public @interface ExcelSheet {
      */
     String sheetName() default "Sheet1";
 
+    /**
+     * Sheet序号
+     */
+    int sheetIndex() default 0;
+
+    /**
+     * 从第几行开始
+     */
+    int rowOffSet() default 0;
+
 }
