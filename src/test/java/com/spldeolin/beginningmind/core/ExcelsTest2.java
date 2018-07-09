@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core;
 import java.io.File;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.util.Excels2;
 import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
@@ -52,9 +51,9 @@ public class ExcelsTest2 {
 
         @Override
         public String parse(String string) {
-            if ("123".equals(string)) {
-                throw new ServiceException("asdfasdfasdfddd");
-            }
+            //if ("123".equals(string)) {
+            //    throw new ServiceException("asdfasdfasdfddd");
+            //}
             if (!NumberUtils.isCreatable(string)) {
                 return null;
             } else {

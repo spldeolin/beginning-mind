@@ -18,11 +18,6 @@ public @interface ExcelColumn {
     String firstColumnName() default "";
 
     /**
-     * 列字母（Excel显示的“列号”，从A开始）
-     */
-    //String columnLetter() default "A";
-
-    /**
      * 格式化策略
      */
     Class<? extends Formatter> formatter() default Formatter.class;
