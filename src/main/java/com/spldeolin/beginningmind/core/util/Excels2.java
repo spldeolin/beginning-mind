@@ -114,8 +114,8 @@ public class Excels2 {
     private static <T> void analyzeColumns(ExcelDefinition excelDefinition, Class<T> clazz, Sheet sheet) {
         for (ExcelDefinition.ColumnDefinition columnDefinition : excelDefinition.getColumnDefinitions()) {
             String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName());
-            columnDefinition.setColumnLetter(columnLetter);
-            if (StringUtils.isNotBlank(columnLetter)) {
+            if (columnLetter != null) {
+                columnDefinition.setColumnLetter(columnLetter);
                 columnDefinition.setColumnNumber(letterToNumber(columnLetter));
             }
         }
@@ -123,9 +123,9 @@ public class Excels2 {
 
     private static String findColumnLetterByFirstColumnName(Sheet sheet, String firstColumnName) {
         if (StringUtils.isBlank(firstColumnName)) {
-            return "A";
+            return null;
         }
-        Row row = sheet.getRow(1);
+        Row row = sheet.getRow(0);
         if (row == null) {
             throw new RuntimeException("工作表[" + sheet.getSheetName() + "] 的首行不存在");
         }
@@ -133,7 +133,7 @@ public class Excels2 {
         for (int i = row.getFirstCellNum(); i <= row.getLastCellNum(); i++) {
             Cell cell = row.getCell(i);
             if (cell != null && cell.toString().equals(firstColumnName)) {
-                result = numberToLetter(cell.getColumnIndex());
+                result = numberToLetter(cell.getColumnIndex() + 1);
             }
         }
         return result;
@@ -195,6 +195,10 @@ public class Excels2 {
     private static boolean rowIsAllBlankInCellNumbers(Row row, List<Integer> cellNumbers) {
         List<String> contents = Lists.newArrayList();
         for (Integer cellNumber : cellNumbers) {
+            if (cellNumber == null) {
+                contents.add(null);
+                continue;
+            }
             int cellIndex = cellNumber - 1;
             Cell cell = row.getCell(cellIndex);
             if (cell == null) {
@@ -263,7 +267,7 @@ public class Excels2 {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             } catch (Exception e) {
-                ParseInvalid parseInvalid = ParseInvalid.builder().rowNumber(row.getRowNum()).columnLetter(
+                ParseInvalid parseInvalid = ParseInvalid.builder().rowNumber(row.getRowNum() + 1).columnLetter(
                         columnDefinition.getColumnLetter()).cause("数据格式非法").build();
                 if (assignedFormatter) {
                     parseInvalid.setCause(e.getMessage());
