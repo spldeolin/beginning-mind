@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,8 @@ import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.ExcelDefinition;
 import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.Formatter;
+import com.spldeolin.beginningmind.core.util.excel.ParseInvalid;
+import com.spldeolin.beginningmind.core.util.excel.ParseInvalidException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.util.StringUtil;
@@ -37,7 +40,7 @@ import tk.mybatis.mapper.util.StringUtil;
 @Log4j2
 public class Excels2 {
 
-    public static <T> List<T> readExcel(File file, Class<T> clazz) {
+    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ParseInvalidException {
         ExcelDefinition excelDefinition = new ExcelDefinition();
         try {
             analyzeFile(excelDefinition, file);
@@ -47,10 +50,18 @@ public class Excels2 {
             Workbook workbook = openWorkbook(excelDefinition);
             Sheet sheet = openSheet(excelDefinition, workbook);
             List<T> result = Lists.newArrayList();
+            List<ParseInvalid> parseInvalids = Lists.newArrayList();
             for (Row row : listValidRows(excelDefinition, sheet)) {
                 if (row != null) {
-                    result.add(parseRow(clazz, excelDefinition.getColumnDefinitions(), row));
+                    try {
+                        result.add(parseRow(clazz, excelDefinition.getColumnDefinitions(), row));
+                    } catch (ParseInvalidException e) {
+                        parseInvalids.addAll(e.getParseInvalids());
+                    }
                 }
+            }
+            if (parseInvalids.size() > 0) {
+                throw new ParseInvalidException().setParseInvalids(parseInvalids);
             }
             return result;
         } catch (IOException e) {
@@ -169,8 +180,9 @@ public class Excels2 {
     }
 
     private static <T> T parseRow(Class<T> clazz, List<ExcelDefinition.ColumnDefinition> columnDefinitions,
-            Row row) {
+            Row row) throws ParseInvalidException {
         T t = Abbreviation.objs.newInstance(clazz);
+        List<ParseInvalid> parseInvalids = Lists.newArrayList();
         for (ExcelDefinition.ColumnDefinition columnDefinition : columnDefinitions) {
             // cell在row中是从0开始的
             int cellIndex = columnDefinition.getColumnNumber() - 1;
@@ -182,42 +194,48 @@ public class Excels2 {
                 cellContent = cell.toString().trim();
             }
             Field field = columnDefinition.getModelField();
-            field.setAccessible(true);
             Object fieldValue = null;
-            if (StringUtil.isNotEmpty(cellContent)) {
-                Formatter formatter = columnDefinition.getFormatter();
-                if (formatter == null || formatter.getClass() == Formatter.class) {
-                    // 没有指定formatter，尝试用缺省方式指定常用formatter
-                    Class fieldType = field.getType();
-                    if (fieldType == String.class) {
-                        fieldValue = cellContent;
-                    } else if (fieldType == Integer.class) {
-                        fieldValue = NumberUtils.createInteger(cellContent);
-                    } else if (fieldType == Long.class) {
-                        fieldValue = NumberUtils.createLong(cellContent);
-                    } else if (fieldType == Float.class) {
-                        fieldValue = NumberUtils.createFloat(cellContent);
-                    } else if (fieldType == Double.class) {
-                        fieldValue = NumberUtils.createDouble(cellContent);
-                    } else if (fieldType == BigDecimal.class) {
-                        fieldValue = NumberUtils.createBigDecimal(cellContent);
-                    } else if (fieldType == Boolean.class) {
-                        fieldValue = BooleanUtils.toBoolean(cellContent);
-                    } else if (fieldType == LocalDateTime.class) {
-                        fieldValue = LocalDateTime.parse(cellContent, Times.DEFAULT_DATE_TIME_FORMATTER);
-                    } else {
-                        throw new RuntimeException("工具类Excels未为 [" + fieldType.getSimpleName() + field.getName() +
-                                "]提供缺省转换策略，请在@ExcelColumn中指定具体formatter");
-                    }
-                } else {
-                    // 指定了formatter
-                    fieldValue = formatter.parse(cellContent);
-                }
-            }
             try {
+                if (StringUtil.isNotEmpty(cellContent)) {
+                    Formatter formatter = columnDefinition.getFormatter();
+                    if (formatter == null || formatter.getClass() == Formatter.class) {
+                        // 没有指定formatter，尝试用缺省方式指定常用formatter
+                        Class fieldType = field.getType();
+                        if (fieldType == String.class) {
+                            fieldValue = cellContent;
+                        } else if (fieldType == Integer.class) {
+                            fieldValue = NumberUtils.createInteger(cellContent);
+                        } else if (fieldType == Long.class) {
+                            fieldValue = NumberUtils.createLong(cellContent);
+                        } else if (fieldType == Float.class) {
+                            fieldValue = NumberUtils.createFloat(cellContent);
+                        } else if (fieldType == Double.class) {
+                            fieldValue = NumberUtils.createDouble(cellContent);
+                        } else if (fieldType == BigDecimal.class) {
+                            fieldValue = NumberUtils.createBigDecimal(cellContent);
+                        } else if (fieldType == Boolean.class) {
+                            fieldValue = BooleanUtils.toBoolean(cellContent);
+                        } else if (fieldType == LocalDateTime.class) {
+                            fieldValue = LocalDateTime.parse(cellContent, Times.DEFAULT_DATE_TIME_FORMATTER);
+                        } else {
+                            throw new RuntimeException("工具类Excels未为 [" + fieldType.getSimpleName() + field.getName() +
+                                    "]提供缺省转换策略，请在@ExcelColumn中指定具体formatter");
+                        }
+                    } else {
+                        // 指定了formatter
+                        fieldValue = formatter.parse(cellContent);
+                    }
+                }
+                field.setAccessible(true);
                 field.set(t, fieldValue);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
+            } catch (DateTimeException | NumberFormatException e) {
+                parseInvalids.add(ParseInvalid.builder().rowNumber(row.getRowNum()).columnLetter(
+                        columnDefinition.getColumnLetter()).cause("数据格式非法").build());
+            }
+            if (parseInvalids.size() > 0) {
+                throw new ParseInvalidException().setParseInvalids(parseInvalids);
             }
         }
         return t;

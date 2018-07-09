@@ -7,6 +7,7 @@ import com.spldeolin.beginningmind.core.util.Excels2;
 import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.Formatter;
+import com.spldeolin.beginningmind.core.util.excel.ParseInvalidException;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -19,7 +20,11 @@ public class ExcelsTest2 {
     @Test
     public void testExcels() {
         File file = new File("C:\\Users\\Deolin\\Desktop\\sample.xlsx");
-        Excels2.readExcel(file, Person.class).forEach(log::info);
+        try {
+            Excels2.readExcel(file, Person.class).forEach(log::info);
+        } catch (ParseInvalidException e) {
+            e.getParseInvalids().forEach(log::info);
+        }
     }
 
     @ExcelSheet(sheetIndex = 2, startingRowNumber = 2)
@@ -27,7 +32,7 @@ public class ExcelsTest2 {
     private static class Person {
 
         @ExcelColumn(columnLetter = "C")
-        private String name;
+        private Integer name;
 
         @ExcelColumn(columnLetter = "M", formatter = AgeFormatter.class)
         private String realAge;
