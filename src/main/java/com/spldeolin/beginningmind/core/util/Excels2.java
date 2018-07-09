@@ -44,10 +44,11 @@ public class Excels2 {
         try {
             analyzeFile(excelDefinition, file);
             analyzeModel(excelDefinition, clazz);
-            analyzeModelFields(excelDefinition, clazz);
-            // TODO 解析完成后excelDefinition做本地缓存
             Workbook workbook = openWorkbook(excelDefinition);
             Sheet sheet = openSheet(excelDefinition, workbook);
+            analyzeModelFields(excelDefinition, clazz, sheet);
+            // TODO 解析完成后excelDefinition做本地缓存
+            analyzeColumns(excelDefinition, clazz, sheet);
             List<T> result = Lists.newArrayList();
             List<ParseInvalid> parseInvalids = Lists.newArrayList();
             for (Row row : listValidRows(excelDefinition, sheet)) {
@@ -87,7 +88,7 @@ public class Excels2 {
         excelDefinition.setRowOffSet(sheetAnno.startingRowNumber());
     }
 
-    private static <T> void analyzeModelFields(ExcelDefinition excelDefinition, Class<T> clazz) {
+    private static <T> void analyzeModelFields(ExcelDefinition excelDefinition, Class<T> clazz, Sheet sheet) {
         List<ExcelDefinition.ColumnDefinition> columnDefinitions = Lists.newArrayList();
         for (Field field : clazz.getDeclaredFields()) {
             ExcelColumn columnAnno = field.getAnnotation(ExcelColumn.class);
@@ -95,9 +96,7 @@ public class Excels2 {
                 continue;
             }
             ExcelDefinition.ColumnDefinition columnDefinition = new ExcelDefinition.ColumnDefinition();
-            String columnLetter = columnAnno.columnLetter();
-            columnDefinition.setColumnLetter(columnLetter);
-            columnDefinition.setColumnNumber(letterToNumber(columnLetter));
+            columnDefinition.setFirstColumnName(columnAnno.firstColumnName());
             columnDefinition.setModelField(field);
             Class<? extends Formatter> formatter = columnAnno.formatter();
             if (formatter != Formatter.class) {
@@ -110,6 +109,34 @@ public class Excels2 {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]中不存在@ExcelColumn字段");
         }
         excelDefinition.setColumnDefinitions(columnDefinitions);
+    }
+
+    private static <T> void analyzeColumns(ExcelDefinition excelDefinition, Class<T> clazz, Sheet sheet) {
+        for (ExcelDefinition.ColumnDefinition columnDefinition : excelDefinition.getColumnDefinitions()) {
+            String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName());
+            columnDefinition.setColumnLetter(columnLetter);
+            if (StringUtils.isNotBlank(columnLetter)) {
+                columnDefinition.setColumnNumber(letterToNumber(columnLetter));
+            }
+        }
+    }
+
+    private static String findColumnLetterByFirstColumnName(Sheet sheet, String firstColumnName) {
+        if (StringUtils.isBlank(firstColumnName)) {
+            return "A";
+        }
+        Row row = sheet.getRow(1);
+        if (row == null) {
+            throw new RuntimeException("工作表[" + sheet.getSheetName() + "] 的首行不存在");
+        }
+        String result = null;
+        for (int i = row.getFirstCellNum(); i <= row.getLastCellNum(); i++) {
+            Cell cell = row.getCell(i);
+            if (cell != null && cell.toString().equals(firstColumnName)) {
+                result = numberToLetter(cell.getColumnIndex());
+            }
+        }
+        return result;
     }
 
     private static Workbook openWorkbook(ExcelDefinition excelDefinition) throws IOException {
@@ -184,8 +211,12 @@ public class Excels2 {
         T t = Abbreviation.objs.newInstance(clazz);
         List<ParseInvalid> parseInvalids = Lists.newArrayList();
         for (ExcelDefinition.ColumnDefinition columnDefinition : columnDefinitions) {
+            Integer columnNumber = columnDefinition.getColumnNumber();
+            if (columnNumber == null) {
+                continue;
+            }
             // cell在row中是从0开始的
-            int cellIndex = columnDefinition.getColumnNumber() - 1;
+            int cellIndex = columnNumber - 1;
             Cell cell = row.getCell(cellIndex);
             String cellContent;
             if (cell == null) {
@@ -266,6 +297,16 @@ public class Excels2 {
             number = 1;
         }
         return number;
+    }
+
+    private static String numberToLetter(int number) {
+        String rs = "";
+        do {
+            number--;
+            rs = ((char) (number % 26 + (int) 'A')) + rs;
+            number = (number - number % 26) / 26;
+        } while (number > 0);
+        return rs;
     }
 
 }

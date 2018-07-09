@@ -13,15 +13,14 @@ import java.lang.annotation.Target;
 public @interface ExcelColumn {
 
     /**
-     * 列首行标题
+     * 列首行名称
      */
-    @Deprecated
-    String columnName() default "";
+    String firstColumnName() default "";
 
     /**
      * 列字母（Excel显示的“列号”，从A开始）
      */
-    String columnLetter() default "A";
+    //String columnLetter() default "A";
 
     /**
      * 格式化策略

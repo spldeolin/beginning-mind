@@ -330,7 +330,7 @@ public class Excels {
             if (excelColumn != null) {
                 columnSize++;
                 srcFields.add(field);
-                columnNames.add(excelColumn.columnName());
+                columnNames.add(excelColumn.firstColumnName());
                 Class formatter = excelColumn.formatter();
                 if (formatter.isInterface()) {
                     formatters.add(null);

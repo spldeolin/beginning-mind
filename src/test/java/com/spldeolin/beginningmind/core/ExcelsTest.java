@@ -1,9 +1,6 @@
 package com.spldeolin.beginningmind.core;
 
-import java.io.File;
-import java.util.List;
 import org.junit.Test;
-import com.spldeolin.beginningmind.core.util.Excels;
 import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
 import lombok.Data;
@@ -35,10 +32,10 @@ public class ExcelsTest {
     @Data
     public static class Student {
 
-        @ExcelColumn(columnName = "姓名")
+        @ExcelColumn(firstColumnName = "姓名")
         private String name;
 
-        @ExcelColumn(columnName = "年龄")
+        @ExcelColumn(firstColumnName = "年龄")
         private Integer age;
 
     }

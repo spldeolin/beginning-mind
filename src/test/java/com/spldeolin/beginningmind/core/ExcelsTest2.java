@@ -32,13 +32,13 @@ public class ExcelsTest2 {
     @Data
     private static class Person {
 
-        @ExcelColumn(columnLetter = "C")
+        @ExcelColumn(firstColumnName = "货主名称")
         private Integer name;
 
-        @ExcelColumn(columnLetter = "M", formatter = AgeFormatter.class)
+        @ExcelColumn(firstColumnName = "主要联系人", formatter = AgeFormatter.class)
         private String realAge;
 
-        @ExcelColumn(columnLetter = "ZZZ", defaultValue = "defaultttt")
+        @ExcelColumn(firstColumnName = "阿斯顿阿斯顿", defaultValue = "defaultttt")
         private String mustNull;
 
     }

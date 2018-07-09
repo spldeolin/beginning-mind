@@ -24,8 +24,8 @@ public @interface ExcelSheet {
     int sheetIndex() default 0;
 
     /**
-     * 从第几行开始读取（Excel显示的“行号”，从1开始）
+     * 从第几行开始读取（Excel显示的“行号”，从2开始）（1是标题行，指定1则没有意义）
      */
-    int startingRowNumber() default 1;
+    int startingRowNumber() default 2;
 
 }

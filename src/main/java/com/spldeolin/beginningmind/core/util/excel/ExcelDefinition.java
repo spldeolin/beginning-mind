@@ -32,6 +32,8 @@ public class ExcelDefinition {
     @Data
     public static class ColumnDefinition {
 
+        private String firstColumnName;
+
         private String columnLetter;
 
         private Integer columnNumber;
