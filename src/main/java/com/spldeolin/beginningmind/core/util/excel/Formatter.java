@@ -10,8 +10,8 @@ package com.spldeolin.beginningmind.core.util.excel;
  */
 public interface Formatter<T> {
 
-    String format(T t);
+    String format(T t) throws Exception;
 
-    T parse(String string);
+    T parse(String string) throws Exception;
 
 }

@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -155,7 +154,7 @@ public class Excels {
                 }
             }
             workbook.write(os);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -310,7 +309,7 @@ public class Excels {
                         } else {
                             field.set(t, parseCell.getFormatter().parse(cellContent));
                         }
-                    } catch (ParseException | IllegalAccessException e) {
+                    } catch (Exception e) {
                         throw new RuntimeException(e);
                     }
                 }

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -101,8 +100,9 @@ public class Excels2 {
             columnDefinition.setColumnNumber(letterToNumber(columnLetter));
             columnDefinition.setModelField(field);
             Class<? extends Formatter> formatter = columnAnno.formatter();
-            if (formatter != Formatter.class)
+            if (formatter != Formatter.class) {
                 columnDefinition.setFormatter(Abbreviation.objs.newInstance(formatter));
+            }
             columnDefinition.setDefaultValue(columnAnno.defaultValue());
             columnDefinitions.add(columnDefinition);
         }
@@ -193,12 +193,13 @@ public class Excels2 {
             } else {
                 cellContent = cell.toString().trim();
             }
+            Formatter formatter = columnDefinition.getFormatter();
+            boolean assignedFormatter = formatter != null && formatter.getClass() != Formatter.class;
             Field field = columnDefinition.getModelField();
             Object fieldValue = null;
             try {
                 if (StringUtil.isNotEmpty(cellContent)) {
-                    Formatter formatter = columnDefinition.getFormatter();
-                    if (formatter == null || formatter.getClass() == Formatter.class) {
+                    if (!assignedFormatter) {
                         // 没有指定formatter，尝试用缺省方式指定常用formatter
                         Class fieldType = field.getType();
                         if (fieldType == String.class) {
@@ -230,13 +231,17 @@ public class Excels2 {
                 field.set(t, fieldValue);
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
-            } catch (DateTimeException | NumberFormatException e) {
-                parseInvalids.add(ParseInvalid.builder().rowNumber(row.getRowNum()).columnLetter(
-                        columnDefinition.getColumnLetter()).cause("数据格式非法").build());
+            } catch (Exception e) {
+                ParseInvalid parseInvalid = ParseInvalid.builder().rowNumber(row.getRowNum()).columnLetter(
+                        columnDefinition.getColumnLetter()).cause("数据格式非法").build();
+                if (assignedFormatter) {
+                    parseInvalid.setCause(e.getMessage());
+                }
+                parseInvalids.add(parseInvalid);
             }
-            if (parseInvalids.size() > 0) {
-                throw new ParseInvalidException().setParseInvalids(parseInvalids);
-            }
+        }
+        if (parseInvalids.size() > 0) {
+            throw new ParseInvalidException().setParseInvalids(parseInvalids);
         }
         return t;
     }
