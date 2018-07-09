@@ -7,9 +7,11 @@ import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
@@ -45,7 +47,7 @@ public class Excels2 {
             Workbook workbook = openWorkbook(excelDefinition);
             Sheet sheet = openSheet(excelDefinition, workbook);
             List<T> result = Lists.newArrayList();
-            for (Row row : listRows(excelDefinition, sheet)) {
+            for (Row row : listValidRows(excelDefinition, sheet)) {
                 if (row != null) {
                     result.add(parseRow(clazz, excelDefinition.getColumnDefinitions(), row));
                 }
@@ -72,7 +74,7 @@ public class Excels2 {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
         }
         excelDefinition.setSheetIndex(sheetAnno.sheetIndex());
-        excelDefinition.setRowOffSet(sheetAnno.rowOffSet());
+        excelDefinition.setRowOffSet(sheetAnno.startingRowNumber());
     }
 
     private static <T> void analyzeModelFields(ExcelDefinition excelDefinition, Class<T> clazz) {
@@ -88,7 +90,7 @@ public class Excels2 {
             columnDefinition.setColumnNumber(letterToNumber(columnLetter));
             columnDefinition.setModelField(field);
             Class<? extends Formatter> formatter = columnAnno.formatter();
-            if (formatter != null && formatter != Formatter.class)
+            if (formatter != Formatter.class)
                 columnDefinition.setFormatter(Abbreviation.objs.newInstance(formatter));
             columnDefinition.setDefaultValue(columnAnno.defaultValue());
             columnDefinitions.add(columnDefinition);
@@ -121,13 +123,13 @@ public class Excels2 {
         try {
             sheet = workbook.getSheetAt(excelDefinition.getSheetIndex());
         } catch (IllegalArgumentException e) {
-            log.warn("第" + excelDefinition.getSheetIndex() + "个Sheet不存在");
-            throw new ExcelAnalyzeException("工作表完整性被破坏");
+            int sheetNumber = excelDefinition.getSheetIndex() + 1;
+            throw new ExcelAnalyzeException("第" + sheetNumber + "个Sheet不存在");
         }
         return sheet;
     }
 
-    private static List<Row> listRows(ExcelDefinition excelDefinition, Sheet sheet) {
+    private static List<Row> listValidRows(ExcelDefinition excelDefinition, Sheet sheet) {
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
         int offsetRowNum = excelDefinition.getRowOffSet() - 1;
@@ -135,7 +137,13 @@ public class Excels2 {
             startRowNum = offsetRowNum;
         }
         for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
-            rows.add(sheet.getRow(rownum));
+            Row row = sheet.getRow(rownum);
+            List<Integer> cellNumbers = excelDefinition.getColumnDefinitions().stream().map(
+                    ExcelDefinition.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
+            if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
+                rows.add(row);
+            }
+
         }
         if (rows.size() == 0) {
             throw new ExcelAnalyzeException("工作表中没有内容");
@@ -143,21 +151,39 @@ public class Excels2 {
         return rows;
     }
 
+    /**
+     * 判断行中指定列的单元格的内容是否全部为空白
+     */
+    private static boolean rowIsAllBlankInCellNumbers(Row row, List<Integer> cellNumbers) {
+        List<String> contents = Lists.newArrayList();
+        for (Integer cellNumber : cellNumbers) {
+            int cellIndex = cellNumber - 1;
+            Cell cell = row.getCell(cellIndex);
+            if (cell == null) {
+                contents.add(null);
+            } else {
+                contents.add(cell.toString());
+            }
+        }
+        return StringUtils.isAllBlank(contents.toArray(new String[0]));
+    }
+
     private static <T> T parseRow(Class<T> clazz, List<ExcelDefinition.ColumnDefinition> columnDefinitions,
             Row row) {
         T t = Abbreviation.objs.newInstance(clazz);
         for (ExcelDefinition.ColumnDefinition columnDefinition : columnDefinitions) {
             // cell在row中是从0开始的
-            Cell cell = row.getCell(columnDefinition.getColumnNumber() - 1);
+            int cellIndex = columnDefinition.getColumnNumber() - 1;
+            Cell cell = row.getCell(cellIndex);
             String cellContent;
             if (cell == null) {
-                cellContent = null;
+                cellContent = columnDefinition.getDefaultValue();
             } else {
                 cellContent = cell.toString().trim();
             }
             Field field = columnDefinition.getModelField();
             field.setAccessible(true);
-            Object fieldValue = columnDefinition.getDefaultValue();
+            Object fieldValue = null;
             if (StringUtil.isNotEmpty(cellContent)) {
                 Formatter formatter = columnDefinition.getFormatter();
                 if (formatter == null || formatter.getClass() == Formatter.class) {

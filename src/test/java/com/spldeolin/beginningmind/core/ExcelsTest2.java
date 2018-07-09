@@ -18,18 +18,18 @@ public class ExcelsTest2 {
 
     @Test
     public void testExcels() {
-        File file = new File("C:\\Users\\Deolin\\Desktop\\Excel.xlsx");
+        File file = new File("C:\\Users\\Deolin\\Desktop\\sample.xlsx");
         Excels2.readExcel(file, Person.class).forEach(log::info);
     }
 
-    @ExcelSheet(sheetIndex = 2, rowOffSet = 14)
+    @ExcelSheet(sheetIndex = 2, startingRowNumber = 2)
     @Data
     private static class Person {
 
-        @ExcelColumn
+        @ExcelColumn(columnLetter = "C")
         private String name;
 
-        @ExcelColumn(columnLetter = "B", formatter = AgeFormatter.class)
+        @ExcelColumn(columnLetter = "M", formatter = AgeFormatter.class)
         private String realAge;
 
         @ExcelColumn(columnLetter = "ZZZ", defaultValue = "defaultttt")

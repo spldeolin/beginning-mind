@@ -19,17 +19,17 @@ public @interface ExcelColumn {
     String columnName() default "";
 
     /**
-     * 列标题
+     * 列字母（Excel显示的“列号”，从A开始）
      */
     String columnLetter() default "A";
 
     /**
-     * 格式化器
+     * 格式化策略
      */
     Class<? extends Formatter> formatter() default Formatter.class;
 
     /**
-     * 属性为null的缺省值（仅在生成Excel时使用到这个值）
+     * 如果单元格内容为空白，则内容缺省为这个值
      */
     String defaultValue() default "";
 
