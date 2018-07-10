@@ -91,6 +91,8 @@ public class SignService {
         SecurityUser user = Signer.current().getSecurityUser();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, user.getId().toString());
+        // TODO 登录者拥有的权限存入profile
+        // TODO 登录者拥有的菜单存入profile
         // profile
         return SignerProfileVO.builder().username(user.getUsername()).build();
     }
