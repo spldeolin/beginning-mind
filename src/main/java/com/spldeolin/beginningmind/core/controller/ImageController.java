@@ -32,7 +32,7 @@ public class ImageController {
      * 普通上传
      */
     @PostMapping("/upload")
-    @Permission(display = "普通上传")
+    @Permission(display = "普通上传", menuId = 1L)
     String create(@RequestParam("image") @NotNull MultipartFile multipartFile) {
         return imageService.upload(multipartFile);
     }

@@ -43,7 +43,7 @@ public class SecurityRoleController {
      * @return 创建成功后生成的ID
      */
     @PostMapping("/create")
-    @Permission(display = "创建一个“角色”")
+    @Permission(display = "创建一个“角色”", menuId = 1L)
     Long create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
         return securityRoleService.createEX(securityRoleInput.toModel());
     }
@@ -55,7 +55,7 @@ public class SecurityRoleController {
      * @return 角色
      */
     @GetMapping("/get")
-    @Permission(display = "获取一个“角色”")
+    @Permission(display = "获取一个“角色”", menuId = 1L)
     SecurityRole get(@RequestParam Long id) {
         return securityRoleService.getEX(id);
     }
@@ -67,7 +67,7 @@ public class SecurityRoleController {
      * @param securityRoleInput 待更新的“角色”
      */
     @PostMapping("/update")
-    @Permission(display = "更新一个“角色”")
+    @Permission(display = "更新一个“角色”", menuId = 1L)
     void update(@RequestParam Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
         securityRoleService.updateEX(securityRoleInput.toModel().setId(id));
     }
@@ -78,7 +78,7 @@ public class SecurityRoleController {
      * @param id 待删除“角色”的ID
      */
     @PostMapping("/delete")
-    @Permission(display = "删除一个“角色”")
+    @Permission(display = "删除一个“角色”", menuId = 1L)
     void delete(@RequestParam Long id) {
         securityRoleService.deleteEX(id);
     }
@@ -90,7 +90,7 @@ public class SecurityRoleController {
      * @return “角色”分页
      */
     @GetMapping("/search")
-    @Permission(display = "获取一批“角色”")
+    @Permission(display = "获取一批“角色”", menuId = 1L)
     Page<SecurityRole> search(PageParam pageParam) {
         return securityRoleService.page(pageParam);
     }
@@ -102,7 +102,7 @@ public class SecurityRoleController {
      * @return 删除情况
      */
     @PostMapping("/batchDelete")
-    @Permission(display = "删除一批“角色”")
+    @Permission(display = "删除一批“角色”", menuId = 1L)
     String delete(@RequestParam List<Long> ids) {
         return securityRoleService.deleteEX(ids);
     }

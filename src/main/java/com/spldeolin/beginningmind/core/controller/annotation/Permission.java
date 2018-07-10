@@ -26,4 +26,18 @@ public @interface Permission {
      */
     String display();
 
+    /**
+     * 指定该接口属于什么菜单（参照security_menu表）
+     */
+    long menuId();
+
+    /**
+     * 指定是否所有用户都应该拥有该接口的权限
+     * <p>
+     * （有些接口比较底层，必须所有用户都能访问，如下拉框渲染接口
+     * <p>
+     * 对于这些接口，应当指定为true
+     */
+    boolean mustHave() default false;
+
 }
