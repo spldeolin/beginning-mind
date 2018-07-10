@@ -30,7 +30,7 @@ CREATE TABLE `security_permission` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_display_name` (`display_name`) USING BTREE,
   UNIQUE KEY `index_mapping` (`mapping`) USING BTREE,
-  UNIQUE KEY `index_mark` (`mark`) USING BTREE
+  UNIQUE KEY `index_mark` (`name`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=259 DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限';
 
 -- ----------------------------

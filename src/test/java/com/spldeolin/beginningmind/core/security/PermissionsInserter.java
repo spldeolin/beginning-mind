@@ -42,7 +42,6 @@ import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
 import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
-import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
@@ -106,9 +105,9 @@ public class PermissionsInserter {
                 } else {
                     display = Permission.display();
                 }
-                String mark = generateMarkByMapping(permissionMapping);
+                String name = generateNameByMapping(permissionMapping);
                 SecurityPermission securityPermission = SecurityPermission.builder().display(display).mapping(
-                        permissionMapping).mark(mark).build();
+                        permissionMapping).name(name).build();
                 securityPermissions.add(securityPermission);
                 log.info(securityPermission);
             }
@@ -214,15 +213,15 @@ public class PermissionsInserter {
         return mapping;
     }
 
-    private String generateUniqueMark() {
-        String mark = StringRandomUtils.generateLowEnNum(3);
-        while (securityPermissionService.searchOne("mark", mark).isPresent()) {
-            mark = StringRandomUtils.generateLowEnNum(3);
-        }
-        return mark;
-    }
+    //private String generateUniqueName() {
+    //    String mark = StringRandomUtils.generateLowEnNum(3);
+    //    while (securityPermissionService.searchOne("name", mark).isPresent()) {
+    //        mark = StringRandomUtils.generateLowEnNum(3);
+    //    }
+    //    return mark;
+    //}
 
-    private String generateMarkByMapping(String mapping) {
+    private String generateNameByMapping(String mapping) {
         // 删除 *
         String mark = mapping.replace("*", "");
 

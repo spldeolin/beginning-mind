@@ -10,8 +10,8 @@
         <result column="inserted_at" jdbcType="TIMESTAMP" property="insertedAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="deletion_flag" jdbcType="BIGINT" property="deletionFlag"/>
+        <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="display" jdbcType="VARCHAR" property="display"/>
         <result column="mapping" jdbcType="VARCHAR" property="mapping"/>
-        <result column="mark" jdbcType="VARCHAR" property="mark"/>
     </resultMap>
 </mapper>

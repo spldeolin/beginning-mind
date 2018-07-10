@@ -178,7 +178,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
         }
         // 过滤器链
         for (SecurityPermission permission : permissions) {
-            result.add(permission.getMark());
+            result.add(permission.getName());
         }
         return result;
     }

@@ -83,7 +83,7 @@ public class ShiroConfig {
         //【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
         for (SecurityPermission securityPermission : securityPermissionService.listAll()) {
             filterChainDefinitions.put(securityPermission.getMapping(),
-                    SignFilter.MARK + ", perms[" + securityPermission.getMark() + "]");
+                    SignFilter.MARK + ", perms[" + securityPermission.getName() + "]");
         }
         // DEBUG环境下放行一切请求（不进行任何认证和鉴权的访问控制）
         if (properties.isDebug()) {

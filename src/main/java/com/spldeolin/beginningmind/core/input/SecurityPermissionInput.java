@@ -33,6 +33,12 @@ public class SecurityPermissionInput implements Serializable {
     private LocalDateTime updatedAt;
 
     /**
+     * 权限名（perms[xxxx]）
+     */
+    @Size(max = 255)
+    private String name;
+
+    /**
      * 用于展示的名称
      */
     @Size(max = 255)
@@ -44,17 +50,11 @@ public class SecurityPermissionInput implements Serializable {
     @Size(max = 255)
     private String mapping;
 
-    /**
-     * 权限标记（perms[xxxx]）
-     */
-    @Size(max = 255)
-    private String mark;
-
     private static final long serialVersionUID = 1L;
 
     public SecurityPermission toModel() {
         return SecurityPermission.builder().id(id).updatedAt(updatedAt).display(display).mapping(
-                mapping).mark(mark).build();
+                mapping).name(name).build();
     }
 
 }

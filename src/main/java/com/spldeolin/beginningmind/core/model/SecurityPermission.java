@@ -57,6 +57,11 @@ public class SecurityPermission implements Serializable {
     private Long deletionFlag;
 
     /**
+     * 权限名（perms[xxxx]）
+     */
+    private String name;
+
+    /**
      * 用于展示的名称
      */
     private String display;
@@ -65,11 +70,6 @@ public class SecurityPermission implements Serializable {
      * 请求方法的全路由（控制器路由+方法路由）
      */
     private String mapping;
-
-    /**
-     * 权限标记（perms[xxxx]）
-     */
-    private String mark;
 
     private static final long serialVersionUID = 1L;
 }
