@@ -2,7 +2,7 @@
  * Created by IntelliJ IDEA File Templates.
  */
 
-package com.spldeolin.beginningmind.core;
+package com.spldeolin.beginningmind.core.test;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

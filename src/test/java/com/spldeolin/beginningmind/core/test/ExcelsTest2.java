@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core;
+package com.spldeolin.beginningmind.core.test;
 
 import java.io.File;
 import org.apache.commons.lang3.math.NumberUtils;

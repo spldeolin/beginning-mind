@@ -36,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.controller.SignController;
-import com.spldeolin.beginningmind.core.controller.TestController;
 import com.spldeolin.beginningmind.core.controller.UrlForwardToExceptionController;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
@@ -51,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class PermissionsInserter {
 
-    private final Class[] EXCLUDED_CLASS = {UrlForwardToExceptionController.class, TestController.class, SignController.class};
+    private final Class[] EXCLUDED_CLASS = {UrlForwardToExceptionController.class, SignController.class};
 
     @Autowired
     private SecurityPermissionService securityPermissionService;

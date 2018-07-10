@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core;
+package com.spldeolin.beginningmind.core.test;
 
 import org.junit.Test;
 import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
