@@ -98,17 +98,17 @@ public class PermissionsInserter {
                 String permissionMapping = controllerMapping + getMapping(requestMethod);
                 permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
                 Permission Permission = requestMethod.getAnnotation(Permission.class);
-                String displayName;
+                String display;
                 if (Permission == null) {
                     //throw new ServiceException("请求方法" + requestMapping + "未声明@Permission");
                     log.warn("请求方法" + requestMapping + "未声明@Permission，使用缺省方式命名");
-                    displayName = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
+                    display = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
                 } else {
-                    displayName = Permission.displayName();
+                    display = Permission.display();
                 }
                 String mark = generateMarkByMapping(permissionMapping);
-                SecurityPermission securityPermission = SecurityPermission.builder().displayName(
-                        displayName).mapping(permissionMapping).mark(mark).build();
+                SecurityPermission securityPermission = SecurityPermission.builder().display(display).mapping(
+                        permissionMapping).mark(mark).build();
                 securityPermissions.add(securityPermission);
                 log.info(securityPermission);
             }
@@ -133,7 +133,7 @@ public class PermissionsInserter {
                 log.warn("[" + mapping + "] 已存在，不再插入");
             } else {
                 securityPermissionService.create(securityPermission);
-                log.info(securityPermission.getDisplayName() + "[" + mapping + "] 插入数据库");
+                log.info(securityPermission.getDisplay() + "[" + mapping + "] 插入数据库");
             }
         }
     }

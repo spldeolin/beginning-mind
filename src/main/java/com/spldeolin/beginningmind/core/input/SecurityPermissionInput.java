@@ -36,7 +36,7 @@ public class SecurityPermissionInput implements Serializable {
      * 用于展示的名称
      */
     @Size(max = 255)
-    private String displayName;
+    private String display;
 
     /**
      * 请求方法的全路由（控制器路由+方法路由）
@@ -53,7 +53,7 @@ public class SecurityPermissionInput implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public SecurityPermission toModel() {
-        return SecurityPermission.builder().id(id).updatedAt(updatedAt).displayName(displayName).mapping(
+        return SecurityPermission.builder().id(id).updatedAt(updatedAt).display(display).mapping(
                 mapping).mark(mark).build();
     }
 

@@ -59,8 +59,7 @@ public class SecurityPermission implements Serializable {
     /**
      * 用于展示的名称
      */
-    @Column(name = "display_name")
-    private String displayName;
+    private String display;
 
     /**
      * 请求方法的全路由（控制器路由+方法路由）
