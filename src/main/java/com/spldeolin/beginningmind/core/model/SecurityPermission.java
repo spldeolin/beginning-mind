@@ -73,8 +73,8 @@ public class SecurityPermission implements Serializable {
     /**
      * 菜单ID
      */
-    @Column(name = "security_menu_id")
-    private Long securityMenuId;
+    @Column(name = "menu_id")
+    private Long menuId;
 
     /**
      * 是否所有用户都应该拥有该权限

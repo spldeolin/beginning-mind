@@ -13,7 +13,7 @@
         <result column="name" jdbcType="VARCHAR" property="name"/>
         <result column="mapping" jdbcType="VARCHAR" property="mapping"/>
         <result column="display" jdbcType="VARCHAR" property="display"/>
-        <result column="security_menu_id" jdbcType="VARCHAR" property="securityMenuId"/>
+        <result column="menu_id" jdbcType="BIGINT" property="menuId"/>
         <result column="must_have" jdbcType="VARCHAR" property="mustHave"/>
     </resultMap>
 </mapper>

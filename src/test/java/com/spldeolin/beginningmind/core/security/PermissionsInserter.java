@@ -109,7 +109,7 @@ public class PermissionsInserter {
                 }
                 String name = generateNameByMapping(permissionMapping);
                 SecurityPermission securityPermission = SecurityPermission.builder().name(name).mapping(
-                        permissionMapping).display(display).securityMenuId(permission.menuId()).mustHave(
+                        permissionMapping).display(display).menuId(permission.menuId()).mustHave(
                         permission.mustHave()).build();
                 securityPermissions.add(securityPermission);
                 log.info(securityPermission);

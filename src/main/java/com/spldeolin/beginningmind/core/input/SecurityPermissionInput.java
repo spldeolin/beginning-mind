@@ -53,7 +53,7 @@ public class SecurityPermissionInput implements Serializable {
     /**
      * 菜单ID
      */
-    private Long securityMenuId;
+    private Long menuId;
 
     /**
      * 是否所有用户都应该拥有该权限
@@ -64,7 +64,7 @@ public class SecurityPermissionInput implements Serializable {
 
     public SecurityPermission toModel() {
         return SecurityPermission.builder().id(id).updatedAt(updatedAt).name(name).mapping(mapping).display(
-                display).securityMenuId(securityMenuId).mustHave(mustHave).build();
+                display).menuId(menuId).mustHave(mustHave).build();
     }
 
 }

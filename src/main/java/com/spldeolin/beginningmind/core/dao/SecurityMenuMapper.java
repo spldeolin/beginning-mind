@@ -5,9 +5,9 @@
 
 package com.spldeolin.beginningmind.core.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
 import com.spldeolin.beginningmind.core.model.SecurityMenu;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * “菜单”数据库映射
