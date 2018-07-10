@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
+import com.spldeolin.beginningmind.core.controller.annotation.Permission;
 import com.spldeolin.beginningmind.core.input.SecurityUserInput;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
@@ -42,6 +43,7 @@ public class SecurityUserController {
      * @return 创建成功后生成的ID
      */
     @PostMapping("/create")
+    @Permission(display = "创建一个“用户”")
     Long create(@RequestBody @Valid SecurityUserInput securityUserInput) {
         return securityUserService.createEX(securityUserInput.toModel());
     }
@@ -53,6 +55,7 @@ public class SecurityUserController {
      * @return 用户
      */
     @GetMapping("/get")
+    @Permission(display = "获取一个“用户”")
     SecurityUser get(@RequestParam Long id) {
         return securityUserService.getEX(id);
     }
@@ -64,6 +67,7 @@ public class SecurityUserController {
      * @param securityUserInput 待更新的“用户”
      */
     @PostMapping("/update")
+    @Permission(display = "更新一个“用户”")
     void update(@RequestParam Long id, @RequestBody @Valid SecurityUserInput securityUserInput) {
         securityUserService.updateEX(securityUserInput.toModel().setId(id));
     }
@@ -74,6 +78,7 @@ public class SecurityUserController {
      * @param id 待删除“用户”的ID
      */
     @PostMapping("/delete")
+    @Permission(display = "删除一个“用户”")
     void delete(@RequestParam Long id) {
         securityUserService.deleteEX(id);
     }
@@ -85,6 +90,7 @@ public class SecurityUserController {
      * @return “用户”分页
      */
     @GetMapping("/search")
+    @Permission(display = "获取一批“用户”")
     Page<SecurityUser> search(PageParam pageParam) {
         return securityUserService.page(pageParam);
     }
@@ -96,6 +102,7 @@ public class SecurityUserController {
      * @return 删除情况
      */
     @PostMapping("/batchDelete")
+    @Permission(display = "删除一批“用户”")
     String delete(@RequestParam List<Long> ids) {
         return securityUserService.deleteEX(ids);
     }
@@ -104,6 +111,7 @@ public class SecurityUserController {
      * 启用/禁用用户
      */
     @PostMapping("/banPick")
+    @Permission(display = "启用/禁用用户")
     void banPick(@RequestParam Long id) {
         securityUserService.banPick(id);
     }

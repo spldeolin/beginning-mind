@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
+import com.spldeolin.beginningmind.core.controller.annotation.Permission;
 import com.spldeolin.beginningmind.core.input.SecurityRoleInput;
 import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.service.SecurityRoleService;
@@ -42,6 +43,7 @@ public class SecurityRoleController {
      * @return 创建成功后生成的ID
      */
     @PostMapping("/create")
+    @Permission(display = "创建一个“角色”")
     Long create(@RequestBody @Valid SecurityRoleInput securityRoleInput) {
         return securityRoleService.createEX(securityRoleInput.toModel());
     }
@@ -53,6 +55,7 @@ public class SecurityRoleController {
      * @return 角色
      */
     @GetMapping("/get")
+    @Permission(display = "获取一个“角色”")
     SecurityRole get(@RequestParam Long id) {
         return securityRoleService.getEX(id);
     }
@@ -64,6 +67,7 @@ public class SecurityRoleController {
      * @param securityRoleInput 待更新的“角色”
      */
     @PostMapping("/update")
+    @Permission(display = "更新一个“角色”")
     void update(@RequestParam Long id, @RequestBody @Valid SecurityRoleInput securityRoleInput) {
         securityRoleService.updateEX(securityRoleInput.toModel().setId(id));
     }
@@ -74,6 +78,7 @@ public class SecurityRoleController {
      * @param id 待删除“角色”的ID
      */
     @PostMapping("/delete")
+    @Permission(display = "删除一个“角色”")
     void delete(@RequestParam Long id) {
         securityRoleService.deleteEX(id);
     }
@@ -85,6 +90,7 @@ public class SecurityRoleController {
      * @return “角色”分页
      */
     @GetMapping("/search")
+    @Permission(display = "获取一批“角色”")
     Page<SecurityRole> search(PageParam pageParam) {
         return securityRoleService.page(pageParam);
     }
@@ -96,6 +102,7 @@ public class SecurityRoleController {
      * @return 删除情况
      */
     @PostMapping("/batchDelete")
+    @Permission(display = "删除一批“角色”")
     String delete(@RequestParam List<Long> ids) {
         return securityRoleService.deleteEX(ids);
     }

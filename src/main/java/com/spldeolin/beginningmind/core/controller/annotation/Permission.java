@@ -21,6 +21,9 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Permission {
 
+    /**
+     * 指定一个能让用户理解该接口作用的“权限显示名”
+     */
     String display();
 
 }
