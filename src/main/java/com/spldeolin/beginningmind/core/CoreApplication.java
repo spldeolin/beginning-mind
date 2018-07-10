@@ -13,6 +13,7 @@ public class CoreApplication {
             return;
         }
         SpringApplication.run(CoreApplication.class, args);
+        System.out.println("启动成功");
     }
 
 }
