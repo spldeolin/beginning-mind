@@ -15,6 +15,7 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Collectors;
@@ -96,18 +97,20 @@ public class PermissionsInserter {
             for (Method requestMethod : controllerDefinition.getRequestMethods()) {
                 String permissionMapping = controllerMapping + getMapping(requestMethod);
                 permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
-                Permission Permission = requestMethod.getAnnotation(Permission.class);
+                Permission permission = requestMethod.getAnnotation(Permission.class);
                 String display;
-                if (Permission == null) {
+                if (permission == null) {
                     //throw new ServiceException("请求方法" + requestMapping + "未声明@Permission");
-                    log.warn("请求方法" + requestMapping + "未声明@Permission，使用缺省方式命名");
-                    display = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
+                    log.warn("请求方法" + requestMapping + "未声明@Permission，请指定");
+                    //display = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
+                    continue;
                 } else {
-                    display = Permission.display();
+                    display = permission.display();
                 }
                 String name = generateNameByMapping(permissionMapping);
-                SecurityPermission securityPermission = SecurityPermission.builder().display(display).mapping(
-                        permissionMapping).name(name).build();
+                SecurityPermission securityPermission = SecurityPermission.builder().name(name).mapping(
+                        permissionMapping).display(display).securityMenuId(permission.menuId()).mustHave(
+                        permission.mustHave()).build();
                 securityPermissions.add(securityPermission);
                 log.info(securityPermission);
             }
@@ -128,8 +131,10 @@ public class PermissionsInserter {
         // 插入`security_permission`
         for (SecurityPermission securityPermission : securityPermissions) {
             String mapping = securityPermission.getMapping();
-            if (securityPermissionService.searchOne("mapping", mapping).isPresent()) {
-                log.warn("[" + mapping + "] 已存在，不再插入");
+            Optional<SecurityPermission> existOrNull = securityPermissionService.searchOne("mapping", mapping);
+            if (existOrNull.isPresent()) {
+                log.info("[" + mapping + "] 已存在，更新数据");
+                securityPermissionService.update(securityPermission.setId(existOrNull.get().getId()));
             } else {
                 securityPermissionService.create(securityPermission);
                 log.info(securityPermission.getDisplay() + "[" + mapping + "] 插入数据库");

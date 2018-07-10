@@ -7,7 +7,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -45,7 +44,7 @@ public class SecurityPermission implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @Version
+    //@Version
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -62,14 +61,26 @@ public class SecurityPermission implements Serializable {
     private String name;
 
     /**
+     * 请求方法的全路由（控制器路由+方法路由）
+     */
+    private String mapping;
+
+    /**
      * 用于展示的名称
      */
     private String display;
 
     /**
-     * 请求方法的全路由（控制器路由+方法路由）
+     * 菜单ID
      */
-    private String mapping;
+    @Column(name = "security_menu_id")
+    private Long securityMenuId;
+
+    /**
+     * 是否所有用户都应该拥有该权限
+     */
+    @Column(name = "must_have")
+    private Boolean mustHave;
 
     private static final long serialVersionUID = 1L;
 }

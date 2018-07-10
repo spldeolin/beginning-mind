@@ -39,22 +39,32 @@ public class SecurityPermissionInput implements Serializable {
     private String name;
 
     /**
+     * 请求方法的全路由（控制器路由+方法路由）
+     */
+    @Size(max = 255)
+    private String mapping;
+
+    /**
      * 用于展示的名称
      */
     @Size(max = 255)
     private String display;
 
     /**
-     * 请求方法的全路由（控制器路由+方法路由）
+     * 菜单ID
      */
-    @Size(max = 255)
-    private String mapping;
+    private Long securityMenuId;
+
+    /**
+     * 是否所有用户都应该拥有该权限
+     */
+    private Boolean mustHave;
 
     private static final long serialVersionUID = 1L;
 
     public SecurityPermission toModel() {
-        return SecurityPermission.builder().id(id).updatedAt(updatedAt).display(display).mapping(
-                mapping).name(name).build();
+        return SecurityPermission.builder().id(id).updatedAt(updatedAt).name(name).mapping(mapping).display(
+                display).securityMenuId(securityMenuId).mustHave(mustHave).build();
     }
 
 }
