@@ -8,6 +8,7 @@ package com.spldeolin.beginningmind.core.service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
@@ -78,7 +79,7 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
     /**
      * 获取用户关联到的所有权限
      */
-    List<String> listUserPermissions(Long userId);
+    Set<String> listUserPermissions(Long userId);
 
     /**
      * 获取指定用户的在线情况

@@ -9,6 +9,7 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
@@ -148,14 +150,15 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     }
 
     @Override
-    public List<String> listUserPermissions(Long userId) {
+    public Set<String> listUserPermissions(Long userId) {
         List<String> result = Lists.newArrayList();
+        Set<String> empty = Sets.newHashSet();
         // `user`
         SecurityUser user = this.get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
         // `user 2 role`
         List<SecurityUsers2roles> roleAssociations = securityUsers2rolesService.searchBatch("userId", user.getId());
         if (roleAssociations.size() == 0) {
-            return result;
+            return empty;
         }
         // `role 2 perm`
         List<Long> roleIds = roleAssociations.stream().map(SecurityUsers2roles::getRoleId).collect(Collectors.toList());
@@ -164,7 +167,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
         List<SecurityRoles2permissions> permissionAssociations = securityRoles2permissionsService.searchBatch(
                 condition);
         if (permissionAssociations.size() == 0) {
-            return result;
+            return empty;
         }
         List<Long> permissionIds = permissionAssociations.stream().map(
                 SecurityRoles2permissions::getPermissionId).collect(Collectors.toList());
@@ -174,13 +177,13 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
         // `perm`
         List<SecurityPermission> permissions = securityPermissionService.get(permissionIds);
         if (permissions.size() == 0) {
-            return result;
+            Sets.newHashSet(result);
         }
         // 过滤器链
         for (SecurityPermission permission : permissions) {
             result.add(permission.getName());
         }
-        return result;
+        return Sets.newHashSet(result);
     }
 
     @Override

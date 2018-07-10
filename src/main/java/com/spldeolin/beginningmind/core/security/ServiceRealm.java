@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.security;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationInfo;
@@ -15,13 +14,17 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.core.security.dto.SaltCredential;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 
+/**
+ * 对接Service的Realm
+ *
+ * @author Deolin
+ */
 public class ServiceRealm extends AuthorizingRealm {
 
     @Autowired
@@ -34,8 +37,7 @@ public class ServiceRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Long userId = ((CurrentSigner) principals.getPrimaryPrincipal()).getSecurityUser().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        List<String> permissionMappings = securityUserService.listUserPermissions(userId);
-        Set<String> permissionNames = Sets.newHashSet(permissionMappings);
+        Set<String> permissionNames = securityUserService.listUserPermissions(userId);
         info.setStringPermissions(permissionNames);
         return info;
     }
