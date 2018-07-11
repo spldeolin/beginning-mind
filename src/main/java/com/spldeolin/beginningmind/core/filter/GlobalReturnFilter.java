@@ -113,7 +113,7 @@ public class GlobalReturnFilter implements Filter {
 
     private String wrapRequestResult(String content) {
         if (content.length() > 0) {
-            if (!content.startsWith("{\"code\":200") || !content.endsWith("}")) {
+            if (!content.startsWith("{\"code\":") || !content.endsWith("}")) {
                 if (!isWrappedWithBrace(content) && !isWrappedWithBracket(content) && !"null".equals(content)) {
                     content = "\"" + content + "\"";
                 }
