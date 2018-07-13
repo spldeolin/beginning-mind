@@ -98,12 +98,23 @@ public class Https {
         if (object instanceof Map) {
             Map<?, ?> map = (Map) object;
             for (Map.Entry<?, ?> entry : map.entrySet()) {
-                form.add(entry.getKey().toString(), entry.getValue().toString());
+                Object key = entry.getKey();
+                if (key == null) {
+                    continue;
+                }
+                Object value = entry.getValue();
+                if (value == null) {
+                    continue;
+                }
+                form.add(key.toString(), value.toString());
             }
         } else {
             for (Field field : object.getClass().getDeclaredFields()) {
                 field.setAccessible(true);
-                form.add(field.getName(), field.get(object).toString());
+                Object value = field.get(object);
+                if (value != null) {
+                    form.add(field.getName(), value.toString());
+                }
             }
         }
         okhttp3.RequestBody body = form.build();
