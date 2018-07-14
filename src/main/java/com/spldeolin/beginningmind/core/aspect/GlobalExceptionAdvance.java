@@ -11,6 +11,7 @@ import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -104,6 +105,19 @@ public class GlobalExceptionAdvance {
             int paramIndex = pathImpl.getLeafNode().getParameterIndex();
             invalids.add(Invalid.builder().name(paramNames[paramIndex]).value(paramValues[paramIndex]).cause(
                     cv.getMessage()).build());
+        }
+        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
+    }
+
+    /**
+     * 400 RequestParam参数没有通过注解校验（multi-param且声明@Valid时）
+     */
+    @ExceptionHandler(BindException.class)
+    public RequestResult handle(BindException e) {
+        List<Invalid> invalids = new ArrayList<>();
+        for (FieldError fieldError : e.getFieldErrors()) {
+            invalids.add(Invalid.builder().name(fieldError.getField()).value(fieldError.getRejectedValue())
+                    .cause(fieldError.getDefaultMessage()).build());
         }
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
