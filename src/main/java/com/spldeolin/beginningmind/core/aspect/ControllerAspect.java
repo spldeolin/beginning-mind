@@ -20,6 +20,7 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.CoreProperties;
+import com.spldeolin.beginningmind.core.api.EnsureStringFieldsTrimmed;
 import com.spldeolin.beginningmind.core.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
@@ -86,6 +87,8 @@ public class ControllerAspect {
         }
         // 刷新会话
         reflashSessionExpire();
+        // 为TrimmedStringFields类执行trimStringFields
+        trimStringFields(controllerInfo);
         // 解析注解，做一些额外处理
         List<Invalid> invalids = handleAnnotations(controllerInfo);
         if (invalids.size() > 0) {
@@ -185,6 +188,15 @@ public class ControllerAspect {
             session.setMaxInactiveInterval(86400);
         } else {
             session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
+        }
+    }
+
+    private void trimStringFields(ControllerInfo controllerInfo) {
+        for (Object parameterValue : controllerInfo.getParameterValues()) {
+            if (parameterValue instanceof EnsureStringFieldsTrimmed) {
+                EnsureStringFieldsTrimmed ensureStringFieldsTrimmed = (EnsureStringFieldsTrimmed) parameterValue;
+                ensureStringFieldsTrimmed.trimStringFields();
+            }
         }
     }
 
