@@ -19,11 +19,12 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.constant.Abbreviation;
 import com.spldeolin.beginningmind.core.util.excel.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
-import com.spldeolin.beginningmind.core.util.excel.ExcelDefinition;
+import com.spldeolin.beginningmind.core.util.excel.ExcelContext;
 import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.Formatter;
 import com.spldeolin.beginningmind.core.util.excel.ParseInvalid;
@@ -33,28 +34,62 @@ import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.util.StringUtil;
 
 /**
+ * Excel读写工具类
+ *
  * @author Deolin 2018/07/07
  */
 @UtilityClass
 @Log4j2
 public class Excels2 {
 
-    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ParseInvalidException {
-        ExcelDefinition excelDefinition = new ExcelDefinition();
+    /**
+     * 读取Excel
+     */
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ParseInvalidException {
+        ExcelContext excelContext = new ExcelContext();
         try {
-            analyzeFile(excelDefinition, file);
-            analyzeModel(excelDefinition, clazz);
-            Workbook workbook = openWorkbook(excelDefinition);
-            Sheet sheet = openSheet(excelDefinition, workbook);
-            analyzeModelFields(excelDefinition, clazz, sheet);
-            // TODO 解析完成后excelDefinition做本地缓存
-            analyzeColumns(excelDefinition, clazz, sheet);
+            analyzeMultipartFile(excelContext, multipartFile);
+
+            return readExcel(excelContext, clazz);
+        } catch (IOException e) {
+            throw new ExcelAnalyzeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
+    }
+
+    /**
+     * 读取Excel
+     */
+    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ParseInvalidException {
+        ExcelContext excelContext = new ExcelContext();
+        try {
+            analyzeFile(excelContext, file);
+
+            return readExcel(excelContext, clazz);
+        } catch (IOException e) {
+            throw new ExcelAnalyzeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
+    }
+
+    /**
+     * 读取Excel
+     */
+    public static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ParseInvalidException {
+        try {
+            analyzeModel(excelContext, clazz);
+            Workbook workbook = openWorkbook(excelContext);
+            Sheet sheet = openSheet(excelContext, workbook);
+            analyzeModelFields(excelContext, clazz, sheet);
+            analyzeColumns(excelContext, clazz, sheet);
             List<T> result = Lists.newArrayList();
             List<ParseInvalid> parseInvalids = Lists.newArrayList();
-            for (Row row : listValidRows(excelDefinition, sheet)) {
+            for (Row row : listValidRows(excelContext, sheet)) {
                 if (row != null) {
                     try {
-                        result.add(parseRow(clazz, excelDefinition.getColumnDefinitions(), row));
+                        result.add(parseRow(clazz, excelContext.getColumnDefinitions(), row));
                     } catch (ParseInvalidException e) {
                         parseInvalids.addAll(e.getParseInvalids());
                     }
@@ -67,35 +102,40 @@ public class Excels2 {
         } catch (IOException e) {
             throw new ExcelAnalyzeException("文件读写失败");
         } finally {
-            close(excelDefinition);
+            close(excelContext);
         }
     }
 
-    /* TODO 重载MultipartFile */
-    private static void analyzeFile(ExcelDefinition excelDefinition, File file) throws IOException {
+    private static void analyzeFile(ExcelContext excelContext, File file) throws IOException {
         String filename = file.getName();
-        excelDefinition.setFileName(FilenameUtils.getBaseName(filename));
-        excelDefinition.setFileExtension(FilenameUtils.getExtension(filename));
-        excelDefinition.setFileInputStream(FileUtils.openInputStream(file));
+        excelContext.setFileExtension(FilenameUtils.getExtension(filename));
+        excelContext.setFileInputStream(FileUtils.openInputStream(file));
     }
 
-    private static <T> void analyzeModel(ExcelDefinition excelDefinition, Class<T> clazz) {
+    private static void analyzeMultipartFile(ExcelContext excelContext,
+            MultipartFile multipartFile) throws IOException {
+        String filename = multipartFile.getOriginalFilename();
+        excelContext.setFileExtension(FilenameUtils.getExtension(filename));
+        excelContext.setFileInputStream(multipartFile.getInputStream());
+    }
+
+    private static <T> void analyzeModel(ExcelContext excelContext, Class<T> clazz) {
         ExcelSheet sheetAnno = clazz.getAnnotation(ExcelSheet.class);
         if (sheetAnno == null) {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
         }
-        excelDefinition.setSheetIndex(sheetAnno.sheetIndex());
-        excelDefinition.setRowOffSet(sheetAnno.startingRowNumber());
+        excelContext.setSheetIndex(sheetAnno.sheetIndex());
+        excelContext.setRowOffSet(sheetAnno.startingRowNumber());
     }
 
-    private static <T> void analyzeModelFields(ExcelDefinition excelDefinition, Class<T> clazz, Sheet sheet) {
-        List<ExcelDefinition.ColumnDefinition> columnDefinitions = Lists.newArrayList();
+    private static <T> void analyzeModelFields(ExcelContext excelContext, Class<T> clazz, Sheet sheet) {
+        List<ExcelContext.ColumnDefinition> columnDefinitions = Lists.newArrayList();
         for (Field field : clazz.getDeclaredFields()) {
             ExcelColumn columnAnno = field.getAnnotation(ExcelColumn.class);
             if (columnAnno == null) {
                 continue;
             }
-            ExcelDefinition.ColumnDefinition columnDefinition = new ExcelDefinition.ColumnDefinition();
+            ExcelContext.ColumnDefinition columnDefinition = new ExcelContext.ColumnDefinition();
             columnDefinition.setFirstColumnName(columnAnno.firstColumnName());
             columnDefinition.setModelField(field);
             Class<? extends Formatter> formatter = columnAnno.formatter();
@@ -108,11 +148,11 @@ public class Excels2 {
         if (columnDefinitions.size() == 0) {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]中不存在@ExcelColumn字段");
         }
-        excelDefinition.setColumnDefinitions(columnDefinitions);
+        excelContext.setColumnDefinitions(columnDefinitions);
     }
 
-    private static <T> void analyzeColumns(ExcelDefinition excelDefinition, Class<T> clazz, Sheet sheet) {
-        for (ExcelDefinition.ColumnDefinition columnDefinition : excelDefinition.getColumnDefinitions()) {
+    private static <T> void analyzeColumns(ExcelContext excelContext, Class<T> clazz, Sheet sheet) {
+        for (ExcelContext.ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
             String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName());
             if (columnLetter != null) {
                 columnDefinition.setColumnLetter(columnLetter);
@@ -139,10 +179,10 @@ public class Excels2 {
         return result;
     }
 
-    private static Workbook openWorkbook(ExcelDefinition excelDefinition) throws IOException {
+    private static Workbook openWorkbook(ExcelContext excelContext) throws IOException {
         Workbook workBook;
-        String fileExtension = excelDefinition.getFileExtension();
-        InputStream inputStream = excelDefinition.getFileInputStream();
+        String fileExtension = excelContext.getFileExtension();
+        InputStream inputStream = excelContext.getFileInputStream();
         if ("xlsx".equals(fileExtension)) {
             workBook = new XSSFWorkbook(inputStream);
         } else if ("xls".equals(fileExtension)) {
@@ -153,31 +193,31 @@ public class Excels2 {
         return workBook;
     }
 
-    private static Sheet openSheet(ExcelDefinition excelDefinition, Workbook workbook) {
+    private static Sheet openSheet(ExcelContext excelContext, Workbook workbook) {
         if (workbook.getNumberOfSheets() == 0) {
             throw new ExcelAnalyzeException("工作簿中不存在工作表");
         }
         Sheet sheet;
         try {
-            sheet = workbook.getSheetAt(excelDefinition.getSheetIndex());
+            sheet = workbook.getSheetAt(excelContext.getSheetIndex());
         } catch (IllegalArgumentException e) {
-            int sheetNumber = excelDefinition.getSheetIndex() + 1;
+            int sheetNumber = excelContext.getSheetIndex() + 1;
             throw new ExcelAnalyzeException("第" + sheetNumber + "个Sheet不存在");
         }
         return sheet;
     }
 
-    private static List<Row> listValidRows(ExcelDefinition excelDefinition, Sheet sheet) {
+    private static List<Row> listValidRows(ExcelContext excelContext, Sheet sheet) {
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
-        int offsetRowNum = excelDefinition.getRowOffSet() - 1;
+        int offsetRowNum = excelContext.getRowOffSet() - 1;
         if (offsetRowNum >= startRowNum) {
             startRowNum = offsetRowNum;
         }
         for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
             Row row = sheet.getRow(rownum);
-            List<Integer> cellNumbers = excelDefinition.getColumnDefinitions().stream().map(
-                    ExcelDefinition.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
+            List<Integer> cellNumbers = excelContext.getColumnDefinitions().stream().map(
+                    ExcelContext.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
             if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
                 rows.add(row);
             }
@@ -210,11 +250,11 @@ public class Excels2 {
         return StringUtils.isAllBlank(contents.toArray(new String[0]));
     }
 
-    private static <T> T parseRow(Class<T> clazz, List<ExcelDefinition.ColumnDefinition> columnDefinitions,
+    private static <T> T parseRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions,
             Row row) throws ParseInvalidException {
         T t = Abbreviation.objs.newInstance(clazz);
         List<ParseInvalid> parseInvalids = Lists.newArrayList();
-        for (ExcelDefinition.ColumnDefinition columnDefinition : columnDefinitions) {
+        for (ExcelContext.ColumnDefinition columnDefinition : columnDefinitions) {
             Integer columnNumber = columnDefinition.getColumnNumber();
             if (columnNumber == null) {
                 continue;
@@ -281,8 +321,8 @@ public class Excels2 {
         return t;
     }
 
-    private static void close(ExcelDefinition excelDefinition) {
-        InputStream inputStream = excelDefinition.getFileInputStream();
+    private static void close(ExcelContext excelContext) {
+        InputStream inputStream = excelContext.getFileInputStream();
         if (inputStream != null) {
             try {
                 inputStream.close();

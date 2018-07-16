@@ -6,12 +6,12 @@ import java.util.List;
 import lombok.Data;
 
 /**
+ * Excels工具类的上下文
+ *
  * @author Deolin 2018/07/07
  */
 @Data
-public class ExcelDefinition {
-
-    private String fileName;
+public class ExcelContext {
 
     private String fileExtension;
 
