@@ -10,9 +10,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,6 @@ import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.cache.RedisCache;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dao.SecurityUserMapper;
@@ -65,7 +66,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     private SecurityPermissionService securityPermissionService;
 
     @Autowired
-    private RedisCache redisCache;
+    private RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
     private FindByIndexNameSessionRepository<? extends Session> finder;
@@ -195,8 +196,8 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     public void killSigner(Long userId) {
         Session session = getSignerSession(userId).orElseThrow(() -> new ServiceException("用户已离线"));
         // 被踢登录者 会在切面中通过自身的当前会话ID找个这个标识，找到后直接调用Shiro登出
-        redisCache.setCacheWithExpireTime("killed:session:" + session.getId(), "killed",
-                SessionConfig.SESSION_EXPIRE_SECONDS);
+        redisTemplate.opsForValue().set("killed:session:" + session.getId(), "killed",
+                SessionConfig.SESSION_EXPIRE_SECONDS, TimeUnit.SECONDS);
     }
 
     @Override

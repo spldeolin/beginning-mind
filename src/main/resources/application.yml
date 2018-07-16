@@ -145,7 +145,7 @@ logging:
 
 core:
 
-  address: localhost:8080
+  address: localhost:2333
 
   file:
     mapping: /static/

@@ -17,6 +17,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.CoreProperties;
@@ -26,7 +27,6 @@ import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.util.ProcessingTimeLogger;
-import com.spldeolin.beginningmind.core.cache.RedisCache;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
@@ -50,7 +50,7 @@ public class ControllerAspect {
     private CoreProperties properties;
 
     @Autowired
-    private RedisCache redisCache;
+    private RedisTemplate<String, Object> redisTemplate;
 
     /**
      * Spring可扫描的，
@@ -171,11 +171,11 @@ public class ControllerAspect {
         if (subject.isAuthenticated() || subject.isRemembered()) {
             String cacheKey = "killed:session:" + RequestContextUtils.session().getId();
             // 被踢出
-            if (redisCache.getCache(cacheKey, String.class) != null) {
+            if (redisTemplate.opsForValue().get(cacheKey) != null) {
                 // 登出
                 subject.logout();
                 // 删除标识
-                redisCache.deleteCache(cacheKey);
+                redisTemplate.delete(cacheKey);
                 return true;
             }
         }
