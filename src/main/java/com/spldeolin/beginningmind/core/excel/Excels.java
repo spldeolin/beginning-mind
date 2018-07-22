@@ -1,22 +1,16 @@
 package com.spldeolin.beginningmind.core.excel;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -29,328 +23,449 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.objenesis.Objenesis;
-import org.springframework.objenesis.ObjenesisStd;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.web.multipart.MultipartFile;
+import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
+import com.spldeolin.beginningmind.core.constant.Abbreviation;
+import com.spldeolin.beginningmind.core.excel.ExcelContext.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.Times;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
+import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * Excel读写工具类
  *
- * @author Deolin
+ * @author Deolin 2018/07/07
  */
 @UtilityClass
 @Log4j2
 public class Excels {
 
-    private static final SimpleDateFormat ISO = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssX");
-
     /**
-     * 生成Excel
+     * 读取Excel
      */
-    public static <T> void writeExcel(String filePath, Class<T> clazz, List<T> list) {
-        writeExcel(new File(filePath), clazz, list);
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ParseInvalidException {
+        ExcelContext excelContext = new ExcelContext();
+        try {
+            analyzeMultipartFile(excelContext, multipartFile);
+
+            return readExcel(excelContext, clazz);
+        } catch (IOException e) {
+            throw new RuntimeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
     }
 
     /**
-     * 生成Excel
+     * 读取Excel
      */
+    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ParseInvalidException {
+        ExcelContext excelContext = new ExcelContext();
+        try {
+            analyzeFile(excelContext, file);
+
+            return readExcel(excelContext, clazz);
+        } catch (IOException e) {
+            throw new ExcelAnalyzeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
+    }
+
+    /**
+     * 读取Excel
+     */
+    public static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ParseInvalidException {
+        try {
+            analyzeModel(excelContext, clazz);
+            Workbook workbook = openWorkbook(excelContext);
+            Sheet sheet = openSheet(excelContext, workbook);
+            analyzeModelFields(excelContext, clazz);
+            analyzeColumns(excelContext, sheet);
+            List<T> result = Lists.newArrayList();
+            List<ParseInvalid> parseInvalids = Lists.newArrayList();
+            for (Row row : listValidRows(excelContext, sheet)) {
+                if (row != null) {
+                    try {
+                        result.add(parseRow(clazz, excelContext.getColumnDefinitions(), row));
+                    } catch (ParseInvalidException e) {
+                        parseInvalids.addAll(e.getParseInvalids());
+                    }
+                }
+            }
+            if (parseInvalids.size() > 0) {
+                throw new ParseInvalidException().setParseInvalids(parseInvalids);
+            }
+            return result;
+        } catch (IOException e) {
+            throw new ExcelAnalyzeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
+    }
+
+    private static void analyzeFile(ExcelContext excelContext, File file) throws IOException {
+        String filename = file.getName();
+        excelContext.setFileExtension(FilenameUtils.getExtension(filename));
+        excelContext.setFileInputStream(FileUtils.openInputStream(file));
+    }
+
+    private static void analyzeMultipartFile(ExcelContext excelContext,
+            MultipartFile multipartFile) throws IOException {
+        String filename = multipartFile.getOriginalFilename();
+        excelContext.setFileExtension(FilenameUtils.getExtension(filename));
+        excelContext.setFileInputStream(multipartFile.getInputStream());
+    }
+
+    private static <T> void analyzeModel(ExcelContext excelContext, Class<T> clazz) {
+        ExcelSheet sheetAnno = clazz.getAnnotation(ExcelSheet.class);
+        if (sheetAnno == null) {
+            throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
+        }
+        excelContext.setSheetName(sheetAnno.sheetName());
+        excelContext.setRowOffSet(sheetAnno.startingRowNumber());
+    }
+
+    private static <T> void analyzeModelFields(ExcelContext excelContext, Class<T> clazz) {
+        List<ExcelContext.ColumnDefinition> columnDefinitions = Lists.newArrayList();
+        for (Field field : clazz.getDeclaredFields()) {
+            ExcelColumn columnAnno = field.getAnnotation(ExcelColumn.class);
+            if (columnAnno == null) {
+                continue;
+            }
+            ExcelContext.ColumnDefinition columnDefinition = new ExcelContext.ColumnDefinition();
+            columnDefinition.setFirstColumnName(columnAnno.firstColumnName());
+            columnDefinition.setModelField(field);
+            Class<? extends Formatter> formatter = columnAnno.formatter();
+            if (formatter != Formatter.class) {
+                columnDefinition.setFormatter(Abbreviation.objs.newInstance(formatter));
+            }
+            columnDefinition.setDefaultValue(columnAnno.defaultValue());
+            columnDefinitions.add(columnDefinition);
+        }
+        if (columnDefinitions.size() == 0) {
+            throw new RuntimeException("Model [" + clazz.getSimpleName() + "]中不存在@ExcelColumn字段");
+        }
+        excelContext.setColumnDefinitions(columnDefinitions);
+    }
+
+    private static <T> void analyzeColumns(ExcelContext excelContext, Sheet sheet) {
+        for (ExcelContext.ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
+            String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName());
+            if (columnLetter != null) {
+                columnDefinition.setColumnLetter(columnLetter);
+                columnDefinition.setColumnNumber(letterToNumber(columnLetter));
+            }
+        }
+    }
+
+    private static String findColumnLetterByFirstColumnName(Sheet sheet, String firstColumnName) {
+        if (StringUtils.isBlank(firstColumnName)) {
+            return null;
+        }
+        Row row = sheet.getRow(0);
+        if (row == null) {
+            throw new RuntimeException("工作表[" + sheet.getSheetName() + "] 的首行不存在");
+        }
+        String result = null;
+        for (int i = row.getFirstCellNum(); i <= row.getLastCellNum(); i++) {
+            Cell cell = row.getCell(i);
+            if (cell != null && cell.toString().equals(firstColumnName)) {
+                result = numberToLetter(cell.getColumnIndex() + 1);
+            }
+        }
+        return result;
+    }
+
+    private static Workbook openWorkbook(ExcelContext excelContext) throws IOException {
+        Workbook workBook;
+        String fileExtension = excelContext.getFileExtension();
+        InputStream inputStream = excelContext.getFileInputStream();
+        if ("xlsx".equals(fileExtension)) {
+            workBook = new XSSFWorkbook(inputStream);
+        } else if ("xls".equals(fileExtension)) {
+            workBook = new HSSFWorkbook(inputStream);
+        } else {
+            throw new ExcelAnalyzeException("文件拓展名不正确");
+        }
+        return workBook;
+    }
+
+    private static Sheet openSheet(ExcelContext excelContext, Workbook workbook) {
+        if (workbook.getNumberOfSheets() == 0) {
+            throw new ExcelAnalyzeException("工作簿中不存在工作表");
+        }
+        Sheet sheet = workbook.getSheet(excelContext.getSheetName());
+        if (sheet == null) {
+            throw new ExcelAnalyzeException("工作表 [" + excelContext.getSheetName() + "]不存在");
+        }
+        return sheet;
+    }
+
+    private static List<Row> listValidRows(ExcelContext excelContext, Sheet sheet) {
+        List<Row> rows = Lists.newArrayList();
+        int startRowNum = sheet.getFirstRowNum();
+        int offsetRowNum = excelContext.getRowOffSet() - 1;
+        if (offsetRowNum >= startRowNum) {
+            startRowNum = offsetRowNum;
+        }
+        for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
+            Row row = sheet.getRow(rownum);
+            List<Integer> cellNumbers = excelContext.getColumnDefinitions().stream().map(
+                    ExcelContext.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
+            if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
+                rows.add(row);
+            }
+
+        }
+        if (rows.size() == 0) {
+            throw new ExcelAnalyzeException("工作表中没有内容");
+        }
+        return rows;
+    }
+
+    /**
+     * 判断行中指定列的单元格的内容是否全部为空白
+     */
+    private static boolean rowIsAllBlankInCellNumbers(Row row, List<Integer> cellNumbers) {
+        List<String> contents = Lists.newArrayList();
+        for (Integer cellNumber : cellNumbers) {
+            if (cellNumber == null) {
+                contents.add(null);
+                continue;
+            }
+            int cellIndex = cellNumber - 1;
+            Cell cell = row.getCell(cellIndex);
+            if (cell == null) {
+                contents.add(null);
+            } else {
+                contents.add(cell.toString());
+            }
+        }
+        return StringUtils.isAllBlank(contents.toArray(new String[0]));
+    }
+
+    private static <T> T parseRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions,
+            Row row) throws ParseInvalidException {
+        T t = Abbreviation.objs.newInstance(clazz);
+        List<ParseInvalid> parseInvalids = Lists.newArrayList();
+        for (ExcelContext.ColumnDefinition columnDefinition : columnDefinitions) {
+            Integer columnNumber = columnDefinition.getColumnNumber();
+            if (columnNumber == null) {
+                continue;
+            }
+            // cell在row中是从0开始的
+            int cellIndex = columnNumber - 1;
+            Cell cell = row.getCell(cellIndex);
+            String cellContent;
+            if (cell == null) {
+                cellContent = columnDefinition.getDefaultValue();
+            } else {
+                cellContent = cell.toString().trim();
+            }
+            Formatter formatter = columnDefinition.getFormatter();
+            boolean assignedFormatter = formatter != null && formatter.getClass() != Formatter.class;
+            Field field = columnDefinition.getModelField();
+            Object fieldValue = null;
+            try {
+                if (StringUtil.isNotEmpty(cellContent)) {
+                    if (!assignedFormatter) {
+                        // 没有指定formatter，尝试用缺省方式指定常用formatter
+                        Class fieldType = field.getType();
+                        // 以.0结尾则删除最后两位
+                        if (cellContent.endsWith(".0")) {
+                            cellContent = cellContent.substring(0, cellContent.length() - 2);
+                        }
+                        if (fieldType == String.class) {
+                            fieldValue = cellContent;
+                        } else if (fieldType == Integer.class) {
+                            fieldValue = NumberUtils.createInteger(cellContent);
+                        } else if (fieldType == Long.class) {
+                            fieldValue = NumberUtils.createLong(cellContent);
+                        } else if (fieldType == Float.class) {
+                            fieldValue = NumberUtils.createFloat(cellContent);
+                        } else if (fieldType == Double.class) {
+                            fieldValue = NumberUtils.createDouble(cellContent);
+                        } else if (fieldType == BigDecimal.class) {
+                            fieldValue = NumberUtils.createBigDecimal(cellContent);
+                        } else if (fieldType == Boolean.class) {
+                            fieldValue = BooleanUtils.toBoolean(cellContent);
+                        } else if (fieldType == LocalDateTime.class) {
+                            fieldValue = LocalDateTime.parse(cellContent, Times.DEFAULT_DATE_TIME_FORMATTER);
+                        } else {
+                            throw new RuntimeException("工具类Excels未为 [" + fieldType.getSimpleName() + field.getName() +
+                                    "]提供缺省转换策略，请在@ExcelColumn中指定具体formatter");
+                        }
+                    } else {
+                        // 指定了formatter
+                        fieldValue = formatter.parse(cellContent);
+                    }
+                }
+                field.setAccessible(true);
+                field.set(t, fieldValue);
+            } catch (IllegalAccessException e) {
+                throw new RuntimeException(e);
+            } catch (Exception e) {
+                ParseInvalid parseInvalid = ParseInvalid.builder().rowNumber(row.getRowNum() + 1).columnLetter(
+                        columnDefinition.getColumnLetter()).cause("数据格式非法").build();
+                if (assignedFormatter) {
+                    parseInvalid.setCause(e.getMessage());
+                }
+                parseInvalids.add(parseInvalid);
+            }
+        }
+        if (parseInvalids.size() > 0) {
+            throw new ParseInvalidException().setParseInvalids(parseInvalids);
+        }
+        return t;
+    }
+
+    private static void close(ExcelContext excelContext) {
+        InputStream inputStream = excelContext.getFileInputStream();
+        if (inputStream != null) {
+            try {
+                inputStream.close();
+            } catch (IOException ignored) {
+            }
+        }
+    }
+
+    private static int letterToNumber(String columnLetter) {
+        columnLetter = columnLetter.toUpperCase();
+        int number = 0;
+        for (int i = 0; i < columnLetter.length(); i++) {
+            number *= 26;
+            number += (columnLetter.charAt(i) - 'A' + 1);
+        }
+        if (number == 0) {
+            number = 1;
+        }
+        return number;
+    }
+
+    private static String numberToLetter(int number) {
+        StringBuilder rs = new StringBuilder();
+        do {
+            number--;
+            rs.insert(0, ((char) (number % 26 + (int) 'A')));
+            number = (number - number % 26) / 26;
+        } while (number > 0);
+        return rs.toString();
+    }
+
+    @SneakyThrows
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
+        ensureFileExist(file);
+        ExcelContext excelContext = new ExcelContext();
+        try (OutputStream os = new FileOutputStream(file)) {
+            analyzeFile(excelContext, file);
+            analyzeModel(excelContext, clazz);
+            analyzeModelFields(excelContext, clazz);
+
+            // 创建工作簿
+            Workbook workbook = newWorkbook(excelContext);
+
+            // 创建工作表
+            Sheet sheet = newSheet(excelContext, workbook);
+
+            // 写入第一行（第一行展示列名）
+            writeFirstRow(excelContext, sheet);
+
+            // 单元格格式（文本） 这是干嘛的？
+            CellStyle cellStyle = workbook.createCellStyle();
+            DataFormat dataFormat = workbook.createDataFormat();
+            cellStyle.setDataFormat(dataFormat.getFormat("@"));
+
+            // 写入第N行（下面的行展示数据）
+            writeRows(excelContext, cellStyle, sheet, list);
+
+            workbook.write(os);
+        } catch (IOException e) {
+            throw new ExcelAnalyzeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
+    }
+
+    private void ensureFileExist(File file) {
         if (!file.exists()) {
             try {
-                file.createNewFile();
+                if (!file.createNewFile()) {
+                    throw new IOException("无法创建文件");
+                }
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
-        try (OutputStream os = new FileOutputStream(file)) {
-            // 解析clazz
-            Field[] fields = clazz.getDeclaredFields();
-            List<Field> srcFields = new ArrayList<>();
-            List<String> columnNames = new ArrayList<>();
-            List<Formatter> formatters = new ArrayList<>();
-            List<String> defaultValues = new ArrayList<>();
-            Integer columnSize = analyzeFields(fields, srcFields, columnNames, formatters, defaultValues);
-            log.info(columnSize.toString());
-            log.info(srcFields.toString());
-            log.info(columnNames.toString());
-            log.info(formatters.toString());
-            log.info(defaultValues.toString());
-            String fileExtension = FilenameUtils.getExtension(file.getName());
-            Workbook workbook;
-            if ("xlsx".equals(fileExtension)) {
-                workbook = new XSSFWorkbook();
-            } else if ("xls".equals(fileExtension)) {
-                workbook = new HSSFWorkbook();
-            } else {
-                throw new ServiceException("文件拓展名不正确");
-            }
-            // 单元格格式（文本）
-            CellStyle cellStyle = workbook.createCellStyle();
-            DataFormat dataFormat = workbook.createDataFormat();
-            cellStyle.setDataFormat(dataFormat.getFormat("@"));
-            Sheet sheet = workbook.createSheet(getSheetName(clazz));
-            // 第一行
-            Row titleRow = sheet.createRow(0);
-            // 向第一行填入列名
-            for (int i = 0; i < columnSize; i++) {
-                Cell cell = titleRow.createCell(i + 1);
+    }
+
+    private static Workbook newWorkbook(ExcelContext excelContext) {
+        String fileExtension = excelContext.getFileExtension();
+        if ("xlsx".equals(fileExtension)) {
+            return new XSSFWorkbook();
+        } else if ("xls".equals(fileExtension)) {
+            return new HSSFWorkbook();
+        } else {
+            throw new ServiceException("文件拓展名不正确");
+        }
+    }
+
+    private static Sheet newSheet(ExcelContext excelContext, Workbook workbook) {
+        return workbook.createSheet(excelContext.getSheetName());
+    }
+
+    private static void writeFirstRow(ExcelContext excelContext, Sheet sheet) {
+        Row titleRow = sheet.createRow(0);
+
+        List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
+        for (int i = 0; i < columns.size(); i++) {
+            ColumnDefinition column = columns.get(i);
+            int cellNumber = i;
+            Cell cell = titleRow.createCell(cellNumber);
+
+            String cellValue = column.getFirstColumnName();
+            cell.setCellValue(cellValue);
+        }
+    }
+
+    private static <T> void writeRows(ExcelContext excelContext, CellStyle cellStyle, Sheet sheet, List<T> list) {
+        for (int j = 0; j < list.size(); j++) {
+            T t = list.get(j);
+            int rowIndex = j + 1;
+            Row titleRow = sheet.createRow(rowIndex);
+
+            List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
+            for (int i = 0; i < columns.size(); i++) {
+                ColumnDefinition column = columns.get(i);
+                int cellNumber = i;
+                Cell cell = titleRow.createCell(cellNumber);
+
+                String cellValue = formatCellValue(column, t);
                 cell.setCellStyle(cellStyle);
-                cell.setCellValue(columnNames.get(i));
+                cell.setCellValue(cellValue);
             }
-            // 第二行开始
-            for (int i = 0; i < list.size(); i++) {
-                T t = list.get(i);
-                // 第N行
-                int lineNo = i + 1;
-                Row valueRow = sheet.createRow(lineNo);
-                // 向N行填入序号
-                Cell cell = valueRow.createCell(0);
-                cell.setCellStyle(cellStyle);
-                cell.setCellValue(lineNo);
-                // 向N行填入数据
-                for (int j = 0; j < srcFields.size(); j++) {
-                    Field field = srcFields.get(j);
-                    field.setAccessible(true);
-                    Object value = ReflectionUtils.getField(field, t);
-                    String cellContent;
-                    if (value == null) {
-                        cellContent = defaultValues.get(j);
-                    } else {
-                        Formatter formatter = formatters.get(j);
-                        if (formatter == null || formatter.getClass() == Formatter.class) {
-                            // 默认formatter或formatter不存在
-                            Class fieldType = field.getType();
-                            if (fieldType == Date.class) {
-                                cellContent = ISO.format((Date) value);
-                            } else if (fieldType == LocalDate.class) {
-                                cellContent = ((LocalDate) value).format(DateTimeFormatter.ISO_DATE);
-                            } else if (fieldType == LocalTime.class) {
-                                cellContent = ((LocalTime) value).format(DateTimeFormatter.ISO_TIME);
-                            } else if (fieldType == LocalDateTime.class) {
-                                cellContent = ((LocalDateTime) value).format(DateTimeFormatter.ISO_DATE_TIME);
-                            } else {
-                                // 非“时间”的情况，默认直接toString即可
-                                cellContent = value.toString();
-                            }
-                        } else {
-                            // 指定了formatter
-                            cellContent = formatter.format(value);
-                        }
-                    }
-                    cell = valueRow.createCell(j + 1);
-                    cell.setCellStyle(cellStyle);
-                    cell.setCellValue(cellContent);
-                }
-            }
-            workbook.write(os);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
         }
     }
 
-    private static <T> String getSheetName(Class<T> clazz) {
-        ExcelSheet excelSheet = clazz.getAnnotation(ExcelSheet.class);
-        if (excelSheet == null) {
-            throw new IllegalArgumentException("实体类未声明@ExcelSheet注解");
-        }
-        String sheetName = excelSheet.sheetName();
-        if (StringUtils.isNotEmpty(sheetName)) {
-            return sheetName;
-        }
-        return "Sheet1";
-    }
-
-    /**
-     * 读取Excel
-     */
-    public static <T> List<T> readExcel(File file, Class<T> clazz) {
-        try (FileInputStream fis = new FileInputStream(file)) {
-            return readExcel(fis, FilenameUtils.getExtension(file.getName()), clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 读取Excel
-     */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
-        try {
-            return readExcel(multipartFile.getInputStream(),
-                    FilenameUtils.getExtension(multipartFile.getOriginalFilename()), clazz);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * 读取Excel
-     */
-    public static <T> List<T> readExcel(InputStream inputStream, String fileExtension, Class<T> clazz) {
-        List<T> list = new ArrayList<>();
-        Sheet sheet;
-        Workbook workBook = null;
-        try {
-            if ("xlsx".equals(fileExtension)) {
-                workBook = new XSSFWorkbook(inputStream);
-            } else if ("xls".equals(fileExtension)) {
-                workBook = new HSSFWorkbook(inputStream);
-            } else {
-                throw new ServiceException("文件拓展名不正确");
-            }
-            if (workBook.getNumberOfSheets() == 0) {
-                return list;
-            }
-            sheet = workBook.getSheetAt(0);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        } finally {
-            if (workBook != null) {
-                try {
-                    workBook.close();
-                } catch (IOException ignored) {
-                }
-            }
-        }
-        // 解析clazz
-        Field[] fields = clazz.getDeclaredFields();
-        List<Field> srcFields = new ArrayList<>();
-        List<String> columnNames = new ArrayList<>();
-        List<Formatter> formatters = new ArrayList<>();
-        List<String> defaultValues = new ArrayList<>();
-        analyzeFields(fields, srcFields, columnNames, formatters, defaultValues);
-        // 解析excel
-        int rowSize = sheet.getLastRowNum();
-        if (rowSize < 1) {
-            return list;
-        }
-        Row titleRow = sheet.getRow(0);
-        // 解析excel结果
-        List<ParseCell> parseCells = new ArrayList<>();
-        /* 第一个单元格是没有值的 */
-        for (int cellIndex = 1; cellIndex < titleRow.getLastCellNum(); cellIndex++) {
-            Cell cell = titleRow.getCell(cellIndex);
-            String cellContent = cell.getStringCellValue();
-            if (columnNames.contains(cellContent)) {
-                int index = columnNames.indexOf(cellContent);
-                parseCells.add(ParseCell.builder().srcField(srcFields.get(index)).formatter(
-                        formatters.get(index)).cellIndex(cellIndex).build());
-            }
-        }
-        // <   <=   疑似BUG
-        for (int rowIndex = 1; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-            Row row = sheet.getRow(rowIndex);
-            Objenesis objenesis = new ObjenesisStd(true);
-            T t = objenesis.newInstance(clazz);
-            boolean rowAllCellsIsNull = true;
-            for (ParseCell parseCell : parseCells) {
-                Field field = parseCell.getSrcField();
-                field.setAccessible(true);
-                Formatter formatter = parseCell.getFormatter();
-                Cell cell = row.getCell(parseCell.getCellIndex());
-                String cellContent;
-                if (cell == null) {
-                    cellContent = null;
-                } else {
-                    rowAllCellsIsNull = false;
-                    cellContent = row.getCell(parseCell.getCellIndex()).getStringCellValue();
-                }
-                if (StringUtils.isNotEmpty(cellContent)) {
-                    try {
-                        if (formatter == null || formatter.getClass() == Formatter.class) {
-                            Class fieldType = field.getType();
-                            if (fieldType == String.class) {
-                                field.set(t, cellContent);
-                            } else if (fieldType == Integer.class || "int".equals(fieldType.getTypeName())) {
-                                field.set(t, NumberUtils.createInteger(cellContent));
-                            } else if (fieldType == Long.class || "long".equals(fieldType.getTypeName())) {
-                                field.set(t, NumberUtils.createLong(cellContent));
-                            } else if (fieldType == BigInteger.class) {
-                                field.set(t, NumberUtils.createBigInteger(cellContent));
-                            } else if (fieldType == Float.class || "float".equals(fieldType.getTypeName())) {
-                                field.set(t, NumberUtils.createFloat(cellContent));
-                            } else if (fieldType == Double.class || "double".equals(fieldType.getTypeName())) {
-                                field.set(t, NumberUtils.createDouble(cellContent));
-                            } else if (fieldType == BigDecimal.class) {
-                                field.set(t, NumberUtils.createBigDecimal(cellContent));
-                            } else if (fieldType == Boolean.class || "boolean".equals(fieldType.getTypeName())) {
-                                Boolean bool;
-                                if (NumberUtils.isCreatable(cellContent)) {
-                                    bool = BooleanUtils.toBooleanObject(Integer.parseInt(cellContent));
-                                } else {
-                                    bool = BooleanUtils.toBooleanObject(cellContent);
-                                }
-                                field.set(t, bool);
-                            } else if (fieldType == Date.class) {
-                                field.set(t, ISO.parse(cellContent));
-                            } else if (fieldType == LocalDate.class) {
-                                field.set(t, LocalDate.parse(cellContent, DateTimeFormatter.ISO_DATE));
-                            } else if (fieldType == LocalTime.class) {
-                                field.set(t, LocalTime.parse(cellContent, DateTimeFormatter.ISO_TIME));
-                            } else if (fieldType == LocalDateTime.class) {
-                                field.set(t, LocalDateTime.parse(cellContent, DateTimeFormatter.ISO_DATE_TIME));
-                            } else {
-                                throw new UnsupportedOperationException(
-                                        "读取Excel失败，类" + clazz.getSimpleName() + "的属性" +
-                                                field.getType().getClass().getSimpleName() + field.getName() +
-                                                "未指定的Formater");
-                            }
-                        } else {
-                            field.set(t, parseCell.getFormatter().parse(cellContent));
-                        }
-                    } catch (Exception e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-            }
-            if (!rowAllCellsIsNull) {
-                list.add(t);
-            }
-        }
-        return list;
-    }
-
+    @SuppressWarnings("unchecked")
     @SneakyThrows
-    private static int analyzeFields(Field[] fields, List<Field> srcFields, List<String> columnNames,
-            List<Formatter> formatters, List<String> defaultValues) {
-        int columnSize = 0;
-        for (Field field : fields) {
-            ExcelColumn excelColumn = field.getAnnotation(ExcelColumn.class);
-            if (excelColumn != null) {
-                columnSize++;
-                srcFields.add(field);
-                columnNames.add(excelColumn.firstColumnName());
-                Class formatter = excelColumn.formatter();
-                if (formatter.isInterface()) {
-                    formatters.add(null);
-                } else {
-                    formatters.add((Formatter) formatter.newInstance());
-                }
-                defaultValues.add(excelColumn.defaultValue());
-            }
+    private <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t) {
+        Field field = columnDefinition.getModelField();
+        field.setAccessible(true);
+        Object fieldValue = field.get(t);
+        if (fieldValue == null) {
+            return columnDefinition.getDefaultValue();
         }
-        return columnSize;
-    }
 
-    @Data
-    @AllArgsConstructor
-    @Builder
-    private static class ParseCell {
+        Formatter formatter = columnDefinition.getFormatter();
+        if (formatter == null) {
+            return fieldValue.toString();
+        }
 
-        private Field srcField;
-
-        private Formatter formatter;
-
-        private Integer cellIndex;
-
+        return formatter.format(fieldValue);
     }
 
 }
