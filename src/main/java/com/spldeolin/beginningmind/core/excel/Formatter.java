@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util.excel;
+package com.spldeolin.beginningmind.core.excel;
 
 /**
  * 格式化器

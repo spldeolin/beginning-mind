@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util.excel;
+package com.spldeolin.beginningmind.core.excel;
 
 import java.io.InputStream;
 import java.lang.reflect.Field;

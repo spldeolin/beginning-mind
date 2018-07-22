@@ -1,8 +1,8 @@
 package com.spldeolin.beginningmind.core.test;
 
 import org.junit.Test;
-import com.spldeolin.beginningmind.core.util.excel.ExcelColumn;
-import com.spldeolin.beginningmind.core.util.excel.ExcelSheet;
+import com.spldeolin.beginningmind.core.excel.ExcelColumn;
+import com.spldeolin.beginningmind.core.excel.ExcelSheet;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
