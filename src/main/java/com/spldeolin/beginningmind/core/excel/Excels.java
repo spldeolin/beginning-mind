@@ -78,7 +78,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ParseInvalidException {
+    private static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ParseInvalidException {
         try {
             analyzeModel(excelContext, clazz);
             Workbook workbook = openWorkbook(excelContext);
