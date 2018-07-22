@@ -3,11 +3,11 @@ package com.spldeolin.beginningmind.core.test;
 import java.io.File;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
+import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.excel.ExcelSheet;
 import com.spldeolin.beginningmind.core.excel.Excels2;
 import com.spldeolin.beginningmind.core.excel.Formatter;
-import com.spldeolin.beginningmind.core.excel.ParseInvalidException;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -19,12 +19,15 @@ public class ExcelsTest2 {
 
     @Test
     public void testExcels() {
-        File file = new File("C:\\Users\\Deolin\\Desktop\\sample.xlsx");
-        try {
-            Excels2.readExcel(file, Person.class).forEach(log::info);
-        } catch (ParseInvalidException e) {
-            e.getParseInvalids().forEach(log::info);
-        }
+//        File file = new File("C:\\Users\\Deolin\\Desktop\\sample.xlsx");
+//        try {
+//            Excels2.readExcel(file, Person.class).forEach(log::info);
+//        } catch (ParseInvalidException e) {
+//            e.getParseInvalids().forEach(log::info);
+//        }
+        File file = new File("C:\\Users\\Deolin\\Desktop\\output.xlsx");
+        Excels2.writeExcel(file, Person.class, Lists.newArrayList());
+
     }
 
     @ExcelSheet(sheetIndex = 2, startingRowNumber = 2)

@@ -15,14 +15,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
+import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.constant.Abbreviation;
 import com.spldeolin.beginningmind.core.util.Times;
+import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.util.StringUtil;
@@ -347,13 +351,57 @@ public class Excels2 {
     }
 
     private static String numberToLetter(int number) {
-        String rs = "";
+        StringBuilder rs = new StringBuilder();
         do {
             number--;
-            rs = ((char) (number % 26 + (int) 'A')) + rs;
+            rs.insert(0, ((char) (number % 26 + (int) 'A')));
             number = (number - number % 26) / 26;
         } while (number > 0);
-        return rs;
+        return rs.toString();
+    }
+
+    @SneakyThrows
+    public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
+        ensureFileExist(file);
+        ExcelContext excelContext = new ExcelContext();
+        try {
+            analyzeFile(excelContext, file);
+            analyzeModel(excelContext, clazz);
+
+            Workbook workbook = newWorkbook(excelContext);
+            // 单元格格式（文本）
+            CellStyle cellStyle = workbook.createCellStyle();
+            DataFormat dataFormat = workbook.createDataFormat();
+            cellStyle.setDataFormat(dataFormat.getFormat("@"));
+
+        } catch (IOException e) {
+            throw new ExcelAnalyzeException("文件读写失败");
+        } finally {
+            close(excelContext);
+        }
+    }
+
+    private void ensureFileExist(File file) {
+        if (!file.exists()) {
+            try {
+                if (!file.createNewFile()) {
+                    throw new IOException("无法创建文件");
+                }
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private static Workbook newWorkbook(ExcelContext excelContext) {
+        String fileExtension = excelContext.getFileExtension();
+        if ("xlsx".equals(fileExtension)) {
+            return new XSSFWorkbook();
+        } else if ("xls".equals(fileExtension)) {
+            return new HSSFWorkbook();
+        } else {
+            throw new ServiceException("文件拓展名不正确");
+        }
     }
 
 }
