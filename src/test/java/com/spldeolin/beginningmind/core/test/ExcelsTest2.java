@@ -38,7 +38,7 @@ public class ExcelsTest2 {
         private String realAge;
 
         // TODO mustNull会绑定为null，说明有一个地方不应该直接continue
-        @ExcelColumn(firstColumnName = "阿斯顿阿斯顿", defaultValue = "defaultttt")
+        @ExcelColumn(firstColumnName = "阿斯顿阿斯顿")
         private String mustNull;
 
     }

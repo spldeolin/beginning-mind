@@ -274,8 +274,16 @@ public class Excels2 {
                         if (fieldType == String.class) {
                             fieldValue = cellContent;
                         } else if (fieldType == Integer.class) {
+                            // 以.0结尾则删除最后两位
+                            if (cellContent.endsWith(".0")) {
+                                cellContent = cellContent.substring(0, cellContent.length() - 2);
+                            }
                             fieldValue = NumberUtils.createInteger(cellContent);
                         } else if (fieldType == Long.class) {
+                            // 以.0结尾则删除最后两位
+                            if (cellContent.endsWith(".0")) {
+                                cellContent = cellContent.substring(0, cellContent.length() - 2);
+                            }
                             fieldValue = NumberUtils.createLong(cellContent);
                         } else if (fieldType == Float.class) {
                             fieldValue = NumberUtils.createFloat(cellContent);
@@ -320,7 +328,8 @@ public class Excels2 {
         if (inputStream != null) {
             try {
                 inputStream.close();
-            } catch (IOException ignored) {}
+            } catch (IOException ignored) {
+            }
         }
     }
 
