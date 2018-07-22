@@ -80,8 +80,8 @@ public class Excels2 {
             analyzeModel(excelContext, clazz);
             Workbook workbook = openWorkbook(excelContext);
             Sheet sheet = openSheet(excelContext, workbook);
-            analyzeModelFields(excelContext, clazz, sheet);
-            analyzeColumns(excelContext, clazz, sheet);
+            analyzeModelFields(excelContext, clazz);
+            analyzeColumns(excelContext, sheet);
             List<T> result = Lists.newArrayList();
             List<ParseInvalid> parseInvalids = Lists.newArrayList();
             for (Row row : listValidRows(excelContext, sheet)) {
@@ -122,11 +122,11 @@ public class Excels2 {
         if (sheetAnno == null) {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
         }
-        excelContext.setSheetIndex(sheetAnno.sheetIndex());
+        excelContext.setSheetName(sheetAnno.sheetName());
         excelContext.setRowOffSet(sheetAnno.startingRowNumber());
     }
 
-    private static <T> void analyzeModelFields(ExcelContext excelContext, Class<T> clazz, Sheet sheet) {
+    private static <T> void analyzeModelFields(ExcelContext excelContext, Class<T> clazz) {
         List<ExcelContext.ColumnDefinition> columnDefinitions = Lists.newArrayList();
         for (Field field : clazz.getDeclaredFields()) {
             ExcelColumn columnAnno = field.getAnnotation(ExcelColumn.class);
@@ -149,7 +149,7 @@ public class Excels2 {
         excelContext.setColumnDefinitions(columnDefinitions);
     }
 
-    private static <T> void analyzeColumns(ExcelContext excelContext, Class<T> clazz, Sheet sheet) {
+    private static <T> void analyzeColumns(ExcelContext excelContext, Sheet sheet) {
         for (ExcelContext.ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
             String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName());
             if (columnLetter != null) {
@@ -195,12 +195,9 @@ public class Excels2 {
         if (workbook.getNumberOfSheets() == 0) {
             throw new ExcelAnalyzeException("工作簿中不存在工作表");
         }
-        Sheet sheet;
-        try {
-            sheet = workbook.getSheetAt(excelContext.getSheetIndex());
-        } catch (IllegalArgumentException e) {
-            int sheetNumber = excelContext.getSheetIndex() + 1;
-            throw new ExcelAnalyzeException("第" + sheetNumber + "个Sheet不存在");
+        Sheet sheet = workbook.getSheet(excelContext.getSheetName());
+        if (sheet == null) {
+            throw new ExcelAnalyzeException("工作表 [" + excelContext.getSheetName() + "]不存在");
         }
         return sheet;
     }

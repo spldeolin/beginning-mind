@@ -15,13 +15,7 @@ public @interface ExcelSheet {
     /**
      * 工作表名
      */
-    @Deprecated
     String sheetName() default "Sheet1";
-
-    /**
-     * Sheet序号（从0开始）
-     */
-    int sheetIndex() default 0;
 
     /**
      * 从第几行开始读取（Excel显示的“行号”，从2开始）（1是标题行，指定1则没有意义）

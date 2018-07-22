@@ -18,9 +18,9 @@ public class ExcelContext {
     private InputStream fileInputStream;
 
     /**
-     * Sheet序号
+     * Sheet名
      */
-    private Integer sheetIndex;
+    private String sheetName;
 
     /**
      * 从第几行开始
