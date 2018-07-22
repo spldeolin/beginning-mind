@@ -1,8 +1,10 @@
 package com.spldeolin.beginningmind.core.excel;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -25,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.constant.Abbreviation;
+import com.spldeolin.beginningmind.core.excel.ExcelContext.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.Times;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -272,19 +275,15 @@ public class Excels2 {
                     if (!assignedFormatter) {
                         // 没有指定formatter，尝试用缺省方式指定常用formatter
                         Class fieldType = field.getType();
+                        // 以.0结尾则删除最后两位
+                        if (cellContent.endsWith(".0")) {
+                            cellContent = cellContent.substring(0, cellContent.length() - 2);
+                        }
                         if (fieldType == String.class) {
                             fieldValue = cellContent;
                         } else if (fieldType == Integer.class) {
-                            // 以.0结尾则删除最后两位
-                            if (cellContent.endsWith(".0")) {
-                                cellContent = cellContent.substring(0, cellContent.length() - 2);
-                            }
                             fieldValue = NumberUtils.createInteger(cellContent);
                         } else if (fieldType == Long.class) {
-                            // 以.0结尾则删除最后两位
-                            if (cellContent.endsWith(".0")) {
-                                cellContent = cellContent.substring(0, cellContent.length() - 2);
-                            }
                             fieldValue = NumberUtils.createLong(cellContent);
                         } else if (fieldType == Float.class) {
                             fieldValue = NumberUtils.createFloat(cellContent);
@@ -361,16 +360,29 @@ public class Excels2 {
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ensureFileExist(file);
         ExcelContext excelContext = new ExcelContext();
-        try {
+        try (OutputStream os = new FileOutputStream(file)) {
             analyzeFile(excelContext, file);
             analyzeModel(excelContext, clazz);
+            analyzeModelFields(excelContext, clazz);
 
+            // 创建工作簿
             Workbook workbook = newWorkbook(excelContext);
-            // 单元格格式（文本）
+
+            // 创建工作表
+            Sheet sheet = newSheet(excelContext, workbook);
+
+            // 写入第一行（第一行展示列名）
+            writeFirstRow(excelContext, sheet);
+
+            // 单元格格式（文本） 这是干嘛的？
             CellStyle cellStyle = workbook.createCellStyle();
             DataFormat dataFormat = workbook.createDataFormat();
             cellStyle.setDataFormat(dataFormat.getFormat("@"));
 
+            // 写入第N行（下面的行展示数据）
+            writeRows(excelContext, cellStyle, sheet, list);
+
+            workbook.write(os);
         } catch (IOException e) {
             throw new ExcelAnalyzeException("文件读写失败");
         } finally {
@@ -399,6 +411,61 @@ public class Excels2 {
         } else {
             throw new ServiceException("文件拓展名不正确");
         }
+    }
+
+    private static Sheet newSheet(ExcelContext excelContext, Workbook workbook) {
+        return workbook.createSheet(excelContext.getSheetName());
+    }
+
+    private static void writeFirstRow(ExcelContext excelContext, Sheet sheet) {
+        Row titleRow = sheet.createRow(0);
+
+        List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
+        for (int i = 0; i < columns.size(); i++) {
+            ColumnDefinition column = columns.get(i);
+            int cellNumber = i;
+            Cell cell = titleRow.createCell(cellNumber);
+
+            String cellValue = column.getFirstColumnName();
+            cell.setCellValue(cellValue);
+        }
+    }
+
+    private static <T> void writeRows(ExcelContext excelContext, CellStyle cellStyle, Sheet sheet, List<T> list) {
+        for (int j = 0; j < list.size(); j++) {
+            T t = list.get(j);
+            int rowIndex = j + 1;
+            Row titleRow = sheet.createRow(rowIndex);
+
+            List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
+            for (int i = 0; i < columns.size(); i++) {
+                ColumnDefinition column = columns.get(i);
+                int cellNumber = i;
+                Cell cell = titleRow.createCell(cellNumber);
+
+                String cellValue = formatCellValue(column, t);
+                cell.setCellStyle(cellStyle);
+                cell.setCellValue(cellValue);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    @SneakyThrows
+    private <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t) {
+        Field field = columnDefinition.getModelField();
+        field.setAccessible(true);
+        Object fieldValue = field.get(t);
+        if (fieldValue == null) {
+            return columnDefinition.getDefaultValue();
+        }
+
+        Formatter formatter = columnDefinition.getFormatter();
+        if (formatter == null) {
+            return fieldValue.toString();
+        }
+
+        return formatter.format(fieldValue);
     }
 
 }
