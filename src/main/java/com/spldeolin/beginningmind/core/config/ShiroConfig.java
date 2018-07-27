@@ -17,12 +17,13 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.controller.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
-import com.spldeolin.beginningmind.core.security.ActuatorFilter;
+import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.SaltSha512CredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
-import com.spldeolin.beginningmind.core.security.SignFilter;
+import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
+import com.spldeolin.beginningmind.core.security.filter.SignFilter;
 import com.spldeolin.beginningmind.core.security.TempTokenHolder;
 import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
 
@@ -45,7 +46,6 @@ public class ShiroConfig {
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
         shiroFilterFactoryBean.setSecurityManager(securityManager);
-        shiroFilterFactoryBean.setUnauthorizedUrl(UrlForwardToExceptionController.UNAUTHORIZED_URL);
         // 过滤器
         shiroFilterFactoryBean.setFilters(createFilters());
         // 过滤器链
@@ -71,19 +71,17 @@ public class ShiroConfig {
         // 【TOKEN】actuator相关请求使用TOKEN的过滤器
         filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
         // 【匿名】放行error、静态资源、验证码请求、登录请求....
-        filterChainDefinitions.put(UrlForwardToExceptionController.ERROR_PATH, "anon");
-        filterChainDefinitions.put(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL, "anon");
-        filterChainDefinitions.put(UrlForwardToExceptionController.UNAUTHORIZED_URL, "anon");
+        filterChainDefinitions.put(ErrorForwardController.ERROR_PATH, "anon");
         filterChainDefinitions.put(properties.getFile().getMapping() + "/**", "anon");
         filterChainDefinitions.put("/isSigning/current", "anon");
         filterChainDefinitions.put("/sign/captcha", "anon");
         filterChainDefinitions.put("/sign/in", "anon");
         // 【登录】登出请求是唯一一个无需权限、需要登录的请求
         filterChainDefinitions.put("/sign/out", SignFilter.MARK);
-        //【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
+        // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
         for (SecurityPermission securityPermission : securityPermissionService.listAll()) {
             filterChainDefinitions.put(securityPermission.getMapping(),
-                    SignFilter.MARK + ", perms[" + securityPermission.getName() + "]");
+                    SignFilter.MARK + ", " + AuthFilter.MARK + "[" + securityPermission.getName() + "]");
         }
         // DEBUG环境下放行一切请求（不进行任何认证和鉴权的访问控制）
         if (properties.isDebug()) {

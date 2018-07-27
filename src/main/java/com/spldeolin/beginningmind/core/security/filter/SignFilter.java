@@ -20,67 +20,43 @@
 
  */
 
-package com.spldeolin.beginningmind.core.security;
+package com.spldeolin.beginningmind.core.security.filter;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
-import org.apache.shiro.web.util.WebUtils;
-import com.spldeolin.beginningmind.core.controller.UrlForwardToExceptionController;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.core.constant.ResultCode;
+import com.spldeolin.beginningmind.core.security.AjaxUtils;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 登录过滤器
  * <pre>
- * 请求只有是“已认证”或“rememberMe”，才可以通过过滤，
- * 另外，NotFound的请求，直接通过这个过滤器
+ * 请求只有是“已认证”或“rememberMe”，才可以通过过滤。
  * 这个过滤器会在ShiroConfig的ShiroFilterFactoryBean中 被注册为sign标记
  * </pre>
  *
  * @author Deolin 2018/05/18
  */
+@Log4j2
 public class SignFilter extends AccessControlFilter {
 
     public static final String MARK = "sign";
 
     @Override
-    public void setLoginUrl(String loginUrl) {
-        super.setLoginUrl(UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL);
-    }
-
-    @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object mappedValue) {
         Subject subject = getSubject(req, resp);
-        // 放行“已认证”
-        if (subject.isAuthenticated()) {
-            return true;
-        }
-        // 放行“rememberMe”
-        if (subject.isRemembered()) {
-            return true;
-        }
-
-        // 判断请求是否NotFound
-        //boolean notFound = true;
-        //Map<RequestMappingInfo, HandlerMethod> handlerMethods = ApplicationContext.getBean(
-        //        RequestMappingHandlerMapping.class).getHandlerMethods();
-        //for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
-        //    RequestMappingInfo info = entry.getKey();
-        //    if (null != info.getMatchingCondition((HttpServletRequest) req)) {
-        //        notFound = false;
-        //    }
-        //}
-        //// 放行NotFound请求
-        //if (notFound) {
-        //    return true;
-        //}
-        return false;
+        // 放行“已认证”、放行“rememberMe”
+        return subject.isAuthenticated() || subject.isRemembered();
     }
 
     // 如果isAccessAllowed()返回false，则调用这个方法
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        WebUtils.issueRedirect(request, response, UrlForwardToExceptionController.SHIROFILTER_LOGINURL_URL);
+        log.info("请求被SignFilter过滤，返回“未登录或登录超时”");
+        AjaxUtils.outputJson(response, RequestResult.failure(ResultCode.UNSIGNED));
         return false;
     }
 

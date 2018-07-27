@@ -5,31 +5,27 @@
 package com.spldeolin.beginningmind.core.controller;
 
 import javax.servlet.http.HttpServletRequest;
-import org.apache.shiro.authz.AuthorizationException;
 import org.springframework.boot.autoconfigure.web.DefaultErrorAttributes;
 import org.springframework.boot.autoconfigure.web.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
-import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * 控制器：提供URL转发到统一异常处理的映射
  *
- * @author Deolin 2018/05/26
+ * 这里的请求不参与授权、鉴权
+ *
+ * @author Deolin 2018/07/27
  */
 @Controller
 @RequestMapping("/")
 @ApiIgnore
-public class UrlForwardToExceptionController implements ErrorController {
+public class ErrorForwardController implements ErrorController {
 
     public static final String ERROR_PATH = "/error";
-
-    public static final String SHIROFILTER_LOGINURL_URL = "/unsigned";
-
-    public static final String UNAUTHORIZED_URL = "/unauth";
 
     @Override
     public String getErrorPath() {
@@ -60,22 +56,6 @@ public class UrlForwardToExceptionController implements ErrorController {
             }
             throw throwable;
         }
-    }
-
-    /**
-     * 直接转发
-     */
-    @RequestMapping(SHIROFILTER_LOGINURL_URL)
-    void unsigned() {
-        throw new UnsignedException("未登录或登录超时");
-    }
-
-    /**
-     * 直接转发
-     */
-    @RequestMapping(UNAUTHORIZED_URL)
-    void unauth() {
-        throw new AuthorizationException();
     }
 
 }
