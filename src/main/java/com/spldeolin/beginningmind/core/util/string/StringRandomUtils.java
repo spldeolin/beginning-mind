@@ -32,7 +32,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateEnNum(int stringLength) {
-        return generate(new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+        return generate(new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
                 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B',
                 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
                 'X', 'Y', 'Z'}, stringLength);
@@ -45,7 +45,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateLowEnNum(int stringLength) {
-        return generate(new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+        return generate(new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
                         'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'},
                 stringLength);
     }
@@ -57,7 +57,18 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateNum(int stringLength) {
-        return generate(new char[] {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}, stringLength);
+        return generate(new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'}, stringLength);
+    }
+
+    /**
+     * 随机选取除了o、l、i的小写英文字母和除了0、1的数字，生成易读的字符串
+     *
+     * @param stringLength 字符串长度
+     * @return 随机字符串
+     */
+    public static String generateLegibleEnNum(int stringLength) {
+        return generate(new char[]{'2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
+                'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'}, stringLength);
     }
 
     private static String generate(char[] chars, int stringLength) {

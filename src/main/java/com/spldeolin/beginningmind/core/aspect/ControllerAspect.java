@@ -133,7 +133,7 @@ public class ControllerAspect {
         // 生成请求标识，构造ControllerInfo对象
         ControllerInfo controllerInfo = ControllerInfo.builder().controllerTarget(controllerTarget).method(
                 method).parameterNames(parameterNames).parameterValues(parameterValues).insignia(
-                StringRandomUtils.generateEnNum(6)).build();
+                StringRandomUtils.generateLegibleEnNum(6)).build();
         return controllerInfo;
     }
 
