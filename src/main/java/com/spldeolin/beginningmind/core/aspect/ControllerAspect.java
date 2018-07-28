@@ -82,7 +82,7 @@ public class ControllerAspect {
         RequestTrack requestTrack = analyzePoint(point);
         RequestContextUtils.setRequestTrack(requestTrack);
         // 设置Log MDC
-        setSignerLogMDC();
+        setLogMDC();
         // 检查登录者是否被踢出
         if (isKilled()) {
             throw new UnsignedException("已被管理员请离，请重新登录");
@@ -102,7 +102,7 @@ public class ControllerAspect {
         // 请求成功时保存日志
         logAfter(requestTrack, data);
         // 清除Log MDC
-        removeSignerLogMDC();
+        removeLogMDC();
         return data;
     }
 
@@ -114,7 +114,7 @@ public class ControllerAspect {
             logThrowing(requestTrack, requestResult);
         }
         // 清除Log MDC
-        removeSignerLogMDC();
+        removeLogMDC();
     }
 
     private RequestTrack analyzePoint(JoinPoint point) {
@@ -144,16 +144,20 @@ public class ControllerAspect {
         return track;
     }
 
-    private void setSignerLogMDC() {
+    private void setLogMDC() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
-            ThreadContext.put(CoupledConstant.LOG_PATTERN_PARAM,
+            ThreadContext.put(CoupledConstant.LOG_MDC_USERNAME,
                     "[" + Signer.current().getSecurityUser().getUsername() + "]");
         }
+
+        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA,
+                "[" + RequestContextUtils.getInsignia() + "]");
     }
 
-    private void removeSignerLogMDC() {
-        ThreadContext.remove(CoupledConstant.LOG_PATTERN_PARAM);
+    private void removeLogMDC() {
+        ThreadContext.remove(CoupledConstant.LOG_MDC_USERNAME);
+        ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
     }
 
     /**

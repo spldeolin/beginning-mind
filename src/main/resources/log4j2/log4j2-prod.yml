@@ -8,7 +8,7 @@ Configuration:
     - name: log.name
       value: # TODO 生产日志文件名
     - name: pattern
-      value: "%highlight{%d{yyyy-MM-dd HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%t][%c{1.}:%L]%X{username} - %m%n"
+      value: "%highlight{%d{yyyy-MM-dd HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%t][%c{1.}:%L]%X{username}%X{insignia} - %m%n"
 
   Appenders:
     # 控制台

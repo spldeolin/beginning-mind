@@ -10,9 +10,14 @@ public class CoupledConstant {
     public static final String[] SWAGGER_URL_PREFIXES = {"/swagger", "/webjars/", "/v2/"};
 
     /**
-     * 必须与log4j2-*.yml的PatternLayout.pattern中的%X{username}占位符相同
+     * 必须与log4j2-*.yml的PatternLayout.pattern中的%X{username}占位符名相同
      */
-    public static final String LOG_PATTERN_PARAM = "username";
+    public static final String LOG_MDC_USERNAME = "username";
+
+    /**
+     * 必须与log4j2-*.yml的PatternLayout.pattern中的%X{insignia}占位符名相同
+     */
+    public static final String LOG_MDC_INSIGNIA = "insignia";
 
     /**
      * SHA512一次的默认密码（000000）

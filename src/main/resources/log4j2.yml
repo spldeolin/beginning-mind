@@ -19,7 +19,7 @@ Configuration:
       PatternLayout:
         charset: utf-8
         # 追加“%t”可打印线程名
-        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{username} - %m%n"
+        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{username}%X{insignia} - %m%n"
 
   Loggers:
     Root:
