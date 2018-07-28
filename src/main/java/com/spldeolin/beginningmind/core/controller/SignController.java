@@ -73,7 +73,7 @@ public class SignController {
     }
 
     @GetMapping("/n")
-    Object ln74(PageParam pageParam) {
+    Object ln74(PageParam pageParam, Integer i) {
         return SecurityRole.builder().name("测试").build();
     }
 

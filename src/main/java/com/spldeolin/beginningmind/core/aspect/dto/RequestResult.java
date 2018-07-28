@@ -21,7 +21,8 @@ public class RequestResult {
 
     private String message;
 
-    private RequestResult() {}
+    private RequestResult() {
+    }
 
     public static RequestResult success() {
         return success(null);

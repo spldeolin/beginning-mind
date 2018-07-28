@@ -80,13 +80,32 @@ public class RequestTrack {
     private Map<String, String> parameterObjects;
 
     /**
-     * [Java] 请求方法返回值
+     * [Java] 请求方法返回值code
      */
-    private String returnObject;
+    private Integer resultCode;
+
+    /**
+     * [Java] 请求方法返回值data
+     */
+    private String resultData;
+
+    /**
+     * [Java] 请求方法返回值message
+     */
+    private String resultMessage;
 
     /**
      * [Java] 请求执行的毫秒数
      */
     private Long processingMilliseconds;
+
+    public void setRequestResult(RequestResult requestResult) {
+        resultCode = requestResult.getCode();
+        Object data = requestResult.getData();
+        if (data != null) {
+            resultData = data.toString();
+        }
+        resultMessage = requestResult.getMessage();
+    }
 
 }

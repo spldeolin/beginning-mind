@@ -11,6 +11,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -100,7 +101,7 @@ public class ControllerAspect {
         Object data = point.proceed(requestTrack.getParameterValues());
         // 请求成功时保存日志
         logAfter(requestTrack, data);
-        // 清除MDC
+        // 清除Log MDC
         removeSignerLogMDC();
         return data;
     }
@@ -108,18 +109,15 @@ public class ControllerAspect {
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
         RequestTrack requestTrack = RequestContextUtils.getRequestTrack();
-        // 未进入解析切面的异常，开始日志是不会有的，也没必要打印返回日志（如body不可读异常）
+        // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不时Controller，所以无法记录日志
         if (requestTrack != null) {
-            // 异常日志
             logThrowing(requestTrack, requestResult);
-            // 清除MDC
-            removeSignerLogMDC();
         }
-        // 确保本线程的Log MDC被清除
+        // 清除Log MDC
         removeSignerLogMDC();
     }
 
-    private RequestTrack analyzePoint(ProceedingJoinPoint point) {
+    private RequestTrack analyzePoint(JoinPoint point) {
         HttpServletRequest request = RequestContextUtils.request();
         RequestTrack track = new RequestTrack();
         Method requestMethod = ((MethodSignature) point.getSignature()).getMethod();
@@ -197,7 +195,7 @@ public class ControllerAspect {
 
     private void logAfter(RequestTrack track, Object dataObject) {
         track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
-        track.setReturnObject(ensureRequestResult(dataObject).toString());
+        track.setRequestResult(ensureRequestResult(dataObject));
         // 存入mongo
         mongoTemplate.save(track);
     }
@@ -211,7 +209,7 @@ public class ControllerAspect {
 
     private void logThrowing(RequestTrack track, RequestResult requestResult) {
         track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
-        track.setReturnObject(requestResult.toString());
+        track.setRequestResult(requestResult);
         // 存入MongoDB
         mongoTemplate.save(track);
     }

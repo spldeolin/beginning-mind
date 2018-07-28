@@ -37,12 +37,15 @@ public class GlobalReturnFilter implements Filter {
     @Override
     @SneakyThrows
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) {
+        HttpServletResponse httpServletResponse = (HttpServletResponse) response;
+
         String uri = ((HttpServletRequest) request).getRequestURI();
         if (!requestMethodDefinitionsHolder.matchAnyMappings(uri)) {
             chain.doFilter(request, response);
             return;
         }
-        ResponseWrapper wrapperResponse = new ResponseWrapper((HttpServletResponse) response);
+
+        ResponseWrapper wrapperResponse = new ResponseWrapper(httpServletResponse);
         chain.doFilter(request, wrapperResponse);
         String rawContent = new String(wrapperResponse.getContent());
         String wrappedContent = wrapRequestResult(rawContent);
