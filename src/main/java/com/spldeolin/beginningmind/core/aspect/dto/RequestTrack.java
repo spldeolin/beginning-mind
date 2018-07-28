@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -47,34 +46,24 @@ public class RequestTrack {
     String insignia;
 
     @Indexed
-    @Field("插入时间")
     private LocalDateTime insertedAt;
 
-    @Field("请求URL")
-    private String httpUrl;
+    private String url;
 
-    @Field("请求动词")
     private String httpMethod;
 
-    @Field("控制器")
     private String controller;
 
-    @Field("请求方法")
     private String requestMethod;
 
-    @Field("参数")
-    private Map<String, String> parameterObjects;
+    private Map<String, String> parameters;
 
-    @Field("返回值code")
     private Integer resultCode;
 
-    @Field("返回值data")
     private String resultData;
 
-    @Field("返回值message")
     private String resultMessage;
 
-    @Field("请求执行时间（毫秒）")
     private Long processingMilliseconds;
 
     public void setRequestResult(RequestResult requestResult) {

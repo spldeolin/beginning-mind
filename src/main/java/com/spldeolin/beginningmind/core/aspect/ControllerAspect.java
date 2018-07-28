@@ -136,11 +136,11 @@ public class ControllerAspect {
         }
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
         track.setInsertedAt(LocalDateTime.now());
-        track.setHttpUrl(request.getRequestURI());
+        track.setUrl(request.getRequestURI());
         track.setHttpMethod(request.getMethod());
         track.setController(point.getTarget().getClass().getSimpleName());
         track.setRequestMethod(requestMethod.getName());
-        track.setParameterObjects(parameterObjects);
+        track.setParameters(parameterObjects);
         return track;
     }
 
