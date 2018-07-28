@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.aspect.dto.ControllerInfo;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
@@ -94,9 +94,9 @@ public class GlobalExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
-        String[] paramNames = controllerInfo.getParameterNames();
-        Object[] paramValues = controllerInfo.getParameterValues();
+        RequestTrack requestTrack = RequestContextUtils.getRequestTrack();
+        String[] paramNames = requestTrack.getParameterNames();
+        Object[] paramValues = requestTrack.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
         for (ConstraintViolation<?> cv : cvs) {
             // 参数路径
@@ -199,13 +199,13 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        ControllerInfo controllerInfo = RequestContextUtils.getControllerInfo();
+        RequestTrack requestTrack = RequestContextUtils.getRequestTrack();
         RequestResult requestResult;
-        if (controllerInfo == null) {
+        if (requestTrack == null) {
             log.error("统一异常处理被击穿！", e);
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR);
         } else {
-            String insignia = controllerInfo.getInsignia();
+            String insignia = requestTrack.getDocument().getInsignia();
             log.error("统一异常处理被击穿！标识：" + insignia, e);
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
         }

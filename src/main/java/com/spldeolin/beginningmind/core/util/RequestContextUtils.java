@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import com.spldeolin.beginningmind.core.aspect.dto.ControllerInfo;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass
@@ -32,10 +32,10 @@ public class RequestContextUtils {
     /**
      * 设置当前HTTP请求的控制器信息
      *
-     * @param controllerInfo 控制器信息
+     * @param requestTrack 控制器信息
      */
-    public static void setControllerInfo(ControllerInfo controllerInfo) {
-        request().setAttribute("{CURRENT_CONTROLLER_INFO}", controllerInfo);
+    public static void setRequestTrack(RequestTrack requestTrack) {
+        request().setAttribute("{CURRENT_CONTROLLER_INFO}", requestTrack);
     }
 
     /**
@@ -43,8 +43,8 @@ public class RequestContextUtils {
      *
      * @return 的控制器信息
      */
-    public static ControllerInfo getControllerInfo() {
-        return (ControllerInfo) request().getAttribute("{CURRENT_CONTROLLER_INFO}");
+    public static RequestTrack getRequestTrack() {
+        return (RequestTrack) request().getAttribute("{CURRENT_CONTROLLER_INFO}");
     }
 
 }
