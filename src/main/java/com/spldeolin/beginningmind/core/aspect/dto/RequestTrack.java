@@ -59,22 +59,22 @@ public class RequestTrack {
         /**
          * [Java] 控制器类名
          */
-        private String javaController;
+        private String controller;
 
         /**
          * [Java] 请求方法名
          */
-        private String javaMethod;
+        private String requestMethod;
 
         /**
          * [Java] 请求方法参数
          */
-        private Map<String, Object> javaParameters;
+        private Map<String, Object> parameterObjects;
 
         /**
          * [Java] 请求方法返回值
          */
-        private Object javaReturn;
+        private Object returnObject;
 
         /**
          * [Java] 请求执行的毫秒数

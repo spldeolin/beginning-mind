@@ -139,9 +139,9 @@ public class ControllerAspect {
         document.setInsertedAt(LocalDateTime.now());
         document.setHttpUrl(request.getRequestURI());
         document.setHttpMethod(request.getMethod());
-        document.setJavaController(point.getTarget().getClass().getSimpleName());
-        document.setJavaMethod(requestMethod.getName());
-        document.setJavaParameters(javaParameters);
+        document.setController(point.getTarget().getClass().getSimpleName());
+        document.setRequestMethod(requestMethod.getName());
+        document.setParameterObjects(javaParameters);
         return track.setDocument(document);
     }
 
@@ -197,7 +197,7 @@ public class ControllerAspect {
     private void logAfter(RequestTrack requestTrack, Object dataObject, long proceedAt) {
         RequestTrack.Document document = requestTrack.getDocument();
         document.setProcessingMilliseconds(System.currentTimeMillis() - proceedAt);
-        document.setJavaReturn(ensureRequestResult(dataObject));
+        document.setReturnObject(ensureRequestResult(dataObject));
         // 存入mongo
         mongoTemplate.save(document);
     }
@@ -211,7 +211,7 @@ public class ControllerAspect {
 
     private void logThrowing(RequestTrack requestTrack, RequestResult requestResult) {
         RequestTrack.Document document = requestTrack.getDocument();
-        document.setJavaReturn(requestResult);
+        document.setReturnObject(requestResult);
         // 存入MongoDB
         mongoTemplate.save(document);
     }
