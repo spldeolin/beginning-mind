@@ -77,4 +77,9 @@ public class SignController {
         return SecurityRole.builder().name("测试").build();
     }
 
+    @GetMapping("/empty")
+    void ln81() {
+
+    }
+
 }

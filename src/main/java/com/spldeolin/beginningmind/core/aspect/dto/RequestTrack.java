@@ -44,7 +44,6 @@ public class RequestTrack {
     private long processedAt;
 
     @Indexed
-    @Field("id")
     String insignia;
 
     @Indexed

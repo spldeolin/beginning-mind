@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
+import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -116,16 +117,17 @@ public class GlobalReturnFilter implements Filter {
 
     private String wrapRequestResult(String content) {
         if (content.length() > 0) {
-            if (!content.startsWith("{\"code\":") || !content.endsWith("}")) {
+            if (!content.startsWith("{" + quote("code") + ":") || !content.endsWith("}")) {
                 if (!isWrappedWithBrace(content) && !isWrappedWithBracket(content) && !"null".equals(content)) {
-                    content = "\"" + content + "\"";
+                    content = quote(content) + ",";
                 }
-                content = "{\"code\":200,\"data\":" + content + "}";
+                // code + data + insignia
+                return "{" + quote("code") + ":200," + quote("data") + ":" + content + "," + generateInsigniaEndPart()
+                        + "}";
             }
-        } else {
-            content = "{\"code\":200}";
         }
-        return content;
+        // code + data
+        return "{\"code\":200," + generateInsigniaEndPart() + "}";
     }
 
     private boolean isWrappedWithBrace(String content) {
@@ -134,6 +136,14 @@ public class GlobalReturnFilter implements Filter {
 
     private boolean isWrappedWithBracket(String content) {
         return content.startsWith("[") && content.endsWith("]");
+    }
+
+    private String quote(String string) {
+        return "\"" + string + "\"";
+    }
+
+    private String generateInsigniaEndPart() {
+        return "\"insignia\":\"" + RequestContextUtils.getInsignia() + "\"";
     }
 
 }

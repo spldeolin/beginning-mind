@@ -30,21 +30,29 @@ public class RequestContextUtils {
     }
 
     /**
-     * 设置当前HTTP请求的控制器信息
-     *
-     * @param requestTrack 控制器信息
+     * @param requestTrack  当前请求轨迹
      */
     public static void setRequestTrack(RequestTrack requestTrack) {
         request().setAttribute("{CURRENT_CONTROLLER_INFO}", requestTrack);
     }
 
     /**
-     * 获取当前HTTP请求的控制器信息
-     *
-     * @return 的控制器信息
+     * @return 当前请求轨迹
      */
     public static RequestTrack getRequestTrack() {
         return (RequestTrack) request().getAttribute("{CURRENT_CONTROLLER_INFO}");
+    }
+
+    /**
+     * @return 当前请求轨迹的标识
+     */
+    public static String getInsignia() {
+        RequestTrack track = getRequestTrack();
+        if (track == null) {
+            return "";
+        } else {
+            return track.getInsignia();
+        }
     }
 
 }

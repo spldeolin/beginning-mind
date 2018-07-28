@@ -21,6 +21,8 @@ public class RequestResult {
 
     private String message;
 
+    private String insignia;
+
     private RequestResult() {
     }
 
