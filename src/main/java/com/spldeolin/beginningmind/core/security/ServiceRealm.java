@@ -18,7 +18,7 @@ import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSigner;
 import com.spldeolin.beginningmind.core.security.dto.SaltCredential;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
-import com.spldeolin.beginningmind.core.util.RequestContextUtils;
+import com.spldeolin.beginningmind.core.util.Sessions;
 
 /**
  * 对接Service的Realm
@@ -58,7 +58,7 @@ public class ServiceRealm extends AuthorizingRealm {
         }
         // 组装当前登录用户对象
         CurrentSigner currentSigner = CurrentSigner.builder().sessionId(
-                RequestContextUtils.session().getId()).securityUser(securityUser).signedAt(
+                Sessions.session().getId()).securityUser(securityUser).signedAt(
                 LocalDateTime.now()).build();
         SaltCredential saltCredential = SaltCredential.builder().password(securityUser.getPassword()).salt(
                 securityUser.getSalt()).build();

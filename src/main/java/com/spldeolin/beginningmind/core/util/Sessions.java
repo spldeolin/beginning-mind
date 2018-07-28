@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.util;
 
+import javax.servlet.http.HttpSession;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -10,17 +11,21 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Sessions {
 
+    public static HttpSession session() {
+        return RequestContextUtils.request().getSession();
+    }
+
     public static void set(String key, Object value) {
-        RequestContextUtils.session().setAttribute(key, value);
+        session().setAttribute(key, value);
     }
 
     @SuppressWarnings("unchecked")
     public static <T> T get(String key) {
-        return (T) RequestContextUtils.session().getAttribute(key);
+        return (T) session().getAttribute(key);
     }
 
     public static void remove(String key) {
-        RequestContextUtils.session().removeAttribute(key);
+        session().removeAttribute(key);
     }
 
 }

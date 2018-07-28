@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +18,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,11 +28,12 @@ import com.spldeolin.beginningmind.core.aspect.dto.ControllerInfo;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.aspect.util.ProcessingTimeLogger;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.model.RequestLog;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
+import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
@@ -52,25 +55,24 @@ public class ControllerAspect {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     /**
-     * Spring可扫描的，
-     * com.spldeolin.beginningmind.core.controller包及其子包下的，
-     * 声明了@RestController注解的类，
-     * 中的所有方法
+     * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
      */
     @Pointcut("execution(* com.spldeolin.beginningmind.core.controller..*.*(..))" +
             " && @within(org.springframework.web.bind.annotation.RestController)")
-    public void controllerMethod() {}
+    public void controllerMethod() {
+    }
 
     /**
-     * Spring可扫描的，
-     * 声明了@RestControllerAdvice注解的类，
-     * 中声明了ExceptionHandler注解的，
-     * 所有方法
+     * Spring可扫描的， 声明了@RestControllerAdvice注解的类， 中声明了ExceptionHandler注解的， 所有方法
      */
     @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice)" +
             " && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
-    public void exceptionHandler() {}
+    public void exceptionHandler() {
+    }
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
@@ -80,7 +82,7 @@ public class ControllerAspect {
         // 设置Log MDC
         setSignerLogMDC();
         // 开始日志
-        logBefore(controllerInfo);
+        RequestLog requestLog = logBefore(controllerInfo);
         // 检查登录者是否被踢出
         if (isKilled()) {
             throw new UnsignedException("已被管理员请离，请重新登录");
@@ -93,17 +95,16 @@ public class ControllerAspect {
         List<Invalid> invalids = handleAnnotations(controllerInfo);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException().setInvalids(invalids);
-        } else {
-            // 记录开始时间
-            long proceedAt = System.currentTimeMillis();
-            // 执行切点
-            Object dataObject = point.proceed(controllerInfo.getParameterValues());
-            // 结束日志
-            logAfter(controllerInfo, dataObject, proceedAt);
-            // 清除MDC
-            removeSignerLogMDC();
-            return dataObject;
         }
+        // 记录开始时间
+        long proceedAt = System.currentTimeMillis();
+        // 执行切点
+        Object data = point.proceed(controllerInfo.getParameterValues());
+        // 结束日志
+        logAfter(requestLog, data, proceedAt);
+        // 清除MDC
+        removeSignerLogMDC();
+        return data;
     }
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
@@ -148,19 +149,10 @@ public class ControllerAspect {
         ThreadContext.remove(CoupledConstant.LOG_PATTERN_PARAM);
     }
 
-    private void logBefore(ControllerInfo controllerInfo) {
+    private RequestLog logBefore(ControllerInfo controllerInfo) {
         HttpServletRequest request = RequestContextUtils.request();
-        log.info("收到请求。(" + controllerInfo.getInsignia() + ")");
-        log.info("[协议] URL：" + request.getRequestURI());
-        log.info("[协议] 动词：" + request.getMethod());
-        log.info("[Java] 控制器类名：" + controllerInfo.getControllerTarget().getClass().getSimpleName());
-        log.info("[Java] 请求方法名：" + controllerInfo.getMethod().getName());
-        String[] parameterNames = controllerInfo.getParameterNames();
-        Object[] parameterValues = controllerInfo.getParameterValues();
-        for (int i = 0; i < parameterNames.length; i++) {
-            log.info("[Java] 请求方法参数" + parameterNames[i] + "：" + parameterValues[i]);
-        }
-        log.info("开始处理...");
+        RequestLog requestLog = RequestLog.builder().loggedAt(LocalDateTime.now()).build();
+        return requestLog.wireControllerInfo(controllerInfo).wireHttpServletRequest(request);
     }
 
     /**
@@ -169,7 +161,7 @@ public class ControllerAspect {
     private boolean isKilled() {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
-            String cacheKey = "killed:session:" + RequestContextUtils.session().getId();
+            String cacheKey = "killed:session:" + Sessions.session().getId();
             // 被踢出
             if (redisTemplate.opsForValue().get(cacheKey) != null) {
                 // 登出
@@ -183,7 +175,7 @@ public class ControllerAspect {
     }
 
     private void reflashSessionExpire() {
-        HttpSession session = RequestContextUtils.session();
+        HttpSession session = Sessions.session();
         if (properties.isDebug()) {
             session.setMaxInactiveInterval(86400);
         } else {
@@ -200,18 +192,18 @@ public class ControllerAspect {
         }
     }
 
+    private void logAfter(RequestLog requestLog, Object dataObject, long proceedAt) {
+        requestLog.setProcessingMilliseconds(System.currentTimeMillis() - proceedAt);
+        requestLog.setJavaReturn(ensureRequestResult(dataObject));
+        // 存入mongo
+        mongoTemplate.save(requestLog);
+    }
+
     private RequestResult ensureRequestResult(Object object) {
         if (object instanceof RequestResult) {
             return (RequestResult) object;
         }
         return RequestResult.success(object);
-    }
-
-    private void logAfter(ControllerInfo controllerInfo, Object dataObject, long proceedAt) {
-        log.info("...处理完毕");
-        ProcessingTimeLogger.logProcessingTime(controllerInfo.getInsignia(), System.currentTimeMillis() - proceedAt);
-        log.info("[Java] 请求方法返回值：" + ensureRequestResult(dataObject));
-        log.info("返回响应。(" + controllerInfo.getInsignia() + ")");
     }
 
     private void logThrowing(ControllerInfo controllerInfo, RequestResult requestResult) {
@@ -240,23 +232,6 @@ public class ControllerAspect {
         }
         return invalids;
     }
-
-    /**
-     * 处理RequireId注解
-     *
-     * @param parameterValue RequireId修饰的参数的值
-     * @param invalids 校验未通过的信息
-     */
-//    private void handleRequireId(Object parameterValue, List<Invalid> invalids) {
-//        Class<?> clazz = parameterValue.getClass();
-//        Field id = ReflectionUtils.findField(clazz, "id");
-//        if (id != null) {
-//            id.setAccessible(true);
-//            if (ReflectionUtils.getField(id, parameterValue) == null) {
-//                invalids.add(Invalid.builder().name("id").value(null).cause("不能为空").build());
-//            }
-//        }
-//    }
 
     /**
      * 处理RequestParam注解

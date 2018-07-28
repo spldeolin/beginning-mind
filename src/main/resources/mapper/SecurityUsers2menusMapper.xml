@@ -7,7 +7,7 @@
 <mapper namespace="com.spldeolin.beginningmind.core.dao.SecurityUsers2menusMapper">
     <resultMap id="BaseResultMap" type="com.spldeolin.beginningmind.core.model.SecurityUsers2menus">
         <id column="id" jdbcType="BIGINT" property="id"/>
-        <result column="inserted_at" jdbcType="TIMESTAMP" property="insertedAt"/>
+        <result column="inserted_at" jdbcType="TIMESTAMP" property="loggedAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="deletion_flag" jdbcType="BIGINT" property="deletionFlag"/>
         <result column="user_id" jdbcType="BIGINT" property="userId"/>

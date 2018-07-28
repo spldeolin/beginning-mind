@@ -16,7 +16,7 @@ public class AuditField {
 
     public static final String IS_NOT_DELETED = " " + DELETION_FLAG_COLUMN_NAME + " =-1 ";
 
-    public static final String INSERTED_AT_FIELD_NAME = "insertedAt";
+    public static final String INSERTED_AT_FIELD_NAME = "loggedAt";
 
     public static final String UPDATED_AT_FIELD_NAME = "updatedAt";
 

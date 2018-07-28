@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.util;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import com.spldeolin.beginningmind.core.aspect.dto.ControllerInfo;
@@ -20,10 +19,6 @@ public class RequestContextUtils {
     public static HttpServletResponse response() {
         ServletRequestAttributes sra = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         return sra.getResponse();
-    }
-
-    public static HttpSession session() {
-        return request().getSession();
     }
 
     public static Cookie[] cookies() {
