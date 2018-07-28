@@ -8,7 +8,6 @@ import javax.validation.Valid;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -63,20 +62,6 @@ public class SignController {
     Boolean isSign() {
         Subject subject = SecurityUtils.getSubject();
         return subject.isAuthenticated() || subject.isRemembered();
-    }
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @GetMapping("/t72")
-    Object t72() {
-        redisTemplate.opsForValue().set("aaa", SignerProfileVO.builder().username("a啊").build());
-        return "SUCCESS";
-    }
-
-    @GetMapping("/t78")
-    Object t78() {
-        return redisTemplate.opsForValue().get("aaa");
     }
 
 }
