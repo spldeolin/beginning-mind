@@ -95,12 +95,11 @@ public class ControllerAspect {
         if (invalids.size() > 0) {
             throw new ExtraInvalidException().setInvalids(invalids);
         }
-        // 记录开始时间
-        long proceedAt = System.currentTimeMillis();
         // 执行切点
+        requestTrack.setProcessedAt(System.currentTimeMillis());
         Object data = point.proceed(requestTrack.getParameterValues());
         // 请求成功时保存日志
-        logAfter(requestTrack, data, proceedAt);
+        logAfter(requestTrack, data);
         // 清除MDC
         removeSignerLogMDC();
         return data;
@@ -130,19 +129,21 @@ public class ControllerAspect {
         track.setParameterNames(parameterNames);
         track.setParameterValues(parameterValues);
 
-        Map<String, Object> javaParameters = Maps.newHashMap();
+        Map<String, String> parameterObjects = Maps.newHashMap();
         for (int i = 0; i < parameterNames.length; i++) {
-            javaParameters.put(parameterNames[i], parameterValues[i]);
+            parameterObjects.put(parameterNames[i], parameterValues[i].toString());
         }
-        RequestTrack.Document document = new RequestTrack.Document();
-        document.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
-        document.setInsertedAt(LocalDateTime.now());
-        document.setHttpUrl(request.getRequestURI());
-        document.setHttpMethod(request.getMethod());
-        document.setController(point.getTarget().getClass().getSimpleName());
-        document.setRequestMethod(requestMethod.getName());
-        document.setParameterObjects(javaParameters);
-        return track.setDocument(document);
+        if (parameterObjects.size() == 0) {
+            parameterObjects = null;
+        }
+        track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
+        track.setInsertedAt(LocalDateTime.now());
+        track.setHttpUrl(request.getRequestURI());
+        track.setHttpMethod(request.getMethod());
+        track.setController(point.getTarget().getClass().getSimpleName());
+        track.setRequestMethod(requestMethod.getName());
+        track.setParameterObjects(parameterObjects);
+        return track;
     }
 
     private void setSignerLogMDC() {
@@ -194,12 +195,11 @@ public class ControllerAspect {
         }
     }
 
-    private void logAfter(RequestTrack requestTrack, Object dataObject, long proceedAt) {
-        RequestTrack.Document document = requestTrack.getDocument();
-        document.setProcessingMilliseconds(System.currentTimeMillis() - proceedAt);
-        document.setReturnObject(ensureRequestResult(dataObject));
+    private void logAfter(RequestTrack track, Object dataObject) {
+        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
+        track.setReturnObject(ensureRequestResult(dataObject).toString());
         // 存入mongo
-        mongoTemplate.save(document);
+        mongoTemplate.save(track);
     }
 
     private RequestResult ensureRequestResult(Object object) {
@@ -209,11 +209,11 @@ public class ControllerAspect {
         return RequestResult.success(object);
     }
 
-    private void logThrowing(RequestTrack requestTrack, RequestResult requestResult) {
-        RequestTrack.Document document = requestTrack.getDocument();
-        document.setReturnObject(requestResult);
+    private void logThrowing(RequestTrack track, RequestResult requestResult) {
+        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
+        track.setReturnObject(requestResult.toString());
         // 存入MongoDB
-        mongoTemplate.save(document);
+        mongoTemplate.save(track);
     }
 
     private List<Invalid> handleAnnotations(RequestTrack requestTrack) {

@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.input.SignInput;
+import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 
@@ -68,6 +70,11 @@ public class SignController {
     @GetMapping("/exception")
     void ln68() {
         throw new ServiceException("sdfsdf");
+    }
+
+    @GetMapping("/n")
+    Object ln74(PageParam pageParam) {
+        return SecurityRole.builder().name("测试").build();
     }
 
 }

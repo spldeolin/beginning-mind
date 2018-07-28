@@ -199,13 +199,13 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrack requestTrack = RequestContextUtils.getRequestTrack();
+        RequestTrack track = RequestContextUtils.getRequestTrack();
         RequestResult requestResult;
-        if (requestTrack == null) {
+        if (track == null) {
             log.error("统一异常处理被击穿！", e);
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR);
         } else {
-            String insignia = requestTrack.getDocument().getInsignia();
+            String insignia = track.getInsignia();
             log.error("统一异常处理被击穿！标识：" + insignia, e);
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
         }
