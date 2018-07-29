@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +19,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.DataFormat;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -264,7 +266,12 @@ public class Excels {
             if (cell == null) {
                 cellContent = columnDefinition.getDefaultValue();
             } else {
-                cellContent = cell.toString().trim();
+                if (CellType.NUMERIC == cell.getCellTypeEnum()) {
+                    // 去除科学计数法
+                    cellContent = new DecimalFormat("0").format(cell.getNumericCellValue());
+                } else {
+                    cellContent = cell.toString().trim();
+                }
             }
             Formatter formatter = columnDefinition.getFormatter();
             boolean assignedFormatter = formatter != null && formatter.getClass() != Formatter.class;

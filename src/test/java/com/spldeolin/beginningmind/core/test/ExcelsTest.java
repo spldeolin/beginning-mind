@@ -2,12 +2,10 @@ package com.spldeolin.beginningmind.core.test;
 
 import java.io.File;
 import java.util.List;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.junit.Test;
 import com.spldeolin.beginningmind.core.excel.ExcelColumn;
 import com.spldeolin.beginningmind.core.excel.ExcelSheet;
 import com.spldeolin.beginningmind.core.excel.Excels;
-import com.spldeolin.beginningmind.core.excel.Formatter;
 import lombok.Data;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -29,40 +27,15 @@ public class ExcelsTest {
         Excels.writeExcel(output, Person.class, persons);
     }
 
-    @ExcelSheet(sheetName = "Sheet1 (3)", startingRowNumber = 2)
+    @ExcelSheet(sheetName = "测试Sheet", startingRowNumber = 2)
     @Data
     private static class Person {
 
-        @ExcelColumn(firstColumnName = "货主名称")
-        private Integer name;
+        @ExcelColumn(firstColumnName = "名称")
+        private String name;
 
-        @ExcelColumn(firstColumnName = "主要联系人", formatter = AgeFormatter.class)
-        private String realAge;
-
-        @ExcelColumn(firstColumnName = "阿斯顿阿斯顿")
-        private String mustNull;
-
-    }
-
-    private class AgeFormatter implements Formatter<String> {
-
-        @Override
-        public String format(String s) {
-            return s;
-        }
-
-        @Override
-        public String parse(String string) {
-            if (!NumberUtils.isCreatable(string)) {
-                return null;
-            } else {
-                int age = (int) Double.parseDouble(string);
-                if (age > 18) {
-                    return "永远的18岁";
-                }
-                return age + "岁";
-            }
-        }
+        @ExcelColumn(firstColumnName = "手机")
+        private String mobile;
 
     }
 
