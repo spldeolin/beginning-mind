@@ -20,18 +20,17 @@ spring:
   profiles.active: ${profile}
 
   datasource:
-    source1:
-      type: com.alibaba.druid.pool.DruidDataSource
-      driver-class-name: com.mysql.jdbc.Driver
-      url: 占位符
-      username: 占位符
-      password: 占位符
-      druid:
-        initialSize: 2
-        minIdle: 2
-        maxActive: 30
-        validationQuery: select 'x'
-        test-on-borrow: true
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    url: 占位符
+    username: 占位符
+    password: 占位符
+    druid:
+      initialSize: 2
+      minIdle: 2
+      maxActive: 30
+      validationQuery: select 'x'
+      test-on-borrow: true
 
   redis:
     host: 占位符
@@ -61,6 +60,9 @@ management:
   endpoints:
     shutdown:
       enabled: true
+
+mybatis:
+  mapper-locations: classpath:mapper/*.xml
 
 mapper:
   mappers:
@@ -120,10 +122,9 @@ spring:
   profiles: dev
 
   datasource:
-    source1:
-      url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
-      username: root
-      password: root
+    url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
+    username: root
+    password: root
 
   redis:
     host: localhost
@@ -172,10 +173,9 @@ spring:
   profiles: test
 
   datasource:
-    source1:
-      url: # TODO 测试数据库
-      username: #TODO 测试数据库
-      password: #TODO 测试数据库
+    url: # TODO 测试数据库
+    username: #TODO 测试数据库
+    password: #TODO 测试数据库
 
   redis:
     host: #TODO 测试Redis
@@ -224,10 +224,9 @@ spring:
   profiles: prod
 
   datasource:
-    source1:
-      url: # TODO 生产数据库
-      username: #TODO 生产数据库
-      password: #TODO 生产数据库
+    url: # TODO 生产数据库
+    username: #TODO 生产数据库
+    password: #TODO 生产数据库
 
   redis:
     host: #TODO 生产Redis
