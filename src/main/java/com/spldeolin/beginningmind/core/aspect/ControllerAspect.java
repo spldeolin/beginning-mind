@@ -1,30 +1,22 @@
 package com.spldeolin.beginningmind.core.aspect;
 
 import java.lang.annotation.Annotation;
-import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
-import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.EnsureStringFieldsTrimmed;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
@@ -37,7 +29,6 @@ import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
-import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -56,6 +47,9 @@ public class ControllerAspect {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private RequestTrackService requestTrackService;
 
     @Autowired
     private MongoTemplate mongoTemplate;
@@ -79,7 +73,7 @@ public class ControllerAspect {
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         // 解析切点
-        RequestTrack requestTrack = analyzePoint(point);
+        RequestTrack requestTrack = requestTrackService.analysisJoinPointAndHttpRequest(point);
         RequestContextUtils.setRequestTrack(requestTrack);
         // 设置Log MDC
         setLogMDC();
@@ -100,7 +94,7 @@ public class ControllerAspect {
         requestTrack.setProcessedAt(System.currentTimeMillis());
         Object data = point.proceed(requestTrack.getParameterValues());
         // 请求成功时保存日志
-        logAfter(requestTrack, data);
+        requestTrackService.savaToMongoAfterProcessing(requestTrack, data);
         // 清除Log MDC
         removeLogMDC();
         return data;
@@ -111,37 +105,10 @@ public class ControllerAspect {
         RequestTrack requestTrack = RequestContextUtils.getRequestTrack();
         // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不时Controller，所以无法记录日志
         if (requestTrack != null) {
-            logThrowing(requestTrack, requestResult);
+            requestTrackService.saveToMongoAfterThrowing(requestTrack, requestResult);
         }
         // 清除Log MDC
         removeLogMDC();
-    }
-
-    private RequestTrack analyzePoint(JoinPoint point) {
-        HttpServletRequest request = RequestContextUtils.request();
-        RequestTrack track = new RequestTrack();
-        Method requestMethod = ((MethodSignature) point.getSignature()).getMethod();
-        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
-        Object[] parameterValues = point.getArgs();
-        track.setMethod(requestMethod);
-        track.setParameterNames(parameterNames);
-        track.setParameterValues(parameterValues);
-
-        Map<String, String> parameterObjects = Maps.newHashMap();
-        for (int i = 0; i < parameterNames.length; i++) {
-            parameterObjects.put(parameterNames[i], parameterValues[i].toString());
-        }
-        if (parameterObjects.size() == 0) {
-            parameterObjects = null;
-        }
-        track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
-        track.setInsertedAt(LocalDateTime.now());
-        track.setUrl(request.getRequestURI());
-        track.setHttpMethod(request.getMethod());
-        track.setController(point.getTarget().getClass().getSimpleName());
-        track.setRequestMethod(requestMethod.getName());
-        track.setParameters(parameterObjects);
-        return track;
     }
 
     private void setLogMDC() {
@@ -195,27 +162,6 @@ public class ControllerAspect {
                 ensureStringFieldsTrimmed.trimStringFields();
             }
         }
-    }
-
-    private void logAfter(RequestTrack track, Object dataObject) {
-        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
-        track.setRequestResult(ensureRequestResult(dataObject));
-        // 存入mongo
-        mongoTemplate.save(track);
-    }
-
-    private RequestResult ensureRequestResult(Object object) {
-        if (object instanceof RequestResult) {
-            return (RequestResult) object;
-        }
-        return RequestResult.success(object);
-    }
-
-    private void logThrowing(RequestTrack track, RequestResult requestResult) {
-        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
-        track.setRequestResult(requestResult);
-        // 存入MongoDB
-        mongoTemplate.save(track);
     }
 
     private List<Invalid> handleAnnotations(RequestTrack requestTrack) {
