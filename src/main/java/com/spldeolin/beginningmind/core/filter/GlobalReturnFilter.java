@@ -124,10 +124,12 @@ public class GlobalReturnFilter implements Filter {
                 // code + data + insignia
                 return "{" + quote("code") + ":200," + quote("data") + ":" + content + "," + generateInsigniaEndPart()
                         + "}";
+            } else {
+                return content.substring(0, content.length() - 1) + "," + generateInsigniaEndPart() + "}";
             }
         }
         // code + data
-        return "{\"code\":200," + generateInsigniaEndPart() + "}";
+        return "{" + quote("code") + ":200," + generateInsigniaEndPart() + "}";
     }
 
     private boolean isWrappedWithBrace(String content) {

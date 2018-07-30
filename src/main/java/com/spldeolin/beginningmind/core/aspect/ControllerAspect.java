@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.aspect;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
@@ -13,7 +14,6 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,9 +51,6 @@ public class ControllerAspect {
     @Autowired
     private RequestTrackService requestTrackService;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
     /**
      * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
      */
@@ -72,19 +69,24 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        // 解析切点
-        RequestTrack requestTrack = requestTrackService.analysisJoinPointAndHttpRequest(point);
+        HttpServletRequest request = RequestContextUtils.request();
+
+        // 解析切点，并存入request
+        RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, request);
         RequestContextUtils.setRequestTrack(requestTrack);
+
         // 设置Log MDC
         setLogMDC();
-        // 检查登录者是否被踢出
+
+        // 检查登录者是否被踢出，并刷新会话；被踢出则结束，不
         if (isKilled()) {
             throw new UnsignedException("已被管理员请离，请重新登录");
         }
-        // 刷新会话
         reflashSessionExpire();
+
         // 为TrimmedStringFields类执行trimStringFields
         trimStringFields(requestTrack);
+
         // 解析注解，做一些额外处理
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
@@ -94,7 +96,7 @@ public class ControllerAspect {
         requestTrack.setProcessedAt(System.currentTimeMillis());
         Object data = point.proceed(requestTrack.getParameterValues());
         // 请求成功时保存日志
-        requestTrackService.savaToMongoAfterProcessing(requestTrack, data);
+        requestTrackService.savaToMongoAfterProcessing(requestTrack, request, data);
         // 清除Log MDC
         removeLogMDC();
         return data;
@@ -102,10 +104,10 @@ public class ControllerAspect {
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
-        RequestTrack requestTrack = RequestContextUtils.getRequestTrack();
+        RequestTrack track = RequestContextUtils.getRequestTrack();
         // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不时Controller，所以无法记录日志
-        if (requestTrack != null) {
-            requestTrackService.saveToMongoAfterThrowing(requestTrack, requestResult);
+        if (track != null) {
+            requestTrackService.saveToMongoAfterThrowing(track, RequestContextUtils.request(), requestResult);
         }
         // 清除Log MDC
         removeLogMDC();

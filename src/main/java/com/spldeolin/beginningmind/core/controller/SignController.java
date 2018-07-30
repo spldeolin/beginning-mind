@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
@@ -20,6 +21,7 @@ import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.SecurityRole;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
+import lombok.Data;
 
 /**
  * 登录、登出、登录状态等
@@ -77,9 +79,16 @@ public class SignController {
         return SecurityRole.builder().name("测试").build();
     }
 
-    @GetMapping("/empty")
-    void ln81() {
+    @PostMapping("/body")
+    void ln86(@RequestBody DTO one, DTO two, @RequestParam("aaa") String aaa) {
+        System.out.println(one);
+    }
 
+    @Data
+    public static class DTO {
+
+        private String name;
+        private Integer age;
     }
 
 }

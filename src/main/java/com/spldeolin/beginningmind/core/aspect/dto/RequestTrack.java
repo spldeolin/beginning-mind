@@ -2,9 +2,9 @@ package com.spldeolin.beginningmind.core.aspect.dto;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import java.util.Map;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Field;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -23,6 +23,9 @@ public class RequestTrack {
      */
     @Transient
     private Method method;
+
+    @Transient
+    private Integer requestBodyParameterIndex;
 
     /**
      * 请求方法的参数名
@@ -46,33 +49,27 @@ public class RequestTrack {
     String insignia;
 
     @Indexed
-    private LocalDateTime insertedAt;
+    private LocalDateTime requestedAt;
 
+    @Field("URL")
     private String url;
 
+    @Field("请求动词")
     private String httpMethod;
 
+    @Field("控制器")
     private String controller;
 
+    @Field("请求方法")
     private String requestMethod;
 
-    private Map<String, String> parameters;
+    @Field("请求体")
+    private String requestBody;
 
-    private Integer resultCode;
+    @Field("返回值")
+    private String responseBody;
 
-    private String resultData;
-
-    private String resultMessage;
-
+    @Field("请求耗时")
     private Long processingMilliseconds;
-
-    public void setRequestResult(RequestResult requestResult) {
-        resultCode = requestResult.getCode();
-        Object data = requestResult.getData();
-        if (data != null) {
-            resultData = data.toString();
-        }
-        resultMessage = requestResult.getMessage();
-    }
 
 }
