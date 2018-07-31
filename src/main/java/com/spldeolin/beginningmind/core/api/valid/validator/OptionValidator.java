@@ -1,9 +1,9 @@
-package com.spldeolin.beginningmind.core.valid.validator;
+package com.spldeolin.beginningmind.core.api.valid.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.apache.commons.lang3.StringUtils;
-import com.spldeolin.beginningmind.core.valid.annotation.Option;
+import com.spldeolin.beginningmind.core.api.valid.annotation.Option;
 
 /**
  * “文本可选项”校验器

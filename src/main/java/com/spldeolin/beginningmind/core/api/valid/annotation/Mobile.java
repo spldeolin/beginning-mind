@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.valid.annotation;
+package com.spldeolin.beginningmind.core.api.valid.annotation;
 
 import static java.lang.annotation.ElementType.ANNOTATION_TYPE;
 import static java.lang.annotation.ElementType.CONSTRUCTOR;
@@ -12,28 +12,24 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import com.spldeolin.beginningmind.core.valid.validator.OptionValidator;
+import com.spldeolin.beginningmind.core.api.valid.validator.MobileValidator;
 
 /**
- * “可选项”校验用注解
+ * “手机号”校验注解
  * <pre>
- * 支持类型：CharSequence
- * 规则：必须是{value}的其中之一，才能通过校验。如果不指定{value}，则本注解不会产生任何作用
+ * 支持类型：String
+ * 规则：11位数字，以1开头
  * </pre>
  */
 @Documented
-@Constraint(validatedBy = {OptionValidator.class})
+@Constraint(validatedBy = {MobileValidator.class})
 @Target({METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER})
 @Retention(RUNTIME)
-public @interface Option {
+public @interface Mobile {
 
-    String message() default "不是可选项";
+    String message() default "不是正确的手机号";
 
     Class<?>[] groups() default {};
-
-    String[] value() default {};
-
-    boolean ignoreCase() default false;
 
     Class<? extends Payload>[] payload() default {};
 

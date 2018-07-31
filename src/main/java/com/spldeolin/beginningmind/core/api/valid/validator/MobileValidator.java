@@ -1,8 +1,8 @@
-package com.spldeolin.beginningmind.core.valid.validator;
+package com.spldeolin.beginningmind.core.api.valid.validator;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
-import com.spldeolin.beginningmind.core.valid.annotation.Mobile;
+import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
 
 /**
  * “手机号”校验器

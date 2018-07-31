@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.valid;
+package com.spldeolin.beginningmind.core.api.valid;
 
 import java.util.ArrayList;
 import java.util.Collection;

@@ -1,10 +1,10 @@
-package com.spldeolin.beginningmind.core.valid.validator;
+package com.spldeolin.beginningmind.core.api.valid.validator;
 
 import java.lang.reflect.Field;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import org.springframework.util.ReflectionUtils;
-import com.spldeolin.beginningmind.core.valid.annotation.Require;
+import com.spldeolin.beginningmind.core.api.valid.annotation.Require;
 
 /**
  * “必选项”校验器

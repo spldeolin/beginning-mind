@@ -7,15 +7,9 @@
 package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.time.*;
-import javax.validation.constraints.*;
-import org.hibernate.validator.constraints.*;
-import org.springframework.beans.BeanUtils;
-import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import com.spldeolin.beginningmind.core.valid.annotation.Option;
 import com.spldeolin.beginningmind.core.model.SecurityUsers2permissions;
 
 /**
