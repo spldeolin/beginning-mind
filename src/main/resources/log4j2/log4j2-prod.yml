@@ -24,65 +24,16 @@ Configuration:
         pattern: ${pattern}
 
     RollingFile:
-    # WARN日志
-    - name: warnFile
-      ignoreExceptions: false
-      fileName: ${sys:log.dir}/${sys:log.name}-WARN.log
-      filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-WARN.log.gz"
-      append: true
-      Filters:
-        ThresholdFilter:
-          level: error
-          onMatch: DENY
-          onMismatch: NEUTRAL
-        ThresholdFilter:
-          level: warn
-          onMatch: ACCEPT
-          onMismatch: DENY
-      PatternLayout:
-        charset: utf-8
-        pattern: ${pattern}
-      Policies:
-        TimeBasedTriggeringPolicy:
-          modulate: true
-          interval: 1
-        SizeBasedTriggeringPolicy:
-          size: "128 MB"
-      DefaultRolloverStrategy:
-        max: 1000
-    # ERROR日志
-    - name: errorFile
-      ignoreExceptions: false
-      fileName: ${sys:log.dir}/${sys:log.name}-ERROR.log
-      filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-ERROR.log.gz"
-      append: true
-      Filters:
-        ThresholdFilter:
-          level: error
-          onMatch: ACCEPT
-          onMismatch: DENY
-      PatternLayout:
-        charset: utf-8
-        pattern: ${pattern}
-      Policies:
-        TimeBasedTriggeringPolicy:
-          modulate: true
-          interval: 1
-        SizeBasedTriggeringPolicy:
-          size: "128 MB"
-      DefaultRolloverStrategy:
-        max: 1000
     # INFO及以上日志
     - name: infoFile
       ignoreExceptions: false
       fileName: ${sys:log.dir}/${sys:log.name}-INFO+.log
       filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-INFO+.log.gz"
       append: true
-      Filters:
-        ThresholdFilter:
-          level: info
-          onMatch: ACCEPT
-          onMismatch: DENY
+      ThresholdFilter:
+        level: info
+        onMatch: ACCEPT
+        onMismatch: DENY
       PatternLayout:
         charset: utf-8
         pattern: ${pattern}
@@ -100,36 +51,13 @@ Configuration:
       fileName: ${sys:log.dir}/${sys:log.name}-DEBUG+.log
       filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-DEBUG+.log.gz"
       append: true
-      Filters:
-        ThresholdFilter:
-          level: debug
-          onMatch: ACCEPT
-          onMismatch: DENY
+      ThresholdFilter:
+        level: debug
+        onMatch: ACCEPT
+        onMismatch: DENY
       PatternLayout:
         charset: utf-8
         pattern: ${pattern}
-      Policies:
-        TimeBasedTriggeringPolicy:
-          modulate: true
-          interval: 1
-        SizeBasedTriggeringPolicy:
-          size: "128 MB"
-      DefaultRolloverStrategy:
-        max: 1000
-    # 请求执行时间日志
-    - name: processingTimeFile
-      ignoreExceptions: false
-      fileName: ${sys:log.dir}/${sys:log.name}-TIME.log
-      filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-TIME.log.gz"
-      append: true
-      Filters:
-        ThresholdFilter:
-          level: info
-          onMatch: ACCEPT
-          onMismatch: DENY
-      PatternLayout:
-        charset: utf-8
-        pattern: "%m\t\t%d{yyyy-MM-dd HH:mm:ss.SSS}%n"
       Policies:
         TimeBasedTriggeringPolicy:
           modulate: true
@@ -144,7 +72,5 @@ Configuration:
       level: all
       AppenderRef:
       - ref: console
-      - ref: warnFile
-      - ref: errorFile
       - ref: infoFile
       - ref: debugFile
