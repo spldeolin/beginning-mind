@@ -148,9 +148,3 @@ Configuration:
       - ref: errorFile
       - ref: infoFile
       - ref: debugFile
-    Logger:
-    - name: com.spldeolin.beginningmind.aspect.util.ProcessingTimeLogger
-      additivity: true
-      level: all
-      AppenderRef:
-      - ref: processingTimeFile
