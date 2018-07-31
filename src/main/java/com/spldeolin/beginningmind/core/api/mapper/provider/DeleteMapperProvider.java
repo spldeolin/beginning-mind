@@ -35,7 +35,7 @@ public class DeleteMapperProvider extends MapperTemplate {
         String sql = SqlUtils.updateTable(entityClass, tableName(entityClass));
         sql += SqlUtils.deletionFlagWhenDelete();
         sql += SqlUtils.wherePKColumns(entityClass, false); // 不使用乐观锁
-        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
+        log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 
@@ -61,7 +61,7 @@ public class DeleteMapperProvider extends MapperTemplate {
             throw new MapperException(
                     "继承 deleteByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须有且只有一个带有@Id注解的字段");
         }
-        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
+        log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 

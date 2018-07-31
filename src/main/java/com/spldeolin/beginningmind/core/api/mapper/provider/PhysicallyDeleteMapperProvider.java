@@ -22,7 +22,7 @@ public class PhysicallyDeleteMapperProvider extends MapperTemplate {
         final Class<?> entityClass = getEntityClass(ms);
         String sql = SqlUtils.deleteFromTable(entityClass, tableName(entityClass));
         sql += SqlUtils.wherePKColumns(entityClass, false); // 不使用乐观锁
-        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
+        log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 

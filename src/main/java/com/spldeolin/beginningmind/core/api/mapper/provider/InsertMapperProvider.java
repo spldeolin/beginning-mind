@@ -119,7 +119,7 @@ public class InsertMapperProvider extends MapperTemplate {
             }
         }
         sql.append("</trim>");
-        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
+        log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 
@@ -150,7 +150,7 @@ public class InsertMapperProvider extends MapperTemplate {
         }
         sql.append("</trim>");
         sql.append("</foreach>");
-        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
+        log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql.toString();
     }
 

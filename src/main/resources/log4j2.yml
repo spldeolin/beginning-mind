@@ -24,9 +24,5 @@ Configuration:
   Loggers:
     Root:
       level: all
-
-    Logger:
-      name: com.spldeolin.beginningmind
-      level: info
       AppenderRef:
       - ref: console

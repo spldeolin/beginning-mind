@@ -23,7 +23,7 @@ public class UpdateMapperProvider extends MapperTemplate {
         String sql = SqlUtils.updateTable(entityClass, tableName(entityClass)) +
                 SqlUtils.updateSetColumns(entityClass, null, true, isNotEmpty()) +
                 SqlUtils.wherePKColumns(entityClass, true);
-        log.info("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
+        log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;
     }
 
