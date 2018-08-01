@@ -119,7 +119,7 @@ public class GlobalReturnFilter implements Filter {
         if (content.length() > 0) {
             if (!content.startsWith("{" + quote("code") + ":") || !content.endsWith("}")) {
                 if (!isWrappedWithBrace(content) && !isWrappedWithBracket(content) && !"null".equals(content)) {
-                    content = quote(content) + ",";
+                    content = quote(content);
                 }
                 // code + data + insignia
                 return "{" + quote("code") + ":200," + quote("data") + ":" + content + "," + generateInsigniaEndPart()
