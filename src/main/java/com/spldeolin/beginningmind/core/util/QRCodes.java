@@ -1,6 +1,10 @@
 package com.spldeolin.beginningmind.core.util;
 
-import java.awt.*;
+import java.awt.BasicStroke;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -126,8 +130,7 @@ public class QRCodes {
     }
 
     /**
-     * 生成二维码(内嵌LOGO)
-     * 二维码文件名随机，文件名可能会有重复
+     * 生成二维码(内嵌LOGO) 二维码文件名随机，文件名可能会有重复
      *
      * @param content 内容
      * @param logoPath LOGO地址
@@ -143,8 +146,7 @@ public class QRCodes {
     }
 
     /**
-     * 生成二维码(内嵌LOGO)
-     * 调用者指定二维码文件名
+     * 生成二维码(内嵌LOGO) 调用者指定二维码文件名
      *
      * @param content 内容
      * @param logoPath LOGO地址
@@ -163,8 +165,7 @@ public class QRCodes {
     }
 
     /**
-     * 当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir．
-     * (mkdir如果父目录不存在则会抛出异常)
+     * 当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir． (mkdir如果父目录不存在则会抛出异常)
      *
      * @param destPath 存放目录
      */

@@ -35,8 +35,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.controller.SignController;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
+import com.spldeolin.beginningmind.core.controller.SignController;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
@@ -87,7 +87,7 @@ public class PermissionsInserter {
         for (ControllerDefinition controllerDefinition : controllerDefinitions) {
             Class controller = controllerDefinition.getController();
             RequestMapping requestMapping = (RequestMapping) controller.getAnnotation(RequestMapping.class);
-            String[] controllerMappings = requestMapping == null ? new String[] {""} : requestMapping.value();
+            String[] controllerMappings = requestMapping == null ? new String[]{""} : requestMapping.value();
             if (controllerMappings.length > 1) {
                 throw new ServiceException("控制器" + controller.getName() + "有多个mapping，请手动指定它的权限");
             }

@@ -16,4 +16,5 @@ import com.spldeolin.beginningmind.core.model.SecurityMenu;
  */
 @Mapper
 public interface SecurityMenuMapper extends CommonMapper<SecurityMenu> {
+
 }

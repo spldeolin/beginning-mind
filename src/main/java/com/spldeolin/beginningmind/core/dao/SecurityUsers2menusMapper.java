@@ -5,9 +5,9 @@
 
 package com.spldeolin.beginningmind.core.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
 import com.spldeolin.beginningmind.core.model.SecurityUsers2menus;
-import org.apache.ibatis.annotations.Mapper;
 
 /**
  * “用户与菜单的关联”数据库映射
@@ -16,4 +16,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface SecurityUsers2menusMapper extends CommonMapper<SecurityUsers2menus> {
+
 }

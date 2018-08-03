@@ -43,7 +43,8 @@ public class Page<T> implements Serializable {
      */
     private Long total;
 
-    private Page() {}
+    private Page() {
+    }
 
     /**
      * 空页

@@ -20,8 +20,7 @@ import com.spldeolin.beginningmind.core.model.SecurityUsers2menus;
 public interface SecurityUsers2menusService extends CommonService<SecurityUsers2menus> {
 
     /**
-     * 创建一个“用户与菜单的关联”
-     * （附带业务校验）
+     * 创建一个“用户与菜单的关联” （附带业务校验）
      *
      * @param securityUsers2menus 待创建“用户与菜单的关联”
      * @return 自增ID
@@ -29,8 +28,7 @@ public interface SecurityUsers2menusService extends CommonService<SecurityUsers2
     Long createEX(SecurityUsers2menus securityUsers2menus);
 
     /**
-     * 获取一个“用户与菜单的关联”
-     * （附带业务校验）
+     * 获取一个“用户与菜单的关联” （附带业务校验）
      *
      * @param id 待获取“用户与菜单的关联”的ID
      * @return “用户与菜单的关联”
@@ -38,24 +36,21 @@ public interface SecurityUsers2menusService extends CommonService<SecurityUsers2
     SecurityUsers2menus getEX(Long id);
 
     /**
-     * 更新一个“用户与菜单的关联”
-     * （附带业务校验）
+     * 更新一个“用户与菜单的关联” （附带业务校验）
      *
      * @param securityUsers2menus 待更新“用户与菜单的关联”
      */
     void updateEX(SecurityUsers2menus securityUsers2menus);
 
     /**
-     * 删除一个“用户与菜单的关联”
-     * （附带业务校验）
+     * 删除一个“用户与菜单的关联” （附带业务校验）
      *
      * @param id 待删除“用户与菜单的关联”的ID
      */
     void deleteEX(Long id);
 
     /**
-     * 删除多个资源
-     * （附带业务校验，并返回详细情况）
+     * 删除多个资源 （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况

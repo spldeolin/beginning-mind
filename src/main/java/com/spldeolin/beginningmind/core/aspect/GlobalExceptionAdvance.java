@@ -23,9 +23,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
@@ -57,8 +57,7 @@ public class GlobalExceptionAdvance {
     }
 
     /**
-     * 400 请求Content-Type错误
-     * 往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定。
+     * 400 请求Content-Type错误 往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定。
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult handle(HttpMediaTypeNotSupportedException e) {

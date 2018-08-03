@@ -7,10 +7,10 @@
 package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
-import java.time.*;
+import java.time.LocalDateTime;
+import com.spldeolin.beginningmind.core.model.SecurityUsers2menus;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import com.spldeolin.beginningmind.core.model.SecurityUsers2menus;
 
 /**
  * “用户与菜单的关联”Input类

@@ -35,12 +35,16 @@ public class InitTask implements CommandLineRunner {
     public void run(String... args) {
         // 将配置中出现的所有localhost替换为本地IP
         localhostToLocalIp();
+
         // 在file.mapping前追加content-path
         mappingAppendContextPath();
+
         // 确保file.mapping以 / 开头和结尾，确保file.location以 / 结尾
         validateProperties();
+
         // 确保本地目录存在
         ensureDirectoryExist();
+
         // 读取RequestMethod信息，并载入内存
         requestMethodDefinitionsHolder.init();
     }

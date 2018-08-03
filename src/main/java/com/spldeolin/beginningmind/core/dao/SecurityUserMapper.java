@@ -16,4 +16,5 @@ import com.spldeolin.beginningmind.core.model.SecurityUser;
  */
 @Mapper
 public interface SecurityUserMapper extends CommonMapper<SecurityUser> {
+
 }

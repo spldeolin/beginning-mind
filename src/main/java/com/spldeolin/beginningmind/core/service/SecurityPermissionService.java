@@ -14,8 +14,7 @@ import com.spldeolin.beginningmind.core.model.SecurityPermission;
 public interface SecurityPermissionService extends CommonService<SecurityPermission> {
 
     /**
-     * 创建一个“权限”
-     * （附带业务校验）
+     * 创建一个“权限” （附带业务校验）
      *
      * @param securityPermission 待创建“权限”
      * @return 自增ID
@@ -23,8 +22,7 @@ public interface SecurityPermissionService extends CommonService<SecurityPermiss
     Long createEX(SecurityPermission securityPermission);
 
     /**
-     * 更新一个“权限”
-     * （附带业务校验）
+     * 更新一个“权限” （附带业务校验）
      *
      * @param securityPermission 待更新“权限”
      */
@@ -38,8 +36,7 @@ public interface SecurityPermissionService extends CommonService<SecurityPermiss
     void deleteEX(Long id);
 
     /**
-     * 删除多个资源
-     * （附带业务校验，并返回详细情况）
+     * 删除多个资源 （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况

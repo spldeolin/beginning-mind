@@ -19,12 +19,12 @@ import org.springframework.context.annotation.Configuration;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
-import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.SaltCredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
+import com.spldeolin.beginningmind.core.security.TempTokenHolder;
+import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
 import com.spldeolin.beginningmind.core.security.filter.SignFilter;
-import com.spldeolin.beginningmind.core.security.TempTokenHolder;
 import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
 
 @Configuration

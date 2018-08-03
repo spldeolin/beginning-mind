@@ -7,11 +7,11 @@
 package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
-import java.time.*;
-import org.hibernate.validator.constraints.*;
+import java.time.LocalDateTime;
+import org.hibernate.validator.constraints.Length;
+import com.spldeolin.beginningmind.core.model.SecurityMenu;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import com.spldeolin.beginningmind.core.model.SecurityMenu;
 
 /**
  * “菜单”Input类

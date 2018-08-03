@@ -14,8 +14,7 @@ import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
 public interface SecurityRoles2permissionsService extends CommonService<SecurityRoles2permissions> {
 
     /**
-     * 创建一个“角色与权限的关联”
-     * （附带业务校验）
+     * 创建一个“角色与权限的关联” （附带业务校验）
      *
      * @param securityRoles2permissions 待创建“角色与权限的关联”
      * @return 自增ID
@@ -23,8 +22,7 @@ public interface SecurityRoles2permissionsService extends CommonService<Security
     Long createEX(SecurityRoles2permissions securityRoles2permissions);
 
     /**
-     * 更新一个“角色与权限的关联”
-     * （附带业务校验）
+     * 更新一个“角色与权限的关联” （附带业务校验）
      *
      * @param securityRoles2permissions 待更新“角色与权限的关联”
      */
@@ -38,8 +36,7 @@ public interface SecurityRoles2permissionsService extends CommonService<Security
     void deleteEX(Long id);
 
     /**
-     * 删除多个资源
-     * （附带业务校验，并返回详细情况）
+     * 删除多个资源 （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况

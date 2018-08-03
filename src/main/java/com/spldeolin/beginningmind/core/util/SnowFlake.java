@@ -12,8 +12,7 @@ package com.spldeolin.beginningmind.core.util;
 public class SnowFlake {
 
     /**
-     * 起始的时间戳
-     * 2018-07-04 14:30:54
+     * 起始的时间戳 2018-07-04 14:30:54
      */
     private final static long START_STMP = 1530685854 * 1000L;
 

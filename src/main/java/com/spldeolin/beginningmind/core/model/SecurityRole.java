@@ -33,12 +33,7 @@ public class SecurityRole implements Serializable {
     private List<SecurityUser> user;
 
     /**
-     * ID 你好吗
-     * asdfaa
-     * asdf
-     * asdf
-     * asdf
-     * sssssssssssssssssss
+     * ID 你好吗 asdfaa asdf asdf asdf sssssssssssssssssss
      *
      * @Param adsf asdf
      */

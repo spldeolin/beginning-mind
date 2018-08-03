@@ -12,9 +12,9 @@ import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Option;
+import com.spldeolin.beginningmind.core.model.SecurityUser;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

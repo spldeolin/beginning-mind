@@ -7,10 +7,10 @@
 package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
-import java.time.*;
+import java.time.LocalDateTime;
+import com.spldeolin.beginningmind.core.model.SecurityUsers2permissions;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import com.spldeolin.beginningmind.core.model.SecurityUsers2permissions;
 
 /**
  * “用户与权限的关联”Input类

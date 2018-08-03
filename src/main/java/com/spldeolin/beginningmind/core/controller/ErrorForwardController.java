@@ -33,8 +33,7 @@ public class ErrorForwardController implements ErrorController {
     }
 
     /**
-     * 结合被重写的getErrorPath方法，原先所有的“Whitelabel Error Page”都会转发给这个请求方法，
-     * 这个请求方法会参照BasicErrorController，解析request后，转发给统一异常处理。
+     * 结合被重写的getErrorPath方法，原先所有的“Whitelabel Error Page”都会转发给这个请求方法， 这个请求方法会参照BasicErrorController，解析request后，转发给统一异常处理。
      *
      * @see DefaultErrorAttributes#addStatus(java.util.Map, org.springframework.web.context.request.RequestAttributes)
      * @see DefaultErrorAttributes#getError(org.springframework.web.context.request.RequestAttributes)

@@ -16,4 +16,5 @@ import com.spldeolin.beginningmind.core.model.SecurityRoles2menus;
  */
 @Mapper
 public interface SecurityRoles2menusMapper extends CommonMapper<SecurityRoles2menus> {
+
 }

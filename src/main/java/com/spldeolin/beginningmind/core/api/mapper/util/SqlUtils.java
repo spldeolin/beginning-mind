@@ -25,7 +25,8 @@ public class SqlUtils {
     public static String getDynamicTableName(Class<?> entityClass, String tableName) {
         if (IDynamicTableName.class.isAssignableFrom(entityClass)) {
             String sql = "<choose>" +
-                    "<when test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(_parameter) and dynamicTableName != null and dynamicTableName != ''\">" +
+                    "<when test=\"@tk.mybatis.mapper.util.OGNL@isDynamicParameter(_parameter) and dynamicTableName != null and dynamicTableName != ''\">"
+                    +
                     "${dynamicTableName}\n" +
                     "</when>" +
                     "<otherwise>" +
@@ -549,7 +550,8 @@ public class SqlUtils {
      */
     public static String exampleCheck(Class<?> entityClass) {
         String sql =
-                "<bind name=\"checkExampleEntityClass\" value=\"@tk.mybatis.mapper.util.OGNL@checkExampleEntityClass(_parameter, '" +
+                "<bind name=\"checkExampleEntityClass\" value=\"@tk.mybatis.mapper.util.OGNL@checkExampleEntityClass(_parameter, '"
+                        +
                         entityClass.getCanonicalName() +
                         "')\"/>";
         return sql;
@@ -572,14 +574,17 @@ public class SqlUtils {
                 "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
                 "            </when>\n" +
                 "            <when test=\"criterion.singleValue\">\n" +
-                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n"
+                +
                 "            </when>\n" +
                 "            <when test=\"criterion.betweenValue\">\n" +
-                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n"
+                +
                 "            </when>\n" +
                 "            <when test=\"criterion.listValue\">\n" +
                 "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
-                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
+                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n"
+                +
                 "                #{listItem}\n" +
                 "              </foreach>\n" +
                 "            </when>\n" +
@@ -606,14 +611,17 @@ public class SqlUtils {
                 "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
                 "            </when>\n" +
                 "            <when test=\"criterion.singleValue\">\n" +
-                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value}\n"
+                +
                 "            </when>\n" +
                 "            <when test=\"criterion.betweenValue\">\n" +
-                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n" +
+                "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition} #{criterion.value} and #{criterion.secondValue}\n"
+                +
                 "            </when>\n" +
                 "            <when test=\"criterion.listValue\">\n" +
                 "              ${@tk.mybatis.mapper.util.OGNL@andOr(criterion)} ${criterion.condition}\n" +
-                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n" +
+                "              <foreach close=\")\" collection=\"criterion.value\" item=\"listItem\" open=\"(\" separator=\",\">\n"
+                +
                 "                #{listItem}\n" +
                 "              </foreach>\n" +
                 "            </when>\n" +

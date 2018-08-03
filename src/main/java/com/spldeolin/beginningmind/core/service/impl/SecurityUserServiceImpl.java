@@ -207,8 +207,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     }
 
     /**
-     * 根据登录时存的PRINCIPAL_NAME_INDEX_NAME的值，通过Spring Session提供的API找到登录者的会话，
-     * 会话不存在则代表未登录
+     * 根据登录时存的PRINCIPAL_NAME_INDEX_NAME的值，通过Spring Session提供的API找到登录者的会话， 会话不存在则代表未登录
      */
     private Optional<Session> getSignerSession(Long userId) {
         Collection<? extends Session> signerSessions = this.finder.findByIndexNameAndIndexValue(

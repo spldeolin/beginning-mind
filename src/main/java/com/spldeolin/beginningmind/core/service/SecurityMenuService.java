@@ -20,8 +20,7 @@ import com.spldeolin.beginningmind.core.model.SecurityMenu;
 public interface SecurityMenuService extends CommonService<SecurityMenu> {
 
     /**
-     * 创建一个“菜单”
-     * （附带业务校验）
+     * 创建一个“菜单” （附带业务校验）
      *
      * @param securityMenu 待创建“菜单”
      * @return 自增ID
@@ -29,8 +28,7 @@ public interface SecurityMenuService extends CommonService<SecurityMenu> {
     Long createEX(SecurityMenu securityMenu);
 
     /**
-     * 获取一个“菜单”
-     * （附带业务校验）
+     * 获取一个“菜单” （附带业务校验）
      *
      * @param id 待获取“菜单”的ID
      * @return “菜单”
@@ -38,24 +36,21 @@ public interface SecurityMenuService extends CommonService<SecurityMenu> {
     SecurityMenu getEX(Long id);
 
     /**
-     * 更新一个“菜单”
-     * （附带业务校验）
+     * 更新一个“菜单” （附带业务校验）
      *
      * @param securityMenu 待更新“菜单”
      */
     void updateEX(SecurityMenu securityMenu);
 
     /**
-     * 删除一个“菜单”
-     * （附带业务校验）
+     * 删除一个“菜单” （附带业务校验）
      *
      * @param id 待删除“菜单”的ID
      */
     void deleteEX(Long id);
 
     /**
-     * 删除多个资源
-     * （附带业务校验，并返回详细情况）
+     * 删除多个资源 （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况

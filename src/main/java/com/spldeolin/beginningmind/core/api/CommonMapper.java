@@ -21,4 +21,5 @@ import com.spldeolin.beginningmind.core.api.mapper.UpdateMapper;
  */
 public interface CommonMapper<M> extends DeleteMapper<M>, InsertMapper<M>, PhysicallyDeleteMapper, SelectMapper<M>,
         UpdateMapper<M> {
+
 }

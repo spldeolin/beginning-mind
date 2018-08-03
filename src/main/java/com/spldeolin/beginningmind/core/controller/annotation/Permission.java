@@ -6,8 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 本项目除了UrlForwardToExceptionController、TestController、SignController以外，
- * 每个开发者编写的请求方法都需要权限才能访问
+ * 本项目除了UrlForwardToExceptionController、TestController、SignController以外， 每个开发者编写的请求方法都需要权限才能访问
  * <p>
  * 通过指定本注解，对每个权限进行额外的修饰说明。
  * <p>

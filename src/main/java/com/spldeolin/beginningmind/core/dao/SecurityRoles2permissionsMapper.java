@@ -16,4 +16,5 @@ import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
  */
 @Mapper
 public interface SecurityRoles2permissionsMapper extends CommonMapper<SecurityRoles2permissions> {
+
 }

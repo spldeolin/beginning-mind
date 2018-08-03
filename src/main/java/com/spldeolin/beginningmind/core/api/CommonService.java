@@ -81,7 +81,7 @@ public interface CommonService<M> {
      *
      * @param m 存放检索条件的对象
      * @return 满足条件的资源
-     * @exception TooManyResultsException 满足条件的资源不止一个时
+     * @throws TooManyResultsException 满足条件的资源不止一个时
      */
     Optional<M> searchOne(M m) throws TooManyResultsException;
 
@@ -91,7 +91,7 @@ public interface CommonService<M> {
      * @param modelFieldName 条件名
      * @param value 值
      * @return 满足条件的资源
-     * @exception TooManyResultsException 满足条件的资源不止一个时
+     * @throws TooManyResultsException 满足条件的资源不止一个时
      */
     Optional<M> searchOne(String modelFieldName, Object value);
 

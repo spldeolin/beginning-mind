@@ -22,8 +22,7 @@ import com.spldeolin.beginningmind.core.model.SecurityUser;
 public interface SecurityUserService extends CommonService<SecurityUser> {
 
     /**
-     * 创建一个“用户”
-     * （附带业务校验）
+     * 创建一个“用户” （附带业务校验）
      *
      * @param securityUser 待创建“用户”
      * @return 自增ID
@@ -31,8 +30,7 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
     Long createEX(SecurityUser securityUser);
 
     /**
-     * 获取一个“用户”
-     * （附带业务校验）
+     * 获取一个“用户” （附带业务校验）
      *
      * @param id “用户”的ID
      * @return “用户”
@@ -40,8 +38,7 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
     SecurityUser getEX(Long id);
 
     /**
-     * 更新一个“用户”
-     * （附带业务校验）
+     * 更新一个“用户” （附带业务校验）
      *
      * @param securityUser 待更新“用户”
      */
@@ -55,8 +52,7 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
     void deleteEX(Long id);
 
     /**
-     * 删除多个资源
-     * （附带业务校验，并返回详细情况）
+     * 删除多个资源 （附带业务校验，并返回详细情况）
      *
      * @param ids 待删除资源的ID列表
      * @return 删除情况
