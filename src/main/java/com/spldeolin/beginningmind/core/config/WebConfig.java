@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Autowired
-    private CoreProperties properties;
+    private CoreProperties coreProperties;
 
     @Value("${core.file.mapping}")
     private String mapping;
@@ -26,7 +26,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String location = properties.getFile().getLocation();
+        String location = coreProperties.getFile().getLocation();
         registry.addResourceHandler(mapping + "/**").addResourceLocations("file:" + location);
     }
 

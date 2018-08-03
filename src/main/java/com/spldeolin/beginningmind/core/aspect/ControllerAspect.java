@@ -43,7 +43,7 @@ import lombok.extern.log4j.Log4j2;
 public class ControllerAspect {
 
     @Autowired
-    private CoreProperties properties;
+    private CoreProperties coreProperties;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -150,7 +150,7 @@ public class ControllerAspect {
 
     private void reflashSessionExpire() {
         HttpSession session = Sessions.session();
-        if (properties.isDebug()) {
+        if (coreProperties.isDebug()) {
             session.setMaxInactiveInterval(86400);
         } else {
             session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);

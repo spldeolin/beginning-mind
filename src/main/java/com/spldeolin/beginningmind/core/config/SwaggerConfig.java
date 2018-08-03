@@ -17,12 +17,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 public class SwaggerConfig {
 
     @Autowired
-    private CoreProperties properties;
+    private CoreProperties coreProperties;
 
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(properties.isDebug())    // 启用/禁用开关
+                .enable(coreProperties.isDebug())    // 启用/禁用开关
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.spldeolin.beginningmind"))

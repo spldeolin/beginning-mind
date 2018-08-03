@@ -34,7 +34,7 @@ public class ShiroConfig {
     private String actuatorUrlPrefix;
 
     @Autowired
-    private CoreProperties properties;
+    private CoreProperties coreProperties;
 
     @Autowired
     private TempTokenHolder tempTokenHolder;
@@ -72,7 +72,7 @@ public class ShiroConfig {
         filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
         // 【匿名】放行error、静态资源、验证码请求、登录请求....
         filterChainDefinitions.put(ErrorForwardController.ERROR_PATH, "anon");
-        filterChainDefinitions.put(properties.getFile().getMapping() + "/**", "anon");
+        filterChainDefinitions.put(coreProperties.getFile().getMapping() + "/**", "anon");
         filterChainDefinitions.put("/isSigning/current", "anon");
         filterChainDefinitions.put("/sign/captcha", "anon");
         filterChainDefinitions.put("/sign/in", "anon");
@@ -84,7 +84,7 @@ public class ShiroConfig {
                     SignFilter.MARK + ", " + AuthFilter.MARK + "[" + securityPermission.getName() + "]");
         }
         // DEBUG环境下放行一切请求（不进行任何认证和鉴权的访问控制）
-        if (properties.isDebug()) {
+        if (coreProperties.isDebug()) {
             filterChainDefinitions = new LinkedHashMap<>();
             filterChainDefinitions.put("/**", "anon");
         }

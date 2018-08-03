@@ -27,7 +27,7 @@ public class InitTask implements CommandLineRunner {
     private String serverContextPath;
 
     @Autowired
-    private CoreProperties properties;
+    private CoreProperties coreProperties;
 
     @Autowired
     private RequestMethodDefinitionsHolder requestMethodDefinitionsHolder;
@@ -48,14 +48,14 @@ public class InitTask implements CommandLineRunner {
 
     @SneakyThrows
     public void localhostToLocalIp() {
-        String address = properties.getAddress();
+        String address = coreProperties.getAddress();
         address = address.replace("localhost", InetAddress.getLocalHost().getHostAddress());
-        properties.setAddress(address);
+        coreProperties.setAddress(address);
     }
 
     public void mappingAppendContextPath() {
         if (StringUtils.isNotBlank(serverContextPath) && !serverContextPath.equals("/")) {
-            CoreProperties.File file = properties.getFile();
+            CoreProperties.File file = coreProperties.getFile();
             String mapping = serverContextPath + file.getMapping();
             log.info("由于指定了context-path为" + serverContextPath + "，故file.mapping变更为" + mapping);
             file.setMapping(mapping);
@@ -63,7 +63,7 @@ public class InitTask implements CommandLineRunner {
     }
 
     public void validateProperties() {
-        CoreProperties.File file = properties.getFile();
+        CoreProperties.File file = coreProperties.getFile();
         if (!file.getMapping().endsWith("/")) {
             throw new IllegalArgumentException("core.file.mapping必须以 / 结尾");
         }
@@ -77,7 +77,7 @@ public class InitTask implements CommandLineRunner {
 
     @SneakyThrows
     public void ensureDirectoryExist() {
-        CoreProperties.File file = properties.getFile();
+        CoreProperties.File file = coreProperties.getFile();
         FileUtils.mkdir(new java.io.File(file.getLocation() + ImageService.IMAGE_DIRECTORY), true);
         FileUtils.mkdir(new java.io.File(file.getLocation() + SignService.CAPTCHA_DIRECTORY), true);
     }

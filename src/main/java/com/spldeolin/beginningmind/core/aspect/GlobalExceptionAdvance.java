@@ -45,7 +45,7 @@ import lombok.extern.log4j.Log4j2;
 public class GlobalExceptionAdvance {
 
     @Autowired
-    private CoreProperties properties;
+    private CoreProperties coreProperties;
 
     /**
      * 400 请求动词错误
@@ -210,7 +210,7 @@ public class GlobalExceptionAdvance {
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
         }
         // 详细错误信息
-        if (properties.isDebug()) {
+        if (coreProperties.isDebug()) {
             String msg = e.getMessage();
             if (msg == null) {
                 msg = e.getClass().getSimpleName();
