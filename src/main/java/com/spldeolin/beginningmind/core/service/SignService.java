@@ -1,12 +1,15 @@
 package com.spldeolin.beginningmind.core.service;
 
-import static com.spldeolin.beginningmind.core.constant.Abbreviation.sep;
-
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.OutputStream;
+import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import javax.imageio.ImageIO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.shiro.SecurityUtils;
@@ -17,11 +20,12 @@ import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.constant.DirectoryName;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
-import com.spldeolin.beginningmind.core.security.GifCaptcha;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
+import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,20 +48,33 @@ public class SignService {
 
     @SneakyThrows
     public String captcha() {
+        String code = StringRandomUtils.generateNum(4);
         String location = coreProperties.getFile().getLocation();
         String mapping = coreProperties.getFile().getMapping();
-        // 文件名
-        String fileName = DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())) + ".gif";
-        // 生成文件
-        File captchaFile = new File(location + CAPTCHA_DIRECTORY + sep + fileName);
-        try (OutputStream out = FileUtils.openOutputStream(captchaFile)) {
-            GifCaptcha gifCaptcha = new GifCaptcha();
-            gifCaptcha.out(out);
-            Sessions.set(CAPTCHA, CaptchaDTO.builder().captcha(gifCaptcha.getCode()).generatedAt(
-                    LocalDateTime.now()).build());
-            // 映射
-            return coreProperties.getAddress() + mapping + CAPTCHA_DIRECTORY + "/" + fileName;
+        // session
+        Sessions.set(CAPTCHA, code);
+        // file
+        String fileName = DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())) + ".jpg";
+        File captchaFile = new File(location + DirectoryName.CAPTCHA_DIRECTORY + File.separator + fileName);
+        int width = 150;
+        int height = 40;
+        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        Graphics g = image.getGraphics();
+        // 背景色
+        g.setColor(new Color(82, 155, 240));
+        g.fillRect(0, 0, width, height);
+        // 字色
+        g.setColor(Color.white);
+        g.setFont(new Font("黑体", Font.BOLD, 36));
+        for (int i = 0; i < code.length(); i++) {
+            String oneChar = code.substring(i, i + 1);
+            g.drawString(oneChar, 4 + 40 * i, 30);
         }
+        try (FileOutputStream out = FileUtils.openOutputStream(captchaFile)) {
+            ImageIO.write(image, "PNG", out);
+        }
+        // 映射
+        return coreProperties.getAddress() + mapping + CAPTCHA_DIRECTORY + "/" + fileName;
     }
 
     /**
