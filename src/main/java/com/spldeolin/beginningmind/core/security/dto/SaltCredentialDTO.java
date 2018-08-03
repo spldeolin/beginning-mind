@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Data
 @Builder
 @Accessors(chain = true)
-public class SaltCredential implements Serializable {
+public class SaltCredentialDTO implements Serializable {
 
     /**
      * 数据库内保存的“密码”字段

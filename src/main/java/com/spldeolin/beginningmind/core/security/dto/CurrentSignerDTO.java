@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @Data
 @Builder
 @Accessors(chain = true)
-public class CurrentSigner implements Serializable, AuthCachePrincipal {
+public class CurrentSignerDTO implements Serializable, AuthCachePrincipal {
 
     /**
      * 会话ID

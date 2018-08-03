@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.constant.DirectoryName;
 import lombok.SneakyThrows;
 
 /**
@@ -21,8 +22,6 @@ import lombok.SneakyThrows;
  */
 @Service
 public class ImageService {
-
-    public static final String IMAGE_DIRECTORY = "image";
 
     @Autowired
     private CoreProperties coreProperties;
@@ -44,12 +43,12 @@ public class ImageService {
             String fileExtension = FilenameUtils.getExtension(multipartFile.getOriginalFilename());
             String destFileName = fileMd5 + FilenameUtils.EXTENSION_SEPARATOR + fileExtension;
             // 生成文件
-            File destFile = new File(location + IMAGE_DIRECTORY + sep + destFileName);
+            File destFile = new File(location + DirectoryName.IMAGE_DIRECTORY + sep + destFileName);
             if (!destFile.exists()) {
                 multipartFile.transferTo(destFile);
             }
             // 映射
-            return coreProperties.getAddress() + mapping + IMAGE_DIRECTORY + "/" + destFileName;
+            return coreProperties.getAddress() + mapping + DirectoryName.IMAGE_DIRECTORY + "/" + destFileName;
         }
     }
 

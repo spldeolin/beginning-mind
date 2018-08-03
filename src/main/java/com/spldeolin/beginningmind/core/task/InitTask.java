@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.CoreProperties;
+import com.spldeolin.beginningmind.core.constant.DirectoryName;
 import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
-import com.spldeolin.beginningmind.core.service.ImageService;
-import com.spldeolin.beginningmind.core.service.SignService;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -70,7 +69,7 @@ public class InitTask implements CommandLineRunner {
         if (!file.getLocation().endsWith("/")) {
             throw new IllegalArgumentException("core.file.location必须以 / 结尾");
         }
-        if (!file.getMapping().endsWith("/")) {
+        if (!file.getMapping().startsWith("/")) {
             throw new IllegalArgumentException("core.file.mapping必须以 / 开头");
         }
     }
@@ -78,7 +77,8 @@ public class InitTask implements CommandLineRunner {
     @SneakyThrows
     public void ensureDirectoryExist() {
         CoreProperties.File file = coreProperties.getFile();
-        FileUtils.mkdir(new java.io.File(file.getLocation() + ImageService.IMAGE_DIRECTORY), true);
-        FileUtils.mkdir(new java.io.File(file.getLocation() + SignService.CAPTCHA_DIRECTORY), true);
+        FileUtils.mkdir(new java.io.File(file.getLocation() + DirectoryName.IMAGE_DIRECTORY), true);
+        FileUtils.mkdir(new java.io.File(file.getLocation() + DirectoryName.CAPTCHA_DIRECTORY), true);
     }
+
 }

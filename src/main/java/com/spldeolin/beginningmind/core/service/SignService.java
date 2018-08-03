@@ -36,8 +36,6 @@ import lombok.SneakyThrows;
 @Service
 public class SignService {
 
-    public static final String CAPTCHA_DIRECTORY = "captcha";
-
     private static final String CAPTCHA = "{CAPTCHA}";
 
     @Autowired
@@ -74,7 +72,7 @@ public class SignService {
             ImageIO.write(image, "PNG", out);
         }
         // 映射
-        return coreProperties.getAddress() + mapping + CAPTCHA_DIRECTORY + "/" + fileName;
+        return coreProperties.getAddress() + mapping + DirectoryName.CAPTCHA_DIRECTORY + "/" + fileName;
     }
 
     /**
@@ -111,7 +109,7 @@ public class SignService {
         // TODO 登录者拥有的权限存入profile
         // TODO 登录者拥有的菜单存入profile
         // profile
-        return SignerProfileVO.builder().username(user.getUsername()).build();
+        return SignerProfileVO.builder().userName(user.getUsername()).build();
     }
 
     /**

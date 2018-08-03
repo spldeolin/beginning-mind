@@ -10,7 +10,7 @@
         <result column="inserted_at" jdbcType="TIMESTAMP" property="loggedAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="deletion_flag" jdbcType="BIGINT" property="deletionFlag"/>
-        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="userName" jdbcType="VARCHAR" property="userName"/>
         <result column="mobile" jdbcType="VARCHAR" property="mobile"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="password" jdbcType="CHAR" property="password"/>

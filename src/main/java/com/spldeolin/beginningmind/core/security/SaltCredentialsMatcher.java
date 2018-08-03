@@ -7,9 +7,9 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
-import com.spldeolin.beginningmind.core.security.dto.SaltCredential;
+import com.spldeolin.beginningmind.core.security.dto.SaltCredentialDTO;
 
-public class SaltSha512CredentialsMatcher implements CredentialsMatcher {
+public class SaltCredentialsMatcher implements CredentialsMatcher {
 
     @Override
     public boolean doCredentialsMatch(AuthenticationToken authenticationToken, AuthenticationInfo authenticationInfo) {
@@ -19,7 +19,7 @@ public class SaltSha512CredentialsMatcher implements CredentialsMatcher {
         // SHA512 -> 加盐 -> SHA512
         String rawPassword = new String(token.getPassword());
         String passwordEX = DigestUtils.sha512Hex(rawPassword);
-        SaltCredential dto = (SaltCredential) info.getCredentials();
+        SaltCredentialDTO dto = (SaltCredentialDTO) info.getCredentials();
         String passwordEX2 = DigestUtils.sha512Hex(passwordEX + dto.getSalt());
         String password = dto.getPassword();
         // 匹配

@@ -15,8 +15,8 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
-import com.spldeolin.beginningmind.core.security.dto.CurrentSigner;
-import com.spldeolin.beginningmind.core.security.dto.SaltCredential;
+import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
+import com.spldeolin.beginningmind.core.security.dto.SaltCredentialDTO;
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 
@@ -35,7 +35,7 @@ public class ServiceRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = ((CurrentSigner) principals.getPrimaryPrincipal()).getSecurityUser().getId();
+        Long userId = ((CurrentSignerDTO) principals.getPrimaryPrincipal()).getSecurityUser().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> permissionNames = securityUserService.listUserPermissions(userId);
         info.setStringPermissions(permissionNames);
@@ -57,10 +57,10 @@ public class ServiceRealm extends AuthorizingRealm {
             throw new DisabledAccountException("用户已被禁用");
         }
         // 组装当前登录用户对象
-        CurrentSigner currentSigner = CurrentSigner.builder().sessionId(
+        CurrentSignerDTO currentSigner = CurrentSignerDTO.builder().sessionId(
                 Sessions.session().getId()).securityUser(securityUser).signedAt(
                 LocalDateTime.now()).build();
-        SaltCredential saltCredential = SaltCredential.builder().password(securityUser.getPassword()).salt(
+        SaltCredentialDTO saltCredential = SaltCredentialDTO.builder().password(securityUser.getPassword()).salt(
                 securityUser.getSalt()).build();
         return new SimpleAuthenticationInfo(currentSigner, saltCredential, getName());
     }

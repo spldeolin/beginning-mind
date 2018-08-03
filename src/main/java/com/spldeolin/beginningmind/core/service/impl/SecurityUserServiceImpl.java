@@ -141,7 +141,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     @Override
     public Optional<SecurityUser> searchOneByPrincipal(String principal) {
         Condition condition = new Condition(SecurityUser.class);
-        condition.createCriteria().orEqualTo("username", principal).orEqualTo("mobile", principal).orEqualTo("email",
+        condition.createCriteria().orEqualTo("userName", principal).orEqualTo("mobile", principal).orEqualTo("email",
                 principal);
         List<SecurityUser> securityAccounts = securityUserMapper.selectBatchByCondition(condition);
         if (securityAccounts.size() == 0) {
@@ -225,7 +225,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForCreating(SecurityUser securityUser) {
-        if (searchOne("username", securityUser.getUsername()).isPresent()) {
+        if (searchOne("userName", securityUser.getUsername()).isPresent()) {
             throw new ServiceException("用户名已被占用");
         }
         String mobile = securityUser.getMobile();
@@ -244,7 +244,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     private void checkOccupationForUpdating(SecurityUser securityUser) {
         Long id = securityUser.getId();
         String username = securityUser.getUsername();
-        if (!id.equals(searchOne("username", username).orElse(new SecurityUser()).getId())) {
+        if (!id.equals(searchOne("userName", username).orElse(new SecurityUser()).getId())) {
             throw new ServiceException("用户名已被占用");
         }
         String mobile = securityUser.getMobile();

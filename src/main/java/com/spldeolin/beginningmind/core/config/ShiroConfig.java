@@ -20,7 +20,7 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.model.SecurityPermission;
 import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
-import com.spldeolin.beginningmind.core.security.SaltSha512CredentialsMatcher;
+import com.spldeolin.beginningmind.core.security.SaltCredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
 import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
 import com.spldeolin.beginningmind.core.security.filter.SignFilter;
@@ -102,7 +102,7 @@ public class ShiroConfig {
     @Bean
     public AuthorizingRealm realm(CacheManager cacheManager) {
         AuthorizingRealm realm = new ServiceRealm();
-        realm.setCredentialsMatcher(new SaltSha512CredentialsMatcher());
+        realm.setCredentialsMatcher(new SaltCredentialsMatcher());
         realm.setCacheManager(cacheManager);
         return realm;
     }
