@@ -20,9 +20,9 @@ import com.spldeolin.beginningmind.core.service.SecurityUserService;
  * @author Deolin 2018/05/26
  */
 @RestController
-@RequestMapping("/signAdmin")
+@RequestMapping("/signManagement")
 @Validated
-public class SignAdminController {
+public class SignManagementController {
 
     @Autowired
     private SecurityUserService securityAccountService;
