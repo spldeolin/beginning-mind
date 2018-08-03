@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util.string;
+package com.spldeolin.beginningmind.core.util;
 
 import java.util.Random;
 import lombok.experimental.UtilityClass;

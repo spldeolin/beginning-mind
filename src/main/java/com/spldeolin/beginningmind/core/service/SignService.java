@@ -25,7 +25,7 @@ import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.SecurityUser;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
-import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

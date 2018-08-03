@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.util.Jsons;
-import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

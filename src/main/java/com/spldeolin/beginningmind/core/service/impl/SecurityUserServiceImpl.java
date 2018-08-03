@@ -37,7 +37,7 @@ import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService
 import com.spldeolin.beginningmind.core.service.SecurityUserService;
 import com.spldeolin.beginningmind.core.service.SecurityUsers2permissionsService;
 import com.spldeolin.beginningmind.core.service.SecurityUsers2rolesService;
-import com.spldeolin.beginningmind.core.util.string.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
