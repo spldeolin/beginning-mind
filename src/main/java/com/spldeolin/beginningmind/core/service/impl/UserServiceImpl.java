@@ -139,7 +139,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         List<String> result = Lists.newArrayList();
         // 用户
         User user = this.getEX(userId);
-        // TODO 用户直接、间接被授予的权限
+        // TODO 用户被直接、间接授予的权限
         List<Permission> permissions = Lists.newArrayList();
         // 过滤器链
         for (Permission permission : permissions) {
