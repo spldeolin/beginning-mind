@@ -20,8 +20,8 @@ public class CoupledConstant {
     public static final String LOG_MDC_INSIGNIA = "insignia";
 
     /**
-     * SHA512一次的默认密码（000000）
+     * SHA512一次的默认密码（0）
      */
-    public static final String DEFAULT_PASSWORD_EX = DigestUtils.sha512Hex("000000");
+    public static final String DEFAULT_PASSWORD_EX = DigestUtils.sha512Hex("0");
 
 }

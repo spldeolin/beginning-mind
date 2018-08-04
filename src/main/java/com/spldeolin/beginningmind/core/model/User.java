@@ -57,9 +57,9 @@ public class User implements Serializable {
     private Long deletionFlag;
 
     /**
-     * “用户名”
+     * 名字
      */
-    private String username;
+    private String name;
 
     /**
      * 手机号
@@ -67,20 +67,18 @@ public class User implements Serializable {
     private String mobile;
 
     /**
-     * E-Mail
+     * E-mail
      */
     private String email;
 
     /**
      * 密码
      */
-    @JsonIgnore
     private String password;
 
     /**
      * 盐
      */
-    @JsonIgnore
     private String salt;
 
     /**
@@ -88,37 +86,6 @@ public class User implements Serializable {
      */
     @Column(name = "enable_sign")
     private Boolean enableSign;
-
-    /**
-     * 昵称
-     */
-    private String nickname;
-
-    /**
-     * 头像URL
-     */
-    @Column(name = "header_url")
-    private String headerUrl;
-
-    /**
-     * 性别
-     */
-    private String sex;
-
-    /**
-     * 联系地址（省）
-     */
-    private String province;
-
-    /**
-     * 联系地址（市）
-     */
-    private String city;
-
-    /**
-     * 联系地址（区）
-     */
-    private String area;
 
     private static final long serialVersionUID = 1L;
 }

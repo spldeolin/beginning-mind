@@ -103,13 +103,13 @@ public class SignService {
         } catch (AuthenticationException e) {
             throw new ServiceException(e.getMessage());
         }
-        User user = Signer.current().getSecurityUser();
+        User user = Signer.current().getUser();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, user.getId().toString());
         // TODO 登录者拥有的权限存入profile
         // TODO 登录者拥有的菜单存入profile
         // profile
-        return SignerProfileVO.builder().userName(user.getUsername()).build();
+        return SignerProfileVO.builder().userName(user.getName()).build();
     }
 
     /**

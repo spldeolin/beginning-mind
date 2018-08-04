@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -44,7 +45,7 @@ public class Permission implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    //@Version
+    @Version
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -77,10 +78,17 @@ public class Permission implements Serializable {
     private Long menuId;
 
     /**
+     * 是否是GET请求
+     */
+    @Column(name = "is_get_request")
+    private Boolean isGetRequest;
+
+    /**
      * 是否所有用户都应该拥有该权限
      */
     @Column(name = "must_have")
     private Boolean mustHave;
 
     private static final long serialVersionUID = 1L;
+
 }

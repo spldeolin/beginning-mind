@@ -35,7 +35,7 @@ public class ServiceRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-        Long userId = ((CurrentSignerDTO) principals.getPrimaryPrincipal()).getSecurityUser().getId();
+        Long userId = ((CurrentSignerDTO) principals.getPrimaryPrincipal()).getUser().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
         Set<String> permissionNames = securityUserService.listUserPermissions(userId);
         info.setStringPermissions(permissionNames);
@@ -51,17 +51,17 @@ public class ServiceRealm extends AuthorizingRealm {
         // 通过principal查找用户
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String principal = token.getUsername();
-        User securityUser = securityUserService.searchOneByPrincipal(principal).orElseThrow(
+        User user = securityUserService.searchOneByPrincipal(principal).orElseThrow(
                 () -> new UnknownAccountException("用户不存在或密码错误"));
-        if (!securityUser.getEnableSign()) {
+        if (!user.getEnableSign()) {
             throw new DisabledAccountException("用户已被禁用");
         }
         // 组装当前登录用户对象
         CurrentSignerDTO currentSigner = CurrentSignerDTO.builder().sessionId(
-                Sessions.session().getId()).securityUser(securityUser).signedAt(
+                Sessions.session().getId()).user(user).signedAt(
                 LocalDateTime.now()).build();
-        SaltCredentialDTO saltCredential = SaltCredentialDTO.builder().password(securityUser.getPassword()).salt(
-                securityUser.getSalt()).build();
+        SaltCredentialDTO saltCredential = SaltCredentialDTO.builder().password(user.getPassword()).salt(
+                user.getSalt()).build();
         return new SimpleAuthenticationInfo(currentSigner, saltCredential, getName());
     }
 

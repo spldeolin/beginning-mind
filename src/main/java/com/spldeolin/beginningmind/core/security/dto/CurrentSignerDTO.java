@@ -24,7 +24,7 @@ public class CurrentSignerDTO implements Serializable, AuthCachePrincipal {
     /**
      * 用户
      */
-    private User securityUser;
+    private User user;
 
     /**
      * 登录时间
@@ -35,7 +35,7 @@ public class CurrentSignerDTO implements Serializable, AuthCachePrincipal {
 
     @Override
     public String getAuthCacheKey() {
-        return securityUser.getUsername();
+        return user.getId().toString();
     }
 
 }

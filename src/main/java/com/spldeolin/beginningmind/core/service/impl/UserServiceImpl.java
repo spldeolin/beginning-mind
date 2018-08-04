@@ -125,7 +125,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     @Override
     public Optional<User> searchOneByPrincipal(String principal) {
         Condition condition = new Condition(User.class);
-        condition.createCriteria().orEqualTo("userName", principal).orEqualTo("mobile", principal).orEqualTo("email",
+        condition.createCriteria().orEqualTo("name", principal).orEqualTo("mobile", principal).orEqualTo("email",
                 principal);
         List<User> securityAccounts = securityUserMapper.selectBatchByCondition(condition);
         if (securityAccounts.size() == 0) {
@@ -185,7 +185,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForCreating(User securityUser) {
-        if (searchOne("userName", securityUser.getUsername()).isPresent()) {
+        if (searchOne("name", securityUser.getName()).isPresent()) {
             throw new ServiceException("用户名已被占用");
         }
         String mobile = securityUser.getMobile();
@@ -201,19 +201,19 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     /**
      * 更新场合下的用户名、手机号、E-Mail占用校验
      */
-    private void checkOccupationForUpdating(User securityUser) {
-        Long id = securityUser.getId();
-        String username = securityUser.getUsername();
-        if (!id.equals(searchOne("userName", username).orElse(new User()).getId())) {
+    private void checkOccupationForUpdating(User user) {
+        Long id = user.getId();
+        String username = user.getName();
+        if (!id.equals(searchOne("name", username).orElse(new User()).getId())) {
             throw new ServiceException("用户名已被占用");
         }
-        String mobile = securityUser.getMobile();
+        String mobile = user.getMobile();
         if (mobile != null) {
             if (!id.equals(searchOne("mobile", mobile).orElse(new User()).getId())) {
                 throw new ServiceException("手机号已被占用");
             }
         }
-        String email = securityUser.getEmail();
+        String email = user.getEmail();
         if (email != null) {
             if (!id.equals(searchOne("email", email).orElse(new User()).getId())) {
                 throw new ServiceException("E-Mail已被占用");

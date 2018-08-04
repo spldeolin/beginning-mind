@@ -8,12 +8,9 @@ package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
-import com.spldeolin.beginningmind.core.api.valid.annotation.Option;
 import com.spldeolin.beginningmind.core.model.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -21,7 +18,7 @@ import lombok.experimental.Accessors;
 /**
  * “用户”Input类
  *
- * @author Deolin 2018/5/29
+ * @author Deolin 2018/8/4
  */
 @Data
 @Accessors(chain = true)
@@ -38,75 +35,48 @@ public class UserInput implements Serializable {
     private LocalDateTime updatedAt;
 
     /**
-     * “用户名”
+     * 名字
      */
-    @NotBlank
-    @Length(max = 16)
-    private String username;
+    @Length(max = 255)
+    private String name;
 
     /**
      * 手机号
      */
-    @Mobile
     @Length(max = 20)
+    @Mobile
     private String mobile;
 
     /**
-     * E-Mail
+     * E-mail
      */
-    @Email
     @Length(max = 255)
+    @Email
     private String email;
+
+    /**
+     * 密码
+     */
+    @Length(max = 128)
+    private String password;
+
+    /**
+     * 盐
+     */
+    @Length(max = 32)
+    private String salt;
 
     /**
      * 能否登录
      */
-    @NotNull
     private Boolean enableSign;
-
-    /**
-     * 昵称
-     */
-    @Length(max = 255)
-    private String nickname;
-
-    /**
-     * 头像URL
-     */
-    @Length(max = 255)
-    private String headerUrl;
-
-    /**
-     * 性别
-     */
-    @Length(max = 6)
-    @Option({"", "male", "female"})
-    private String sex;
-
-    /**
-     * 联系地址（省）
-     */
-    @Length(max = 6)
-    private String province;
-
-    /**
-     * 联系地址（市）
-     */
-    @Length(max = 6)
-    private String city;
-
-    /**
-     * 联系地址（区）
-     */
-    @Length(max = 6)
-    private String area;
 
     private static final long serialVersionUID = 1L;
 
     public User toModel() {
-        return User.builder().id(id).updatedAt(updatedAt).username(username).mobile(mobile).email(
-                email).enableSign(enableSign).nickname(nickname).headerUrl(headerUrl).sex(sex).province(province).city(
-                city).area(area).build();
+        return User.builder().id(id).updatedAt(updatedAt).name(name).mobile(mobile).email(email).password(password)
+                .salt(salt).enableSign(enableSign).build();
     }
 
 }
+// id, updatedAt, name, mobile, email, password, salt, enableSign

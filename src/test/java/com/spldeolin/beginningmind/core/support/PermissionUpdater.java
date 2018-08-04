@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.security;
+package com.spldeolin.beginningmind.core.support;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,13 +40,20 @@ import com.spldeolin.beginningmind.core.controller.SignController;
 import com.spldeolin.beginningmind.core.controller.annotation.Authentication;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.service.PermissionService;
+import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * 更新权限表
+ *
+ * @author Deolin 2018/08/01
+ */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
 @Log4j2
-public class PermissionsInserter {
+public class PermissionUpdater {
+
 
     private final Class[] EXCLUDED_CLASS = {ErrorForwardController.class, SignController.class};
 
@@ -446,5 +453,13 @@ public class PermissionsInserter {
         return classList;
     }
 
-}
+    @Data
+    private static class ControllerDefinition {
 
+        private Class controller;
+
+        private List<Method> requestMethods;
+
+    }
+
+}
