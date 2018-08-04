@@ -82,7 +82,7 @@ logging:
 
 core:
 
-  app-address: 占位符
+  address: 占位符
 
   time:
     default-date-pattern: yyyy-MM-dd
@@ -146,7 +146,7 @@ logging:
 
 core:
 
-  address: localhost:2333
+  address: http://localhost:2333
 
   file:
     mapping: /static/
