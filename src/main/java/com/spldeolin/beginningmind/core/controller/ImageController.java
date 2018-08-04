@@ -33,7 +33,7 @@ public class ImageController {
      */
     @PostMapping("/upload")
     @Authentication(display = "普通上传", menuId = 1L)
-    String create(@RequestParam("image") @NotNull MultipartFile multipartFile) {
+    String upload(@RequestParam("image") @NotNull MultipartFile multipartFile) {
         return imageService.upload(multipartFile);
     }
 

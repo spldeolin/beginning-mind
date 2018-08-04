@@ -5,7 +5,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
+import com.spldeolin.beginningmind.core.model.RequestTrack;
 import lombok.experimental.UtilityClass;
 
 @UtilityClass

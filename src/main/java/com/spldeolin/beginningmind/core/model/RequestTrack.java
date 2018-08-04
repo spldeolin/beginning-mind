@@ -1,10 +1,15 @@
 package com.spldeolin.beginningmind.core.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import javax.persistence.*;
-import javax.validation.constraints.Size;
+import javax.persistence.Column;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,6 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Table(name = "request_track")
 public class RequestTrack implements Serializable {
+
     /**
      * ID
      */
@@ -102,5 +108,46 @@ public class RequestTrack implements Serializable {
     @Column(name = "response_body")
     private String responseBody;
 
+    /**
+     * 登录者用户ID
+     */
+    @Column(name = "signed_user_id")
+    private Long signedUserId;
+
+    /**
+     * 登录者用户名
+     */
+    @Column(name = "signed_user_name")
+    private String signedUserName;
+
+    /**
+     * 登录者用户手机
+     */
+    @Column(name = "signed_user_mobile")
+    private String signedUserMobile;
+
+    /**
+     * 请求方法
+     */
+    private Method method;
+
+    private Integer requestBodyParameterIndex;
+
+    /**
+     * 请求方法的参数名
+     */
+    private String[] parameterNames;
+
+    /**
+     * 请求方法的参数值
+     */
+    private Object[] parameterValues;
+
+    /**
+     * 请求开始时间
+     */
+    private long processedAt;
+
     private static final long serialVersionUID = 1L;
+
 }

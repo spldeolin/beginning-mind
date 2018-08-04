@@ -6,12 +6,11 @@
 
 package com.spldeolin.beginningmind.core.service;
 
-import java.util.List;
-import java.util.Optional;
-import com.spldeolin.beginningmind.core.model.RequestTrack;
+import javax.servlet.http.HttpServletRequest;
+import org.aspectj.lang.JoinPoint;
 import com.spldeolin.beginningmind.core.api.CommonService;
-import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.api.dto.PageParam;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.core.model.RequestTrack;
 
 /**
  * “请求轨迹”业务
@@ -21,54 +20,19 @@ import com.spldeolin.beginningmind.core.api.dto.PageParam;
 public interface RequestTrackService extends CommonService<RequestTrack> {
 
     /**
-     * 创建一个“请求轨迹”
-     * （附带业务校验）
-     *
-     * @param requestTrack 待创建“请求轨迹”
-     * @return 自增ID
+     * 设置 切点、Request、登录者ID，生成请求轨迹
      */
-    Long createEX(RequestTrack requestTrack);
+    RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, HttpServletRequest request, Long userId);
 
     /**
-     * 获取一个“请求轨迹”
-     * （附带业务校验）
-     *
-     * @param id 待获取“请求轨迹”的ID
-     * @return “请求轨迹”
+     * 补全请求轨迹信息，并保存请求轨迹
      */
-    RequestTrack getEX(Long id);
+    void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, Object dataObject);
 
     /**
-     * 更新一个“请求轨迹”
-     * （附带业务校验）
-     *
-     * @param requestTrack 待更新“请求轨迹”
+     * 补全请求轨迹信息，并保存请求轨迹
      */
-    void updateEX(RequestTrack requestTrack);
+    void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult);
 
-    /**
-     * 删除一个“请求轨迹”
-     * （附带业务校验）
-     *
-     * @param id 待删除“请求轨迹”的ID
-     */
-    void deleteEX(Long id);
-
-    /**
-     * 删除多个资源
-     * （附带业务校验，并返回详细情况）
-     *
-     * @param ids 待删除资源的ID列表
-     * @return 删除情况
-     */
-    String deleteEX(List<Long> ids);
-
-    /**
-     * 分页获取资源
-     *
-     * @param pageParam 页码和每页条目数
-     * @return Page 分页对象
-     */
-    Page<RequestTrack> page(PageParam pageParam); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
 }

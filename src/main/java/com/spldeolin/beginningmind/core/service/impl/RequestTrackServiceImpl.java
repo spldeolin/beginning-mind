@@ -6,21 +6,28 @@
 
 package com.spldeolin.beginningmind.core.service.impl;
 
-import java.util.List;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
+import java.time.LocalDateTime;
+import java.util.Map.Entry;
+import javax.servlet.http.HttpServletRequest;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
-import com.spldeolin.beginningmind.core.dao.RequestTrackMapper;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.model.RequestTrack;
+import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
+import com.spldeolin.beginningmind.core.service.UserService;
+import com.spldeolin.beginningmind.core.util.Jsons;
+import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
-import tk.mybatis.mapper.entity.Condition;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.api.dto.PageParam;
-import com.github.pagehelper.PageHelper;
-import tk.mybatis.mapper.entity.Condition;
-import tk.mybatis.mapper.entity.Example;
 
 /**
  * “请求轨迹”业务实现
@@ -32,57 +39,120 @@ import tk.mybatis.mapper.entity.Example;
 public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> implements RequestTrackService {
 
     @Autowired
-    private RequestTrackMapper requestTrackMapper;
+    private UserService userService;
 
     @Override
-    public Long createEX(RequestTrack requestTrack) {
-        /* 业务校验 */
-        super.create(requestTrack);
-        return requestTrack.getId();
-    }
+    public RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, HttpServletRequest request, Long userId) {
+        RequestTrack track = new RequestTrack();
+        Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
+        Object[] parameterValues = joinPoint.getArgs();
+        track.setMethod(requestMethod);
+        track.setParameterNames(parameterNames);
+        track.setParameterValues(parameterValues);
+        track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
+        track.setRequestedAt(LocalDateTime.now());
+        track.setUrl(request.getRequestURI());
+        track.setHttpMethod(request.getMethod());
+        track.setController(joinPoint.getTarget().getClass().getSimpleName());
+        track.setRequestMethod(requestMethod.getName());
 
-    @Override
-    public RequestTrack getEX(Long id) {
-        return super.get(id).orElseThrow(() -> new ServiceException("请求轨迹不存在或是已被删除"));
-    }
-
-    @Override
-    public void updateEX(RequestTrack requestTrack) {
-        if (!isExist(requestTrack.getId())) {
-            throw new ServiceException("请求轨迹不存在或是已被删除");
+        Parameter[] parameters = requestMethod.getParameters();
+        for (int i = 0; i < parameters.length; i++) {
+            if (isRequestBody(parameters[i])) {
+                track.setRequestBodyParameterIndex(i);
+            }
         }
-        /* 业务校验 */
-        if (!super.update(requestTrack)) {
-            throw new ServiceException("请求轨迹数据过时");
-        }
+
+        track.setSignedUserId(userId);
+
+        return track;
     }
 
+    @Async
     @Override
-    public void deleteEX(Long id) {
-        if (!isExist(id)) {
-            throw new ServiceException("请求轨迹不存在或是已被删除");
-        }
-        /* 业务校验 */
-        super.delete(id);
+    public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, Object dataObject) {
+        analysizRequestTrack(track, request);
+        track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
+
+        super.create(track);
     }
 
+    @Async
     @Override
-    public String deleteEX(List<Long> ids) {
-        List<RequestTrack> exist = super.get(ids);
-        if (exist.size() == 0) {
-            throw new ServiceException("选中的请求轨迹全部不存在或是已被删除");
-        }
-        /* 业务校验 */
-        super.delete(ids);
-        return "操作成功";
+    public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult) {
+        analysizRequestTrack(track, request);
+        track.setResponseBody(Jsons.toJson(requestResult));
+
+        super.create(track);
     }
 
-    @Override
-    public Page<RequestTrack> page(PageParam pageParam) {
-        Condition condition = new Condition(RequestTrack.class);
-        condition.createCriteria()/* 添加条件 */;
-        pageParam.startPage();
-        return Page.wrap(requestTrackMapper.selectBatchByCondition(condition));
+    private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {
+        StringBuilder url = new StringBuilder(64);
+        url.append(track.getUrl());
+        for (Entry<String, String[]> queryValuesEachKey : request.getParameterMap().entrySet()) {
+            String queryKey = queryValuesEachKey.getKey();
+            for (String queryValue : queryValuesEachKey.getValue()) {
+                if (queryValue != null) {
+                    url.append("&");
+                    url.append(queryKey);
+                    url.append("=");
+                    url.append(queryValue);
+                }
+            }
+        }
+        track.setUrl(url.toString().replaceFirst("&", "?"));
+
+        Object requestBodyParameterValue = null;
+        Annotation[][] annotations = track.getMethod().getParameterAnnotations();
+        outter:
+        for (int parameterIndex = 0; parameterIndex < annotations.length; parameterIndex++) {
+            Annotation[] annotationsEachParameter = annotations[parameterIndex];
+            for (Annotation annotation : annotationsEachParameter) {
+                if (annotation instanceof RequestBody) {
+                    requestBodyParameterValue = track.getParameterValues()[parameterIndex];
+                    break outter;
+                }
+            }
+        }
+        if (requestBodyParameterValue != null) {
+            track.setRequestBody(Jsons.toJson(requestBodyParameterValue));
+        } else {
+            track.setRequestBody("");
+        }
+
+        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
+
+        Long signedUserId = track.getSignedUserId();
+        if (signedUserId != null) {
+            User user = userService.getEX(track.getSignedUserId());
+            track.setSignedUserName(user.getName());
+            track.setSignedUserMobile(user.getMobile());
+        } else {
+            track.setSignedUserName("");
+            track.setSignedUserMobile("");
+        }
+
+    }
+
+    private RequestResult ensureRequestResult(Object object) {
+        if (object instanceof RequestResult) {
+            return (RequestResult) object;
+        }
+        return RequestResult.success(object);
+    }
+
+    private boolean isRequestBody(Parameter parameter) {
+        return hasAnnotation(parameter, RequestBody.class);
+    }
+
+    private boolean hasAnnotation(Parameter parameter, Class<? extends Annotation> annotationType) {
+        for (Annotation annotation : parameter.getAnnotations()) {
+            if (annotation.getClass() == annotationType) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }

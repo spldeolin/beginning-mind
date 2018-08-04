@@ -21,13 +21,15 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.EnsureStringFieldsTrimmed;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.model.RequestTrack;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
+import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import com.spldeolin.beginningmind.core.util.Sessions;
+import com.spldeolin.beginningmind.core.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -71,7 +73,8 @@ public class ControllerAspect {
         HttpServletRequest request = RequestContextUtils.request();
 
         // 解析切点，并存入request
-        RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, request);
+        Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
+        RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, request, signedUserId);
         RequestContextUtils.setRequestTrack(requestTrack);
 
         // 设置Log MDC
@@ -95,7 +98,7 @@ public class ControllerAspect {
         requestTrack.setProcessedAt(System.currentTimeMillis());
         Object data = point.proceed(requestTrack.getParameterValues());
         // 请求成功时保存日志
-        requestTrackService.savaToMongoAfterProcessing(requestTrack, request, data);
+        requestTrackService.completeAndSaveTrack(requestTrack, request, data);
         // 清除Log MDC
         removeLogMDC();
         return data;
@@ -106,7 +109,7 @@ public class ControllerAspect {
         RequestTrack track = RequestContextUtils.getRequestTrack();
         // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不时Controller，所以无法记录日志
         if (track != null) {
-            requestTrackService.saveToMongoAfterThrowing(track, RequestContextUtils.request(), requestResult);
+            requestTrackService.completeAndSaveTrack(track, RequestContextUtils.request(), requestResult);
         }
         // 清除Log MDC
         removeLogMDC();

@@ -5,8 +5,6 @@
 package com.spldeolin.beginningmind.core.controller;
 
 import javax.validation.Valid;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.service.SignService;
+import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 
 /**
@@ -66,8 +65,7 @@ public class SignController {
      */
     @GetMapping(IS_SIGNING_REQUEST_MAPPING)
     Boolean isSigning() {
-        Subject subject = SecurityUtils.getSubject();
-        return subject.isAuthenticated() || subject.isRemembered();
+        return Signer.isSigning();
     }
 
 }
