@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.controller.SignController;
+import com.spldeolin.beginningmind.core.controller.annotation.Authentication;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import lombok.extern.log4j.Log4j2;
@@ -93,8 +94,8 @@ public class PermissionsInserter {
             for (Method requestMethod : controllerDefinition.getRequestMethods()) {
                 String permissionMapping = controllerMapping + getMapping(requestMethod);
                 permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
-                com.spldeolin.beginningmind.core.controller.annotation.Permission permission = requestMethod.getAnnotation(
-                        com.spldeolin.beginningmind.core.controller.annotation.Permission.class);
+                Authentication permission = requestMethod.getAnnotation(
+                        Authentication.class);
                 String display;
                 if (permission == null) {
                     //throw new ServiceException("请求方法" + requestMapping + "未声明@Permission");

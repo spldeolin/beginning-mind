@@ -19,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.controller.SignController;
+import com.spldeolin.beginningmind.core.controller.TestController;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.security.SaltCredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
@@ -71,12 +72,13 @@ public class ShiroConfig {
         Map<String, String> filterChainDefinitions = new LinkedHashMap<>();
         // 【TOKEN】actuator相关请求使用TOKEN的过滤器
         filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
-        // 【匿名】放行error、静态资源、验证码请求、登录请求....
+        // 【匿名】放行error、静态资源、验证码请求、登录请求、测试控制器....
         filterChainDefinitions.put(ErrorForwardController.ERROR_PATH, "anon");
         filterChainDefinitions.put(coreProperties.getFile().getMapping() + "/**", "anon");
         filterChainDefinitions.put(SignController.CAPTCHA_REQUEST_MAPPING, "anon");
         filterChainDefinitions.put(SignController.SIGN_IN_REQUEST_MAPPING, "anon");
         filterChainDefinitions.put(SignController.IS_SIGNING_REQUEST_MAPPING, "anon");
+        filterChainDefinitions.put(TestController.TEST_REQUEST_MAPPING_PREFIX, "anon");
         // 【登录】登出请求是唯一一个无需权限、需要登录的请求
         filterChainDefinitions.put(SignController.SIGN_OUT_REQUEST_MAPPING, SignFilter.MARK);
         // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链

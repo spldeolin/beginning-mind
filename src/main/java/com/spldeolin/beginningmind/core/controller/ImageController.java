@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import com.spldeolin.beginningmind.core.controller.annotation.Permission;
+import com.spldeolin.beginningmind.core.controller.annotation.Authentication;
 import com.spldeolin.beginningmind.core.service.ImageService;
 
 /**
@@ -32,7 +32,7 @@ public class ImageController {
      * 普通上传
      */
     @PostMapping("/upload")
-    @Permission(display = "普通上传", menuId = 1L)
+    @Authentication(display = "普通上传", menuId = 1L)
     String create(@RequestParam("image") @NotNull MultipartFile multipartFile) {
         return imageService.upload(multipartFile);
     }
