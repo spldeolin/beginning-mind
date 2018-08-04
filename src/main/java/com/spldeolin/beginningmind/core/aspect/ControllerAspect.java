@@ -28,7 +28,6 @@ import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import com.spldeolin.beginningmind.core.util.Sessions;
-import com.spldeolin.beginningmind.core.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -114,18 +113,11 @@ public class ControllerAspect {
     }
 
     private void setLogMDC() {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated() || subject.isRemembered()) {
-            ThreadContext.put(CoupledConstant.LOG_MDC_USERNAME,
-                    "[" + Signer.current().getUser().getId() + "]");
-        }
-
         ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA,
                 "[" + RequestContextUtils.getInsignia() + "]");
     }
 
     private void removeLogMDC() {
-        ThreadContext.remove(CoupledConstant.LOG_MDC_USERNAME);
         ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
     }
 
