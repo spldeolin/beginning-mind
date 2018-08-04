@@ -117,7 +117,7 @@ public class ControllerAspect {
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated() || subject.isRemembered()) {
             ThreadContext.put(CoupledConstant.LOG_MDC_USERNAME,
-                    "[" + Signer.current().getUser().getName() + "]");
+                    "[" + Signer.current().getUser().getId() + "]");
         }
 
         ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA,

@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FileUtils;
@@ -84,18 +83,13 @@ public class SignService {
         if (subject.isAuthenticated()) {
             throw new ServiceException("请勿重复登录");
         }
-        CaptchaDTO captchaDTO = Sessions.get(CAPTCHA);
+        String captcha = Sessions.get(CAPTCHA);
         Sessions.remove(CAPTCHA);
-        if (captchaDTO == null ||
-                ChronoUnit.MINUTES.between(captchaDTO.getGeneratedAt(), LocalDateTime.now()) > 5) {
+        if (captcha == null) {
             throw new ServiceException("验证码超时");
         }
-        String captcha = captchaDTO.getCaptcha();
-        // DEBUG环境下，验证码可以随便填
-        if (!coreProperties.isDebug()) {
-            if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
-                throw new ServiceException("验证码错误");
-            }
+        if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
+            throw new ServiceException("验证码错误");
         }
         // 登录
         try {

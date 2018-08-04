@@ -65,7 +65,7 @@ public class SignController {
      * 当前调用者是否登录中
      */
     @GetMapping(IS_SIGNING_REQUEST_MAPPING)
-    Boolean isSign() {
+    Boolean isSigning() {
         Subject subject = SecurityUtils.getSubject();
         return subject.isAuthenticated() || subject.isRemembered();
     }
