@@ -12,7 +12,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.service.SignService;
@@ -24,9 +23,16 @@ import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
  * @author Deolin 2018/05/26
  */
 @RestController
-@RequestMapping("/sign")
 @Validated
 public class SignController {
+
+    public static final String CAPTCHA_REQUEST_MAPPING = "/sign/captcha";
+
+    public static final String SIGN_IN_REQUEST_MAPPING = "/sign/in";
+
+    public static final String SIGN_OUT_REQUEST_MAPPING = "/sign/out";
+
+    public static final String IS_SIGNING_REQUEST_MAPPING = "/sign/isSigning";
 
     @Autowired
     private SignService signService;
@@ -34,7 +40,7 @@ public class SignController {
     /**
      * 获取验证码
      */
-    @GetMapping("/captcha")
+    @GetMapping(CAPTCHA_REQUEST_MAPPING)
     String captcha() {
         return signService.captcha();
     }
@@ -42,7 +48,7 @@ public class SignController {
     /**
      * 登录
      */
-    @PostMapping("/in")
+    @PostMapping(SIGN_IN_REQUEST_MAPPING)
     SignerProfileVO signIn(@RequestBody @Valid SignInput input) {
         return signService.signIn(input);
     }
@@ -50,7 +56,7 @@ public class SignController {
     /**
      * 登出
      */
-    @PostMapping("/out")
+    @PostMapping(SIGN_OUT_REQUEST_MAPPING)
     void signOut() {
         signService.signOut();
     }
@@ -58,7 +64,7 @@ public class SignController {
     /**
      * 当前调用者是否登录中
      */
-    @GetMapping("/isSigning")
+    @GetMapping(IS_SIGNING_REQUEST_MAPPING)
     Boolean isSign() {
         Subject subject = SecurityUtils.getSubject();
         return subject.isAuthenticated() || subject.isRemembered();

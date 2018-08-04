@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.womenhz.busgroup.core.service.UserService;
+import com.spldeolin.beginningmind.core.service.UserService;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 

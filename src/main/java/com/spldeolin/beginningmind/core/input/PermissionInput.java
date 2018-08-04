@@ -9,7 +9,7 @@ package com.spldeolin.beginningmind.core.input;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
-import com.spldeolin.beginningmind.core.model.SecurityPermission;
+import com.spldeolin.beginningmind.core.model.Permission;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class SecurityPermissionInput implements Serializable {
+public class PermissionInput implements Serializable {
 
     /**
      * ID
@@ -62,8 +62,8 @@ public class SecurityPermissionInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SecurityPermission toModel() {
-        return SecurityPermission.builder().id(id).updatedAt(updatedAt).name(name).mapping(mapping).display(
+    public Permission toModel() {
+        return Permission.builder().id(id).updatedAt(updatedAt).name(name).mapping(mapping).display(
                 display).menuId(menuId).mustHave(mustHave).build();
     }
 

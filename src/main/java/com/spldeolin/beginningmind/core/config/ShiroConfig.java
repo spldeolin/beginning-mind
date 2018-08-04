@@ -18,14 +18,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
-import com.spldeolin.beginningmind.core.model.SecurityPermission;
+import com.spldeolin.beginningmind.core.controller.SignController;
+import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.security.SaltCredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
 import com.spldeolin.beginningmind.core.security.TempTokenHolder;
 import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
 import com.spldeolin.beginningmind.core.security.filter.SignFilter;
-import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
+import com.spldeolin.beginningmind.core.service.PermissionService;
 
 @Configuration
 public class ShiroConfig {
@@ -40,7 +41,7 @@ public class ShiroConfig {
     private TempTokenHolder tempTokenHolder;
 
     @Autowired
-    private SecurityPermissionService securityPermissionService;
+    private PermissionService securityPermissionService;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -73,17 +74,17 @@ public class ShiroConfig {
         // 【匿名】放行error、静态资源、验证码请求、登录请求....
         filterChainDefinitions.put(ErrorForwardController.ERROR_PATH, "anon");
         filterChainDefinitions.put(coreProperties.getFile().getMapping() + "/**", "anon");
-        filterChainDefinitions.put("/isSigning/current", "anon");
-        filterChainDefinitions.put("/sign/captcha", "anon");
-        filterChainDefinitions.put("/sign/in", "anon");
+        filterChainDefinitions.put(SignController.CAPTCHA_REQUEST_MAPPING, "anon");
+        filterChainDefinitions.put(SignController.SIGN_IN_REQUEST_MAPPING, "anon");
+        filterChainDefinitions.put(SignController.IS_SIGNING_REQUEST_MAPPING, "anon");
         // 【登录】登出请求是唯一一个无需权限、需要登录的请求
-        filterChainDefinitions.put("/sign/out", SignFilter.MARK);
+        filterChainDefinitions.put(SignController.SIGN_OUT_REQUEST_MAPPING, SignFilter.MARK);
         // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
-        for (SecurityPermission securityPermission : securityPermissionService.listAll()) {
+        for (Permission securityPermission : securityPermissionService.listAll()) {
             filterChainDefinitions.put(securityPermission.getMapping(),
                     SignFilter.MARK + ", " + AuthFilter.MARK + "[" + securityPermission.getName() + "]");
         }
-        // DEBUG环境下放行一切请求（不进行任何认证和鉴权的访问控制）
+        // DEBUG环境下放行一切请求（不进行任何基于认证和鉴权的过滤）
         if (coreProperties.isDebug()) {
             filterChainDefinitions = new LinkedHashMap<>();
             filterChainDefinitions.put("/**", "anon");

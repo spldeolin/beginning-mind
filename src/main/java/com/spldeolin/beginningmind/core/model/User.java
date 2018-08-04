@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 用户与权限的关联
+ * 用户
  *
- * @author Deolin 2018/5/28
+ * @author Deolin 2018/5/29
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "security_users2roles")
-public class SecurityUsers2roles implements Serializable {
+@Table(name = "user")
+public class User implements Serializable {
 
     /**
      * ID
@@ -56,11 +56,69 @@ public class SecurityUsers2roles implements Serializable {
     @JsonIgnore
     private Long deletionFlag;
 
-    @Column(name = "user_id")
-    private Long userId;
+    /**
+     * “用户名”
+     */
+    private String username;
 
-    @Column(name = "role_id")
-    private Long roleId;
+    /**
+     * 手机号
+     */
+    private String mobile;
+
+    /**
+     * E-Mail
+     */
+    private String email;
+
+    /**
+     * 密码
+     */
+    @JsonIgnore
+    private String password;
+
+    /**
+     * 盐
+     */
+    @JsonIgnore
+    private String salt;
+
+    /**
+     * 能否登录
+     */
+    @Column(name = "enable_sign")
+    private Boolean enableSign;
+
+    /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
+     * 头像URL
+     */
+    @Column(name = "header_url")
+    private String headerUrl;
+
+    /**
+     * 性别
+     */
+    private String sex;
+
+    /**
+     * 联系地址（省）
+     */
+    private String province;
+
+    /**
+     * 联系地址（市）
+     */
+    private String city;
+
+    /**
+     * 联系地址（区）
+     */
+    private String area;
 
     private static final long serialVersionUID = 1L;
 }

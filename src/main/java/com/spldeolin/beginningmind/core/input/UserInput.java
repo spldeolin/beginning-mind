@@ -14,7 +14,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Option;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.User;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -25,7 +25,7 @@ import lombok.experimental.Accessors;
  */
 @Data
 @Accessors(chain = true)
-public class SecurityUserInput implements Serializable {
+public class UserInput implements Serializable {
 
     /**
      * ID
@@ -103,8 +103,8 @@ public class SecurityUserInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SecurityUser toModel() {
-        return SecurityUser.builder().id(id).updatedAt(updatedAt).username(username).mobile(mobile).email(
+    public User toModel() {
+        return User.builder().id(id).updatedAt(updatedAt).username(username).mobile(mobile).email(
                 email).enableSign(enableSign).nickname(nickname).headerUrl(headerUrl).sex(sex).province(province).city(
                 city).area(area).build();
     }

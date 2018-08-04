@@ -7,7 +7,7 @@ package com.spldeolin.beginningmind.core.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.User;
 
 /**
  * “用户”数据库映射
@@ -15,6 +15,6 @@ import com.spldeolin.beginningmind.core.model.SecurityUser;
  * @author Deolin 2018/5/29
  */
 @Mapper
-public interface SecurityUserMapper extends CommonMapper<SecurityUser> {
+public interface UserMapper extends CommonMapper<User> {
 
 }

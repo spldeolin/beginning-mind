@@ -7,9 +7,9 @@ import com.github.pagehelper.PageHelper;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.dao.SecurityPermissionMapper;
-import com.spldeolin.beginningmind.core.model.SecurityPermission;
-import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
+import com.spldeolin.beginningmind.core.dao.PermissionMapper;
+import com.spldeolin.beginningmind.core.model.Permission;
+import com.spldeolin.beginningmind.core.service.PermissionService;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -21,21 +21,21 @@ import tk.mybatis.mapper.entity.Condition;
  */
 @Service
 @Log4j2
-public class SecurityPermissionServiceImpl extends CommonServiceImpl<SecurityPermission> implements
-        SecurityPermissionService {
+public class PermissionServiceImpl extends CommonServiceImpl<Permission> implements
+        PermissionService {
 
     @Autowired
-    private SecurityPermissionMapper securityPermissionMapper;
+    private PermissionMapper securityPermissionMapper;
 
     @Override
-    public Long createEX(SecurityPermission securityPermission) {
+    public Long createEX(Permission securityPermission) {
         /* 业务校验 */
         super.create(securityPermission);
         return securityPermission.getId();
     }
 
     @Override
-    public void updateEX(SecurityPermission securityPermission) {
+    public void updateEX(Permission securityPermission) {
         if (!isExist(securityPermission.getId())) {
             throw new ServiceException("权限不存在或是已被删除");
         }
@@ -56,7 +56,7 @@ public class SecurityPermissionServiceImpl extends CommonServiceImpl<SecurityPer
 
     @Override
     public String deleteEX(List<Long> ids) {
-        List<SecurityPermission> exist = super.get(ids);
+        List<Permission> exist = super.get(ids);
         if (exist.size() == 0) {
             throw new ServiceException("选中的权限全部不存在或是已被删除");
         }
@@ -66,8 +66,8 @@ public class SecurityPermissionServiceImpl extends CommonServiceImpl<SecurityPer
     }
 
     @Override
-    public Page<SecurityPermission> page(Integer pageNo, Integer pageSize) {
-        Condition condition = new Condition(SecurityPermission.class);
+    public Page<Permission> page(Integer pageNo, Integer pageSize) {
+        Condition condition = new Condition(Permission.class);
         condition.createCriteria()/* 添加条件 */;
         PageHelper.startPage(pageNo, pageSize);
         return Page.wrap(securityPermissionMapper.selectBatchByCondition(condition));

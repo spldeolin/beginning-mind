@@ -22,7 +22,7 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.constant.DirectoryName;
 import com.spldeolin.beginningmind.core.input.SignInput;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
@@ -39,7 +39,7 @@ public class SignService {
     private static final String CAPTCHA = "{CAPTCHA}";
 
     @Autowired
-    private SecurityUserService securityAccountService;
+    private UserService securityAccountService;
 
     @Autowired
     private CoreProperties coreProperties;
@@ -103,7 +103,7 @@ public class SignService {
         } catch (AuthenticationException e) {
             throw new ServiceException(e.getMessage());
         }
-        SecurityUser user = Signer.current().getSecurityUser();
+        User user = Signer.current().getSecurityUser();
         // 登录成功后，为Spring Session管理的会话追加标识，用于定位当前会话
         Sessions.set(FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, user.getId().toString());
         // TODO 登录者拥有的权限存入profile

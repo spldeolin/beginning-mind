@@ -37,11 +37,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.controller.SignController;
-import com.spldeolin.beginningmind.core.controller.annotation.Permission;
-import com.spldeolin.beginningmind.core.model.SecurityPermission;
-import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
-import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
-import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
+import com.spldeolin.beginningmind.core.model.Permission;
+import com.spldeolin.beginningmind.core.service.PermissionService;
 import lombok.extern.log4j.Log4j2;
 
 @RunWith(SpringRunner.class)
@@ -53,10 +50,10 @@ public class PermissionsInserter {
     private final Class[] EXCLUDED_CLASS = {ErrorForwardController.class, SignController.class};
 
     @Autowired
-    private SecurityPermissionService securityPermissionService;
+    private PermissionService securityPermissionService;
 
-    @Autowired
-    private SecurityRoles2permissionsService securityRoles2permissionsService;
+//    @Autowired
+//    private SecurityRoles2permissionsService securityRoles2permissionsService;
 
     @Test
     public void insert() {
@@ -82,7 +79,7 @@ public class PermissionsInserter {
                 }
             }
         }
-        List<SecurityPermission> securityPermissions = new ArrayList<>();
+        List<Permission> securityPermissions = new ArrayList<>();
         // 解析控制器
         for (ControllerDefinition controllerDefinition : controllerDefinitions) {
             Class controller = controllerDefinition.getController();
@@ -96,7 +93,8 @@ public class PermissionsInserter {
             for (Method requestMethod : controllerDefinition.getRequestMethods()) {
                 String permissionMapping = controllerMapping + getMapping(requestMethod);
                 permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
-                Permission permission = requestMethod.getAnnotation(Permission.class);
+                com.spldeolin.beginningmind.core.controller.annotation.Permission permission = requestMethod.getAnnotation(
+                        com.spldeolin.beginningmind.core.controller.annotation.Permission.class);
                 String display;
                 if (permission == null) {
                     //throw new ServiceException("请求方法" + requestMapping + "未声明@Permission");
@@ -107,7 +105,7 @@ public class PermissionsInserter {
                     display = permission.display();
                 }
                 String name = generateNameByMapping(permissionMapping);
-                SecurityPermission securityPermission = SecurityPermission.builder().name(name).mapping(
+                Permission securityPermission = Permission.builder().name(name).mapping(
                         permissionMapping).display(display).menuId(permission.menuId()).mustHave(
                         permission.mustHave()).build();
                 securityPermissions.add(securityPermission);
@@ -115,22 +113,22 @@ public class PermissionsInserter {
             }
         }
         // 删除接口已经不存在的多余权限
-        List<String> mappings = securityPermissions.stream().map(SecurityPermission::getMapping).collect(
+        List<String> mappings = securityPermissions.stream().map(Permission::getMapping).collect(
                 Collectors.toList());
-        for (SecurityPermission existPermission : securityPermissionService.listAll()) {
+        for (Permission existPermission : securityPermissionService.listAll()) {
             if (!mappings.contains(existPermission.getMapping())) {
                 log.info("权限[" + existPermission.getMapping() + "] 对应接口已不存在，删除这个权限");
                 Long existPermissionId = existPermission.getId();
                 securityPermissionService.delete(existPermissionId);
-                // 删除关联关系
-                securityRoles2permissionsService.delete(securityRoles2permissionsService.searchBatch("permissionId",
-                        existPermissionId).stream().map(SecurityRoles2permissions::getId).collect(Collectors.toList()));
+//                // 删除关联关系
+//                securityRoles2permissionsService.delete(securityRoles2permissionsService.searchBatch("permissionId",
+//                        existPermissionId).stream().map(SecurityRoles2permissions::getId).collect(Collectors.toList()));
             }
         }
         // 插入`security_permission`
-        for (SecurityPermission securityPermission : securityPermissions) {
+        for (Permission securityPermission : securityPermissions) {
             String mapping = securityPermission.getMapping();
-            Optional<SecurityPermission> existOrNull = securityPermissionService.searchOne("mapping", mapping);
+            Optional<Permission> existOrNull = securityPermissionService.searchOne("mapping", mapping);
             if (existOrNull.isPresent()) {
                 log.info("[" + mapping + "] 已存在，更新数据");
                 securityPermissionService.update(securityPermission.setId(existOrNull.get().getId()));

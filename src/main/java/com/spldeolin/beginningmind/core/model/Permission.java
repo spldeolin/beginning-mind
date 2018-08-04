@@ -2,15 +2,12 @@ package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,7 +15,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
- * 角色
+ * 权限
  *
  * @author Deolin 2018/5/15
  */
@@ -27,18 +24,13 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "security_role")
-public class SecurityRole implements Serializable {
-
-    private List<SecurityUser> user;
+@Table(name = "permission")
+public class Permission implements Serializable {
 
     /**
-     * ID 你好吗 asdfaa asdf asdf asdf sssssssssssssssssss
-     *
-     * @Param adsf asdf
+     * ID
      */
     @Id
-    @JsonProperty("nasdadasdasdotAId")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -52,7 +44,7 @@ public class SecurityRole implements Serializable {
     /**
      * 审计字段 更新时间
      */
-    @Version
+    //@Version
     @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
@@ -64,9 +56,31 @@ public class SecurityRole implements Serializable {
     private Long deletionFlag;
 
     /**
-     * 角色名
+     * 权限名（perms[xxxx]）
      */
     private String name;
+
+    /**
+     * 请求方法的全路由（控制器路由+方法路由）
+     */
+    private String mapping;
+
+    /**
+     * 用于展示的名称
+     */
+    private String display;
+
+    /**
+     * 菜单ID
+     */
+    @Column(name = "menu_id")
+    private Long menuId;
+
+    /**
+     * 是否所有用户都应该拥有该权限
+     */
+    @Column(name = "must_have")
+    private Boolean mustHave;
 
     private static final long serialVersionUID = 1L;
 }

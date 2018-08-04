@@ -14,10 +14,10 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.dto.SaltCredentialDTO;
-import com.spldeolin.beginningmind.core.service.SecurityUserService;
+import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 
 /**
@@ -28,7 +28,7 @@ import com.spldeolin.beginningmind.core.util.Sessions;
 public class ServiceRealm extends AuthorizingRealm {
 
     @Autowired
-    private SecurityUserService securityUserService;
+    private UserService securityUserService;
 
     /**
      * 认证后授权
@@ -51,7 +51,7 @@ public class ServiceRealm extends AuthorizingRealm {
         // 通过principal查找用户
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String principal = token.getUsername();
-        SecurityUser securityUser = securityUserService.searchOneByPrincipal(principal).orElseThrow(
+        User securityUser = securityUserService.searchOneByPrincipal(principal).orElseThrow(
                 () -> new UnknownAccountException("用户不存在或密码错误"));
         if (!securityUser.getEnableSign()) {
             throw new DisabledAccountException("用户已被禁用");

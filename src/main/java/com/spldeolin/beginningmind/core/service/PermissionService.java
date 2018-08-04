@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.core.service;
 import java.util.List;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.model.SecurityPermission;
+import com.spldeolin.beginningmind.core.model.Permission;
 
 /**
  * “权限”业务
@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.core.model.SecurityPermission;
  * @author Deolin 2018/5/1
  * @generator Cadeau Support
  */
-public interface SecurityPermissionService extends CommonService<SecurityPermission> {
+public interface PermissionService extends CommonService<Permission> {
 
     /**
      * 创建一个“权限” （附带业务校验）
@@ -19,14 +19,14 @@ public interface SecurityPermissionService extends CommonService<SecurityPermiss
      * @param securityPermission 待创建“权限”
      * @return 自增ID
      */
-    Long createEX(SecurityPermission securityPermission);
+    Long createEX(Permission securityPermission);
 
     /**
      * 更新一个“权限” （附带业务校验）
      *
      * @param securityPermission 待更新“权限”
      */
-    void updateEX(SecurityPermission securityPermission);
+    void updateEX(Permission securityPermission);
 
     /**
      * 删除一个“权限”
@@ -50,7 +50,7 @@ public interface SecurityPermissionService extends CommonService<SecurityPermiss
      * @param pageSize 分页尺寸
      * @return Page 分页对象
      */
-    Page<SecurityPermission> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
+    Page<Permission> page(Integer pageNo, Integer pageSize); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
     // 其他方法声明
 

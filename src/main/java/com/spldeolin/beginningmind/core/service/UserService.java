@@ -12,14 +12,14 @@ import java.util.Set;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
+import com.spldeolin.beginningmind.core.model.User;
 
 /**
  * “用户”业务
  *
  * @author Deolin 2018/5/28
  */
-public interface SecurityUserService extends CommonService<SecurityUser> {
+public interface UserService extends CommonService<User> {
 
     /**
      * 创建一个“用户” （附带业务校验）
@@ -27,7 +27,7 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
      * @param securityUser 待创建“用户”
      * @return 自增ID
      */
-    Long createEX(SecurityUser securityUser);
+    Long createEX(User securityUser);
 
     /**
      * 获取一个“用户” （附带业务校验）
@@ -35,14 +35,14 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
      * @param id “用户”的ID
      * @return “用户”
      */
-    SecurityUser getEX(Long id);
+    User getEX(Long id);
 
     /**
      * 更新一个“用户” （附带业务校验）
      *
      * @param securityUser 待更新“用户”
      */
-    void updateEX(SecurityUser securityUser);
+    void updateEX(User securityUser);
 
     /**
      * 删除一个“用户”
@@ -65,12 +65,12 @@ public interface SecurityUserService extends CommonService<SecurityUser> {
      * @param pageParam 页码和每页条目数
      * @return Page 分页对象
      */
-    Page<SecurityUser> page(PageParam pageParam); // 根据具体需求拓展这个方法（追加搜索用参数等）
+    Page<User> page(PageParam pageParam); // 根据具体需求拓展这个方法（追加搜索用参数等）
 
     /**
      * 通过用户名或手机号或email搜索用户
      */
-    Optional<SecurityUser> searchOneByPrincipal(String principal);
+    Optional<User> searchOneByPrincipal(String principal);
 
     /**
      * 获取用户关联到的所有权限

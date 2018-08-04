@@ -7,14 +7,14 @@ package com.spldeolin.beginningmind.core.dao;
 
 import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
-import com.spldeolin.beginningmind.core.model.SecurityUsers2menus;
+import com.spldeolin.beginningmind.core.model.Permission;
 
 /**
- * “用户与菜单的关联”数据库映射
+ * “权限”数据库映射
  *
- * @author Deolin 2018/7/10
+ * @author Deolin 2018/5/15
  */
 @Mapper
-public interface SecurityUsers2menusMapper extends CommonMapper<SecurityUsers2menus> {
+public interface PermissionMapper extends CommonMapper<Permission> {
 
 }

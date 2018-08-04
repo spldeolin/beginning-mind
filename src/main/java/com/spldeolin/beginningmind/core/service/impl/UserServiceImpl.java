@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -26,17 +25,11 @@ import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.dao.SecurityUserMapper;
-import com.spldeolin.beginningmind.core.model.SecurityPermission;
-import com.spldeolin.beginningmind.core.model.SecurityRoles2permissions;
-import com.spldeolin.beginningmind.core.model.SecurityUser;
-import com.spldeolin.beginningmind.core.model.SecurityUsers2permissions;
-import com.spldeolin.beginningmind.core.model.SecurityUsers2roles;
-import com.spldeolin.beginningmind.core.service.SecurityPermissionService;
-import com.spldeolin.beginningmind.core.service.SecurityRoles2permissionsService;
-import com.spldeolin.beginningmind.core.service.SecurityUserService;
-import com.spldeolin.beginningmind.core.service.SecurityUsers2permissionsService;
-import com.spldeolin.beginningmind.core.service.SecurityUsers2rolesService;
+import com.spldeolin.beginningmind.core.dao.UserMapper;
+import com.spldeolin.beginningmind.core.model.Permission;
+import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.service.PermissionService;
+import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
@@ -48,22 +41,13 @@ import tk.mybatis.mapper.entity.Condition;
  */
 @Service
 @Log4j2
-public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> implements SecurityUserService {
+public class UserServiceImpl extends CommonServiceImpl<User> implements UserService {
 
     @Autowired
-    private SecurityUserMapper securityUserMapper;
+    private UserMapper securityUserMapper;
 
     @Autowired
-    private SecurityUsers2rolesService securityUsers2rolesService;
-
-    @Autowired
-    private SecurityRoles2permissionsService securityRoles2permissionsService;
-
-    @Autowired
-    private SecurityUsers2permissionsService securityUsers2permissionsService;
-
-    @Autowired
-    private SecurityPermissionService securityPermissionService;
+    private PermissionService securityPermissionService;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -72,7 +56,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     private FindByIndexNameSessionRepository<? extends Session> finder;
 
     @Override
-    public Long createEX(SecurityUser securityUser) {
+    public Long createEX(User securityUser) {
         checkOccupationForCreating(securityUser);
         // 生成盐与密码
         String salt = StringRandomUtils.generateVisibleAscii(32);
@@ -85,12 +69,12 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     }
 
     @Override
-    public SecurityUser getEX(Long id) {
+    public User getEX(Long id) {
         return super.get(id).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
     }
 
     @Override
-    public void updateEX(SecurityUser securityUser) {
+    public void updateEX(User securityUser) {
         Long id = securityUser.getId();
         if (!isExist(id)) {
             throw new ServiceException("用户不存在或是已被删除");
@@ -117,7 +101,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
 
     @Override
     public String deleteEX(List<Long> ids) {
-        List<SecurityUser> exist = super.get(ids);
+        List<User> exist = super.get(ids);
         if (exist.size() < ids.size()) {
             throw new ServiceException("部分用户不存在或是已被删除");
         }
@@ -131,19 +115,19 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     }
 
     @Override
-    public Page<SecurityUser> page(PageParam pageParam) {
-        Condition condition = new Condition(SecurityUser.class);
+    public Page<User> page(PageParam pageParam) {
+        Condition condition = new Condition(User.class);
         condition.createCriteria();
         pageParam.startPage();
         return Page.wrap(securityUserMapper.selectBatchByCondition(condition));
     }
 
     @Override
-    public Optional<SecurityUser> searchOneByPrincipal(String principal) {
-        Condition condition = new Condition(SecurityUser.class);
+    public Optional<User> searchOneByPrincipal(String principal) {
+        Condition condition = new Condition(User.class);
         condition.createCriteria().orEqualTo("userName", principal).orEqualTo("mobile", principal).orEqualTo("email",
                 principal);
-        List<SecurityUser> securityAccounts = securityUserMapper.selectBatchByCondition(condition);
+        List<User> securityAccounts = securityUserMapper.selectBatchByCondition(condition);
         if (securityAccounts.size() == 0) {
             return Optional.empty();
         }
@@ -153,35 +137,12 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     @Override
     public Set<String> listUserPermissions(Long userId) {
         List<String> result = Lists.newArrayList();
-        Set<String> empty = Sets.newHashSet();
-        // `user`
-        SecurityUser user = this.get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
-        // `user 2 role`
-        List<SecurityUsers2roles> roleAssociations = securityUsers2rolesService.searchBatch("userId", user.getId());
-        if (roleAssociations.size() == 0) {
-            return empty;
-        }
-        // `role 2 perm`
-        List<Long> roleIds = roleAssociations.stream().map(SecurityUsers2roles::getRoleId).collect(Collectors.toList());
-        Condition condition = new Condition(SecurityRoles2permissions.class);
-        condition.createCriteria().andIn("roleId", roleIds);
-        List<SecurityRoles2permissions> permissionAssociations = securityRoles2permissionsService.searchBatch(
-                condition);
-        if (permissionAssociations.size() == 0) {
-            return empty;
-        }
-        List<Long> permissionIds = permissionAssociations.stream().map(
-                SecurityRoles2permissions::getPermissionId).collect(Collectors.toList());
-        // `user 2 permission`
-        permissionIds.addAll(securityUsers2permissionsService.searchBatch("userId", userId).stream().map(
-                SecurityUsers2permissions::getPermissionId).collect(Collectors.toList()));
-        // `perm`
-        List<SecurityPermission> permissions = securityPermissionService.get(permissionIds);
-        if (permissions.size() == 0) {
-            Sets.newHashSet(result);
-        }
+        // 用户
+        User user = this.getEX(userId);
+        // TODO 用户直接、间接被授予的权限
+        List<Permission> permissions = Lists.newArrayList();
         // 过滤器链
-        for (SecurityPermission permission : permissions) {
+        for (Permission permission : permissions) {
             result.add(permission.getName());
         }
         return Sets.newHashSet(result);
@@ -202,7 +163,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
 
     @Override
     public void banPick(Long userId) {
-        SecurityUser securityUser = get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+        User securityUser = get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
         super.update(securityUser.setEnableSign(!securityUser.getEnableSign()));
     }
 
@@ -223,7 +184,7 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     /**
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
-    private void checkOccupationForCreating(SecurityUser securityUser) {
+    private void checkOccupationForCreating(User securityUser) {
         if (searchOne("userName", securityUser.getUsername()).isPresent()) {
             throw new ServiceException("用户名已被占用");
         }
@@ -240,21 +201,21 @@ public class SecurityUserServiceImpl extends CommonServiceImpl<SecurityUser> imp
     /**
      * 更新场合下的用户名、手机号、E-Mail占用校验
      */
-    private void checkOccupationForUpdating(SecurityUser securityUser) {
+    private void checkOccupationForUpdating(User securityUser) {
         Long id = securityUser.getId();
         String username = securityUser.getUsername();
-        if (!id.equals(searchOne("userName", username).orElse(new SecurityUser()).getId())) {
+        if (!id.equals(searchOne("userName", username).orElse(new User()).getId())) {
             throw new ServiceException("用户名已被占用");
         }
         String mobile = securityUser.getMobile();
         if (mobile != null) {
-            if (!id.equals(searchOne("mobile", mobile).orElse(new SecurityUser()).getId())) {
+            if (!id.equals(searchOne("mobile", mobile).orElse(new User()).getId())) {
                 throw new ServiceException("手机号已被占用");
             }
         }
         String email = securityUser.getEmail();
         if (email != null) {
-            if (!id.equals(searchOne("email", email).orElse(new SecurityUser()).getId())) {
+            if (!id.equals(searchOne("email", email).orElse(new User()).getId())) {
                 throw new ServiceException("E-Mail已被占用");
             }
         }

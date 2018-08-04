@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.controller.annotation.Permission;
-import com.spldeolin.beginningmind.core.service.SecurityUserService;
+import com.spldeolin.beginningmind.core.service.UserService;
 
 /**
  * 登录管理
@@ -25,7 +25,7 @@ import com.spldeolin.beginningmind.core.service.SecurityUserService;
 public class SignManagementController {
 
     @Autowired
-    private SecurityUserService securityAccountService;
+    private UserService securityAccountService;
 
     /**
      * 指定用户是否登录中
