@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
@@ -43,29 +44,25 @@ import com.spldeolin.beginningmind.core.service.PermissionService;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
-/**
- * 更新权限表
- *
- * @author Deolin 2018/08/01
- */
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
 @Log4j2
 public class PermissionUpdater {
 
-
-    private final Class[] EXCLUDED_CLASS = {ErrorForwardController.class, SignController.class};
+    private final Class[] EXCLUDED_CLASS = {
+            // error转发
+            ErrorForwardController.class,
+            // 后台登录
+            SignController.class,
+    };
 
     @Autowired
-    private PermissionService securityPermissionService;
-
-//    @Autowired
-//    private SecurityRoles2permissionsService securityRoles2permissionsService;
+    private PermissionService permissionService;
 
     @Test
     public void insert() {
-        String packageName = "com.spldeolin.beginningmind.core.controller";
+        String packageName = "com.spldeolin.beginningmind.core";
         // 获取所有Class
         List<Class> classes = listClasses(packageName, true);
         // 找出所有符合要求的控制器与请求方法
@@ -87,7 +84,7 @@ public class PermissionUpdater {
                 }
             }
         }
-        List<Permission> securityPermissions = new ArrayList<>();
+        List<Permission> permissions = new ArrayList<>();
         // 解析控制器
         for (ControllerDefinition controllerDefinition : controllerDefinitions) {
             Class controller = controllerDefinition.getController();
@@ -99,52 +96,78 @@ public class PermissionUpdater {
             String controllerMapping = checkMappingSepChar(controllerMappings[0]);
 
             for (Method requestMethod : controllerDefinition.getRequestMethods()) {
-                String permissionMapping = controllerMapping + getMapping(requestMethod);
-                permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
-                Authentication permission = requestMethod.getAnnotation(
-                        Authentication.class);
-                String display;
-                if (permission == null) {
-                    //throw new ServiceException("请求方法" + requestMapping + "未声明@Permission");
-                    log.warn("请求方法" + requestMapping + "未声明@Permission，请指定");
-                    //display = permissionMapping.replace('/', ':').substring(1, permissionMapping.length());
-                    continue;
-                } else {
-                    display = permission.display();
+                try {
+                    String permissionMapping = controllerMapping + getMapping(requestMethod);
+                    permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
+                    Authentication authentication = requestMethod.getAnnotation(Authentication.class);
+                    String display;
+                    if (authentication == null) {
+                        throw new ServiceException("请求方法[" + controller.getSimpleName() + "#" +
+                                requestMethod.getName() + "] 未声明@Permission，请指定");
+                    } else {
+                        display = authentication.display();
+                    }
+                    String name = generateNameByMapping(permissionMapping);
+                    Permission permission = Permission.builder().name(name).mapping(
+                            permissionMapping).display(display).menuId(authentication.menuId()).build();
+
+                    // mustHave
+                    permission.setMustHave(authentication.mustHave());
+
+                    // isGetRequest
+                    if (isGetRequestMethod(requestMethod)) {
+                        permission.setIsGetRequest(true);
+                    } else {
+                        permission.setIsGetRequest(false);
+                    }
+
+                    permissions.add(permission);
+                    log.info(permission);
+                } catch (Exception e) {
+                    log.error(e.getMessage());
                 }
-                String name = generateNameByMapping(permissionMapping);
-                Permission securityPermission = Permission.builder().name(name).mapping(
-                        permissionMapping).display(display).menuId(permission.menuId()).mustHave(
-                        permission.mustHave()).build();
-                securityPermissions.add(securityPermission);
-                log.info(securityPermission);
             }
         }
         // 删除接口已经不存在的多余权限
-        List<String> mappings = securityPermissions.stream().map(Permission::getMapping).collect(
+        List<String> mappings = permissions.stream().map(Permission::getMapping).collect(
                 Collectors.toList());
-        for (Permission existPermission : securityPermissionService.listAll()) {
+        for (Permission existPermission : permissionService.listAll()) {
             if (!mappings.contains(existPermission.getMapping())) {
                 log.info("权限[" + existPermission.getMapping() + "] 对应接口已不存在，删除这个权限");
-                Long existPermissionId = existPermission.getId();
-                securityPermissionService.delete(existPermissionId);
-//                // 删除关联关系
-//                securityRoles2permissionsService.delete(securityRoles2permissionsService.searchBatch("permissionId",
-//                        existPermissionId).stream().map(SecurityRoles2permissions::getId).collect(Collectors.toList()));
+                deletePermissionCompletely(existPermission);
             }
         }
         // 插入`security_permission`
-        for (Permission securityPermission : securityPermissions) {
-            String mapping = securityPermission.getMapping();
-            Optional<Permission> existOrNull = securityPermissionService.searchOne("mapping", mapping);
+        for (Permission permission : permissions) {
+            String mapping = permission.getMapping();
+            Optional<Permission> existOrNull = permissionService.searchOne("mapping", mapping);
             if (existOrNull.isPresent()) {
                 log.info("[" + mapping + "] 已存在，更新数据");
-                securityPermissionService.update(securityPermission.setId(existOrNull.get().getId()));
+                permissionService.update(permission.setId(existOrNull.get().getId()));
             } else {
-                securityPermissionService.create(securityPermission);
-                log.info(securityPermission.getDisplay() + "[" + mapping + "] 插入数据库");
+                permissionService.create(permission);
+                log.info(permission.getDisplay() + "[" + mapping + "] 插入数据库");
             }
         }
+    }
+
+    private void deletePermissionCompletely(Permission existPermission) {
+        Long existPermissionId = existPermission.getId();
+        // 删除权限
+        permissionService.delete(existPermissionId);
+        // 删除与角色的关联关系
+//        List<Long> associationsWithRole = securityRoles2permissionsService.searchBatch("permissionId",
+//                existPermissionId).stream().map(SecurityRoles2permissions::getId).collect(Collectors.toList());
+//        if (associationsWithRole.size() > 0) {
+//            securityRoles2permissionsService.delete(associationsWithRole);
+//        }
+        // 删除与用户的关联关系
+//        List<Long> associationsWithUser = securityUsers2permissionsService
+//                .searchBatch("permissionId", existPermissionId).stream().map(SecurityUsers2permissions::getId)
+//                .collect(Collectors.toList());
+//        if (associationsWithUser.size() > 0) {
+//            securityUsers2permissionsService.delete(associationsWithUser);
+//        }
     }
 
     private boolean isContoller(Class clazz) {
@@ -169,6 +192,27 @@ public class PermissionUpdater {
             }
         }
         return isRequestMethod;
+    }
+
+    private boolean isGetRequestMethod(Method method) {
+        boolean isGetRequestMethod = false;
+        for (Annotation annotation : method.getAnnotations()) {
+            if (annotation instanceof GetMapping) {
+                isGetRequestMethod = true;
+            }
+            if (annotation instanceof RequestMapping) {
+                for (RequestMethod requestMethod : ((RequestMapping) annotation).method()) {
+                    if (requestMethod == RequestMethod.GET) {
+                        isGetRequestMethod = true;
+                        break;
+                    }
+                }
+            }
+            if (isGetRequestMethod) {
+                break;
+            }
+        }
+        return isGetRequestMethod;
     }
 
     private String getMapping(Method requestMethod) {
@@ -223,14 +267,6 @@ public class PermissionUpdater {
         return mapping;
     }
 
-    //private String generateUniqueName() {
-    //    String mark = StringRandomUtils.generateLowEnNum(3);
-    //    while (securityPermissionService.searchOne("name", mark).isPresent()) {
-    //        mark = StringRandomUtils.generateLowEnNum(3);
-    //    }
-    //    return mark;
-    //}
-
     private String generateNameByMapping(String mapping) {
         // 删除 *
         String mark = mapping.replace("*", "");
@@ -245,7 +281,7 @@ public class PermissionUpdater {
         }
 
         // / 替换为 :
-        mark = mark.replace("/", ":");
+        mark = mark.replace("/", "_");
         return mark;
     }
 
@@ -339,7 +375,7 @@ public class PermissionUpdater {
         if (!Files.exists(path)) {
             return Collections.emptyList();
         }
-        List<Class<?>> classList = new ArrayList<Class<?>>();
+        List<Class<?>> classList = new ArrayList<>();
         if (Files.isDirectory(path)) {
             if (!recursive) {
                 return Collections.emptyList();
@@ -423,7 +459,7 @@ public class PermissionUpdater {
      * @return 该包名下的所有类
      */
     public List<Class<?>> getClassInJar(JarFile jar, String packageName, boolean recursive) {
-        List<Class<?>> classList = new ArrayList<Class<?>>();
+        List<Class<?>> classList = new ArrayList<>();
         //该迭代器会递归得到该jar底下所有的目录和文件
         Enumeration<JarEntry> iterator = jar.entries();
         while (iterator.hasMoreElements()) {
@@ -463,3 +499,4 @@ public class PermissionUpdater {
     }
 
 }
+
