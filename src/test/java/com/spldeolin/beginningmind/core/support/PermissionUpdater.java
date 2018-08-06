@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.controller.SignController;
-import com.spldeolin.beginningmind.core.controller.annotation.Authentication;
+import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import lombok.Data;
@@ -99,7 +99,7 @@ public class PermissionUpdater {
                 try {
                     String permissionMapping = controllerMapping + getMapping(requestMethod);
                     permissionMapping = permissionMapping.replaceAll("\\{.*}", "*");
-                    Authentication authentication = requestMethod.getAnnotation(Authentication.class);
+                    Authorization authentication = requestMethod.getAnnotation(Authorization.class);
                     String display;
                     if (authentication == null) {
                         throw new ServiceException("请求方法[" + controller.getSimpleName() + "#" +

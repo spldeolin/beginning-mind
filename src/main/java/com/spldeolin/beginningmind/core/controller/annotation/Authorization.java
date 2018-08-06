@@ -20,7 +20,7 @@ import java.lang.annotation.Target;
  */
 @Target({ElementType.FIELD, ElementType.TYPE, ElementType.METHOD})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface Authentication {
+public @interface Authorization {
 
     /**
      * POST类请求展示给用户，必填；
