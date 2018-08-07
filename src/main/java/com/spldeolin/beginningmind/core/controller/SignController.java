@@ -1,7 +1,3 @@
-/*
- * Created by IntelliJ IDEA File Templates.
- */
-
 package com.spldeolin.beginningmind.core.controller;
 
 import javax.validation.Valid;

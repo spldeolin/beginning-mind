@@ -1,7 +1,3 @@
-/*
- * Created by IntelliJ IDEA File Templates.
- */
-
 package com.spldeolin.beginningmind.core.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
