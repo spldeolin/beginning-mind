@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -124,6 +125,31 @@ public class RequestTrack implements Serializable {
      */
     @Column(name = "response_body")
     private String responseBody;
+
+    /**
+     * 请求方法
+     */
+    private Method method;
+
+    /**
+     * 请求体对象在请求方法参数列表中的位置
+     */
+    private Integer requestBodyParameterIndex;
+
+    /**
+     * 请求方法的参数名
+     */
+    private String[] parameterNames;
+
+    /**
+     * 请求方法的参数值
+     */
+    private Object[] parameterValues;
+
+    /**
+     * 请求开始时间
+     */
+    private long processedAt;
 
     private static final long serialVersionUID = 1L;
 
