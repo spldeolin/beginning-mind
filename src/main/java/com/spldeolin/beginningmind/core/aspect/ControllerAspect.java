@@ -94,13 +94,17 @@ public class ControllerAspect {
         if (invalids.size() > 0) {
             throw new ExtraInvalidException().setInvalids(invalids);
         }
+
         // 执行切点
         requestTrack.setProcessedAt(System.currentTimeMillis());
         Object data = point.proceed(requestTrack.getParameterValues());
+
         // 请求成功时保存日志
         requestTrackService.completeAndSaveTrack(requestTrack, request, data);
+
         // 清除Log MDC
         removeLogMDC();
+
         return data;
     }
 
