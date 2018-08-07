@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponseWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder;
-import com.spldeolin.beginningmind.core.util.RequestContextUtils;
+import com.spldeolin.beginningmind.core.util.Requests;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -145,7 +145,7 @@ public class GlobalReturnFilter implements Filter {
     }
 
     private String generateInsigniaEndPart() {
-        return "\"insignia\":\"" + RequestContextUtils.getInsignia() + "\"";
+        return "\"insignia\":\"" + Requests.getInsignia() + "\"";
     }
 
 }

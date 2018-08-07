@@ -27,7 +27,7 @@ import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.model.RequestTrack;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
-import com.spldeolin.beginningmind.core.util.RequestContextUtils;
+import com.spldeolin.beginningmind.core.util.Requests;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
 import lombok.extern.log4j.Log4j2;
@@ -70,12 +70,12 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        HttpServletRequest request = RequestContextUtils.request();
+        HttpServletRequest request = Requests.request();
 
         // 解析切点，并存入request
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
         RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, request, signedUserId);
-        RequestContextUtils.setRequestTrack(requestTrack);
+        Requests.setRequestTrack(requestTrack);
 
         // 设置Log MDC
         setLogMDC();
@@ -106,10 +106,10 @@ public class ControllerAspect {
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
-        RequestTrack track = RequestContextUtils.getRequestTrack();
-        // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不时Controller，所以无法记录日志
+        RequestTrack track = Requests.getRequestTrack();
+        // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不是Controller，所以无法记录日志
         if (track != null) {
-            requestTrackService.completeAndSaveTrack(track, RequestContextUtils.request(), requestResult);
+            requestTrackService.completeAndSaveTrack(track, Requests.request(), requestResult);
         }
         // 清除Log MDC
         removeLogMDC();
@@ -117,7 +117,7 @@ public class ControllerAspect {
 
     private void setLogMDC() {
         ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA,
-                "[" + RequestContextUtils.getInsignia() + "]");
+                "[" + Requests.getInsignia() + "]");
     }
 
     private void removeLogMDC() {
