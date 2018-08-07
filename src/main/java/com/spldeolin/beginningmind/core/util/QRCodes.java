@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.core.util;
 
+import static com.spldeolin.beginningmind.core.constant.Abbreviation.utf8;
+
 import java.awt.BasicStroke;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -9,7 +11,6 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.OutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import com.google.zxing.BarcodeFormat;
@@ -69,7 +70,7 @@ public class QRCodes {
     private static BufferedImage createImage(String content, String logoPath, boolean needCompress) throws Exception {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
         hints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
-        hints.put(EncodeHintType.CHARACTER_SET, StandardCharsets.UTF_8);
+        hints.put(EncodeHintType.CHARACTER_SET, utf8);
         hints.put(EncodeHintType.MARGIN, 1);
         BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, QRCODE_SIZE, QRCODE_SIZE,
                 hints);
@@ -248,7 +249,7 @@ public class QRCodes {
         BufferedImageLuminanceSource source = new BufferedImageLuminanceSource(image);
         BinaryBitmap bitmap = new BinaryBitmap(new HybridBinarizer(source));
         Hashtable<DecodeHintType, Object> hints = new Hashtable<>();
-        hints.put(DecodeHintType.CHARACTER_SET, StandardCharsets.UTF_8);
+        hints.put(DecodeHintType.CHARACTER_SET, utf8);
         Result result = new MultiFormatReader().decode(bitmap, hints);
         String resultStr = result.getText();
         return resultStr;

@@ -1,6 +1,8 @@
 package com.spldeolin.beginningmind.core.constant;
 
 import java.io.File;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import org.springframework.objenesis.Objenesis;
 import org.springframework.objenesis.ObjenesisStd;
 
@@ -28,5 +30,10 @@ public interface Abbreviation {
      * Objenesis对象
      */
     Objenesis objs = new ObjenesisStd(true);
+
+    /**
+     * UTF-8编码
+     */
+    Charset utf8 = StandardCharsets.UTF_8;
 
 }
