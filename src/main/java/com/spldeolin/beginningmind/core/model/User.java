@@ -88,4 +88,5 @@ public class User implements Serializable {
     private Boolean enableSign;
 
     private static final long serialVersionUID = 1L;
+
 }

@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
@@ -97,18 +96,6 @@ public class RequestTrack implements Serializable {
     private Long processingMilliseconds;
 
     /**
-     * 请求体
-     */
-    @Column(name = "request_body")
-    private String requestBody;
-
-    /**
-     * 返回值
-     */
-    @Column(name = "response_body")
-    private String responseBody;
-
-    /**
      * 登录者用户ID
      */
     @Column(name = "signed_user_id")
@@ -127,26 +114,16 @@ public class RequestTrack implements Serializable {
     private String signedUserMobile;
 
     /**
-     * 请求方法
+     * 请求体
      */
-    private Method method;
-
-    private Integer requestBodyParameterIndex;
-
-    /**
-     * 请求方法的参数名
-     */
-    private String[] parameterNames;
+    @Column(name = "request_body")
+    private String requestBody;
 
     /**
-     * 请求方法的参数值
+     * 返回值
      */
-    private Object[] parameterValues;
-
-    /**
-     * 请求开始时间
-     */
-    private long processedAt;
+    @Column(name = "response_body")
+    private String responseBody;
 
     private static final long serialVersionUID = 1L;
 
