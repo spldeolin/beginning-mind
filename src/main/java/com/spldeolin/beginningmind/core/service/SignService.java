@@ -35,7 +35,7 @@ import lombok.SneakyThrows;
 @Service
 public class SignService {
 
-    private static final String CAPTCHA = "{CAPTCHA}";
+    private static final String CAPTCHA = "com.spldeolin.beginningmind.core.service.SignService.CAPTCHA";
 
     @Autowired
     private UserService securityAccountService;
