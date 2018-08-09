@@ -143,11 +143,6 @@ public class RequestTrack implements Serializable {
     private Method method;
 
     /**
-     * 请求体对象在请求方法参数列表中的位置
-     */
-    private Integer requestBodyParameterIndex;
-
-    /**
      * 请求方法的参数名
      */
     private String[] parameterNames;

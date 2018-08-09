@@ -72,9 +72,9 @@ public class ControllerAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         HttpServletRequest request = Requests.request();
 
-        // 解析切点，并存入request
+        // 解析切点
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
-        RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, request, signedUserId);
+        RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, signedUserId);
         Requests.setRequestTrack(requestTrack);
 
         // 设置Log MDC

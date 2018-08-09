@@ -8,7 +8,6 @@ package com.spldeolin.beginningmind.core.service.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Map.Entry;
@@ -43,7 +42,7 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     private UserService userService;
 
     @Override
-    public RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, HttpServletRequest request, Long userId) {
+    public RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId) {
         RequestTrack track = new RequestTrack();
 
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
@@ -60,13 +59,6 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
         track.setUserId(userId);
 
         track.setMethod(requestMethod);
-
-        Parameter[] parameters = requestMethod.getParameters();
-        for (int i = 0; i < parameters.length; i++) {
-            if (isRequestBody(parameters[i])) {
-                track.setRequestBodyParameterIndex(i);
-            }
-        }
 
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
         track.setParameterNames(parameterNames);
@@ -105,30 +97,29 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
             User user = userService.getEX(track.getUserId());
             track.setUserName(user.getName());
             track.setUserMobile(user.getMobile());
-        } else {
-            track.setUserName("");
-            track.setUserMobile("");
         }
 
         track.setIp(getIpFromRequest(request));
 
-        Object requestBodyParameterValue = null;
-        Annotation[][] annotations = track.getMethod().getParameterAnnotations();
-        outter:
+        Object requestBodyValue = getRequestBodyValueByAnnotation(track.getParameterValues(), track.getMethod());
+        if (requestBodyValue != null) {
+            track.setRequestBody(Jsons.toJson(requestBodyValue));
+        } else {
+            track.setRequestBody("");
+        }
+    }
+
+    private Object getRequestBodyValueByAnnotation(Object[] parameterValues, Method method) {
+        Annotation[][] annotations = method.getParameterAnnotations();
         for (int parameterIndex = 0; parameterIndex < annotations.length; parameterIndex++) {
             Annotation[] annotationsEachParameter = annotations[parameterIndex];
             for (Annotation annotation : annotationsEachParameter) {
                 if (annotation instanceof RequestBody) {
-                    requestBodyParameterValue = track.getParameterValues()[parameterIndex];
-                    break outter;
+                    return parameterValues[parameterIndex];
                 }
             }
         }
-        if (requestBodyParameterValue != null) {
-            track.setRequestBody(Jsons.toJson(requestBodyParameterValue));
-        } else {
-            track.setRequestBody("");
-        }
+        return null;
     }
 
     private RequestResult ensureRequestResult(Object object) {
@@ -136,19 +127,6 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
             return (RequestResult) object;
         }
         return RequestResult.success(object);
-    }
-
-    private boolean isRequestBody(Parameter parameter) {
-        return hasAnnotation(parameter, RequestBody.class);
-    }
-
-    private boolean hasAnnotation(Parameter parameter, Class<? extends Annotation> annotationType) {
-        for (Annotation annotation : parameter.getAnnotations()) {
-            if (annotation.getClass() == annotationType) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private String getFullUrlFromRequest(HttpServletRequest request) {

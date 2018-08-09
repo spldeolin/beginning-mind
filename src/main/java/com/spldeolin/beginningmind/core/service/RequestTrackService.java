@@ -20,9 +20,9 @@ import com.spldeolin.beginningmind.core.model.RequestTrack;
 public interface RequestTrackService extends CommonService<RequestTrack> {
 
     /**
-     * 设置 切点、Request、登录者ID，生成请求轨迹
+     * 设置 切点、登录者ID，生成请求轨迹
      */
-    RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, HttpServletRequest request, Long userId);
+    RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId);
 
     /**
      * 补全请求轨迹信息，并保存请求轨迹
