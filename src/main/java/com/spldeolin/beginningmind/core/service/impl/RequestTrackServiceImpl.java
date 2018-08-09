@@ -110,6 +110,8 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
             track.setUserMobile("");
         }
 
+        track.setIp(getIpFromRequest(request));
+
         Object requestBodyParameterValue = null;
         Annotation[][] annotations = track.getMethod().getParameterAnnotations();
         outter:
@@ -164,6 +166,23 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
             }
         }
         return url.toString().replaceFirst("&", "?");
+    }
+
+    public String getIpFromRequest(HttpServletRequest request) {
+        String ip = request.getHeader("x-forwarded-for");
+        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("Proxy-Client-IP");
+        }
+        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getHeader("X-Real-IP");
+        }
+        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
+            ip = request.getRemoteAddr();
+        }
+        return ip;
     }
 
 }

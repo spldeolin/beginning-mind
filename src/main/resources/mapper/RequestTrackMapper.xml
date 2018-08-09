@@ -10,7 +10,7 @@
         <result column="inserted_at" jdbcType="TIMESTAMP" property="insertedAt"/>
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="deletion_flag" jdbcType="BIGINT" property="deletionFlag"/>
-        <result column="insignia" jdbcType="VARCHAR" property="insignia"/>
+        <result column="insignia" jdbcType="CHAR" property="insignia"/>
         <result column="date" jdbcType="DATE" property="date"/>
         <result column="time" jdbcType="TIME" property="time"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
@@ -21,6 +21,7 @@
         <result column="user_id" jdbcType="BIGINT" property="userId"/>
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="user_mobile" jdbcType="CHAR" property="userMobile"/>
+        <result column="ip" jdbcType="VARCHAR" property="ip"/>
         <result column="request_body" jdbcType="LONGVARCHAR" property="requestBody"/>
         <result column="response_body" jdbcType="LONGVARCHAR" property="responseBody"/>
     </resultMap>

@@ -115,6 +115,11 @@ public class RequestTrack implements Serializable {
     private String userName;
 
     /**
+     * 请求者IP
+     */
+    private String ip;
+
+    /**
      * 登录者用户手机
      */
     @Column(name = "user_mobile")
