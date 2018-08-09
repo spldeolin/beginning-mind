@@ -2,7 +2,9 @@ package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -63,10 +65,14 @@ public class RequestTrack implements Serializable {
     private String insignia;
 
     /**
-     * 请求时间
+     * 收到请求的日期
      */
-    @Column(name = "requested_at")
-    private LocalDateTime requestedAt;
+    private LocalDate date;
+
+    /**
+     * 收到请求的时间
+     */
+    private LocalTime time;
 
     /**
      * URL
@@ -99,20 +105,20 @@ public class RequestTrack implements Serializable {
     /**
      * 登录者用户ID
      */
-    @Column(name = "signed_user_id")
-    private Long signedUserId;
+    @Column(name = "user_id")
+    private Long userId;
 
     /**
      * 登录者用户名
      */
-    @Column(name = "signed_user_name")
-    private String signedUserName;
+    @Column(name = "user_name")
+    private String userName;
 
     /**
      * 登录者用户手机
      */
-    @Column(name = "signed_user_mobile")
-    private String signedUserMobile;
+    @Column(name = "user_mobile")
+    private String userMobile;
 
     /**
      * 请求体

@@ -9,7 +9,8 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
@@ -47,14 +48,16 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
 
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
 
-        track.setRequestedAt(LocalDateTime.now());
+        track.setDate(LocalDate.now());
+
+        track.setTime(LocalTime.now());
 
         track.setController(joinPoint.getTarget().getClass().getSimpleName());
 
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         track.setRequestMethod(requestMethod.getName());
 
-        track.setSignedUserId(userId);
+        track.setUserId(userId);
 
         track.setMethod(requestMethod);
 
@@ -97,14 +100,14 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
 
         track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
 
-        Long signedUserId = track.getSignedUserId();
+        Long signedUserId = track.getUserId();
         if (signedUserId != null) {
-            User user = userService.getEX(track.getSignedUserId());
-            track.setSignedUserName(user.getName());
-            track.setSignedUserMobile(user.getMobile());
+            User user = userService.getEX(track.getUserId());
+            track.setUserName(user.getName());
+            track.setUserMobile(user.getMobile());
         } else {
-            track.setSignedUserName("");
-            track.setSignedUserMobile("");
+            track.setUserName("");
+            track.setUserMobile("");
         }
 
         Object requestBodyParameterValue = null;

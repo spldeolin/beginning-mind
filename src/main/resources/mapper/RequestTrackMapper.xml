@@ -11,15 +11,16 @@
         <result column="updated_at" jdbcType="TIMESTAMP" property="updatedAt"/>
         <result column="deletion_flag" jdbcType="BIGINT" property="deletionFlag"/>
         <result column="insignia" jdbcType="VARCHAR" property="insignia"/>
-        <result column="requested_at" jdbcType="TIMESTAMP" property="requestedAt"/>
+        <result column="date" jdbcType="DATE" property="date"/>
+        <result column="time" jdbcType="TIME" property="time"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="http_method" jdbcType="VARCHAR" property="httpMethod"/>
         <result column="controller" jdbcType="VARCHAR" property="controller"/>
         <result column="request_method" jdbcType="VARCHAR" property="requestMethod"/>
         <result column="processing_milliseconds" jdbcType="BIGINT" property="processingMilliseconds"/>
-        <result column="signed_user_id" jdbcType="BIGINT" property="signedUserId"/>
-        <result column="signed_user_name" jdbcType="VARCHAR" property="signedUserName"/>
-        <result column="signed_user_mobile" jdbcType="CHAR" property="signedUserMobile"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="user_name" jdbcType="VARCHAR" property="userName"/>
+        <result column="user_mobile" jdbcType="CHAR" property="userMobile"/>
         <result column="request_body" jdbcType="LONGVARCHAR" property="requestBody"/>
         <result column="response_body" jdbcType="LONGVARCHAR" property="responseBody"/>
     </resultMap>
