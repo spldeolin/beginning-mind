@@ -120,6 +120,12 @@ public class RequestTrack implements Serializable {
     private String ip;
 
     /**
+     * 项目启动时指定的profile
+     */
+    @Column(name = "active_profile")
+    private String activeProfile;
+
+    /**
      * 登录者用户手机
      */
     @Column(name = "user_mobile")

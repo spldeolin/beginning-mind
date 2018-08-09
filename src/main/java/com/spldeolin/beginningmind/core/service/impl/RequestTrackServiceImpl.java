@@ -16,6 +16,7 @@ import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -37,6 +38,9 @@ import lombok.extern.log4j.Log4j2;
 @Service
 @Log4j2
 public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> implements RequestTrackService {
+
+    @Autowired
+    private Environment environment;
 
     @Autowired
     private UserService userService;
@@ -100,6 +104,8 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
         }
 
         track.setIp(getIpFromRequest(request));
+
+        track.setActiveProfile(environment.getActiveProfiles()[0]);
 
         Object requestBodyValue = getRequestBodyValueByAnnotation(track.getParameterValues(), track.getMethod());
         if (requestBodyValue != null) {

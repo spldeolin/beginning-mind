@@ -22,6 +22,7 @@
         <result column="user_name" jdbcType="VARCHAR" property="userName"/>
         <result column="user_mobile" jdbcType="CHAR" property="userMobile"/>
         <result column="ip" jdbcType="VARCHAR" property="ip"/>
+        <result column="active_profile" jdbcType="VARCHAR" property="activeProfile"/>
         <result column="request_body" jdbcType="LONGVARCHAR" property="requestBody"/>
         <result column="response_body" jdbcType="LONGVARCHAR" property="responseBody"/>
     </resultMap>
