@@ -25,7 +25,7 @@ public class SwaggerConfig {
                 .enable(coreProperties.isDebug())    // 启用/禁用开关
                 .apiInfo(apiInfo())
                 .select()
-                .apis(RequestHandlerSelectors.basePackage("com.spldeolin.beginningmind"))
+                .apis(RequestHandlerSelectors.basePackage("com.spldeolin.beginningmind.core"))
                 .paths(PathSelectors.any())
                 .build();
     }
