@@ -44,18 +44,19 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     @Override
     public RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, HttpServletRequest request, Long userId) {
         RequestTrack track = new RequestTrack();
-        Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
-        Object[] parameterValues = joinPoint.getArgs();
-        track.setMethod(requestMethod);
-        track.setParameterNames(parameterNames);
-        track.setParameterValues(parameterValues);
+
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
+
         track.setRequestedAt(LocalDateTime.now());
-        track.setUrl(request.getRequestURI());
-        track.setHttpMethod(request.getMethod());
+
         track.setController(joinPoint.getTarget().getClass().getSimpleName());
+
+        Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         track.setRequestMethod(requestMethod.getName());
+
+        track.setSignedUserId(userId);
+
+        track.setMethod(requestMethod);
 
         Parameter[] parameters = requestMethod.getParameters();
         for (int i = 0; i < parameters.length; i++) {
@@ -64,7 +65,11 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
             }
         }
 
-        track.setSignedUserId(userId);
+        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
+        track.setParameterNames(parameterNames);
+
+        Object[] parameterValues = joinPoint.getArgs();
+        track.setParameterValues(parameterValues);
 
         return track;
     }
@@ -74,7 +79,6 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, Object dataObject) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
-
         super.create(track);
     }
 
@@ -83,25 +87,25 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(requestResult));
-
         super.create(track);
     }
 
     private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {
-        StringBuilder url = new StringBuilder(64);
-        url.append(track.getUrl());
-        for (Entry<String, String[]> queryValuesEachKey : request.getParameterMap().entrySet()) {
-            String queryKey = queryValuesEachKey.getKey();
-            for (String queryValue : queryValuesEachKey.getValue()) {
-                if (queryValue != null) {
-                    url.append("&");
-                    url.append(queryKey);
-                    url.append("=");
-                    url.append(queryValue);
-                }
-            }
+        track.setUrl(getFullUrlFromRequest(request));
+
+        track.setHttpMethod(request.getMethod());
+
+        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
+
+        Long signedUserId = track.getSignedUserId();
+        if (signedUserId != null) {
+            User user = userService.getEX(track.getSignedUserId());
+            track.setSignedUserName(user.getName());
+            track.setSignedUserMobile(user.getMobile());
+        } else {
+            track.setSignedUserName("");
+            track.setSignedUserMobile("");
         }
-        track.setUrl(url.toString().replaceFirst("&", "?"));
 
         Object requestBodyParameterValue = null;
         Annotation[][] annotations = track.getMethod().getParameterAnnotations();
@@ -120,19 +124,6 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
         } else {
             track.setRequestBody("");
         }
-
-        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
-
-        Long signedUserId = track.getSignedUserId();
-        if (signedUserId != null) {
-            User user = userService.getEX(track.getSignedUserId());
-            track.setSignedUserName(user.getName());
-            track.setSignedUserMobile(user.getMobile());
-        } else {
-            track.setSignedUserName("");
-            track.setSignedUserMobile("");
-        }
-
     }
 
     private RequestResult ensureRequestResult(Object object) {
@@ -153,6 +144,23 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
             }
         }
         return false;
+    }
+
+    private String getFullUrlFromRequest(HttpServletRequest request) {
+        StringBuilder url = new StringBuilder(64);
+        url.append(request.getRequestURL());
+        for (Entry<String, String[]> queryValuesEachKey : request.getParameterMap().entrySet()) {
+            String queryKey = queryValuesEachKey.getKey();
+            for (String queryValue : queryValuesEachKey.getValue()) {
+                if (queryValue != null) {
+                    url.append("&");
+                    url.append(queryKey);
+                    url.append("=");
+                    url.append(queryValue);
+                }
+            }
+        }
+        return url.toString().replaceFirst("&", "?");
     }
 
 }
