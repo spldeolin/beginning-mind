@@ -76,7 +76,9 @@ public class RedisCache {
     }
 
     /**
-     * 删除缓存的失效时间，使缓存永远有效（TODO key不存在？）
+     * 删除缓存的失效时间，使缓存永远有效
+     *
+     * 缓存不存在返回false
      */
     public Boolean deleteExpire(String key) {
         return redisTemplate.persist(key);
@@ -84,16 +86,12 @@ public class RedisCache {
 
     /**
      * 获取缓存的剩余失效时间（TODO key不存在？）
+     *
+     * 缓存不存在则返回-2
+     * 缓存永久有效则返回-1
      */
     public Long getExpire(String key, TimeUnit unit) {
         return redisTemplate.getExpire(key, unit);
-    }
-
-    /**
-     * 获取缓存的剩余失效时间（TODO key不存在？）（TODO 时间单位是什么？）
-     */
-    public Long getExpire(String key) {
-        return redisTemplate.getExpire(key);
     }
 
     /**

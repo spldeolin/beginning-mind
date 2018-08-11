@@ -73,7 +73,21 @@ public class RedisCacheTest {
     @Test
     @SneakyThrows
     public void ln75() {
-        log.info(redisCache.move("test:d7", 1));
+        redisCache.setEx("test:d9", "临时", 100, TimeUnit.SECONDS);
+        log.info(redisCache.deleteExpire("test:d9"));
+    }
+
+    @Test
+    @SneakyThrows
+    public void ln82() {
+        log.info(redisCache.getExpire("test:d19", TimeUnit.SECONDS));
+    }
+
+    @Test
+    @SneakyThrows
+    public void ln88() {
+        redisCache.setEx("test:d19", "han字", 5000, TimeUnit.MILLISECONDS);
+        log.info(redisCache.getExpire("test:d19"));
     }
 
 }
