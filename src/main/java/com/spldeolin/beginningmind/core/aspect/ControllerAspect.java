@@ -18,7 +18,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.api.EnsureStringFieldsTrimmed;
+import com.spldeolin.beginningmind.core.api.ControllerAspectPreprocess;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
@@ -158,9 +158,9 @@ public class ControllerAspect {
 
     private void trimStringFields(RequestTrack requestTrack) {
         for (Object parameterValue : requestTrack.getParameterValues()) {
-            if (parameterValue instanceof EnsureStringFieldsTrimmed) {
-                EnsureStringFieldsTrimmed ensureStringFieldsTrimmed = (EnsureStringFieldsTrimmed) parameterValue;
-                ensureStringFieldsTrimmed.trimStringFields();
+            if (parameterValue instanceof ControllerAspectPreprocess) {
+                ControllerAspectPreprocess controllerAspectPreprocess = (ControllerAspectPreprocess) parameterValue;
+                controllerAspectPreprocess.nullToEmptyAndTrim();
             }
         }
     }
