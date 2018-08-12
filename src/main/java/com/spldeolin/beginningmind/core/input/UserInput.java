@@ -8,8 +8,8 @@ package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.Length;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.core.model.User;
 import lombok.Data;
@@ -37,46 +37,28 @@ public class UserInput implements Serializable {
     /**
      * 名字
      */
-    @Length(max = 255)
+    @Size(max = 255)
     private String name;
 
     /**
      * 手机号
      */
-    @Length(max = 20)
+    @Size(max = 20)
     @Mobile
     private String mobile;
 
     /**
      * E-mail
      */
-    @Length(max = 255)
+    @Size(max = 255)
     @Email
     private String email;
-
-    /**
-     * 密码
-     */
-    @Length(max = 128)
-    private String password;
-
-    /**
-     * 盐
-     */
-    @Length(max = 32)
-    private String salt;
-
-    /**
-     * 能否登录
-     */
-    private Boolean enableSign;
 
     private static final long serialVersionUID = 1L;
 
     public User toModel() {
-        return User.builder().id(id).updatedAt(updatedAt).name(name).mobile(mobile).email(email).password(password)
-                .salt(salt).enableSign(enableSign).build();
+        return User.builder().id(id).updatedAt(updatedAt).name(name).mobile(mobile).email(email).build();
     }
 
 }
-// id, updatedAt, name, mobile, email, password, salt, enableSign
+// id, updatedAt, name, mobile, email
