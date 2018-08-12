@@ -84,6 +84,8 @@ core:
 
   address: 占位符
 
+  redis-namespace: beginningmind
+
   time:
     default-date-pattern: yyyy-MM-dd
     default-time-pattern: HH:mm:ss

@@ -22,14 +22,14 @@ public class CoreProperties {
     private boolean debug;
 
     /**
-     * “一个曲奇”
-     */
-    private String oneCookie;
-
-    /**
      * 本项目的访问地址（IP:端口号，e.g.: http:localhost:2333）
      */
     private String address;
+
+    /**
+     * Redis缓存的key命名空间
+     */
+    private String redisNamespace;
 
     /**
      * “时间”格式
