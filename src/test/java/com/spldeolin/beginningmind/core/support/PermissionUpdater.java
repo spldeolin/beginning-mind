@@ -62,7 +62,7 @@ public class PermissionUpdater {
 
     @Test
     public void insert() {
-        String packageName = "com.spldeolin.beginningmind";
+        String packageName = "com.spldeolin.beginningmind.core";
         // 获取所有Class
         List<Class> classes = listClasses(packageName, true);
         // 找出所有符合要求的控制器与请求方法

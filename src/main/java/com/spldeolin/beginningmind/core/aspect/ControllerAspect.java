@@ -53,9 +53,9 @@ public class ControllerAspect {
     private RequestTrackService requestTrackService;
 
     /**
-     * Spring可扫描的， com.spldeolin.beginningmind.*.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
+     * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
      */
-    @Pointcut("execution(* com.spldeolin.beginningmind.*.controller..*.*(..))" +
+    @Pointcut("execution(* com.spldeolin.beginningmind.core.controller..*.*(..))" +
             " && @within(org.springframework.web.bind.annotation.RestController)")
     public void controllerMethod() {
     }
