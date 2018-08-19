@@ -78,6 +78,7 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, Object dataObject) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
+        log.info("异步创建请求轨迹 {}", track);
         super.create(track);
     }
 
@@ -86,6 +87,7 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(requestResult));
+        log.info("异步创建请求轨迹 {}", track);
         super.create(track);
     }
 

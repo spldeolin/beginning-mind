@@ -186,6 +186,9 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(ServiceException.class)
     public RequestResult handle(ServiceException e) {
+        if (coreProperties.isDebug()) {
+            log.error(e);
+        }
         return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
     }
 
