@@ -5,9 +5,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.redis.RedisCache;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
@@ -22,16 +23,17 @@ import lombok.extern.log4j.Log4j2;
 public class RedisChecker {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    private RedisCache redisCache;
 
     @Test
     @SneakyThrows
     public void t() {
-        redisTemplate.opsForValue().set("one-cookie", "曲奇", 10, TimeUnit.SECONDS);
+        redisCache.set("one-cookie", User.builder().name("曲奇").build(), 100, TimeUnit.SECONDS);
 
-        log.info(redisTemplate.opsForValue().get("one-cookie"));
+        User user = redisCache.get("one-cookie");
+        log.info(user);
 
-        redisTemplate.delete("one-cookie"); //break point
+        redisCache.delete("one-cookie"); //break point
 
         log.info("结束");
     }
