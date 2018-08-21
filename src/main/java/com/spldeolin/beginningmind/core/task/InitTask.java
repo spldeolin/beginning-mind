@@ -40,7 +40,7 @@ public class InitTask implements CommandLineRunner {
         mappingAppendContextPath();
 
         // 确保file.mapping以 / 开头和结尾，确保file.location以 / 结尾
-        validateProperties();
+        ensureMappingAndLocationStartEndWithVirgule();
 
         // 确保本地目录存在
         ensureDirectoryExist();
@@ -65,16 +65,19 @@ public class InitTask implements CommandLineRunner {
         }
     }
 
-    public void validateProperties() {
+    public void ensureMappingAndLocationStartEndWithVirgule() {
         CoreProperties.File file = coreProperties.getFile();
-        if (!file.getMapping().endsWith("/")) {
-            throw new IllegalArgumentException("core.file.mapping必须以 / 结尾");
+        String mapping = file.getMapping();
+        String location = file.getLocation();
+
+        if (!mapping.endsWith("/")) {
+            file.setMapping(mapping + "/");
+        }
+        if (!mapping.startsWith("/")) {
+            file.setMapping("/" + mapping);
         }
         if (!file.getLocation().endsWith("/")) {
-            throw new IllegalArgumentException("core.file.location必须以 / 结尾");
-        }
-        if (!file.getMapping().startsWith("/")) {
-            throw new IllegalArgumentException("core.file.mapping必须以 / 开头");
+            file.setMapping(location + "/");
         }
     }
 
