@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.config;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.UUID;
 import javax.servlet.Filter;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -21,9 +22,9 @@ import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.controller.SignController;
 import com.spldeolin.beginningmind.core.controller.TestController;
 import com.spldeolin.beginningmind.core.model.Permission;
+import com.spldeolin.beginningmind.core.redis.RedisCache;
 import com.spldeolin.beginningmind.core.security.SaltCredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
-import com.spldeolin.beginningmind.core.security.TempTokenHolder;
 import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
 import com.spldeolin.beginningmind.core.security.filter.SignFilter;
@@ -39,10 +40,10 @@ public class ShiroConfig {
     private CoreProperties coreProperties;
 
     @Autowired
-    private TempTokenHolder tempTokenHolder;
+    private PermissionService securityPermissionService;
 
     @Autowired
-    private PermissionService securityPermissionService;
+    private RedisCache redisCache;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -61,7 +62,7 @@ public class ShiroConfig {
     private Map<String, Filter> createFilters() {
         Map<String, Filter> filters = new HashMap<>();
         filters.put(SignFilter.MARK, new SignFilter());
-        filters.put(ActuatorFilter.MARK, new ActuatorFilter(tempTokenHolder));
+        filters.put(ActuatorFilter.MARK, new ActuatorFilter(UUID.randomUUID().toString()));
         return filters;
     }
 

@@ -6,8 +6,6 @@ import org.apache.shiro.web.filter.AccessControlFilter;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.security.AjaxUtils;
-import com.spldeolin.beginningmind.core.security.TempTokenHolder;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -17,17 +15,20 @@ import lombok.extern.log4j.Log4j2;
  * </pre>
  */
 @Log4j2
-@AllArgsConstructor
 public class ActuatorFilter extends AccessControlFilter {
 
     public static final String MARK = "actuator";
 
-    private TempTokenHolder tempTokenHolder;
+    private String actuatorToken;
+
+    public ActuatorFilter(String actuatorToken) {
+        this.actuatorToken = actuatorToken;
+    }
 
     @Override
     protected boolean isAccessAllowed(ServletRequest req, ServletResponse resp, Object mappedValue) {
         String token = req.getParameter("token");
-        return tempTokenHolder.getActuatorToken().equals(token);
+        return actuatorToken.equals(token);
     }
 
     // 如果isAccessAllowed()返回false，则调用这个方法
