@@ -135,7 +135,7 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://root:root@localhost:27017/beginning_mind
+      uri: mongodb://beginning_mind_app:beginning_mind_app@localhost:27017/beginning_mind
 
   activemq:
     broker-url: tcp://127.0.0.1:61616
