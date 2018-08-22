@@ -101,7 +101,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public String deleteEX(List<Long> ids) {
-        List<User> exist = super.get(ids);
+        List<User> exist = super.list(ids);
         if (exist.size() < ids.size()) {
             throw new ServiceException("部分用户不存在或是已被删除");
         }

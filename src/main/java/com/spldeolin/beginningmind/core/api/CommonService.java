@@ -36,7 +36,7 @@ public interface CommonService<M> {
      * @param ids 资源ID列表
      * @return 资源列表
      */
-    List<M> get(List<Long> ids);
+    List<M> list(List<Long> ids);
 
     /**
      * 获取多个资源，并以资源ID为key，组成映射表
@@ -44,7 +44,7 @@ public interface CommonService<M> {
      * @param ids 资源ID列表
      * @return 资源映射表
      */
-    Map<Long, M> getAsMap(List<Long> ids);
+    Map<Long, M> map(List<Long> ids);
 
     /**
      * 获取全部资源

@@ -49,7 +49,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     }
 
     @Override
-    public List<M> get(List<Long> ids) {
+    public List<M> list(List<Long> ids) {
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
@@ -59,12 +59,12 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     }
 
     @Override
-    public Map<Long, M> getAsMap(List<Long> ids) {
+    public Map<Long, M> map(List<Long> ids) {
         if (!isIdGetable) {
             throw new ServiceException(clazz.getSimpleName() + " 不含有ID属性");
         }
 
-        return listToMap(get(ids));
+        return listToMap(list(ids));
     }
 
     @Override

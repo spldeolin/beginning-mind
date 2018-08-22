@@ -56,7 +56,7 @@ public class PermissionServiceImpl extends CommonServiceImpl<Permission> impleme
 
     @Override
     public String deleteEX(List<Long> ids) {
-        List<Permission> exist = super.get(ids);
+        List<Permission> exist = super.list(ids);
         if (exist.size() == 0) {
             throw new ServiceException("选中的权限全部不存在或是已被删除");
         }
