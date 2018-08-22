@@ -2,10 +2,14 @@ package com.spldeolin.beginningmind.core.api;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.google.common.collect.Maps;
+import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -17,10 +21,13 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     private Class<M> clazz;
 
+    private boolean isIdGetable;
+
     @SuppressWarnings("unchecked")
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         clazz = (Class<M>) pt.getActualTypeArguments()[0];
+        isIdGetable = ArrayUtils.contains(clazz.getInterfaces(), IdGetable.class);
     }
 
     @Override
@@ -46,8 +53,18 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
+
         String idsSQL = Strings.join(ids, ',');
         return mapper.selectBatchByIds(idsSQL);
+    }
+
+    @Override
+    public Map<Long, M> getAsMap(List<Long> ids) {
+        if (!isIdGetable) {
+            throw new ServiceException(clazz.getSimpleName() + " 不含有ID属性");
+        }
+
+        return listToMap(get(ids));
     }
 
     @Override
@@ -112,6 +129,15 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     }
 
     @Override
+    public Map<Long, M> mapAll() {
+        if (!isIdGetable) {
+            throw new ServiceException(clazz.getSimpleName() + " 不含有ID属性");
+        }
+
+        return listToMap(listAll());
+    }
+
+    @Override
     public boolean isExist(Long id) {
         Condition condition = new Condition(clazz);
         condition.selectProperties("id");
@@ -137,6 +163,12 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             throw new TooManyResultsException("满足条件的资源不止一个");
         }
         return Optional.of(models.get(0));
+    }
+
+    private Map<Long, M> listToMap(List<M> list) {
+        Map<Long, M> map = Maps.newHashMapWithExpectedSize(list.size());
+        list.forEach(m -> map.put(((IdGetable) m).getId(), m));
+        return map;
     }
 
 }

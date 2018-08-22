@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.api;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import tk.mybatis.mapper.entity.Condition;
@@ -38,11 +39,26 @@ public interface CommonService<M> {
     List<M> get(List<Long> ids);
 
     /**
+     * 获取多个资源，并以资源ID为key，组成映射表
+     *
+     * @param ids 资源ID列表
+     * @return 资源映射表
+     */
+    Map<Long, M> getAsMap(List<Long> ids);
+
+    /**
      * 获取全部资源
      *
      * @return 资源列表
      */
     List<M> listAll();
+
+    /**
+     * 获取全部资源，并以资源ID为key，组成映射表
+     *
+     * @return 资源映射表
+     */
+    Map<Long, M> mapAll();
 
     /**
      * 更新一个资源，本方法不校验资源是否存在
