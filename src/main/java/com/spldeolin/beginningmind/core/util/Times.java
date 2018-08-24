@@ -27,22 +27,22 @@ public class Times {
     public static final ZoneId SYSTEM_ZONE = ZoneId.systemDefault();
 
     /**
-     * 世界的生日 1970-01-01
+     * 1970-01-01
      */
     public static final LocalDate WORLD_BIRTHDAY = LocalDate.of(1970, 1, 1);
 
     /**
-     * 一天的开始 00:00:00
+     * 00:00:00
      */
     public static final LocalTime DAY_START = LocalTime.of(0, 0, 0);
 
     /**
-     * 一天的结束 23:59:59
+     * 23:59:59
      */
     public static final LocalTime DAY_END = LocalTime.of(23, 59, 59);
 
     /**
-     * 世界是何时诞生的 1970-01-01 00:00:00
+     * 1970-01-01 00:00:00
      */
     public static final LocalDateTime WORLD_BORN_ON = LocalDateTime.of(WORLD_BIRTHDAY, DAY_START);
 
@@ -54,31 +54,101 @@ public class Times {
     public static final DateTimeFormatter DEFAULT_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
     /**
-     * Date转化为LocalDateTime
+     * java.util.Date -> LocalDateTime
      */
     public static LocalDateTime toLocalDateTime(Date date) {
         return LocalDateTime.ofInstant(date.toInstant(), SYSTEM_ZONE);
     }
 
     /**
-     * UNIX时间戳转化为LocalDateTime
+     * UNIX时间戳 -> LocalDateTime
      */
     public static LocalDateTime toLocalDateTime(long unixTimeStamp) {
         return LocalDateTime.ofInstant(Instant.ofEpochSecond(unixTimeStamp), ZoneId.systemDefault());
     }
 
     /**
-     * String转化为LocalDateTime（yyyy-MM-dd HH:mm:ss）
+     * String -> LocalDateTime  （yyyy-MM-dd）
      */
     public static LocalDateTime toLocalDateTime(String content) {
         return LocalDateTime.parse(content, DEFAULT_DATE_TIME_FORMATTER);
     }
 
     /**
-     * String转化为LocalDateTime
+     * String -> LocalDateTime  （指定格式）
      */
     public static LocalDateTime toLocalDateTime(String content, String pattern) {
         return LocalDateTime.parse(content, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * java.util.Date -> LocalDate
+     */
+    public static LocalDate toLocalDate(Date date) {
+        return toLocalDateTime(date).toLocalDate();
+    }
+
+    /**
+     * java.util.Date -> LocalTime
+     */
+    public static LocalTime toLocalTime(Date date) {
+        return toLocalDateTime(date).toLocalTime();
+    }
+
+    /**
+     * LocalDateTime转化为String（yyyy-MM-dd HH:mm:ss）
+     */
+    public static String toString(LocalDateTime localDateTime) {
+        return DEFAULT_DATE_TIME_FORMATTER.format(localDateTime);
+    }
+
+    /**
+     * LocalDateTime -> String （指定格式）
+     */
+    public static String toString(LocalDateTime localDateTime, String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).format(localDateTime);
+    }
+
+    /**
+     * LocalDate -> String  （yyyy-MM-dd）
+     */
+    public static String toString(LocalDate localDate) {
+        return DEFAULT_DATE_FORMATTER.format(localDate);
+    }
+
+    /**
+     * LocalDate -> String  （指定格式）
+     */
+    public static String toString(LocalDate localDate, String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).format(localDate);
+    }
+
+    /**
+     * LocalTime -> String  （HH:mm:ss）
+     */
+    public static String toString(LocalTime localTime) {
+        return DEFAULT_TIME_FORMATTER.format(localTime);
+    }
+
+    /**
+     * LocalTime -> String  （指定格式）
+     */
+    public static String toString(LocalTime localTime, String pattern) {
+        return DateTimeFormatter.ofPattern(pattern).format(localTime);
+    }
+
+    /**
+     * LocalDateTime -> java.util.Date
+     */
+    public static Date toDate(LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * LocalDateTime -> UNIX时间戳
+     */
+    public static long toUnixTimestamp(LocalDateTime localDateTime) {
+        return localDateTime.atZone(SYSTEM_ZONE).toInstant().getEpochSecond();
     }
 
     /**
@@ -93,76 +163,6 @@ public class Times {
      */
     public static LocalDateTime toggleToDayEnd(LocalDateTime localDateTime) {
         return LocalDateTime.of(localDateTime.toLocalDate(), DAY_END);
-    }
-
-    /**
-     * Date转化为LocalDate
-     */
-    public static LocalDate toLocalDate(Date date) {
-        return toLocalDateTime(date).toLocalDate();
-    }
-
-    /**
-     * Date转化为LocalTime
-     */
-    public static LocalTime toLocalTime(Date date) {
-        return toLocalDateTime(date).toLocalTime();
-    }
-
-    /**
-     * LocalDateTime转化为Date
-     */
-    public static Date toDate(LocalDateTime localDateTime) {
-        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
-    }
-
-    /**
-     * LocalDateTime转化为String（yyyy-MM-dd HH:mm:ss）
-     */
-    public static String toString(LocalDateTime localDateTime) {
-        return DEFAULT_DATE_TIME_FORMATTER.format(localDateTime);
-    }
-
-    /**
-     * LocalDateTime转化为String
-     */
-    public static String toString(LocalDateTime localDateTime, String pattern) {
-        return DateTimeFormatter.ofPattern(pattern).format(localDateTime);
-    }
-
-    /**
-     * LocalDate转化为String（yyyy-MM-dd）
-     */
-    public static String toString(LocalDate localDate) {
-        return DEFAULT_DATE_FORMATTER.format(localDate);
-    }
-
-    /**
-     * LocalDate转化为String
-     */
-    public static String toString(LocalDate localDate, String pattern) {
-        return DateTimeFormatter.ofPattern(pattern).format(localDate);
-    }
-
-    /**
-     * LocalTime转化为String（HH:mm:ss）
-     */
-    public static String toString(LocalTime localTime) {
-        return DEFAULT_TIME_FORMATTER.format(localTime);
-    }
-
-    /**
-     * LocalTime转化为String
-     */
-    public static String toString(LocalTime localTime, String pattern) {
-        return DateTimeFormatter.ofPattern(pattern).format(localTime);
-    }
-
-    /**
-     * LocalDateTime转化为UNIX时间戳
-     */
-    public static long toUnixTimestamp(LocalDateTime localDateTime) {
-        return localDateTime.atZone(SYSTEM_ZONE).toInstant().getEpochSecond();
     }
 
 }
