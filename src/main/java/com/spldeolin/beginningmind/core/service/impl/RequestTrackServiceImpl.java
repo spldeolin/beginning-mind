@@ -9,7 +9,7 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.time.LocalDate;
-import java.time.LocalTime;
+import java.time.LocalDateTime;
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
@@ -17,10 +17,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.env.Environment;
+import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
-import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.model.RequestTrack;
 import com.spldeolin.beginningmind.core.model.User;
@@ -28,6 +28,7 @@ import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.Times;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,7 +38,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Service
 @Log4j2
-public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> implements RequestTrackService {
+public class RequestTrackServiceImpl implements RequestTrackService {
 
     @Autowired
     private Environment environment;
@@ -45,15 +46,16 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private MongoTemplate mongoTemplate;
+
     @Override
     public RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId) {
         RequestTrack track = new RequestTrack();
 
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
 
-        track.setDate(LocalDate.now());
-
-        track.setTime(LocalTime.now());
+        track.setAcceptedAt(LocalDateTime.now());
 
         track.setController(joinPoint.getTarget().getClass().getSimpleName());
 
@@ -79,7 +81,7 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
         log.info("异步创建请求轨迹 {}", track);
-        super.create(track);
+        mongoTemplate.save(track, "request_track_" + Times.toString(LocalDate.now(), "yyyyMMdd"));
     }
 
     @Async
@@ -88,7 +90,7 @@ public class RequestTrackServiceImpl extends CommonServiceImpl<RequestTrack> imp
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(requestResult));
         log.info("异步创建请求轨迹 {}", track);
-        super.create(track);
+        mongoTemplate.save(track, "request_track_" + Times.toString(LocalDate.now(), "yyyyMMdd"));
     }
 
     private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {

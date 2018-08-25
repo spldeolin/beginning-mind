@@ -8,7 +8,6 @@ package com.spldeolin.beginningmind.core.service;
 
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
-import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.model.RequestTrack;
 
@@ -17,7 +16,7 @@ import com.spldeolin.beginningmind.core.model.RequestTrack;
  *
  * @author Deolin 2018/8/4
  */
-public interface RequestTrackService extends CommonService<RequestTrack> {
+public interface RequestTrackService {
 
     /**
      * 设置 切点、登录者ID，生成请求轨迹
@@ -33,6 +32,5 @@ public interface RequestTrackService extends CommonService<RequestTrack> {
      * 补全请求轨迹信息，并保存请求轨迹
      */
     void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult);
-
 
 }
