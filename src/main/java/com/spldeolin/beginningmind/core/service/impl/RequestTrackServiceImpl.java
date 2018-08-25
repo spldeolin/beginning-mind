@@ -80,8 +80,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, Object dataObject) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
-        log.info("异步创建请求轨迹 {}", track);
-        mongoTemplate.save(track, "request_track_" + Times.toString(LocalDate.now(), "yyyyMMdd"));
+        saveTrack(track);
     }
 
     @Async
@@ -89,8 +88,13 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(requestResult));
-        log.info("异步创建请求轨迹 {}", track);
+        saveTrack(track);
+    }
+
+    private void saveTrack(RequestTrack track) {
+        log.info("异步保存请求轨迹 {}", track);
         mongoTemplate.save(track, "request_track_" + Times.toString(LocalDate.now(), "yyyyMMdd"));
+
     }
 
     private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {
