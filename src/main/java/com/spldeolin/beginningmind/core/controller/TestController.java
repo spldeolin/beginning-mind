@@ -12,17 +12,25 @@ import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
  *
  * @author Deolin 2018/08/04
  */
-@RestController // TODO 生产环境注释掉这个控制器
-@RequestMapping(TestController.TEST_REQUEST_MAPPING_PREFIX)
+@RestController
+@RequestMapping({"a", "b"})
 @Validated
 public class TestController {
 
     public static final String TEST_REQUEST_MAPPING_PREFIX = "/test";
 
+    /**
+     * 按打法啊定身法
+     *
+     * @param a adf
+     * @param b asdf
+     * @return asdf
+     * @author ad
+     */
     @PostMapping("/ppp")
     @Authorization(display = "普通请求", menuId = 1L)
-    void ln20() {
-
+    String ln20(String a, String b) {
+        return null;
     }
 
     @GetMapping("/ggg")

@@ -36,8 +36,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
-import com.spldeolin.beginningmind.core.controller.SignController;
+//import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
+//import com.spldeolin.beginningmind.core.controller.SignController;
 import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.service.PermissionService;
@@ -52,9 +52,9 @@ public class PermissionUpdater {
 
     private final Class[] EXCLUDED_CLASS = {
             // error转发
-            ErrorForwardController.class,
-            // 后台登录
-            SignController.class,
+//            ErrorForwardController.class,
+//            // 后台登录
+//            SignController.class,
     };
 
     @Autowired
