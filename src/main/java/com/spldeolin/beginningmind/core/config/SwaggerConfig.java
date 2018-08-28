@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -15,7 +14,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @Configuration
 @EnableSwagger2
-@Import({springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class})
+//@Import({springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class})
 public class SwaggerConfig {
 
     @Autowired

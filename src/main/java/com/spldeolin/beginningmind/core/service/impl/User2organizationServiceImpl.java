@@ -6,10 +6,14 @@
 
 package com.spldeolin.beginningmind.core.service.impl;
 
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.dao.User2organizationMapper;
+import com.spldeolin.beginningmind.core.dto.IdCountDTO;
 import com.spldeolin.beginningmind.core.model.User2organization;
 import com.spldeolin.beginningmind.core.service.User2organizationService;
 import lombok.extern.log4j.Log4j2;
@@ -26,5 +30,11 @@ public class User2organizationServiceImpl extends CommonServiceImpl<User2organiz
 
     @Autowired
     private User2organizationMapper user2organizationMapper;
+
+    @Override
+    public Map<Long, Integer> mapUserCounts() {
+        List<IdCountDTO> dtos = user2organizationMapper.countUsers();
+        return dtos.stream().collect(Collectors.toMap(IdCountDTO::getId, IdCountDTO::getCount));
+    }
 
 }

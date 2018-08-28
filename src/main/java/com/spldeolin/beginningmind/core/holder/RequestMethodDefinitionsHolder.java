@@ -10,7 +10,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.redis.RedisCache;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -20,17 +19,14 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestMethodDefinitionsHolder {
 
-    private static final String KEY = "com.spldeolin.beginningmind.core.holder.RequestMethodDefinitionsHolder.KEY";
-
     @Autowired
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
-    @Autowired
-    private RedisCache redisCache;
+    private List<String> mappings;
 
     public void init() {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
-        List<String> mappings = Lists.newArrayList();
+        mappings = Lists.newArrayList();
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMethods.entrySet()) {
             RequestMappingInfo info = entry.getKey();
             Set<String> patterns = info.getPatternsCondition().getPatterns();
@@ -45,11 +41,9 @@ public class RequestMethodDefinitionsHolder {
                 mappings.add(pattern);
             }
         }
-        redisCache.set(KEY, mappings);
     }
 
     public boolean matchAnyMappings(String url) {
-        List<String> mappings = redisCache.get(KEY);
         if (mappings != null) {
             for (String mapping : mappings) {
                 if (url.contains(mapping)) {
@@ -59,5 +53,6 @@ public class RequestMethodDefinitionsHolder {
         }
         return false;
     }
+
 
 }

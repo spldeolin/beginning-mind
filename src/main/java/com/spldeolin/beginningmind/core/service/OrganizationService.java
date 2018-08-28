@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.dto.IdNameDTO;
-import com.spldeolin.beginningmind.core.dto.OrganizationNodeDTO;
+import com.spldeolin.beginningmind.core.dto.OrganizationTreeDTO;
 import com.spldeolin.beginningmind.core.model.Organization;
 
 /**
@@ -31,7 +31,7 @@ public interface OrganizationService extends CommonService<Organization> {
 
     Page<Organization> page(PageParam pageParam);
 
-    List<OrganizationNodeDTO> tree();
+    OrganizationTreeDTO tree();
 
     List<IdNameDTO> tiny();
 

@@ -4,8 +4,10 @@
  */
 package com.spldeolin.beginningmind.core.dao;
 
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
+import com.spldeolin.beginningmind.core.dto.IdCountDTO;
 import com.spldeolin.beginningmind.core.model.User2organization;
 /**
  * “用户与组织架构的关联”数据库映射
@@ -14,4 +16,7 @@ import com.spldeolin.beginningmind.core.model.User2organization;
  */
 @Mapper
 public interface User2organizationMapper extends CommonMapper<User2organization> {
+
+     List<IdCountDTO> countUsers();
+
 }

@@ -21,7 +21,7 @@ import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dto.IdNameDTO;
-import com.spldeolin.beginningmind.core.dto.OrganizationNodeDTO;
+import com.spldeolin.beginningmind.core.dto.OrganizationTreeDTO;
 import com.spldeolin.beginningmind.core.input.OrganizationInput;
 import com.spldeolin.beginningmind.core.model.Organization;
 import com.spldeolin.beginningmind.core.service.OrganizationService;
@@ -99,12 +99,12 @@ public class OrganizationController {
      * 组织架构树
      */
     @GetMapping("/tree")
-    List<OrganizationNodeDTO> tree() {
+    OrganizationTreeDTO tree() {
         return organizationService.tree();
     }
 
     /**
-     * 组织架构简单一览
+     * 组织架构一览
      */
     @GetMapping("/tiny")
     List<IdNameDTO> tiny() {
