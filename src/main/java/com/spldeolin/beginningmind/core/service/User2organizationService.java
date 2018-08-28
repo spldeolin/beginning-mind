@@ -6,6 +6,7 @@
 
 package com.spldeolin.beginningmind.core.service;
 
+import java.util.List;
 import java.util.Map;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.model.User2organization;
@@ -17,6 +18,8 @@ import com.spldeolin.beginningmind.core.model.User2organization;
  */
 public interface User2organizationService extends CommonService<User2organization> {
 
-    Map<Long, Integer> mapUserCounts();
+    Map<Long, Integer> mapUserCountsByOrganization();
+
+    Map<Long, String> mapPositionsByUser(List<Long> userIds);
 
 }

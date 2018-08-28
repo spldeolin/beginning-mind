@@ -17,6 +17,7 @@ import com.spldeolin.beginningmind.core.dto.IdCountDTO;
 import com.spldeolin.beginningmind.core.model.User2organization;
 import com.spldeolin.beginningmind.core.service.User2organizationService;
 import lombok.extern.log4j.Log4j2;
+import tk.mybatis.mapper.entity.Condition;
 
 /**
  * “用户与组织架构的关联”业务实现
@@ -32,9 +33,18 @@ public class User2organizationServiceImpl extends CommonServiceImpl<User2organiz
     private User2organizationMapper user2organizationMapper;
 
     @Override
-    public Map<Long, Integer> mapUserCounts() {
+    public Map<Long, Integer> mapUserCountsByOrganization() {
         List<IdCountDTO> dtos = user2organizationMapper.countUsers();
         return dtos.stream().collect(Collectors.toMap(IdCountDTO::getId, IdCountDTO::getCount));
+    }
+
+    @Override
+    public Map<Long, String> mapPositionsByUser(List<Long> userIds) {
+        Condition condition = new Condition(User2organization.class);
+        condition.createCriteria().andIn("userId", userIds);
+        List<User2organization> user2organizations = super.searchBatch(condition);
+        return user2organizations.stream()
+                .collect(Collectors.toMap(User2organization::getUserId, User2organization::getPosition));
     }
 
 }
