@@ -145,7 +145,7 @@ public class OrganizationServiceImpl extends CommonServiceImpl<Organization> imp
 
         if (tree == null) {
             List<Organization> models = listAll();
-            Map<Long, Integer> userCounts = user2organizationService.mapUserCounts();
+            Map<Long, Integer> userCounts = user2organizationService.mapUserCountsByOrganization();
             tree = new OrganizationTreeDTO(
                     listNodes(models, models.iterator(), CoupledConstant.ROOT_ORGANIZATION_ID, userCounts));
             redisCache.set(ORGANIZATION_TREE_CACHE_KEY, tree);
