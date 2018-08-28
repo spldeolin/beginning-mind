@@ -4,10 +4,9 @@
  */
 package com.spldeolin.beginningmind.core.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
 import com.spldeolin.beginningmind.core.model.User2organization;
-
-import org.apache.ibatis.annotations.Mapper;
 /**
  * “用户与组织架构的关联”数据库映射
  *
