@@ -40,7 +40,7 @@ public class ShiroConfig {
     private CoreProperties coreProperties;
 
     @Autowired
-    private PermissionService securityPermissionService;
+    private PermissionService permissionService;
 
     @Autowired
     private RedisCache redisCache;
@@ -83,9 +83,9 @@ public class ShiroConfig {
         // 【登录】登出请求是唯一一个无需权限、需要登录的请求
         filterChainDefinitions.put(SignController.SIGN_OUT_REQUEST_MAPPING, SignFilter.MARK);
         // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
-        for (Permission securityPermission : securityPermissionService.listAll()) {
-            filterChainDefinitions.put(securityPermission.getMapping(),
-                    SignFilter.MARK + ", " + AuthFilter.MARK + "[" + securityPermission.getName() + "]");
+        for (Permission permission : permissionService.listAll()) {
+            filterChainDefinitions.put(permission.getMapping(),
+                    SignFilter.MARK + ", " + AuthFilter.MARK + "[" + permission.getName() + "]");
         }
         // DEBUG环境下放行一切请求（不进行任何基于认证和鉴权的过滤）
         if (coreProperties.isDebug()) {

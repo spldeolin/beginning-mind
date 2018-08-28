@@ -21,7 +21,7 @@ import com.spldeolin.beginningmind.core.service.UserService;
 public class SignManagementController {
 
     @Autowired
-    private UserService securityAccountService;
+    private UserService userService;
 
     /**
      * 指定用户是否登录中
@@ -29,7 +29,7 @@ public class SignManagementController {
     @Authorization(display = "查看指定用户是否登录中", menuId = 1L)
     @GetMapping("/isSigning")
     Boolean isSign(@RequestParam Long userId) {
-        return securityAccountService.isAccountSigning(userId);
+        return userService.isAccountSigning(userId);
     }
 
     /**
@@ -38,7 +38,7 @@ public class SignManagementController {
     @Authorization(display = "将指定用户踢下线", menuId = 1L)
     @PostMapping("/kill")
     void kill(@RequestParam Long userId) {
-        securityAccountService.killSigner(userId);
+        userService.killSigner(userId);
     }
 
 }

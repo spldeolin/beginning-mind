@@ -24,10 +24,10 @@ public interface UserService extends CommonService<User> {
     /**
      * 创建一个“用户” （附带业务校验）
      *
-     * @param securityUser 待创建“用户”
+     * @param user 待创建“用户”
      * @return 自增ID
      */
-    Long createEX(User securityUser);
+    Long createEX(User user);
 
     /**
      * 获取一个“用户” （附带业务校验）
@@ -40,9 +40,9 @@ public interface UserService extends CommonService<User> {
     /**
      * 更新一个“用户” （附带业务校验）
      *
-     * @param securityUser 待更新“用户”
+     * @param user 待更新“用户”
      */
-    void updateEX(User securityUser);
+    void updateEX(User user);
 
     /**
      * 删除一个“用户”

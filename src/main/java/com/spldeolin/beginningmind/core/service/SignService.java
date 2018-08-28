@@ -38,7 +38,7 @@ public class SignService {
     private static final String CAPTCHA = "com.spldeolin.beginningmind.core.service.SignService.CAPTCHA";
 
     @Autowired
-    private UserService securityAccountService;
+    private UserService userService;
 
     @Autowired
     private CoreProperties coreProperties;
@@ -117,14 +117,14 @@ public class SignService {
      * 指定用户是否登录中
      */
     public Boolean isSign(Long userId) {
-        return securityAccountService.isAccountSigning(userId);
+        return userService.isAccountSigning(userId);
     }
 
     /**
      * 将指定用户踢下线
      */
     public void kill(Long userId) {
-        securityAccountService.killSigner(userId);
+        userService.killSigner(userId);
     }
 
     @Data

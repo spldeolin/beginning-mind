@@ -16,17 +16,17 @@ public interface PermissionService extends CommonService<Permission> {
     /**
      * 创建一个“权限” （附带业务校验）
      *
-     * @param securityPermission 待创建“权限”
+     * @param permission 待创建“权限”
      * @return 自增ID
      */
-    Long createEX(Permission securityPermission);
+    Long createEX(Permission permission);
 
     /**
      * 更新一个“权限” （附带业务校验）
      *
-     * @param securityPermission 待更新“权限”
+     * @param permission 待更新“权限”
      */
-    void updateEX(Permission securityPermission);
+    void updateEX(Permission permission);
 
     /**
      * 删除一个“权限”

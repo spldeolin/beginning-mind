@@ -30,7 +30,7 @@ public @interface Authorization {
     String display() default "";
 
     /**
-     * 参照`security_menu`表来指定该属性，必填
+     * 参照`menu`表来指定该属性，必填
      */
     long menuId();
 

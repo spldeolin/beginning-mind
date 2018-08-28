@@ -30,6 +30,7 @@ import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.UserService;
+import com.spldeolin.beginningmind.core.util.SnowFlake;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
@@ -44,10 +45,10 @@ import tk.mybatis.mapper.entity.Condition;
 public class UserServiceImpl extends CommonServiceImpl<User> implements UserService {
 
     @Autowired
-    private UserMapper securityUserMapper;
+    private UserMapper userMapper;
 
     @Autowired
-    private PermissionService securityPermissionService;
+    private PermissionService permissionService;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -56,16 +57,22 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     private FindByIndexNameSessionRepository<? extends Session> finder;
 
     @Override
-    public Long createEX(User securityUser) {
-        checkOccupationForCreating(securityUser);
-        // 生成盐与密码
+    public Long createEX(User user) {
+        checkOccupationForCreating(user);
+        // 盐、密码
         String salt = StringRandomUtils.generateVisibleAscii(32);
-        securityUser.setSalt(salt);
+        user.setSalt(salt);
         String password = DigestUtils.sha512Hex(CoupledConstant.DEFAULT_PASSWORD_EX + salt);
-        securityUser.setPassword(password);
-        // insert
-        super.create(securityUser);
-        return securityUser.getId();
+        user.setPassword(password);
+
+        // 能否登录
+        user.setEnableSign(true);
+
+        // 编号
+        user.setSerialNumber(String.valueOf(new SnowFlake(0, 0).nextId()));
+
+        super.create(user);
+        return user.getId();
     }
 
     @Override
@@ -74,16 +81,16 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     }
 
     @Override
-    public void updateEX(User securityUser) {
-        Long id = securityUser.getId();
+    public void updateEX(User user) {
+        Long id = user.getId();
         if (!isExist(id)) {
             throw new ServiceException("用户不存在或是已被删除");
         }
         if (getSignerSession(id).isPresent()) {
             throw new ServiceException("用户登录中，等待用户退出或是将用户请离后再次操作");
         }
-        checkOccupationForUpdating(securityUser);
-        if (!super.update(securityUser)) {
+        checkOccupationForUpdating(user);
+        if (!super.update(user)) {
             throw new ServiceException("用户数据过时");
         }
     }
@@ -119,7 +126,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         Condition condition = new Condition(User.class);
         condition.createCriteria();
         pageParam.startPage();
-        return Page.wrap(securityUserMapper.selectBatchByCondition(condition));
+        return Page.wrap(userMapper.selectBatchByCondition(condition));
     }
 
     @Override
@@ -127,11 +134,11 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         Condition condition = new Condition(User.class);
         condition.createCriteria().orEqualTo("name", principal).orEqualTo("mobile", principal).orEqualTo("email",
                 principal);
-        List<User> securityAccounts = securityUserMapper.selectBatchByCondition(condition);
-        if (securityAccounts.size() == 0) {
+        List<User> users = userMapper.selectBatchByCondition(condition);
+        if (users.size() == 0) {
             return Optional.empty();
         }
-        return Optional.ofNullable(securityAccounts.get(0));
+        return Optional.ofNullable(users.get(0));
     }
 
     @Override
@@ -163,8 +170,8 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public void banPick(Long userId) {
-        User securityUser = get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
-        super.update(securityUser.setEnableSign(!securityUser.getEnableSign()));
+        User user = get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+        super.update(user.setEnableSign(!user.getEnableSign()));
     }
 
     /**
@@ -184,15 +191,15 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     /**
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
-    private void checkOccupationForCreating(User securityUser) {
-        if (searchOne("name", securityUser.getName()).isPresent()) {
+    private void checkOccupationForCreating(User user) {
+        if (searchOne("name", user.getName()).isPresent()) {
             throw new ServiceException("用户名已被占用");
         }
-        String mobile = securityUser.getMobile();
+        String mobile = user.getMobile();
         if (mobile != null && searchOne("mobile", mobile).isPresent()) {
             throw new ServiceException("手机号已被占用");
         }
-        String email = securityUser.getEmail();
+        String email = user.getEmail();
         if (email != null && searchOne("email", email).isPresent()) {
             throw new ServiceException("E-Mail已被占用");
         }

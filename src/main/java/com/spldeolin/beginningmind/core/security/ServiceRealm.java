@@ -28,7 +28,7 @@ import com.spldeolin.beginningmind.core.util.Sessions;
 public class ServiceRealm extends AuthorizingRealm {
 
     @Autowired
-    private UserService securityUserService;
+    private UserService userService;
 
     /**
      * 认证后授权
@@ -37,7 +37,7 @@ public class ServiceRealm extends AuthorizingRealm {
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         Long userId = ((CurrentSignerDTO) principals.getPrimaryPrincipal()).getUser().getId();
         SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-        Set<String> permissionNames = securityUserService.listUserPermissions(userId);
+        Set<String> permissionNames = userService.listUserPermissions(userId);
         info.setStringPermissions(permissionNames);
         return info;
     }
@@ -51,7 +51,7 @@ public class ServiceRealm extends AuthorizingRealm {
         // 通过principal查找用户
         UsernamePasswordToken token = (UsernamePasswordToken) authenticationToken;
         String principal = token.getUsername();
-        User user = securityUserService.searchOneByPrincipal(principal).orElseThrow(
+        User user = userService.searchOneByPrincipal(principal).orElseThrow(
                 () -> new UnknownAccountException("用户不存在或密码错误"));
         if (!user.getEnableSign()) {
             throw new DisabledAccountException("用户已被禁用");

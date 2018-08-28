@@ -25,22 +25,22 @@ public class PermissionServiceImpl extends CommonServiceImpl<Permission> impleme
         PermissionService {
 
     @Autowired
-    private PermissionMapper securityPermissionMapper;
+    private PermissionMapper permissionMapper;
 
     @Override
-    public Long createEX(Permission securityPermission) {
+    public Long createEX(Permission permission) {
         /* 业务校验 */
-        super.create(securityPermission);
-        return securityPermission.getId();
+        super.create(permission);
+        return permission.getId();
     }
 
     @Override
-    public void updateEX(Permission securityPermission) {
-        if (!isExist(securityPermission.getId())) {
+    public void updateEX(Permission permission) {
+        if (!isExist(permission.getId())) {
             throw new ServiceException("权限不存在或是已被删除");
         }
         /* 业务校验 */
-        if (!super.update(securityPermission)) {
+        if (!super.update(permission)) {
             throw new ServiceException("权限数据过时");
         }
     }
@@ -70,7 +70,7 @@ public class PermissionServiceImpl extends CommonServiceImpl<Permission> impleme
         Condition condition = new Condition(Permission.class);
         condition.createCriteria()/* 添加条件 */;
         PageHelper.startPage(pageNo, pageSize);
-        return Page.wrap(securityPermissionMapper.selectBatchByCondition(condition));
+        return Page.wrap(permissionMapper.selectBatchByCondition(condition));
     }
 
 }

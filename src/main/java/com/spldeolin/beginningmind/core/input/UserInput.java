@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotBlank;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.core.model.User;
 import lombok.Data;
@@ -37,12 +38,14 @@ public class UserInput implements Serializable {
     /**
      * 名字
      */
+    @NotBlank
     @Size(max = 255)
     private String name;
 
     /**
      * 手机号
      */
+    @NotBlank
     @Size(max = 20)
     @Mobile
     private String mobile;

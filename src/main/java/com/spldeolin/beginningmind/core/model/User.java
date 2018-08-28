@@ -87,6 +87,12 @@ public class User implements Serializable {
     @Column(name = "enable_sign")
     private Boolean enableSign;
 
+    /**
+     * 编号
+     */
+    @Column(name = "serial_number")
+    private String serialNumber;
+
     private static final long serialVersionUID = 1L;
 
 }

@@ -137,7 +137,7 @@ public class PermissionUpdater {
                 deletePermissionCompletely(existPermission);
             }
         }
-        // 插入`security_permission`
+        // 插入`permission`
         for (Permission permission : permissions) {
             String mapping = permission.getMapping();
             Optional<Permission> existOrNull = permissionService.searchOne("mapping", mapping);

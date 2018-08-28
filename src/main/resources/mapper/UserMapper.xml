@@ -16,5 +16,6 @@
         <result column="password" jdbcType="CHAR" property="password"/>
         <result column="salt" jdbcType="CHAR" property="salt"/>
         <result column="enable_sign" jdbcType="BIT" property="enableSign"/>
+        <result column="serial_number" jdbcType="CHAR" property="serialNumber"/>
     </resultMap>
 </mapper>
