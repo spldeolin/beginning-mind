@@ -4,10 +4,10 @@
  */
 package com.spldeolin.beginningmind.core.dao;
 
+import org.apache.ibatis.annotations.Mapper;
 import com.spldeolin.beginningmind.core.api.CommonMapper;
 import com.spldeolin.beginningmind.core.model.Organization;
 
-import org.apache.ibatis.annotations.Mapper;
 /**
  * “组织架构”数据库映射
  *
@@ -15,4 +15,5 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface OrganizationMapper extends CommonMapper<Organization> {
+
 }

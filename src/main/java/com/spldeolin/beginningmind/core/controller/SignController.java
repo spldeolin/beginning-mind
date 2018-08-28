@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.util.Signer;
-import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 
 /**
  * 登录、登出、登录状态等
