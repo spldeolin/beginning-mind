@@ -19,4 +19,24 @@ public class CoupledConstant {
      */
     public static final String DEFAULT_PASSWORD_EX = DigestUtils.sha512Hex("0");
 
+    /**
+     * 最高层组织架构的parentId
+     */
+    public static final Long ROOT_ORGANIZATION_ID = 0L;
+
+    /**
+     * 最高层组织架构的parentId
+     */
+    public static final String ROOT_ORGANIZATION_ID_S = "0";
+
+    /**
+     * 第一个组织架构
+     */
+    public static final Long EDEN_ORGANIZATION_ID = 1L;
+
+    /**
+     * 第一个用户
+     */
+    public static final Long ADAM_USER_ID = 1L;
+
 }

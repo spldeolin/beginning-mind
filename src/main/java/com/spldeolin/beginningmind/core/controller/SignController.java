@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.util.Signer;
-import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
+import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 
 /**
  * 登录、登出、登录状态等
@@ -44,7 +44,7 @@ public class SignController {
      * 登录
      */
     @PostMapping(SIGN_IN_REQUEST_MAPPING)
-    SignerProfileVO signIn(@RequestBody @Valid SignInput input) {
+    SignerProfileDTO signIn(@RequestBody @Valid SignInput input) {
         return signService.signIn(input);
     }
 

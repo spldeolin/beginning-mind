@@ -25,7 +25,7 @@ import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.Signer;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
-import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
+import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -77,7 +77,7 @@ public class SignService {
     /**
      * 登录
      */
-    public SignerProfileVO signIn(SignInput input) {
+    public SignerProfileDTO signIn(SignInput input) {
         // 重复登录、验证码校验
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
@@ -103,7 +103,7 @@ public class SignService {
         // TODO 登录者拥有的权限存入profile
         // TODO 登录者拥有的菜单存入profile
         // profile
-        return SignerProfileVO.builder().userName(user.getName()).build();
+        return SignerProfileDTO.builder().userName(user.getName()).build();
     }
 
     /**
