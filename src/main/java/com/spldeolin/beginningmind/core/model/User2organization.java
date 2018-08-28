@@ -28,6 +28,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 @Table(name = "user2organization")
 public class User2organization implements IdGetable, Serializable {
+
     /**
      * ID
      */
@@ -62,6 +63,9 @@ public class User2organization implements IdGetable, Serializable {
     @Column(name = "organization_id")
     private Long organizationId;
 
+    /**
+     * 职位
+     */
     private String position;
 
     private static final long serialVersionUID = 1L;
