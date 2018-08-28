@@ -6,10 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
-import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -38,7 +36,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     @Override
     public void create(List<M> models) {
         if (models.size() == 0) {
-            throw new IllegalArgumentException("ids长度不应为0");
+            throw new IllegalArgumentException("models长度不应为0");
         }
         mapper.insertBatch(models);
     }
@@ -54,15 +52,17 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             throw new IllegalArgumentException("ids长度不应为0");
         }
 
-        String idsSQL = Strings.join(ids, ',');
-        return mapper.selectBatchByIds(idsSQL);
+        StringBuilder idsSQL = new StringBuilder(64);
+        for (Long id : ids) {
+            idsSQL.append(id).append(",");
+        }
+        idsSQL.deleteCharAt(idsSQL.length() - 1);
+        return mapper.selectBatchByIds(idsSQL.toString());
     }
 
     @Override
     public Map<Long, M> map(List<Long> ids) {
-        if (!isIdGetable) {
-            throw new ServiceException(clazz.getSimpleName() + " 不含有ID属性");
-        }
+        ensureIsIdGetable();
 
         return listToMap(list(ids));
     }
@@ -80,10 +80,15 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     @Override
     public boolean delete(List<Long> ids) {
         if (ids.size() == 0) {
-            throw new IllegalArgumentException("models长度不应为0");
+            throw new IllegalArgumentException("ids长度不应为0");
         }
-        String idsSQL = Strings.join(ids, ',');
-        return mapper.deleteBatchByIds(idsSQL) != 0;
+
+        StringBuilder idsSQL = new StringBuilder(64);
+        for (Long id : ids) {
+            idsSQL.append(id).append(",");
+        }
+        idsSQL.deleteCharAt(idsSQL.length() - 1);
+        return mapper.deleteBatchByIds(idsSQL.toString()) != 0;
     }
 
     @Override
@@ -130,9 +135,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public Map<Long, M> mapAll() {
-        if (!isIdGetable) {
-            throw new ServiceException(clazz.getSimpleName() + " 不含有ID属性");
-        }
+        ensureIsIdGetable();
 
         return listToMap(listAll());
     }
@@ -169,6 +172,12 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         Map<Long, M> map = Maps.newHashMapWithExpectedSize(list.size());
         list.forEach(m -> map.put(((IdGetable) m).getId(), m));
         return map;
+    }
+
+    private void ensureIsIdGetable() {
+        if (!isIdGetable) {
+            throw new IllegalArgumentException(clazz.getSimpleName() + " 未实现IdGetable接口");
+        }
     }
 
 }
