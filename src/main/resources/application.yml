@@ -47,11 +47,6 @@ spring:
     mongodb:
       uri: 占位符
 
-  activemq:
-    broker-url: 占位符
-    spring.activemq.user: 占位符
-    spring.activemq.password: 占位符
-
 management:
   security:
     enabled: false
@@ -124,23 +119,18 @@ spring:
   profiles: dev
 
   datasource:
-    url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
-    username: root
-    password: root
+    url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
+    username: admin
+    password: admin
 
   redis:
-    host: localhost
+    host: 192.168.2.2
     port: 6379
     password: root
 
   data:
     mongodb:
-      uri: mongodb://beginning_mind_app:beginning_mind_app@localhost:27017/beginning_mind
-
-  activemq:
-    broker-url: tcp://127.0.0.1:61616
-    spring.activemq.user: admin
-    spring.activemq.password: admin
+      uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
 
 logging:
 
@@ -188,11 +178,6 @@ spring:
     mongodb:
       uri: #TODO 测试MongoDB
 
-  activemq:
-    broker-url: #TODO 测试activeMQ
-    spring.activemq.user: #TODO 测试activeMQ
-    spring.activemq.password: #TODO 测试activeMQ
-
 logging:
 
   config: classpath:log4j2/log4j2-test.yml
@@ -238,11 +223,6 @@ spring:
   data:
     mongodb:
       uri: #TODO 生产MongoDB
-
-  activemq:
-    broker-url: #TODO 生产activeMQ
-    spring.activemq.user: #TODO 生产activeMQ
-    spring.activemq.password: #TODO 生产activeMQ
 
 logging:
 
