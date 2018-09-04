@@ -92,7 +92,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     }
 
     private void saveTrack(RequestTrack track) {
-        log.info("异步保存请求轨迹 {}", track);
+        log.info("异步保存请求轨迹 {}", track.getInsignia());
         mongoTemplate.save(track, "request_track_" + Times.toString(LocalDate.now(), "yyyyMMdd"));
 
     }
@@ -112,6 +112,8 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         }
 
         track.setIp(getIpFromRequest(request));
+
+        track.setSessionId(request.getSession().getId());
 
         track.setActiveProfile(environment.getActiveProfiles()[0]);
 

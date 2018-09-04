@@ -87,6 +87,12 @@ public class RequestTrack implements Serializable {
     private String ip;
 
     /**
+     * 会话ID
+     */
+    @Field("session_id")
+    private String sessionId;
+
+    /**
      * 项目启动时指定的profile
      */
     @Field("active_profile")
