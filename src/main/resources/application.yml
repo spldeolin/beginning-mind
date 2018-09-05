@@ -47,6 +47,12 @@ spring:
     mongodb:
       uri: 占位符
 
+  rabbitmq:
+    host: 占位符
+    port: 占位符
+    username: 占位符
+    password: 占位符
+
 management:
   security:
     enabled: false
@@ -132,6 +138,12 @@ spring:
     mongodb:
       uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
 
+  rabbitmq:
+    host: 192.168.2.2
+    port: 5672
+    username: root
+    password: root
+
 logging:
 
   config: # 不指定，使用缺省的src/main/resources/log4j2.yml
@@ -178,6 +190,12 @@ spring:
     mongodb:
       uri: #TODO 测试MongoDB
 
+  rabbitmq:
+    host: #TODO 测试RabbitMQ
+    port: #TODO 测试RabbitMQ
+    username: #TODO 测试RabbitMQ
+    password: #TODO 测试RabbitMQ
+
 logging:
 
   config: classpath:log4j2/log4j2-test.yml
@@ -223,6 +241,12 @@ spring:
   data:
     mongodb:
       uri: #TODO 生产MongoDB
+
+  rabbitmq:
+    host: #TODO 生产RabbitMQ
+    port: #TODO 生产RabbitMQ
+    username: #TODO 生产RabbitMQ
+    password: #TODO 生产RabbitMQ
 
 logging:
 
