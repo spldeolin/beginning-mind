@@ -1,13 +1,11 @@
 package com.spldeolin.beginningmind.core.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
-import com.spldeolin.beginningmind.core.service.Sender;
 
 /**
  * 用于测试的控制器
@@ -46,14 +44,6 @@ public class TestController {
     Object ln35() {
 
         return null;
-    }
-
-    @Autowired
-    private Sender sender;
-
-    @GetMapping("/send")
-    void send() {
-        sender.send();
     }
 
 }

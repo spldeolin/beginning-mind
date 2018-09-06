@@ -83,4 +83,18 @@ public class CoreProperties {
 
     }
 
+    /**
+     * 雪花算法的机器区分ID和数据库区分ID
+     */
+    private SnowFlake snowFlake;
+
+    @Data
+    public static class SnowFlake {
+
+        private Long datacenterId;
+
+        private Long machineId;
+
+    }
+
 }

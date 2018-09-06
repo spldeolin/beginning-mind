@@ -29,8 +29,8 @@ import com.spldeolin.beginningmind.core.dao.UserMapper;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.PermissionService;
+import com.spldeolin.beginningmind.core.service.SnowFlakeService;
 import com.spldeolin.beginningmind.core.service.UserService;
-import com.spldeolin.beginningmind.core.util.SnowFlake;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
@@ -56,6 +56,9 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     @Autowired
     private FindByIndexNameSessionRepository<? extends Session> finder;
 
+    @Autowired
+    private SnowFlakeService snowFlakeService;
+
     @Override
     public Long createEX(User user) {
         checkOccupationForCreating(user);
@@ -69,7 +72,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         user.setEnableSign(true);
 
         // 编号
-        user.setSerialNumber(String.valueOf(new SnowFlake(0, 0).nextId()));
+        user.setSerialNumber(String.valueOf(snowFlakeService.nextId()));
 
         super.create(user);
         return user.getId();

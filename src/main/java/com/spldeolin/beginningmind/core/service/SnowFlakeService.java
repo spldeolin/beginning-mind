@@ -1,4 +1,9 @@
-package com.spldeolin.beginningmind.core.util;
+package com.spldeolin.beginningmind.core.service;
+
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
  * Twitter的“雪花”算法
@@ -9,7 +14,11 @@ package com.spldeolin.beginningmind.core.util;
  *
  * @author Deolin 2018/07/04
  */
-public class SnowFlake {
+@Service
+public class SnowFlakeService {
+
+    @Autowired
+    private CoreProperties coreProperties;
 
     /**
      * 起始的时间戳 2018-07-04 14:30:54
@@ -34,17 +43,17 @@ public class SnowFlake {
     /**
      * 序列号的最大值
      */
-    private final static long MAX_DATACENTER_NUM = -1L ^ (-1L << DATACENTER_BIT);
+    private final static long MAX_DATACENTER_NUM = ~(-1L << DATACENTER_BIT);
 
     /**
      * 机器标识最大值
      */
-    private final static long MAX_MACHINE_NUM = -1L ^ (-1L << MACHINE_BIT);
+    private final static long MAX_MACHINE_NUM = ~(-1L << MACHINE_BIT);
 
     /**
      * 数据中心最大值
      */
-    private final static long MAX_SEQUENCE = -1L ^ (-1L << SEQUENCE_BIT);
+    private final static long MAX_SEQUENCE = ~(-1L << SEQUENCE_BIT);
 
     /**
      * 序列号的向左位移
@@ -72,13 +81,18 @@ public class SnowFlake {
      */
     private long lastStmp = -1L;
 
-    public SnowFlake(long datacenterId, long machineId) {
+    @PostConstruct
+    public void initDatacenterAndMachine() {
+        long datacenterId = coreProperties.getSnowFlake().getDatacenterId();
+        long machineId = coreProperties.getSnowFlake().getMachineId();
+
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
             throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");
         }
         if (machineId > MAX_MACHINE_NUM || machineId < 0) {
             throw new IllegalArgumentException("machineId can't be greater than MAX_MACHINE_NUM or less than 0");
         }
+
         this.datacenterId = datacenterId;
         this.machineId = machineId;
     }
@@ -123,17 +137,6 @@ public class SnowFlake {
     private long getNewstmp() {
         return System.currentTimeMillis();
     }
-
-    public static void main(String[] args) {
-        SnowFlake snowFlake = new SnowFlake(0, 0);
-
-        for (int i = 0; i < 100; i++) {
-            System.out.println(snowFlake.nextId());
-        }
-        System.out.println(Long.valueOf(Long.MAX_VALUE).toString());
-        System.out.println(Long.valueOf(Long.MAX_VALUE).toString().length());
-    }
-
 
 }
 

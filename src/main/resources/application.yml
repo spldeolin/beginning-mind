@@ -104,6 +104,10 @@ core:
     addresser-email: # TODO E-Mail
     addresser-auth-code: # TODO E-Mail
 
+  snow-flake:
+    datacenter-id: 占位符
+    machine-id: 占位符
+
 ---
 
 ########################
@@ -155,6 +159,10 @@ core:
   file:
     mapping: /static/
     location: C:/beginning-mind-static/
+
+  snow-flake:
+    datacenter-id: 0
+    machine-id: 0
 
 ---
 
@@ -208,6 +216,10 @@ core:
     mapping: /static/
     location: # TODO 测试环境静态文件目录
 
+  snow-flake:
+    datacenter-id: 0
+    machine-id: 0
+
 ---
 
 ########################
@@ -259,3 +271,7 @@ core:
   file:
     mapping: /static/
     location: # TODO 生产环境静态文件目录
+
+  snow-flake:
+    datacenter-id: 0
+    machine-id: 0
