@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.util;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
@@ -44,10 +45,10 @@ public class Https {
     @SneakyThrows
     public static String get(String url) {
         Request request = new Request.Builder().url(url).header("User-Agent", DISGUISED_USER_AGENT).build();
-        Response response = client.newCall(request).execute();
-        if (HttpStatus.OK.value() != response.code()) {
-            throw new RuntimeException(response.message());
-        }
+
+        // 请求
+        Response response = doRequest(request);
+
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
             return null;
@@ -65,10 +66,10 @@ public class Https {
     public static String postJson(String url, String json) {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
         Request request = new Request.Builder().url(url).post(body).header("User-Agent", DISGUISED_USER_AGENT).build();
-        Response response = client.newCall(request).execute();
-        if (HttpStatus.OK.value() != response.code()) {
-            throw new RuntimeException(response.message());
-        }
+
+        // 请求
+        Response response = doRequest(request);
+
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
             return null;
@@ -119,15 +120,35 @@ public class Https {
         }
         okhttp3.RequestBody body = form.build();
         Request request = new Request.Builder().url(url).post(body).header("User-Agent", DISGUISED_USER_AGENT).build();
-        Response response = client.newCall(request).execute();
-        if (HttpStatus.OK.value() != response.code()) {
-            throw new RuntimeException(response.message());
-        }
+
+        // 请求
+        Response response = doRequest(request);
+
         ResponseBody responseBody = response.body();
         if (responseBody == null) {
             return null;
         }
         return responseBody.string();
+    }
+
+    /**
+     * 发送请求，获取response，非200则重试5次，第5次后依然非200则抛出异常
+     */
+    private Response doRequest(Request request) throws IOException {
+        // 发送请求，获取response，非200则重试5次
+        Response response = null;
+        for (int i = 0; i < 5; i++) {
+            response = client.newCall(request).execute();
+            if (HttpStatus.OK.value() == response.code()) {
+                break;
+            } else {
+                // 5次后依然非200则抛出异常
+                if (i == 5 - 1) {
+                    throw new RuntimeException(response.message());
+                }
+            }
+        }
+        return response;
     }
 
 }
