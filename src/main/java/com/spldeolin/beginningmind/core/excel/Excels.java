@@ -266,7 +266,7 @@ public class Excels {
             if (cell == null) {
                 cellContent = columnDefinition.getDefaultValue();
             } else {
-                if (CellType.NUMERIC == cell.getCellTypeEnum()) {
+                if (CellType.NUMERIC == cell.getCellType()) {
                     // 去除科学计数法
                     cellContent = new DecimalFormat("0").format(cell.getNumericCellValue());
                 } else {
