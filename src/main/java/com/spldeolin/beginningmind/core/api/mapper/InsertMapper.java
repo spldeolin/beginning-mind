@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.InsertProvider;
 import org.apache.ibatis.annotations.Options;
 import com.spldeolin.beginningmind.core.api.mapper.provider.InsertMapperProvider;
 
+/**
+ * @author Deolin
+ */
 public interface InsertMapper<M> {
 
     @Options(useGeneratedKeys = true)

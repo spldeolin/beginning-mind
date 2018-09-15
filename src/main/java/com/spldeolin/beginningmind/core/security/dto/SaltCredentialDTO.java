@@ -7,6 +7,8 @@ import lombok.experimental.Accessors;
 
 /**
  * 当前登录的最终密码信息
+ *
+ * @author Deolin
  */
 @Data
 @Builder

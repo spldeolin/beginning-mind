@@ -4,6 +4,9 @@ import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
+/**
+ * @author Deolin
+ */
 @Component
 public class ApplicationContext implements ApplicationContextAware {
 

@@ -10,6 +10,8 @@ import lombok.experimental.Accessors;
 
 /**
  * 当前登录者的信息
+ *
+ * @author Deolin
  */
 @Data
 @Builder

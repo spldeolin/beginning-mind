@@ -10,6 +10,8 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
  * E-Mail
+ *
+ * @author Deolin
  */
 @Service
 public class EmailService {

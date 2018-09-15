@@ -15,6 +15,9 @@ import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.provider.IdsProvider;
 import tk.mybatis.mapper.provider.base.BaseUpdateProvider;
 
+/**
+ * @author Deolin
+ */
 @Log4j2
 public class DeleteMapperProvider extends MapperTemplate {
 

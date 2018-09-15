@@ -7,6 +7,8 @@ import lombok.Data;
 
 /**
  * 分页包装对象
+ *
+ * @author Deolin
  */
 @Data
 public class Page<T> implements Serializable {

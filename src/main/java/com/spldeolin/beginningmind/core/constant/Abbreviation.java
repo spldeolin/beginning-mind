@@ -8,6 +8,8 @@ import org.springframework.objenesis.ObjenesisStd;
 
 /**
  * 常用对象、值的缩写常量
+ *
+ * @author Deolin
  */
 public interface Abbreviation {
 

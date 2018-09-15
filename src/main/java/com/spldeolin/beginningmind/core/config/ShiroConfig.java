@@ -29,6 +29,9 @@ import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
 import com.spldeolin.beginningmind.core.security.filter.SignFilter;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 
+/**
+ * @author Deolin
+ */
 @Configuration
 public class ShiroConfig {
 

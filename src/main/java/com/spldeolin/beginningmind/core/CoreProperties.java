@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * 配置一览
+ *
+ * @author Deolin
  */
 @Component
 @ConfigurationProperties(value = "core")

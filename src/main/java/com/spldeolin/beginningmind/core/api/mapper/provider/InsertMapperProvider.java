@@ -21,6 +21,9 @@ import tk.mybatis.mapper.provider.SpecialProvider;
 import tk.mybatis.mapper.provider.base.BaseInsertProvider;
 import tk.mybatis.mapper.util.StringUtil;
 
+/**
+ * @author Deolin
+ */
 @Log4j2
 public class InsertMapperProvider extends MapperTemplate {
 
@@ -52,7 +55,6 @@ public class InsertMapperProvider extends MapperTemplate {
                 //sql.append(column.getColumn() + ",");
             } else if (column.isIdentity()) {
                 //这种情况下,如果原先的字段有值,需要先缓存起来,否则就一定会使用自动增长
-                //这是一个bind节点
                 sql.append(SqlHelper.getBindCache(column));
                 //如果是Identity列，就需要插入selectKey
                 //如果已经存在Identity列，抛出异常

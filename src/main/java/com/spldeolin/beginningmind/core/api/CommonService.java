@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import tk.mybatis.mapper.entity.Condition;
 
+/**
+ * @author Deolin
+ */
 public interface CommonService<M> {
 
     /**
