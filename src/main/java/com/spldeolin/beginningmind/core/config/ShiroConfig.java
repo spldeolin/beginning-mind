@@ -62,7 +62,7 @@ public class ShiroConfig {
      * @return 过滤器一览
      */
     private Map<String, Filter> createFilters() {
-        Map<String, Filter> filters = new HashMap<>();
+        Map<String, Filter> filters = new HashMap<>(64);
         filters.put(SignFilter.MARK, new SignFilter());
         filters.put(ActuatorFilter.MARK, new ActuatorFilter(UUID.randomUUID().toString()));
         return filters;
