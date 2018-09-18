@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.github.pagehelper.page.PageMethod;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.ControllerAspectPreprocess;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
@@ -79,6 +80,9 @@ public class ControllerAspect {
 
         // 设置Log MDC
         setLogMDC();
+
+        // 清除LocalThread中的分页信息，防止异常或其他原因不会消耗掉的分页信息，不会因线程复用而影响其他的查询语句
+        PageMethod.clearPage();
 
         // 检查登录者是否被踢出，并刷新会话；被踢出则结束，不
         if (isKilled()) {
