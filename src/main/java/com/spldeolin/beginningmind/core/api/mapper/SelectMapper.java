@@ -5,6 +5,9 @@ import org.apache.ibatis.annotations.SelectProvider;
 import com.spldeolin.beginningmind.core.api.mapper.provider.SelectMapperProvider;
 import tk.mybatis.mapper.entity.Condition;
 
+/**
+ * @author Deolin
+ */
 public interface SelectMapper<M> {
 
     @SelectProvider(type = SelectMapperProvider.class, method = "dynamicSQL")

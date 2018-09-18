@@ -16,6 +16,9 @@ import tk.mybatis.mapper.mapperhelper.EntityHelper;
 import tk.mybatis.mapper.util.StringUtil;
 import tk.mybatis.mapper.version.VersionException;
 
+/**
+ * @author Deolin
+ */
 @UtilityClass
 public class SqlUtils {
 
@@ -369,7 +372,6 @@ public class SqlUtils {
             if (!column.isId() && column.isUpdatable()) {
                 if (column == versionColumn) {
                     Version version = versionColumn.getEntityField().getAnnotation(Version.class);
-//                    String versionClass = version.nextVersion().getCanonicalName();
                     String versionClass = null;
                     //version = ${@tk.mybatis.mapper.version@nextVersionClass("versionClass", version)}
                     sql.append(column.getColumn())

@@ -8,6 +8,9 @@ import tk.mybatis.mapper.mapperhelper.MapperHelper;
 import tk.mybatis.mapper.mapperhelper.MapperTemplate;
 import tk.mybatis.mapper.provider.base.BaseDeleteProvider;
 
+/**
+ * @author Deolin
+ */
 @Log4j2
 public class PhysicallyDeleteMapperProvider extends MapperTemplate {
 

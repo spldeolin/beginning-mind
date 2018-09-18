@@ -3,6 +3,9 @@ package com.spldeolin.beginningmind.core.api.mapper;
 import org.apache.ibatis.annotations.UpdateProvider;
 import com.spldeolin.beginningmind.core.api.mapper.provider.DeleteMapperProvider;
 
+/**
+ * @author Deolin
+ */
 public interface DeleteMapper<M> extends PhysicallyDeleteMapper {
 
     @UpdateProvider(type = DeleteMapperProvider.class, method = "dynamicSQL")

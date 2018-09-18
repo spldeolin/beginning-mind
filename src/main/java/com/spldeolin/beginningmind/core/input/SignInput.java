@@ -5,6 +5,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.hibernate.validator.constraints.NotBlank;
 import lombok.Data;
 
+/**
+ * @author Deolin
+ */
 @Data
 public class SignInput implements Serializable {
 

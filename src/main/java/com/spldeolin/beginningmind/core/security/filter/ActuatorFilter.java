@@ -13,6 +13,8 @@ import lombok.extern.log4j.Log4j2;
  * <pre>
  * 用于处理actuator提供的相关请求，为这类请求专门提供过滤策略
  * </pre>
+ *
+ * @author Deolin
  */
 @Log4j2
 public class ActuatorFilter extends AccessControlFilter {

@@ -17,6 +17,9 @@ import tk.mybatis.mapper.provider.ExampleProvider;
 import tk.mybatis.mapper.provider.IdsProvider;
 import tk.mybatis.mapper.provider.base.BaseSelectProvider;
 
+/**
+ * @author Deolin
+ */
 @Log4j2
 public class SelectMapperProvider extends MapperTemplate {
 

@@ -32,6 +32,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
+/**
+ * @author Deolin
+ */
 @Service
 public class SignService {
 

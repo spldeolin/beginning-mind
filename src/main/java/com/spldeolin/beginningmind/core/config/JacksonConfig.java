@@ -20,6 +20,9 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
+/**
+ * @author Deolin
+ */
 @Configuration
 public class JacksonConfig {
 

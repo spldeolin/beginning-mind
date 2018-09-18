@@ -11,6 +11,9 @@ import com.google.common.collect.Maps;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
+/**
+ * @author Deolin
+ */
 @Log4j2
 public class CommonServiceImpl<M> implements CommonService<M> {
 

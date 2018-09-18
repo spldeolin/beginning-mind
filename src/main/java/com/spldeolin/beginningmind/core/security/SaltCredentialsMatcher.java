@@ -9,6 +9,9 @@ import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.CredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.dto.SaltCredentialDTO;
 
+/**
+ * @author Deolin
+ */
 public class SaltCredentialsMatcher implements CredentialsMatcher {
 
     @Override

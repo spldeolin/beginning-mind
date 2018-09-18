@@ -2,6 +2,9 @@ package com.spldeolin.beginningmind.core.constant;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
+/**
+ * @author Deolin
+ */
 public class CoupledConstant {
 
     /**
