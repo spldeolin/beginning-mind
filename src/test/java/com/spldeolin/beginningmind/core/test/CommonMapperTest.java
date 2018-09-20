@@ -75,4 +75,9 @@ public class CommonMapperTest {
         log.info(userMapper.selectCountByCondition(condition));
     }
 
+    @Test
+    public void testClear() {
+        userMapper.clearProperty(1L, "enableSign");
+    }
+
 }

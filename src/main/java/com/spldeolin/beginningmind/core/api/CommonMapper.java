@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.api;
 
+import com.spldeolin.beginningmind.core.api.mapper.ClearMapper;
 import com.spldeolin.beginningmind.core.api.mapper.DeleteMapper;
 import com.spldeolin.beginningmind.core.api.mapper.InsertMapper;
 import com.spldeolin.beginningmind.core.api.mapper.PhysicallyDeleteMapper;
@@ -13,6 +14,6 @@ import com.spldeolin.beginningmind.core.api.mapper.UpdateMapper;
  * @author Deolin
  */
 public interface CommonMapper<M> extends DeleteMapper<M>, InsertMapper<M>, PhysicallyDeleteMapper, SelectMapper<M>,
-        UpdateMapper<M> {
+        UpdateMapper<M>, ClearMapper<M> {
 
 }
