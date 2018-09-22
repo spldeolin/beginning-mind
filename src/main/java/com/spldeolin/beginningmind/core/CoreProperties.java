@@ -99,4 +99,9 @@ public class CoreProperties {
 
     }
 
+    /**
+     * CommonServiceImpl中每个LoadingCache对象的最大缓存条数
+     */
+    private Integer maxSizePerLocalCache;
+
 }

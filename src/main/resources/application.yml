@@ -108,6 +108,8 @@ core:
     datacenter-id: 占位符
     machine-id: 占位符
 
+  max-size-per-local-cache: 64
+
 ---
 
 ########################

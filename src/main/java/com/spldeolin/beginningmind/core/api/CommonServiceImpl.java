@@ -11,6 +11,7 @@ import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
+import com.spldeolin.beginningmind.core.CoreProperties;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -22,6 +23,9 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Autowired
     private CommonMapper<M> mapper;
+
+    @Autowired
+    private CoreProperties coreProperties;
 
     private Class<M> clazz;
 
@@ -211,7 +215,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     }
 
     private final LoadingCache<Long, Optional<M>> selectByIdCacheable = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(coreProperties.getMaxSizePerLocalCache())
             .build(new CacheLoader<Long, Optional<M>>() {
                 @Override
                 public Optional<M> load(Long id) {
@@ -220,7 +224,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<String, List<M>> selectBatchByIdsCacheable = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(coreProperties.getMaxSizePerLocalCache())
             .build(new CacheLoader<String, List<M>>() {
                 @Override
                 public List<M> load(String ids) {
@@ -231,7 +235,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     private List<M> selectAllCacheable;
 
     private final LoadingCache<M, List<M>> selectBatchByModelCacheable = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(coreProperties.getMaxSizePerLocalCache())
             .build(new CacheLoader<M, List<M>>() {
                 @Override
                 public List<M> load(M model) {
@@ -240,7 +244,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<Condition, List<M>> selectBatchByConditionCacheable = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(coreProperties.getMaxSizePerLocalCache())
             .build(new CacheLoader<Condition, List<M>>() {
                 @Override
                 public List<M> load(Condition condition) {
@@ -249,7 +253,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<M, Integer> selectCountByModelCacheable = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(coreProperties.getMaxSizePerLocalCache())
             .build(new CacheLoader<M, Integer>() {
                 @Override
                 public Integer load(M condition) {
@@ -258,7 +262,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<Condition, Integer> selectCountByConditionCacheable = CacheBuilder.newBuilder()
-            .maximumSize(100)
+            .maximumSize(coreProperties.getMaxSizePerLocalCache())
             .build(new CacheLoader<Condition, Integer>() {
                 @Override
                 public Integer load(Condition condition) {
