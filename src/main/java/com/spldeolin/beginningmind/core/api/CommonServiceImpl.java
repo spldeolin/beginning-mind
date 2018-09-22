@@ -7,6 +7,9 @@ import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
@@ -46,7 +49,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public Optional<M> get(Long id) {
-        return Optional.ofNullable(mapper.selectById(id));
+        return selectByIdCacheable.getUnchecked(id);
     }
 
     @Override
@@ -60,7 +63,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             idsSQL.append(id).append(",");
         }
         idsSQL.deleteCharAt(idsSQL.length() - 1);
-        return mapper.selectBatchByIds(idsSQL.toString());
+        return selectBatchByIdsCacheable.getUnchecked(idsSQL.toString());
     }
 
     @Override
@@ -72,12 +75,20 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public boolean update(M model) {
-        return mapper.updateByIdSelective(model) != 0;
+        boolean updated = mapper.updateByIdSelective(model) != 0;
+        if (updated) {
+            this.clearCache();
+        }
+        return updated;
     }
 
     @Override
     public boolean delete(Long id) {
-        return mapper.deleteById(id) != 0;
+        boolean deleted = mapper.deleteById(id) != 0;
+        if (deleted) {
+            this.clearCache();
+        }
+        return deleted;
     }
 
     @Override
@@ -91,7 +102,14 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             idsSQL.append(id).append(",");
         }
         idsSQL.deleteCharAt(idsSQL.length() - 1);
-        return mapper.deleteBatchByIds(idsSQL.toString()) != 0;
+
+        boolean deleted = mapper.deleteBatchByIds(idsSQL.toString()) != 0;
+
+        if (deleted) {
+            this.clearCache();
+        }
+
+        return deleted;
     }
 
     @Override
@@ -99,7 +117,12 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         M model = mapper.selectById(id);
         if (model != null) {
             log.warn("物理删除：" + model);
-            return mapper.physicallyDelete(id) != 0;
+
+            boolean physicallyDeleted = mapper.physicallyDelete(id) != 0;
+            if (physicallyDeleted) {
+                this.clearCache();
+            }
+            return physicallyDeleted;
         }
         return false;
     }
@@ -116,24 +139,28 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public List<M> searchBatch(M model) {
-        return mapper.selectBatchByModel(model);
+        return selectBatchByModelCacheable.getUnchecked(model);
     }
 
     @Override
     public List<M> searchBatch(String modelFieldName, Object value) {
         Condition condition = new Condition(clazz);
         condition.createCriteria().andEqualTo(modelFieldName, value);
-        return mapper.selectBatchByCondition(condition);
+        return searchBatch(condition);
     }
 
     @Override
     public List<M> searchBatch(Condition condition) {
-        return mapper.selectBatchByCondition(condition);
+        return selectBatchByConditionCacheable.getUnchecked(condition);
     }
 
     @Override
     public List<M> listAll() {
-        return mapper.selectAll();
+        if (selectAllCacheable != null) {
+            return selectAllCacheable;
+        } else {
+            return mapper.selectAll();
+        }
     }
 
     @Override
@@ -148,7 +175,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         Condition condition = new Condition(clazz);
         condition.selectProperties("id");
         condition.createCriteria().andEqualTo("id", id);
-        return mapper.selectCountByCondition(condition) > 0;
+        return selectCountByConditionCacheable.getUnchecked(condition) > 0;
     }
 
     @Override
@@ -158,7 +185,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
 
     @Override
     public int count(M model) {
-        return mapper.selectCountByModel(model);
+        return selectCountByModelCacheable.getUnchecked(model);
     }
 
     private Optional<M> batchToOne(List<M> models) {
@@ -181,6 +208,72 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         if (!isIdGetable) {
             throw new IllegalArgumentException(clazz.getSimpleName() + " 未实现IdGetable接口");
         }
+    }
+
+    private final LoadingCache<Long, Optional<M>> selectByIdCacheable = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<Long, Optional<M>>() {
+                @Override
+                public Optional<M> load(Long id) {
+                    return Optional.ofNullable(mapper.selectById(id));
+                }
+            });
+
+    private final LoadingCache<String, List<M>> selectBatchByIdsCacheable = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<String, List<M>>() {
+                @Override
+                public List<M> load(String ids) {
+                    return mapper.selectBatchByIds(ids);
+                }
+            });
+
+    private List<M> selectAllCacheable;
+
+    private final LoadingCache<M, List<M>> selectBatchByModelCacheable = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<M, List<M>>() {
+                @Override
+                public List<M> load(M model) {
+                    return mapper.selectBatchByModel(model);
+                }
+            });
+
+    private final LoadingCache<Condition, List<M>> selectBatchByConditionCacheable = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<Condition, List<M>>() {
+                @Override
+                public List<M> load(Condition condition) {
+                    return mapper.selectBatchByCondition(condition);
+                }
+            });
+
+    private final LoadingCache<M, Integer> selectCountByModelCacheable = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<M, Integer>() {
+                @Override
+                public Integer load(M condition) {
+                    return mapper.selectCountByModel(condition);
+                }
+            });
+
+    private final LoadingCache<Condition, Integer> selectCountByConditionCacheable = CacheBuilder.newBuilder()
+            .maximumSize(100)
+            .build(new CacheLoader<Condition, Integer>() {
+                @Override
+                public Integer load(Condition condition) {
+                    return mapper.selectCountByCondition(condition);
+                }
+            });
+
+    private void clearCache() {
+        selectByIdCacheable.invalidateAll();
+        selectBatchByIdsCacheable.invalidateAll();
+        selectAllCacheable = null;
+        selectBatchByModelCacheable.invalidateAll();
+        selectBatchByConditionCacheable.invalidateAll();
+        selectCountByModelCacheable.invalidateAll();
+        selectCountByConditionCacheable.invalidateAll();
     }
 
 }
