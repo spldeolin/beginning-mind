@@ -108,7 +108,7 @@ core:
     datacenter-id: 占位符
     machine-id: 占位符
 
-  max-size-per-local-cache: 64
+  max-size-per-local-cache: 占位符
 
 ---
 
@@ -166,6 +166,8 @@ core:
     datacenter-id: 0
     machine-id: 0
 
+  max-size-per-local-cache: 64
+
 ---
 
 ########################
@@ -222,6 +224,8 @@ core:
     datacenter-id: 0
     machine-id: 0
 
+  max-size-per-local-cache: 64
+
 ---
 
 ########################
@@ -277,3 +281,5 @@ core:
   snow-flake:
     datacenter-id: 0
     machine-id: 0
+
+  max-size-per-local-cache: # TODO 生产环境本地缓存最大条数
