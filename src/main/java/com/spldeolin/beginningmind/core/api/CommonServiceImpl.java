@@ -12,6 +12,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.core.CoreProperties;
+import com.spldeolin.beginningmind.core.dto.CacheStatsDTO;
 import lombok.extern.log4j.Log4j2;
 import tk.mybatis.mapper.entity.Condition;
 
@@ -215,7 +216,8 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     }
 
     private final LoadingCache<Long, Optional<M>> selectByIdCacheable = CacheBuilder.newBuilder()
-            .maximumSize(coreProperties.getMaxSizePerLocalCache())
+            .recordStats()
+            .maximumSize(64)
             .build(new CacheLoader<Long, Optional<M>>() {
                 @Override
                 public Optional<M> load(Long id) {
@@ -224,7 +226,8 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<String, List<M>> selectBatchByIdsCacheable = CacheBuilder.newBuilder()
-            .maximumSize(coreProperties.getMaxSizePerLocalCache())
+            .recordStats()
+            .maximumSize(64)
             .build(new CacheLoader<String, List<M>>() {
                 @Override
                 public List<M> load(String ids) {
@@ -235,7 +238,8 @@ public class CommonServiceImpl<M> implements CommonService<M> {
     private List<M> selectAllCacheable;
 
     private final LoadingCache<M, List<M>> selectBatchByModelCacheable = CacheBuilder.newBuilder()
-            .maximumSize(coreProperties.getMaxSizePerLocalCache())
+            .recordStats()
+            .maximumSize(64)
             .build(new CacheLoader<M, List<M>>() {
                 @Override
                 public List<M> load(M model) {
@@ -244,7 +248,8 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<Condition, List<M>> selectBatchByConditionCacheable = CacheBuilder.newBuilder()
-            .maximumSize(coreProperties.getMaxSizePerLocalCache())
+            .recordStats()
+            .maximumSize(64)
             .build(new CacheLoader<Condition, List<M>>() {
                 @Override
                 public List<M> load(Condition condition) {
@@ -253,7 +258,8 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<M, Integer> selectCountByModelCacheable = CacheBuilder.newBuilder()
-            .maximumSize(coreProperties.getMaxSizePerLocalCache())
+            .recordStats()
+            .maximumSize(64)
             .build(new CacheLoader<M, Integer>() {
                 @Override
                 public Integer load(M condition) {
@@ -262,7 +268,8 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             });
 
     private final LoadingCache<Condition, Integer> selectCountByConditionCacheable = CacheBuilder.newBuilder()
-            .maximumSize(coreProperties.getMaxSizePerLocalCache())
+            .recordStats()
+            .maximumSize(64)
             .build(new CacheLoader<Condition, Integer>() {
                 @Override
                 public Integer load(Condition condition) {
@@ -278,6 +285,19 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         selectBatchByConditionCacheable.invalidateAll();
         selectCountByModelCacheable.invalidateAll();
         selectCountByConditionCacheable.invalidateAll();
+    }
+
+    public Map<String, CacheStatsDTO> listCacheStatses() {
+        Map<String, CacheStatsDTO> result = Maps.newHashMap();
+        result.put("selectByIdCacheable", CacheStatsDTO.fromCacheStats(selectByIdCacheable.stats()));
+        result.put("selectBatchByIdsCacheable", CacheStatsDTO.fromCacheStats(selectBatchByIdsCacheable.stats()));
+        result.put("selectBatchByModelCacheable", CacheStatsDTO.fromCacheStats(selectBatchByModelCacheable.stats()));
+        result.put("selectBatchByConditionCacheable",
+                CacheStatsDTO.fromCacheStats(selectBatchByConditionCacheable.stats()));
+        result.put("selectCountByModelCacheable", CacheStatsDTO.fromCacheStats(selectCountByModelCacheable.stats()));
+        result.put("selectCountByConditionCacheable",
+                CacheStatsDTO.fromCacheStats(selectCountByConditionCacheable.stats()));
+        return result;
     }
 
 }

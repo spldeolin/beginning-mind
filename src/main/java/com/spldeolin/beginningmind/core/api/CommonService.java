@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
+import com.spldeolin.beginningmind.core.dto.CacheStatsDTO;
 import tk.mybatis.mapper.entity.Condition;
 
 /**
@@ -165,5 +166,12 @@ public interface CommonService<M> {
      * @return true存在，false不存在
      */
     int count(M model);
+
+    /**
+     * 获取本地缓存的缓存统计
+     *
+     * @return 缓存统计
+     */
+    Map<String, CacheStatsDTO> listCacheStatses();
 
 }
