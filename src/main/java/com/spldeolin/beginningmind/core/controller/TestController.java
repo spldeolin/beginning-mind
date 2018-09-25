@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.controller;
 
+import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,6 +10,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
+import lombok.Data;
 
 /**
  * 用于测试的控制器
@@ -60,6 +62,30 @@ public class TestController {
         multimap.putAll("adf", Lists.newArrayList("字母", "char"));
 
         return multimap;
+    }
+
+    @GetMapping("/rawMultimap")
+    Object ln66() {
+        RawMultimap rawMultimap1 = new RawMultimap();
+        rawMultimap1.setKey("1");
+        rawMultimap1.setValues(Lists.newArrayList("数字1", "数字2", "数字12313", "数字"));
+
+        RawMultimap rawMultimap2 = new RawMultimap();
+        rawMultimap2.setKey("adf");
+        rawMultimap2.setValues(Lists.newArrayList("字母", "char"));
+
+        List<RawMultimap> RawMultimaps = Lists.newArrayList(rawMultimap1, rawMultimap2);
+
+        return RawMultimaps;
+    }
+
+    @Data
+    private static class RawMultimap {
+
+        private String key;
+
+        private List<String> values;
+
     }
 
 }
