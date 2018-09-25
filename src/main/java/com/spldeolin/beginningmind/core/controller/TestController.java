@@ -4,6 +4,7 @@ import java.util.List;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.ArrayListMultimap;
@@ -11,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
 import lombok.Data;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 用于测试的控制器
@@ -20,6 +22,7 @@ import lombok.Data;
 @RestController
 @RequestMapping({"a", "b"})
 @Validated
+@Log4j2
 public class TestController {
 
     public static final String TEST_REQUEST_MAPPING_PREFIX = "/test";
@@ -86,6 +89,11 @@ public class TestController {
 
         private List<String> values;
 
+    }
+
+    @PostMapping("/multimapInput")
+    void ln92(@RequestBody Multimap<String, String> multimap) {
+        log.info(multimap);
     }
 
 }
