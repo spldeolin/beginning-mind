@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -47,6 +48,9 @@ public class JacksonConfig {
                 .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
 
         Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
+
+        builder.modules(new GuavaModule());
+
         // 是否将java.util.Date对象转化为时间戳
         if (!Optional.ofNullable(coreProperties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(
                 true)) {

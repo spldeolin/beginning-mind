@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -40,6 +41,7 @@ public class Jsons {
      */
     static {
         defaultObjectMapper = new ObjectMapper();
+        // jsr310的“时间”类型
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
         DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -51,6 +53,10 @@ public class Jsons {
                 .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
                 .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
         defaultObjectMapper.registerModule(javaTimeModule);
+
+        // Guava Collection
+        defaultObjectMapper.registerModule(new GuavaModule());
+
         // 忽略不认识的属性名
         defaultObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         // 时区
