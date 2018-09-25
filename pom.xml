@@ -262,17 +262,13 @@
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.9.6</version>
-                <scope>import</scope>
-                <type>pom</type>
+                <version>2.9.7</version>
             </dependency>
             <!--log4j2 (bom)-->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-bom</artifactId>
                 <version>2.11.1</version>
-                <scope>import</scope>
-                <type>pom</type>
             </dependency>
         </dependencies>
     </dependencyManagement>
