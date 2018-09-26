@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.core.config;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
 import com.spldeolin.beginningmind.core.controller.TestController;
@@ -62,8 +62,9 @@ public class ShiroConfig {
      * @return 过滤器一览
      */
     private Map<String, Filter> createFilters() {
-        Map<String, Filter> filters = new HashMap<>(64);
+        Map<String, Filter> filters = Maps.newHashMap();
         filters.put(SignFilter.MARK, new SignFilter());
+        filters.put(AuthFilter.MARK, new AuthFilter());
         filters.put(ActuatorFilter.MARK, new ActuatorFilter(UUID.randomUUID().toString()));
         return filters;
     }
