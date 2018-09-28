@@ -3,7 +3,10 @@ package com.spldeolin.beginningmind.core.redis;
 import java.util.Collections;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.google.common.collect.Lists;
+import lombok.extern.log4j.Log4j2;
 import redis.clients.jedis.Jedis;
+import redis.clients.jedis.JedisPool;
 
 /**
  * 基于Redis的分布式锁
@@ -11,6 +14,7 @@ import redis.clients.jedis.Jedis;
  * @author Deolin 2018/09/27
  */
 @Component
+@Log4j2
 public class DistributedLock {
 
     private static final String LOCK_SUCCESS = "OK";
@@ -22,7 +26,7 @@ public class DistributedLock {
     private static final Long RELEASE_SUCCESS = 1L;
 
     @Autowired
-    private Jedis jedis;
+    private JedisPool jedisPool;
 
     /**
      * 尝试获取分布式锁
@@ -33,8 +37,13 @@ public class DistributedLock {
      * @return 是否成功获取锁
      */
     public boolean get(String lockKey, String requestId, int expireTime) {
-        String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
-        return LOCK_SUCCESS.equals(result);
+        try (Jedis jedis = jedisPool.getResource()) {
+            String result = jedis.set(lockKey, requestId, SET_IF_NOT_EXIST, SET_WITH_EXPIRE_TIME, expireTime);
+            return LOCK_SUCCESS.equals(result);
+        } catch (Exception e) {
+            log.error(e);
+            return false;
+        }
     }
 
     /**
@@ -46,8 +55,13 @@ public class DistributedLock {
      */
     public boolean release(String lockKey, String requestId) {
         String script = "if redis.call('get', KEYS[1]) == ARGV[1] then return redis.call('del', KEYS[1]) else return 0 end";
-        Object result = jedis.eval(script, Collections.singletonList(lockKey), Collections.singletonList(requestId));
-        return RELEASE_SUCCESS.equals(result);
+        try (Jedis jedis = jedisPool.getResource()) {
+            Object result = jedis.eval(script, Collections.singletonList(lockKey), Lists.newArrayList(requestId));
+            return RELEASE_SUCCESS.equals(result);
+        } catch (Exception e) {
+            log.error(e);
+            return false;
+        }
     }
 
 }
