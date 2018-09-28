@@ -35,16 +35,6 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-
-    @Value("${spring.redis.host}")
-    private String redisHost;
-
-    @Value("${spring.redis.port}")
-    private String redisPort;
-
-    @Value("${spring.redis.password}")
-    private String redisPassword;
-
     @Bean
     public JedisPool jedisPool(
             @Autowired JedisPoolConfig config,
