@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.filter;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -48,10 +49,10 @@ public class GlobalReturnFilter implements Filter {
 
         ResponseWrapper wrapperResponse = new ResponseWrapper(httpServletResponse);
         chain.doFilter(request, wrapperResponse);
-        String rawContent = new String(wrapperResponse.getContent());
+        String rawContent = new String(wrapperResponse.getContent(), StandardCharsets.UTF_8);
         String wrappedContent = wrapRequestResult(rawContent);
         ServletOutputStream out = response.getOutputStream();
-        byte[] bytes = wrappedContent.getBytes();
+        byte[] bytes = wrappedContent.getBytes(StandardCharsets.UTF_8);
         out.write(bytes);
         response.setContentLengthLong(bytes.length);
         out.flush();
