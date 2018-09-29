@@ -1,11 +1,13 @@
 package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.HashBasedTable;
@@ -13,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Table;
 import com.spldeolin.beginningmind.core.controller.annotation.Authorization;
+import com.spldeolin.beginningmind.core.mq.producer.AckDemoProducer;
 import lombok.Data;
 import lombok.extern.log4j.Log4j2;
 
@@ -104,6 +107,14 @@ public class TestController {
         table.put(1L, 1.2, "阿斯顿");
         table.put(1L, 1.88, "阿古斯");
         return table;
+    }
+
+    @Autowired
+    private AckDemoProducer ackDemoProducer;
+
+    @GetMapping("ack")
+    void ack(@RequestParam String msg) {
+        ackDemoProducer.produce(msg);
     }
 
 }

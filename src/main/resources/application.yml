@@ -52,6 +52,13 @@ spring:
     port: 占位符
     username: 占位符
     password: 占位符
+    publisher-confirms: true # 发送确认
+    publisher-returns: true # 发送失败退回
+    listener:
+      #      direct:
+      #        acknowledge-mode: manual # ACK
+      simple:
+        acknowledge-mode: manual # ACK
 
 management:
   security:
