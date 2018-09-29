@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
@@ -27,6 +28,28 @@ public class CoreProperties {
      * 本项目的访问地址（IP:端口号，e.g.: http:localhost:2333）
      */
     private String address;
+
+    /**
+     * api.mapper.provider包下用的审计字段与删除标记配置
+     */
+    private MapperProvider mapperProvider;
+
+    @Data
+    public static class MapperProvider {
+
+        private List<String> auditingFieldNames;
+
+        private List<String> auditingPropertyNames;
+
+        private boolean isExistDeletionFlag;
+
+        private String deletionFlagFieldName;
+
+        private String deletionFlagPropertyName;
+
+        private String isNotDeletedSql;
+
+    }
 
     /**
      * Redis缓存的key命名空间

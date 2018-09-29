@@ -92,6 +92,18 @@ core:
 
   address: 占位符
 
+  mapper-provider:
+    auditing-field-names:
+    - inserted_at
+    - updated_at
+    auditing-property-names:
+    - insertedAt
+    - updatedAt
+    is-exist-deletion-flag: true
+    deletion-flag-field-name: deletion_flag
+    deletion-flag-property-name: deletionFlag
+    is-not-deleted-sql: deletion_flag = -1
+
   redis-namespace: beginningmind
 
   time:
