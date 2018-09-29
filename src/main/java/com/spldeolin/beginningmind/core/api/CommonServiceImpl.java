@@ -4,6 +4,7 @@ import java.lang.reflect.ParameterizedType;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import javax.annotation.Nonnull;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -220,7 +221,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             .maximumSize(64)
             .build(new CacheLoader<Long, Optional<M>>() {
                 @Override
-                public Optional<M> load(Long id) {
+                public Optional<M> load(@Nonnull Long id) {
                     return Optional.ofNullable(mapper.selectById(id));
                 }
             });
@@ -230,7 +231,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             .maximumSize(64)
             .build(new CacheLoader<String, List<M>>() {
                 @Override
-                public List<M> load(String ids) {
+                public List<M> load(@Nonnull String ids) {
                     return mapper.selectBatchByIds(ids);
                 }
             });
@@ -242,7 +243,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             .maximumSize(64)
             .build(new CacheLoader<M, List<M>>() {
                 @Override
-                public List<M> load(M model) {
+                public List<M> load(@Nonnull M model) {
                     return mapper.selectBatchByModel(model);
                 }
             });
@@ -252,7 +253,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             .maximumSize(64)
             .build(new CacheLoader<Condition, List<M>>() {
                 @Override
-                public List<M> load(Condition condition) {
+                public List<M> load(@Nonnull Condition condition) {
                     return mapper.selectBatchByCondition(condition);
                 }
             });
@@ -262,7 +263,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             .maximumSize(64)
             .build(new CacheLoader<M, Integer>() {
                 @Override
-                public Integer load(M condition) {
+                public Integer load(@Nonnull M condition) {
                     return mapper.selectCountByModel(condition);
                 }
             });
@@ -272,7 +273,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
             .maximumSize(64)
             .build(new CacheLoader<Condition, Integer>() {
                 @Override
-                public Integer load(Condition condition) {
+                public Integer load(@Nonnull Condition condition) {
                     return mapper.selectCountByCondition(condition);
                 }
             });
