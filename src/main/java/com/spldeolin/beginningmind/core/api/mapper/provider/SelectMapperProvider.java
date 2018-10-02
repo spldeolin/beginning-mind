@@ -1,9 +1,8 @@
 package com.spldeolin.beginningmind.core.api.mapper.provider;
 
-import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.IS_NOT_DELETED;
-
 import java.util.Set;
 import org.apache.ibatis.mapping.MappedStatement;
+import com.spldeolin.beginningmind.core.api.mapper.constant.AuditField;
 import com.spldeolin.beginningmind.core.api.mapper.util.SqlUtils;
 import com.spldeolin.beginningmind.core.api.mapper.util.StringCompressUtils;
 import lombok.extern.log4j.Log4j2;
@@ -56,7 +55,7 @@ public class SelectMapperProvider extends MapperTemplate {
             sql.append(" where ");
             sql.append(column.getColumn());
             sql.append(" in (${_parameter})");
-            sql.append(" and " + IS_NOT_DELETED);
+            sql.append(" and " + AuditField.IS_NOT_DELETED);
         } else {
             throw new MapperException(
                     "继承 selectByIds 方法的实体类[" + entityClass.getCanonicalName() + "]中必须只有一个带有 @Id 注解的字段");
@@ -74,7 +73,7 @@ public class SelectMapperProvider extends MapperTemplate {
         setResultType(ms, entityClass);
         String sql = SqlUtils.selectAllColumns(entityClass) +
                 SqlUtils.fromTable(entityClass, tableName(entityClass)) +
-                " where " + IS_NOT_DELETED +
+                " where " + AuditField.IS_NOT_DELETED +
                 SqlUtils.orderByDefault(entityClass);
         log.debug("Provide Mapper Statement: " + StringCompressUtils.trimUnnecessaryBlanks(sql));
         return sql;

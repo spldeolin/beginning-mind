@@ -1,8 +1,5 @@
 package com.spldeolin.beginningmind.core.api.mapper.util;
 
-import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.DELETION_FLAG_COLUMN_NAME;
-import static com.spldeolin.beginningmind.core.api.mapper.constant.AuditField.IS_NOT_DELETED;
-
 import java.util.Set;
 import javax.persistence.Version;
 import org.apache.commons.lang3.StringUtils;
@@ -286,7 +283,7 @@ public class SqlUtils {
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
             // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
-            if (StringUtils.equalsAny(column.getColumn(), "id", DELETION_FLAG_COLUMN_NAME)) {
+            if (StringUtils.equalsAny(column.getColumn(), "id", AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (!column.isInsertable()) {
@@ -355,7 +352,7 @@ public class SqlUtils {
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
             // 忽略以下字段，原因：inserted_at数据插入之后不应改变，updated_at MySQL会自动更新，deletion_flag不应能被修改
-            if (StringUtils.equalsAny(column.getColumn(), DELETION_FLAG_COLUMN_NAME)) {
+            if (StringUtils.equalsAny(column.getColumn(), AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }
             if (column.getEntityField().isAnnotationPresent(Version.class)) {
@@ -431,8 +428,8 @@ public class SqlUtils {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            if (DELETION_FLAG_COLUMN_NAME.equals(column.getColumn())) {
-                sql.append(" AND " + IS_NOT_DELETED);
+            if (AuditField.DELETION_FLAG_COLUMN_NAME.equals(column.getColumn())) {
+                sql.append(" AND " + AuditField.IS_NOT_DELETED);
                 continue;
             }
             if (!useVersion || !column.getEntityField().isAnnotationPresent(Version.class)) {
@@ -561,7 +558,7 @@ public class SqlUtils {
     public static String exampleWhereClause() {
         return "<if test=\"_parameter != null\">" +
                 "<where>\n" +
-                IS_NOT_DELETED + "\n" +
+                AuditField.IS_NOT_DELETED + "\n" +
                 "  <foreach collection=\"oredCriteria\" item=\"criteria\">\n" +
                 "    <if test=\"criteria.valid\">\n" +
                 "      ${@tk.mybatis.mapper.util.OGNL@andOr(criteria)}" +
