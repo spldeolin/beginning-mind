@@ -124,7 +124,7 @@ public class CommonServiceImpl<M> implements CommonService<M> {
         if (model != null) {
             log.warn("物理删除：" + model);
 
-            boolean physicallyDeleted = mapper.physicallyDelete(id) != 0;
+            boolean physicallyDeleted = mapper.physicallyDeleteById(id) != 0;
             if (physicallyDeleted) {
                 this.clearCache();
             }

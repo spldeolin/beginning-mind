@@ -18,6 +18,18 @@ public interface PhysicallyDeleteMapper {
      * </pre>
      */
     @DeleteProvider(type = PhysicallyDeleteMapperProvider.class, method = "dynamicSQL")
-    int physicallyDelete(Long id);
+    int physicallyDeleteById(Long id);
+
+    /**
+     * <pre>
+     * ############
+     * #          #
+     * #  DANGER  #
+     * #          #
+     * ############
+     * </pre>
+     */
+    @DeleteProvider(type = PhysicallyDeleteMapperProvider.class, method = "dynamicSQL")
+    int physicallyDeleteByIds(String ids);
 
 }

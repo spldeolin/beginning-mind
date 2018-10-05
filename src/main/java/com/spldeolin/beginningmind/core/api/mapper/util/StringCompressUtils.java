@@ -16,7 +16,7 @@ public class StringCompressUtils {
                 "    ") + "|");
     }
 
-    public static String trimUnnecessaryBlanks(StringBuilder sb) {
+    public static String trimUnnecessaryBlanks(CharSequence sb) {
         return trimUnnecessaryBlanks(sb.toString());
     }
 
