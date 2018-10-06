@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.holder;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
@@ -24,6 +25,7 @@ public class RequestMethodDefinitionsHolder {
 
     private List<String> mappings;
 
+    @PostConstruct
     public void init() {
         Map<RequestMappingInfo, HandlerMethod> handlerMethods = requestMappingHandlerMapping.getHandlerMethods();
         mappings = Lists.newArrayList();

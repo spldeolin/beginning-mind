@@ -44,9 +44,6 @@ public class InitTask implements CommandLineRunner {
 
         // 确保本地目录存在
         ensureDirectoryExist();
-
-        // 读取RequestMethod信息，并载入内存
-        requestMethodDefinitionsHolder.init();
     }
 
     @SneakyThrows
