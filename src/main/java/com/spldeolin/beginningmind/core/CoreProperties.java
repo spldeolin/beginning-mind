@@ -52,6 +52,24 @@ public class CoreProperties {
     }
 
     /**
+     * SpringBoot内部的@Async线程池规格
+     */
+    private TaskExecutor taskExecutor;
+
+    @Data
+    public static class TaskExecutor {
+
+        private Integer coreSize;
+
+        private Integer maximumSize;
+
+        private Integer queueCapacity;
+
+        private Integer keepAliveSeconds;
+
+    }
+
+    /**
      * 文件支持
      */
     private File file;

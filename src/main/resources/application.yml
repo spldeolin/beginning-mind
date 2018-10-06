@@ -100,6 +100,12 @@ core:
     default-datetime-pattern: yyyy-MM-dd'T'HH:mm:ss
     serialize-java-util-date-to-timestamp: true
 
+  task-executor:
+    core-size: 5
+    maximum-size: 10
+    queue-capacity: 20
+    keep-alive-seconds: 60
+
   file:
     mapping: 占位符
     location: 占位符
