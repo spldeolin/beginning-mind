@@ -19,18 +19,16 @@ spring:
 
   profiles.active: ${profile}
 
-  datasource:
-    type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
+  datasource.druid:
+    driverClassName: com.mysql.jdbc.Driver
     url: 占位符
     username: 占位符
     password: 占位符
-    druid:
-      initialSize: 2
-      minIdle: 2
-      maxActive: 30
-      validationQuery: select 'x'
-      test-on-borrow: true
+    initialSize: 2
+    minIdle: 2
+    maxActive: 30
+    validationQuery: select 'x'
+    testOnBorrow: true
 
   redis:
     host: 占位符
@@ -38,44 +36,43 @@ spring:
     password: 占位符
     timeout: 2000 #2sec
     pool:
-      max-active: 8
-      max-wait: -1
-      max-idle: 8
-      min-idle: 0
+      maxActive: 8
+      maxWait: -1
+      maxIdle: 8
+      minIdle: 0
 
-  data:
-    mongodb:
-      uri: 占位符
+  data.mongodb:
+    uri: 占位符
 
   rabbitmq:
     host: 占位符
     port: 占位符
     username: 占位符
     password: 占位符
-    publisher-confirms: true # 发送确认
-    publisher-returns: true # 发送失败退回
+    publisherConfirms: true # 发送确认
+    publisherReturns: true # 发送失败退回
     listener:
       #      direct:
       #        acknowledge-mode: manual # ACK
       simple:
-        acknowledge-mode: manual # ACK
+        acknowledgeMode: manual # ACK
 
 management:
   security:
     enabled: false
   port: ${server.port}
-  context-path: /actuator
+  contextPath: /actuator
   endpoints:
     shutdown:
       enabled: true
 
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
+  mapperLocations: classpath:mapper/*.xml
 
 mapper:
   mappers:
   - com.spldeolin.beginningmind.core.api.CommonMapper
-  not-empty: false
+  notEmpty: false
   identity: MYSQL
 
 pagehelper:
@@ -92,36 +89,36 @@ core:
 
   address: 占位符
 
-  redis-namespace: beginningmind
+  redisNamespace: beginningmind
 
   time:
-    default-date-pattern: yyyy-MM-dd
-    default-time-pattern: HH:mm:ss
-    default-datetime-pattern: yyyy-MM-dd'T'HH:mm:ss
-    serialize-java-util-date-to-timestamp: true
+    defaultDatePattern: yyyy-MM-dd
+    defaultTimePattern: HH:mm:ss
+    defaultDatetimePattern: yyyy-MM-dd'T'HH:mm:ss
+    serializeJavaUtilDateToTimestamp: true
 
   task-executor:
-    core-size: 5
-    maximum-size: 10
-    queue-capacity: 20
-    keep-alive-seconds: 60
+    coreSize: 5
+    maximumSize: 10
+    queueCapacity: 20
+    keepAliveSeconds: 60
 
   file:
     mapping: 占位符
     location: 占位符
 
   email:
-    server-host: smtp.163.com
-    server-port: 25
-    addresser-name: # TODO E-Mail
-    addresser-email: # TODO E-Mail
-    addresser-auth-code: # TODO E-Mail
+    serverHost: smtp.163.com
+    serverPort: 25
+    addresserName: # TODO E-Mail
+    addresserEmail: # TODO E-Mail
+    addresserAuthCode: # TODO E-Mail
 
-  snow-flake:
-    datacenter-id: 占位符
-    machine-id: 占位符
+  snowFlake:
+    datacenterId: 占位符
+    machineId: 占位符
 
-  max-size-per-local-cache: 占位符
+  maxSizePerLocalCache: 占位符
 
 ---
 
@@ -143,7 +140,7 @@ spring:
 
   profiles: dev
 
-  datasource:
+  datasource.druid:
     url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
     username: admin
     password: admin
@@ -153,9 +150,8 @@ spring:
     port: 6379
     password: root
 
-  data:
-    mongodb:
-      uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
+  data.mongodb:
+    uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
 
   rabbitmq:
     host: 192.168.2.2
@@ -175,11 +171,11 @@ core:
     mapping: /static/
     location: C:/beginning-mind-static/
 
-  snow-flake:
-    datacenter-id: 0
-    machine-id: 0
+  snowFlake:
+    datacenterId: 0
+    machineId: 0
 
-  max-size-per-local-cache: 64
+  maxSizePerLocalCache: 64
 
 ---
 
@@ -195,13 +191,13 @@ server:
 
   port: # TODO 测试端口
 
-  context-path: /
+  contextPath: /
 
 spring:
 
   profiles: test
 
-  datasource:
+  datasource.druid:
     url: # TODO 测试数据库
     username: #TODO 测试数据库
     password: #TODO 测试数据库
@@ -211,9 +207,8 @@ spring:
     port: #TODO 测试Redis
     password: #TODO 测试Redis
 
-  data:
-    mongodb:
-      uri: #TODO 测试MongoDB
+  data.mongodb:
+    uri: #TODO 测试MongoDB
 
   rabbitmq:
     host: #TODO 测试RabbitMQ
@@ -234,10 +229,10 @@ core:
     location: # TODO 测试环境静态文件目录
 
   snow-flake:
-    datacenter-id: 0
-    machine-id: 0
+    datacenterId: 0
+    machineId: 0
 
-  max-size-per-local-cache: 64
+  maxSizePerLocalCache: 64
 
 ---
 
@@ -253,13 +248,13 @@ server:
 
   port: # TODO 生产端口
 
-  context-path: /
+  contextPath: /
 
 spring:
 
   profiles: prod
 
-  datasource:
+  datasource.druid:
     url: # TODO 生产数据库
     username: #TODO 生产数据库
     password: #TODO 生产数据库
@@ -269,9 +264,8 @@ spring:
     port: #TODO 生产Redis
     password: #TODO 生产Redis
 
-  data:
-    mongodb:
-      uri: #TODO 生产MongoDB
+  data.mongodb:
+    uri: #TODO 生产MongoDB
 
   rabbitmq:
     host: #TODO 生产RabbitMQ
@@ -295,4 +289,4 @@ core:
     datacenter-id: 0
     machine-id: 0
 
-  max-size-per-local-cache: # TODO 生产环境本地缓存最大条数
+  maxSizePerLocalCache: # TODO 生产环境本地缓存最大条数

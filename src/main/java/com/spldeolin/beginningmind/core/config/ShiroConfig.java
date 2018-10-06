@@ -35,7 +35,7 @@ import com.spldeolin.beginningmind.core.service.PermissionService;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${management.context-path}")
+    @Value("${management.contextPath}")
     private String actuatorUrlPrefix;
 
     @Autowired
