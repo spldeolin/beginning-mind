@@ -22,7 +22,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class InitTask implements CommandLineRunner {
 
-    @Value("${server.context-path}")
+    @Value("${server.contextPath}")
     private String serverContextPath;
 
     @Autowired
