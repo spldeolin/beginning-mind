@@ -9,8 +9,8 @@
     <packaging>jar</packaging>
 
     <name>Beginning::Mind</name>
-    <description>初心</description>
 
+    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -20,10 +20,52 @@
 
     <properties>
         <java.version>1.8</java.version>
+        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
+        <spring-session.version>1.3.3.RELEASE</spring-session.version>
+        <!-- https://mvnrepository.com/artifact/com.alibaba/druid-spring-boot-starter -->
+        <druid.version>1.1.10</druid.version>
+        <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
+        <mybatis.version>1.3.2</mybatis.version>
+        <!-- https://mvnrepository.com/artifact/tk.mybatis/mapper-spring-boot-starter -->
+        <mapper.version>1.2.4</mapper.version>
+        <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
+        <pagehelper.version>1.2.7</pagehelper.version>
+        <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
+        <shiro.version>1.4.0</shiro.version>
+        <!-- https://mvnrepository.com/artifact/org.crazycake/shiro-redis -->
+        <shiro-redis.version>3.0.0</shiro-redis.version>
+        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
+        <swagger.version>2.9.2</swagger.version>
+        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
+        <commons-lang3.version>3.8.1</commons-lang3.version>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <guava.version>26.0-jre</guava.version>
+        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
+        <okhttp.version>3.11.0</okhttp.version>
+        <!-- https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-core -->
+        <protostuff.version>1.1.3</protostuff.version>
+        <!-- https://mvnrepository.com/artifact/org.objenesis/objenesis -->
+        <objenesis.version>2.6</objenesis.version>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <poi.version>4.0.0</poi.version>
+        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
+        <commons-io.version>2.6</commons-io.version>
+        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
+        <commons-codec.version>1.11</commons-codec.version>
+        <!-- https://mvnrepository.com/artifact/com.google.zxing/javase -->
+        <zxing.version>3.3.3</zxing.version>
+        <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
+        <simple-java-mail.version>5.0.6</simple-java-mail.version>
+        <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
+        <pinyin4j.version>2.5.1</pinyin4j.version>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson/jackson-bom -->
+        <jackson-bom.version>2.9.7</jackson-bom.version>
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-bom -->
+        <log4j2-bom.version>2.11.1</log4j2-bom.version>
     </properties>
 
     <dependencies>
-        <!--springboot-->
+        <!-- springboot -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter</artifactId>
@@ -34,12 +76,12 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--springboot log4j2-->
+        <!-- springboot log4j2 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
         </dependency>
-        <!--springboot web-->
+        <!-- springboot web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -54,43 +96,43 @@
                 </exclusion>
             </exclusions>
         </dependency>
-        <!--springboot undertow-->
+        <!-- springboot undertow -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
-        <!--springboot aspect-->
+        <!-- springboot aspect -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <!--springboot redis-->
+        <!-- springboot redis -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
-        <!--springboot mongodb-->
+        <!-- springboot mongodb -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>
-        <!--springboot rabbitmq-->
+        <!-- springboot rabbitmq -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
-        <!--springboot actuator-->
+        <!-- springboot actuator -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
-        <!--spring session-->
+        <!-- spring session -->
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
-            <version>1.3.3.RELEASE</version>
+            <version>${spring-session.version}</version>
         </dependency>
-        <!--jackson (jsr310, guava, yaml)-->
+        <!-- jackson (jsr310, guava, yaml) -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
@@ -103,7 +145,7 @@
             <groupId>com.fasterxml.jackson.dataformat</groupId>
             <artifactId>jackson-dataformat-yaml</artifactId>
         </dependency>
-        <!--log4j2 (adapter)-->
+        <!-- log4j2 (adapter) -->
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-1.2-api</artifactId>
@@ -116,143 +158,143 @@
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-jul</artifactId>
         </dependency>
-        <!--druid-->
+        <!-- druid -->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid-spring-boot-starter</artifactId>
-            <version>1.1.10</version>
+            <version>${druid.version}</version>
         </dependency>
-        <!--mybatis-->
+        <!-- mybatis -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>1.3.2</version>
+            <version>${mybatis.version}</version>
         </dependency>
-        <!--mapper-->
+        <!-- mapper -->
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper-spring-boot-starter</artifactId>
-            <version>1.2.4</version>
+            <version>${mapper.version}</version>
         </dependency>
-        <!--pagehelper-->
+        <!-- pagehelper -->
         <dependency>
             <groupId>com.github.pagehelper</groupId>
             <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.7</version>
+            <version>${pagehelper.version}</version>
         </dependency>
-        <!--shiro-->
+        <!-- shiro -->
         <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-spring</artifactId>
-            <version>1.4.0</version>
+            <version>${shiro.version}</version>
         </dependency>
-        <!--shiro-redis-->
+        <!-- shiro-redis -->
         <dependency>
             <groupId>org.crazycake</groupId>
             <artifactId>shiro-redis</artifactId>
-            <version>3.0.0</version>
+            <version>${shiro-redis.version}</version>
         </dependency>
-        <!--swagger-->
+        <!-- swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>2.9.2</version>
+            <version>${swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
-            <version>2.9.2</version>
+            <version>${swagger.version}</version>
         </dependency>
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-bean-validators</artifactId>
-            <version>2.9.2</version>
+            <version>${swagger.version}</version>
         </dependency>
-        <!--commons lang3-->
+        <!-- commons lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
-        <!--guava-->
+        <!-- guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>26.0-jre</version>
+            <version>${guava.version}</version>
         </dependency>
-        <!--okhttp-->
+        <!-- okhttp -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>3.11.0</version>
+            <version>${okhttp.version}</version>
         </dependency>
-        <!--protostuff-->
+        <!-- protostuff -->
         <dependency>
             <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-core</artifactId>
-            <version>1.1.3</version>
+            <version>${protostuff.version}</version>
         </dependency>
         <dependency>
             <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-runtime</artifactId>
-            <version>1.1.3</version>
+            <version>${protostuff.version}</version>
         </dependency>
-        <!--objenesis-->
+        <!-- objenesis -->
         <dependency>
             <groupId>org.objenesis</groupId>
             <artifactId>objenesis</artifactId>
-            <version>2.6</version>
+            <version>${objenesis.version}</version>
         </dependency>
-        <!--poi-->
+        <!-- poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>4.0.0</version>
+            <version>${poi.version}</version>
         </dependency>
-        <!--commons io-->
+        <!-- commons io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>${commons-io.version}</version>
         </dependency>
-        <!--commons codec-->
+        <!-- commons codec -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
+            <version>${commons-codec.version}</version>
         </dependency>
-        <!--zxing-->
+        <!-- zxing -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>3.3.3</version>
+            <version>${zxing.version}</version>
         </dependency>
-        <!--simple java email-->
+        <!-- simple java email -->
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
-            <version>5.0.4</version>
+            <version>${simple-java-mail.version}</version>
         </dependency>
-        <!--pinyin4j-->
+        <!-- pinyin4j -->
         <dependency>
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
-            <version>2.5.1</version>
+            <version>${pinyin4j.version}</version>
         </dependency>
 
-        <!--mysql-->
+        <!-- mysql -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!--lombok-->
+        <!-- lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <!--springboot test-->
+        <!-- springboot test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -262,17 +304,17 @@
 
     <dependencyManagement>
         <dependencies>
-            <!--jackson (bom)-->
+            <!-- jackson (bom) -->
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
                 <artifactId>jackson-bom</artifactId>
-                <version>2.9.7</version>
+                <version>${jackson-bom.version}</version>
             </dependency>
-            <!--log4j2 (bom)-->
+            <!-- log4j2 (bom) -->
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
                 <artifactId>log4j-bom</artifactId>
-                <version>2.11.1</version>
+                <version>${log4j2-bom.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
