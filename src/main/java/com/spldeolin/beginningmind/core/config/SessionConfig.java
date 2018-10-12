@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.config;
 
+import org.springframework.context.annotation.Configuration;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
 
 /**
@@ -9,6 +10,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  */
 @EnableRedisHttpSession(redisNamespace = "beginningmind",
         maxInactiveIntervalInSeconds = SessionConfig.SESSION_EXPIRE_SECONDS)
+@Configuration
 public class SessionConfig {
 
     public static final int SESSION_EXPIRE_SECONDS = 1801;
