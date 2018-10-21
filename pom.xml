@@ -58,7 +58,7 @@
         <protostuff.version>1.1.3</protostuff.version>
 
         <!-- https://mvnrepository.com/artifact/org.objenesis/objenesis -->
-        <objenesis.version>3.0</objenesis.version>
+        <objenesis.version>3.0.1</objenesis.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
         <poi.version>4.0.0</poi.version>
