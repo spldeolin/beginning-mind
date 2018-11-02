@@ -14,4 +14,9 @@ public class AuditField {
 
     public static final String DELETION_FLAG_FIELD_NAME = "deletionFlag";
 
+    /**
+     * 持久层执行insert/update操作时，需要不织入SQL文的字段的属性名
+     */
+    public static final String[] IGNORED_FIELD_NAMES = {"insertedAt", "updatedAt"};
+
 }

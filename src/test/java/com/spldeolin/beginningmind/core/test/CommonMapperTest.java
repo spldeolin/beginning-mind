@@ -4,6 +4,7 @@
 
 package com.spldeolin.beginningmind.core.test;
 
+import java.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,20 +38,27 @@ public class CommonMapperTest {
     @Test
     public void testInsert() {
         userMapper.insertBatch(Lists.newArrayList(
-                User.builder().name("1adkljads").deletionFlag(110086L).build(),
-                User.builder().name("2adkljads").deletionFlag(210086L).build(),
-                User.builder().name("3adkljads").deletionFlag(310086L).build(),
-                User.builder().name("4adkljads").deletionFlag(410086L).build(),
-                User.builder().name("5adkljads").deletionFlag(510086L).build()
+                User.builder().name("1adkljads").deletionFlag(110086L).mobile("1").email("2").password("3").salt("4")
+                        .enableSign(true).serialNumber("5").build(),
+                User.builder().name("2adkljads").deletionFlag(210086L).mobile("1").email("2").password("3").salt("4")
+                        .enableSign(true).serialNumber("5").build(),
+                User.builder().name("3adkljads").deletionFlag(310086L).mobile("1").email("2").password("3").salt("4")
+                        .enableSign(true).serialNumber("5").build(),
+                User.builder().name("4adkljads").deletionFlag(410086L).mobile("1").email("2").password("3").salt("4")
+                        .enableSign(true).serialNumber("5").build(),
+                User.builder().name("5adkljads").deletionFlag(510086L).mobile("1").email("2").password("3").salt("4")
+                        .enableSign(true).serialNumber("5").build()
         ));
-        User user = User.builder().name("adkljads").deletionFlag(10086L).build();
+        User user = User.builder().name("adkljads").deletionFlag(10086L).mobile("1").email("2").password("3").salt("4")
+                .enableSign(true).serialNumber("5").build();
         userMapper.insert(user);
         log.info(user.getId());
     }
 
     @Test
     public void testUpdate() {
-        User user = User.builder().id(18L).name("汉字").deletionFlag(5464646464L).build();
+        User user = User.builder().id(2L).name("汉字").updatedAt(LocalDateTime.of(2018, 8, 7, 8, 33, 52))
+                .deletionFlag(5464646464L).build();
         log.info(userMapper.updateByIdSelective(user));
     }
 

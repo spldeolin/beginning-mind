@@ -282,6 +282,10 @@ public class SqlUtils {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
+            // 指定需要忽略的字段
+            if (StringUtils.equalsAny(column.getProperty(), AuditField.IGNORED_FIELD_NAMES)) {
+                continue;
+            }
             // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
             if (StringUtils.equalsAny(column.getColumn(), "id", AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
@@ -351,7 +355,11 @@ public class SqlUtils {
         EntityColumn versionColumn = null;
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
-            // 忽略以下字段，原因：inserted_at数据插入之后不应改变，updated_at MySQL会自动更新，deletion_flag不应能被修改
+            // 指定需要忽略的字段
+            if (StringUtils.equalsAny(column.getProperty(), AuditField.IGNORED_FIELD_NAMES)) {
+                continue;
+            }
+            // 忽略以下字段，原因：deletion_flag不应能被修改
             if (StringUtils.equalsAny(column.getColumn(), AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
             }

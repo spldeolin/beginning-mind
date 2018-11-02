@@ -40,6 +40,10 @@ public class InsertMapperProvider extends MapperTemplate {
         Boolean hasIdentityKey = false;
         //先处理cache或bind节点
         for (EntityColumn column : columnList) {
+            // 指定需要忽略的字段
+            if (StringUtils.equalsAny(column.getProperty(), AuditField.IGNORED_FIELD_NAMES)) {
+                continue;
+            }
             // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
             if (StringUtils.equalsAny(column.getColumn(), "id", AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
@@ -73,6 +77,10 @@ public class InsertMapperProvider extends MapperTemplate {
         sql.append(SqlHelper.insertIntoTable(entityClass, tableName(entityClass)));
         sql.append("<trim prefix=\"(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
+            // 指定需要忽略的字段
+            if (StringUtils.equalsAny(column.getProperty(), AuditField.IGNORED_FIELD_NAMES)) {
+                continue;
+            }
             // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
             if (StringUtils.equalsAny(column.getColumn(), "id", AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
@@ -89,6 +97,10 @@ public class InsertMapperProvider extends MapperTemplate {
         sql.append("</trim>");
         sql.append("<trim prefix=\"VALUES(\" suffix=\")\" suffixOverrides=\",\">");
         for (EntityColumn column : columnList) {
+            // 指定需要忽略的字段
+            if (StringUtils.equalsAny(column.getProperty(), AuditField.IGNORED_FIELD_NAMES)) {
+                continue;
+            }
             // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
             if (StringUtils.equalsAny(column.getColumn(), "id", AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
@@ -135,6 +147,10 @@ public class InsertMapperProvider extends MapperTemplate {
         Set<EntityColumn> columnList = EntityHelper.getColumns(entityClass);
         //当某个列有主键策略时，不需要考虑他的属性是否为空，因为如果为空，一定会根据主键策略给他生成一个值
         for (EntityColumn column : columnList) {
+            // 指定需要忽略的字段
+            if (StringUtils.equalsAny(column.getProperty(), AuditField.IGNORED_FIELD_NAMES)) {
+                continue;
+            }
             // 忽略以下字段，原因：id自增，inserted_at有初始值，updated_at初始应该为null，deletion_flag初始应该为-1
             if (StringUtils.equalsAny(column.getColumn(), "id", AuditField.DELETION_FLAG_COLUMN_NAME)) {
                 continue;
