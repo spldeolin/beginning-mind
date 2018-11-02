@@ -19,7 +19,7 @@ spring:
 
   profiles.active: ${profile}
 
-  datasource.druid:
+  datasource:
     driverClassName: com.mysql.jdbc.Driver
     url: 占位符
     username: 占位符
@@ -140,7 +140,7 @@ spring:
 
   profiles: dev
 
-  datasource.druid:
+  datasource:
     url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
     username: admin
     password: admin
@@ -197,7 +197,7 @@ spring:
 
   profiles: test
 
-  datasource.druid:
+  datasource:
     url: # TODO 测试数据库
     username: #TODO 测试数据库
     password: #TODO 测试数据库
@@ -254,7 +254,7 @@ spring:
 
   profiles: prod
 
-  datasource.druid:
+  datasource:
     url: # TODO 生产数据库
     username: #TODO 生产数据库
     password: #TODO 生产数据库

@@ -7,14 +7,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.alibaba.druid.pool.DruidDataSource;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
+
+//import com.alibaba.druid.pool.DruidDataSource;
 
 /**
  * @author Deolin 2018/08/01
@@ -26,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 public class ApplicationYmlChecker {
 
     @Autowired
-    private DruidDataSource druidDataSource;
+    private DataSourceProperties dataSourceProperties;
 
     @Autowired
     private RedisProperties redisProperties;
@@ -53,7 +55,7 @@ public class ApplicationYmlChecker {
     @SneakyThrows
     public void t() {
         // spring.datasource.druid
-        log.info(druidDataSource);
+        log.info(dataSourceProperties);
 
         // spring.redis
         log.info(redisProperties);
