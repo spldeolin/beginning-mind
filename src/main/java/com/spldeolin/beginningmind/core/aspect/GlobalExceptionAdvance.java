@@ -178,8 +178,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(RequestNotFoundException.class)
     public RequestResult handleRequestNotFoundException() {
-        return RequestResult.failure(ResultCode.NOT_FOUND,
-                (String) Requests.request().getAttribute("javax.servlet.error.request_uri"));
+        return RequestResult.failure(ResultCode.NOT_FOUND);
     }
 
     /**

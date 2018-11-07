@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
+import lombok.extern.log4j.Log4j2;
 import springfox.documentation.annotations.ApiIgnore;
 
 /**
@@ -19,6 +20,7 @@ import springfox.documentation.annotations.ApiIgnore;
 @Controller
 @RequestMapping("/")
 @ApiIgnore
+@Log4j2
 public class ErrorForwardController implements ErrorController {
 
     public static final String ERROR_PATH = "/error";
@@ -42,6 +44,7 @@ public class ErrorForwardController implements ErrorController {
             throw new RequestNotFoundException();
         }
         if (status.equals(HttpStatus.NOT_FOUND.value())) {
+            log.info("找不到的URL {}", request.getAttribute("javax.servlet.error.request_uri"));
             throw new RequestNotFoundException();
         } else {
             Throwable throwable = (Throwable) request.getAttribute(
