@@ -19,6 +19,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
@@ -32,6 +33,30 @@ public class JacksonConfig {
 
     @Bean
     public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
+        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
+
+        // 模块
+        builder.modules(Lists.newArrayList(guavaCollectionModule(), javaTimeModule()));
+
+        // 是否将java.util.Date对象转化为时间戳
+        if (!Optional.ofNullable(coreProperties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
+            builder.simpleDateFormat(coreProperties.getTime().getDefaultDatetimePattern());
+        }
+
+        // 忽略不认识的属性名
+        builder.failOnUnknownProperties(false);
+
+        // 时区
+        builder.timeZone(TimeZone.getDefault());
+
+        return builder;
+    }
+
+    private GuavaModule guavaCollectionModule() {
+        return new GuavaModule();
+    }
+
+    private SimpleModule javaTimeModule() {
         DateTimeFormatter date = DateTimeFormatter.ofPattern(coreProperties.getTime().getDefaultDatePattern());
         DateTimeFormatter time = DateTimeFormatter.ofPattern(coreProperties.getTime().getDefaultTimePattern());
         DateTimeFormatter dateTime = DateTimeFormatter.ofPattern(
@@ -47,20 +72,7 @@ public class JacksonConfig {
                 .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
                 .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
 
-        Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json().modules(javaTimeModule);
-
-        builder.modules(new GuavaModule());
-
-        // 是否将java.util.Date对象转化为时间戳
-        if (!Optional.ofNullable(coreProperties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(
-                true)) {
-            builder.simpleDateFormat(coreProperties.getTime().getDefaultDatetimePattern());
-        }
-        // 忽略不认识的属性名
-        builder.failOnUnknownProperties(false);
-        // 时区
-        builder.timeZone(TimeZone.getDefault());
-        return builder;
+        return javaTimeModule;
     }
 
 }
