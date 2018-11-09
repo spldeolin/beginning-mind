@@ -8,7 +8,7 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
  *
  * @author Deolin
  */
-@EnableRedisHttpSession(redisNamespace = "beginningmind",
+@EnableRedisHttpSession(redisNamespace = "beginningMind",
         maxInactiveIntervalInSeconds = SessionConfig.SESSION_EXPIRE_SECONDS)
 @Configuration
 public class SessionConfig {

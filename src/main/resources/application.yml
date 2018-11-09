@@ -89,7 +89,7 @@ core:
 
   address: 占位符
 
-  redisNamespace: beginningmind
+  redisNamespace: beginningMind
 
   time:
     defaultDatePattern: yyyy-MM-dd
