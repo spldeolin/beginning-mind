@@ -40,7 +40,7 @@
         <mapper.version>1.2.4</mapper.version>
 
         <!-- https://mvnrepository.com/artifact/com.github.pagehelper/pagehelper-spring-boot-starter -->
-        <pagehelper.version>1.2.9</pagehelper.version>
+        <pagehelper.version>1.2.10</pagehelper.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.shiro/shiro-spring -->
         <shiro.version>1.4.0</shiro.version>
