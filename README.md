@@ -1,4 +1,4 @@
-## beginning-mind
+## *beginning-mind*
 
 ### 简介
 
@@ -10,18 +10,16 @@
 
 - 前后端完全分离，交互数据一律以JSON形式进出。
 - 没有xml配置、properties配置，只有yaml。
-- 受代码生成器支持，单表操作基本无需任何编码。
+- 集成了代码生成器与MybatisPlus，单表操作基本无需任何编码。
 - 统一异常处理，可能的错误均会被考虑到，并得到处理。
 - 控制层数据校验，确保对外API高度健壮。
 - 选用性能最好的Log4j2作为日志实现，并通过适配器将主流的日志门面统一适配到Log4j2实现。
 - 每次请求的轨迹都将保存到Mongo，方便追溯。
-- 数据库所有数据的删除方式均为逻辑删除，删除标识值设计成与ID一致，用于字段的唯一制约。
-
-### 依赖
-
-[cadeau-support](https://github.com/spldeolin/cadeau-support) 代码生成器
+- 数据库所有数据的删除方式均为逻辑删除。
 
 ### 项目前身
+
+[new-mind](https://github.com/spldeolin/new-mind) 尝试从Spring Boot 1.5.x升级到Spring Boot 2.x.x，现已合并
 
 [try-boot](https://github.com/spldeolin/try-boot) 初次使用Spring Boot	
 

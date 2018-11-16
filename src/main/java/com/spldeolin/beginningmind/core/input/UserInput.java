@@ -8,12 +8,15 @@ package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import org.hibernate.validator.constraints.Email;
-import org.hibernate.validator.constraints.NotBlank;
 import com.spldeolin.beginningmind.core.api.valid.annotation.Mobile;
 import com.spldeolin.beginningmind.core.model.User;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
 /**
@@ -22,6 +25,9 @@ import lombok.experimental.Accessors;
  * @author Deolin 2018/8/4
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Accessors(chain = true)
 public class UserInput implements Serializable {
 

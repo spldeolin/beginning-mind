@@ -4,9 +4,6 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-/**
- * @author Deolin
- */
 @SpringBootApplication
 public class CoreApplication {
 
@@ -16,7 +13,7 @@ public class CoreApplication {
             return;
         }
         SpringApplication.run(CoreApplication.class, args);
-        System.out.println("启动成功");
+        System.out.println("beginning-mind启动成功");
     }
 
 }

@@ -2,13 +2,10 @@ package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.spldeolin.beginningmind.core.api.IdGetable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,80 +15,70 @@ import lombok.experimental.Accessors;
 /**
  * 用户
  *
- * @author Deolin 2018/5/29
+ * @author Deolin 2018/11/15
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "user")
-public class User implements Serializable {
+@TableName("user")
+public class User implements IdGetable, Serializable {
 
     /**
      * ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableField("id")
     private Long id;
 
     /**
-     * 审计字段 插入时间
+     * 通用字段 插入时间
      */
-    @Column(name = "inserted_at")
-    @JsonIgnore
+    @TableField("inserted_at")
     private LocalDateTime insertedAt;
 
     /**
-     * 审计字段 更新时间
+     * 通用字段 更新时间
      */
     @Version
-    @Column(name = "updated_at")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
-
-    /**
-     * 审计字段 删除标记（-1代表未被删除，其他代表被删除）
-     */
-    @Column(name = "deletion_flag")
-    @JsonIgnore
-    private Long deletionFlag;
 
     /**
      * 名字
      */
+    @TableField("name")
     private String name;
 
     /**
      * 手机号
      */
+    @TableField("mobile")
     private String mobile;
 
     /**
      * E-mail
      */
+    @TableField("email")
     private String email;
 
     /**
      * 密码
      */
+    @TableField("password")
     private String password;
 
     /**
      * 盐
      */
+    @TableField("salt")
     private String salt;
 
     /**
      * 能否登录
      */
-    @Column(name = "enable_sign")
+    @TableField("enable_sign")
     private Boolean enableSign;
-
-    /**
-     * 编号
-     */
-    @Column(name = "serial_number")
-    private String serialNumber;
 
     private static final long serialVersionUID = 1L;
 

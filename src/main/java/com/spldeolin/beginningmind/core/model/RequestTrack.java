@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,13 +16,14 @@ import lombok.experimental.Accessors;
 /**
  * 请求轨迹
  *
- * @author Deolin 2018/8/4
+ * @author Deolin 2018/11/15
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
+@TableName("request_track")
 public class RequestTrack implements Serializable {
 
     /**

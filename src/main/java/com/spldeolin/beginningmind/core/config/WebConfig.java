@@ -6,16 +6,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
+import org.springframework.util.unit.DataSize;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
  * @author Deolin
  */
 @Component
-public class WebConfig extends WebMvcConfigurerAdapter {
+public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private CoreProperties coreProperties;
@@ -50,9 +51,9 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     public MultipartConfigElement multipartConfigElement() {
         MultipartConfigFactory factory = new MultipartConfigFactory();
         // 单文件限制
-        factory.setMaxFileSize("5MB");
+        factory.setMaxFileSize(DataSize.ofMegabytes(5));
         // 总文件限制
-        factory.setMaxRequestSize("10MB");
+        factory.setMaxRequestSize(DataSize.ofMegabytes(10));
         return factory.createMultipartConfig();
     }
 

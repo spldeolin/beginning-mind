@@ -1,30 +1,21 @@
 package com.spldeolin.beginningmind.core;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 配置一览
  *
  * @author Deolin
  */
-@Component
 @ConfigurationProperties(value = "core")
+@Component
 @Data
-@Log4j2
 public class CoreProperties {
 
     /**
-     * 是否处于debug场合
-     */
-    @Value("${debug}")
-    private boolean debug;
-
-    /**
-     * 本项目的访问地址（IP:端口号，e.g.: http:localhost:2333）
+     * 本项目的访问地址（http://localhost:2333）
      */
     private String address;
 
@@ -36,10 +27,10 @@ public class CoreProperties {
     /**
      * “时间”格式
      */
-    private Time time;
+    private TimeProp time;
 
     @Data
-    public static class Time {
+    public static class TimeProp {
 
         private String defaultDatePattern;
 
@@ -54,10 +45,10 @@ public class CoreProperties {
     /**
      * SpringBoot内部的@Async线程池规格
      */
-    private TaskExecutor taskExecutor;
+    private TaskExecutorProp taskExecutor;
 
     @Data
-    public static class TaskExecutor {
+    public static class TaskExecutorProp {
 
         private Integer coreSize;
 
@@ -72,10 +63,10 @@ public class CoreProperties {
     /**
      * 文件支持
      */
-    private File file;
+    private FileProp file;
 
     @Data
-    public static class File {
+    public static class FileProp {
 
         private String mapping;
 
@@ -84,12 +75,26 @@ public class CoreProperties {
     }
 
     /**
-     * E-Mail
+     * 雪花算法的机器区分ID和数据库区分ID
      */
-    private Email email;
+    private SnowFlakeProp snowFlake;
 
     @Data
-    public static class Email {
+    public static class SnowFlakeProp {
+
+        private Long datacenterId;
+
+        private Long machineId;
+
+    }
+
+    /**
+     * E-Mail
+     */
+    private EmailProp email;
+
+    @Data
+    public static class EmailProp {
 
         private String serverHost;
 
@@ -104,22 +109,18 @@ public class CoreProperties {
     }
 
     /**
-     * 雪花算法的机器区分ID和数据库区分ID
+     * 是否启用安全模块
      */
-    private SnowFlake snowFlake;
-
-    @Data
-    public static class SnowFlake {
-
-        private Long datacenterId;
-
-        private Long machineId;
-
-    }
+    private Boolean enableSecurity;
 
     /**
-     * CommonServiceImpl中每个LoadingCache对象的最大缓存条数
+     * 是否启用Swagger
      */
-    private Integer maxSizePerLocalCache;
+    private Boolean enableSwagger;
+
+    /**
+     * 是否启用actuator相关接口的Token认证过滤器
+     */
+    private Boolean enableActuatorFilter;
 
 }

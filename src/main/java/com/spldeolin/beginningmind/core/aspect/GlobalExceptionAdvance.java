@@ -8,7 +8,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
@@ -21,10 +21,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOthersException;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
@@ -37,15 +37,12 @@ import lombok.extern.log4j.Log4j2;
  * 控制层增强：统一异常处理
  *
  * @author Deolin
- * @see com.spldeolin.beginningmind.core.constant.ResultCode
+ * @see ResultCode
  */
 @Component
 @RestControllerAdvice
 @Log4j2
 public class GlobalExceptionAdvance {
-
-    @Autowired
-    private CoreProperties coreProperties;
 
     /**
      * 400 请求动词错误
@@ -61,9 +58,13 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult handle(HttpMediaTypeNotSupportedException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST,
-                "Content-Type错误，当前为[" + e.getContentType().toString().replace(";charset=UTF-8", "") +
-                        "]，正确为[application/json]");
+        MediaType mediaType = e.getContentType();
+        String message = "Content-Type错误，";
+        if (mediaType != null) {
+            message += "当前为[" + e.getContentType().toString().replace(";charset=UTF-8", "") + "]，";
+        }
+        message += "正确为[application/json]。";
+        return RequestResult.failure(ResultCode.BAD_REQEUST, message);
     }
 
     /**
@@ -166,12 +167,13 @@ public class GlobalExceptionAdvance {
     }
 
     /**
-     * 403 没权限或是请求actuator时提供的token不正确
+     * 403 没有权限
      */
     @ExceptionHandler(AuthorizationException.class)
     public RequestResult handleAuthorizationException() {
         return RequestResult.failure(ResultCode.FORBIDDEN);
     }
+
 
     /**
      * 404 找不到请求
@@ -181,12 +183,22 @@ public class GlobalExceptionAdvance {
         return RequestResult.failure(ResultCode.NOT_FOUND);
     }
 
+
     /**
      * 1001 业务异常
      */
     @ExceptionHandler(ServiceException.class)
     public RequestResult handle(ServiceException e) {
         return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
+    }
+
+
+    /**
+     * 500 由BasicErrorController产生的异常（HTTP 404以外的）
+     */
+    @ExceptionHandler(BasicErrorControllerOthersException.class)
+    public RequestResult handle(BasicErrorControllerOthersException e) {
+        return RequestResult.failure(ResultCode.INTERNAL_ERROR, e.getErrorAttributes().toString());
     }
 
     /**
@@ -207,17 +219,6 @@ public class GlobalExceptionAdvance {
             String insignia = track.getInsignia();
             log.error("统一异常处理被击穿！标识：" + insignia, e);
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
-        }
-        // 详细错误信息
-        if (coreProperties.isDebug()) {
-            String msg = e.getMessage();
-            if (msg == null) {
-                msg = e.getClass().getSimpleName();
-            }
-            if (msg.length() > 200) {
-                msg = msg.substring(0, 200) + " ...";
-            }
-            requestResult.setMessage(requestResult.getMessage() + "，详细信息（" + msg + "）");
         }
         return requestResult;
     }

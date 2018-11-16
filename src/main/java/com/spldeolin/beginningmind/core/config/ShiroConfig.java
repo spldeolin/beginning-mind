@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.core.config;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.UUID;
 import javax.servlet.Filter;
 import org.apache.shiro.cache.CacheManager;
 import org.apache.shiro.mgt.SecurityManager;
@@ -18,13 +17,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.controller.ErrorForwardController;
-import com.spldeolin.beginningmind.core.controller.TestController;
 import com.spldeolin.beginningmind.core.model.Permission;
-import com.spldeolin.beginningmind.core.redis.RedisCache;
 import com.spldeolin.beginningmind.core.security.SaltCredentialsMatcher;
 import com.spldeolin.beginningmind.core.security.ServiceRealm;
-import com.spldeolin.beginningmind.core.security.filter.ActuatorFilter;
 import com.spldeolin.beginningmind.core.security.filter.AuthFilter;
 import com.spldeolin.beginningmind.core.security.filter.SignFilter;
 import com.spldeolin.beginningmind.core.service.PermissionService;
@@ -35,17 +30,11 @@ import com.spldeolin.beginningmind.core.service.PermissionService;
 @Configuration
 public class ShiroConfig {
 
-    @Value("${management.contextPath}")
-    private String actuatorUrlPrefix;
-
     @Autowired
     private CoreProperties coreProperties;
 
     @Autowired
     private PermissionService permissionService;
-
-    @Autowired
-    private RedisCache redisCache;
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager) {
@@ -65,7 +54,6 @@ public class ShiroConfig {
         Map<String, Filter> filters = Maps.newHashMap();
         filters.put(SignFilter.MARK, new SignFilter());
         filters.put(AuthFilter.MARK, new AuthFilter());
-        filters.put(ActuatorFilter.MARK, new ActuatorFilter(UUID.randomUUID().toString()));
         return filters;
     }
 
@@ -74,26 +62,22 @@ public class ShiroConfig {
      */
     private Map<String, String> createFilterChainDefinitions() {
         Map<String, String> filterChainDefinitions = new LinkedHashMap<>();
-        // 【TOKEN】actuator相关请求使用TOKEN的过滤器
-        filterChainDefinitions.put(actuatorUrlPrefix + "/**", ActuatorFilter.MARK);
-        // 【匿名】放行error、静态资源、验证码请求、登录请求、测试控制器....
-        filterChainDefinitions.put(ErrorForwardController.ERROR_PATH, "anon");
-        filterChainDefinitions.put(coreProperties.getFile().getMapping() + "/**", "anon");
-        filterChainDefinitions.put("/sign/captcha", "anon");
-        filterChainDefinitions.put("/sign/in", "anon");
-        filterChainDefinitions.put("/sign/isSigning", "anon");
-        filterChainDefinitions.put(TestController.TEST_REQUEST_MAPPING_PREFIX, "anon");
-        // 【登录】登出请求是唯一一个无需权限、需要登录的请求
-        filterChainDefinitions.put("/sign/out", SignFilter.MARK);
-        // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
-        for (Permission permission : permissionService.listAll()) {
-            filterChainDefinitions.put(permission.getMapping(),
-                    SignFilter.MARK + ", " + AuthFilter.MARK + "[" + permission.getName() + "]");
-        }
-        // DEBUG环境下放行一切请求（不进行任何基于认证和鉴权的过滤）
-        if (coreProperties.isDebug()) {
-            filterChainDefinitions = new LinkedHashMap<>();
+        // 根据配置决定是否需要放行一切请求
+        if (!coreProperties.getEnableSecurity()) {
             filterChainDefinitions.put("/**", "anon");
+        } else {
+            // 【匿名】放行error、静态资源、验证码请求、登录请求、测试控制器....
+            filterChainDefinitions.put(coreProperties.getFile().getMapping() + "/**", "anon");
+            filterChainDefinitions.put("/sign/captcha", "anon");
+            filterChainDefinitions.put("/sign/in", "anon");
+            filterChainDefinitions.put("/sign/isSigning", "anon");
+            // 【登录】登出请求是唯一一个无需权限、需要登录的请求
+            filterChainDefinitions.put("/sign/out", SignFilter.MARK);
+            // 【鉴权】为UrlForwardToExceptionController、TestController、SignController以外所有控制器 设置权限链
+            for (Permission permission : permissionService.listAll()) {
+                filterChainDefinitions.put(permission.getMapping(),
+                        SignFilter.MARK + ", " + AuthFilter.MARK + "[" + permission.getName() + "]");
+            }
         }
         return filterChainDefinitions;
     }
@@ -128,8 +112,7 @@ public class ShiroConfig {
             @Value("${spring.redis.timeout}") int timeout,
             @Value("${spring.redis.password}") String password) {
         RedisManager redisManager = new RedisManager();
-        redisManager.setHost(host);
-        redisManager.setPort(port);
+        redisManager.setHost(host + ":" + port);
         redisManager.setTimeout(timeout);
         redisManager.setPassword(password);
         return redisManager;

@@ -28,7 +28,7 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.security.AjaxUtils;
+import com.spldeolin.beginningmind.core.security.util.AjaxUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -56,7 +56,7 @@ public class SignFilter extends AccessControlFilter {
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
         log.info("请求被SignFilter过滤，返回“未登录或登录超时”");
-        AjaxUtils.outputJson(response, RequestResult.failure(ResultCode.UNSIGNED));
+        AjaxUtil.outputJson(response, RequestResult.failure(ResultCode.UNSIGNED));
         return false;
     }
 

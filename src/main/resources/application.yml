@@ -7,8 +7,6 @@
 ##                    ##
 ########################
 
-debug: 占位符
-
 server:
 
   port: 占位符
@@ -20,7 +18,7 @@ spring:
   profiles.active: ${profile}
 
   datasource:
-    driverClassName: com.mysql.jdbc.Driver
+    driverClassName: com.mysql.cj.jdbc.Driver
     url: 占位符
     username: 占位符
     password: 占位符
@@ -52,38 +50,37 @@ spring:
     publisherConfirms: true # 发送确认
     publisherReturns: true # 发送失败退回
     listener:
-      #      direct:
-      #        acknowledgeMode: manual # ACK
       simple:
         acknowledgeMode: manual # ACK
 
+logging:
+
+  config: #未被覆盖时使用默认log4j2.yml
+
 management:
-  security:
-    enabled: false
-  port: ${server.port}
-  contextPath: /actuator
+  server:
+    port: ${server.port}
+    security.enabled: false
   endpoints:
-    shutdown:
-      enabled: true
+    web:
+      base-path: /actuator
+      exposure.include: "*"
+  endpoint:
+    health.show-details: always
 
-mybatis:
-  mapperLocations: classpath:mapper/*.xml
-
-mapper:
-  mappers:
-  - com.spldeolin.beginningmind.core.api.CommonMapper
-  notEmpty: false
-  identity: MYSQL
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  type-aliases-package: com.spldeolin.beginningmind.core.model
+  global-config:
+    banner: false
+    db-config:
+      id-type: INPUT
 
 pagehelper:
   helperDialect: mysql
   reasonable: true
   supportMethodsArguments: true
   params: count=countSql
-
-logging:
-
-  config: #未被覆盖时使用默认log4j2.yml
 
 core:
 
@@ -107,6 +104,10 @@ core:
     mapping: 占位符
     location: 占位符
 
+  snowFlake:
+    datacenterId: 占位符
+    machineId: 占位符
+
   email:
     serverHost: smtp.163.com
     serverPort: 25
@@ -114,11 +115,11 @@ core:
     addresserEmail: # TODO E-Mail
     addresserAuthCode: # TODO E-Mail
 
-  snowFlake:
-    datacenterId: 占位符
-    machineId: 占位符
+  enableSecurity: 占位符
 
-  maxSizePerLocalCache: 占位符
+  enableSwagger: 占位符
+
+  enableActuatorFilter: 占位符
 
 ---
 
@@ -127,8 +128,6 @@ core:
 ##     Devlopment     ##
 ##                    ##
 ########################
-
-debug: true
 
 server:
 
@@ -141,7 +140,7 @@ spring:
   profiles: dev
 
   datasource:
-    url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true
+    url: jdbc:mysql://192.168.2.2:3306/new_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true&useTimezone=true&serverTimezone=GMT%2B8
     username: admin
     password: admin
 
@@ -168,14 +167,18 @@ core:
   address: http://localhost:2333
 
   file:
-    mapping: /static/
-    location: C:/beginning-mind-static/
+    mapping: static
+    location: C:/beginning-mind-static
 
   snowFlake:
-    datacenterId: 0
-    machineId: 0
+    datacenterId: 1
+    machineId: 1
 
-  maxSizePerLocalCache: 64
+  enableSecurity: false
+
+  enableSwagger: true
+
+  enableActuatorFilter: true
 
 ---
 
@@ -185,11 +188,9 @@ core:
 ##                    ##
 ########################
 
-debug: true
-
 server:
 
-  port: # TODO 测试端口
+  port: # TODO 测试环境 端口号
 
   contextPath: /
 
@@ -198,23 +199,23 @@ spring:
   profiles: test
 
   datasource:
-    url: # TODO 测试数据库
-    username: #TODO 测试数据库
-    password: #TODO 测试数据库
+    url: jdbc:mysql://192.168.2.2:3306/new_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true&useTimezone=true&serverTimezone=GMT%2B8
+    username: admin
+    password: admin
 
   redis:
-    host: #TODO 测试Redis
-    port: #TODO 测试Redis
-    password: #TODO 测试Redis
+    host: 192.168.2.2
+    port: 6379
+    password: root
 
   data.mongodb:
-    uri: #TODO 测试MongoDB
+    uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
 
   rabbitmq:
-    host: #TODO 测试RabbitMQ
-    port: #TODO 测试RabbitMQ
-    username: #TODO 测试RabbitMQ
-    password: #TODO 测试RabbitMQ
+    host: 192.168.2.2
+    port: 5672
+    username: root
+    password: root
 
 logging:
 
@@ -222,17 +223,21 @@ logging:
 
 core:
 
-  address: # TODO 测试域名与端口
+  address: http://localhost:2333
 
   file:
-    mapping: /static/
-    location: # TODO 测试环境静态文件目录
+    mapping: static
+    location: C:/beginning-mind-static
 
   snowFlake:
-    datacenterId: 0
-    machineId: 0
+    datacenterId: 1
+    machineId: 1
 
-  maxSizePerLocalCache: 64
+  enableSecurity: false
+
+  enableSwagger: true
+
+  enableActuatorFilter: false
 
 ---
 
@@ -242,11 +247,9 @@ core:
 ##                    ##
 ########################
 
-debug: false
-
 server:
 
-  port: # TODO 生产端口
+  port: # TODO 生产环境 端口号
 
   contextPath: /
 
@@ -255,23 +258,23 @@ spring:
   profiles: prod
 
   datasource:
-    url: # TODO 生产数据库
-    username: #TODO 生产数据库
-    password: #TODO 生产数据库
+    url: # TODO 生产环境 MySQL连接
+    username: # TODO 生产环境 MySQL连接
+    password: # TODO 生产环境 MySQL连接
 
   redis:
-    host: #TODO 生产Redis
-    port: #TODO 生产Redis
-    password: #TODO 生产Redis
+    host: # TODO 生产环境 Redis连接
+    port: # TODO 生产环境 Redis连接
+    password: # TODO 生产环境 Redis连接
 
   data.mongodb:
-    uri: #TODO 生产MongoDB
+    uri: # TODO 生产环境 MongoDB连接
 
   rabbitmq:
-    host: #TODO 生产RabbitMQ
-    port: #TODO 生产RabbitMQ
-    username: #TODO 生产RabbitMQ
-    password: #TODO 生产RabbitMQ
+    host: # TODO 生产环境 RabbitMQ连接
+    port: # TODO 生产环境 RabbitMQ连接
+    username: # TODO 生产环境 RabbitMQ连接
+    password: # TODO 生产环境 RabbitMQ连接
 
 logging:
 
@@ -279,14 +282,18 @@ logging:
 
 core:
 
-  address: # TODO 生产域名与端口
+  address: # TODO 生产环境 Web地址
 
   file:
-    mapping: /static/
-    location: # TODO 生产环境静态文件目录
+    mapping: static
+    location: # TODO 生产环境 静态目录
 
   snowFlake:
-    datacenterId: 0
-    machineId: 0
+    datacenterId: # TODO 生产环境 雪花算法数据中心ID
+    machineId: # TODO 生产环境 雪花算法机器ID
 
-  maxSizePerLocalCache: # TODO 生产环境本地缓存最大条数
+  enableSecurity: true
+
+  enableSwagger: false
+
+  enableActuatorFilter: true

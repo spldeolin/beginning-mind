@@ -12,7 +12,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Requests {
 
-    private static final String REQUEST_TRACK = "com.spldeolin.beginningmind.core.util.Requests.REQUEST_TRACK";
+    private static final String REQUEST_TRACK_KEY = "com.spldeolin.beginningmind.core.util.Requests.REQUEST_TRACK_KEY";
 
     public static HttpServletRequest request() {
         return RequestContextUtils.request();
@@ -35,14 +35,14 @@ public class Requests {
      * @param requestTrack 当前请求轨迹
      */
     public static void setRequestTrack(RequestTrack requestTrack) {
-        request().setAttribute(REQUEST_TRACK, requestTrack);
+        request().setAttribute(REQUEST_TRACK_KEY, requestTrack);
     }
 
     /**
      * @return 当前请求轨迹
      */
     public static RequestTrack getRequestTrack() {
-        return (RequestTrack) request().getAttribute(REQUEST_TRACK);
+        return (RequestTrack) request().getAttribute(REQUEST_TRACK_KEY);
     }
 
     /**

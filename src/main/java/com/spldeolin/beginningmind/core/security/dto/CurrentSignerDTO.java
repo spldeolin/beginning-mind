@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.core.security.dto;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import org.crazycake.shiro.AuthCachePrincipal;
 import com.spldeolin.beginningmind.core.model.User;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +15,7 @@ import lombok.experimental.Accessors;
 @Data
 @Builder
 @Accessors(chain = true)
-public class CurrentSignerDTO implements Serializable, AuthCachePrincipal {
+public class CurrentSignerDTO implements Serializable {
 
     /**
      * 会话ID
@@ -34,10 +33,5 @@ public class CurrentSignerDTO implements Serializable, AuthCachePrincipal {
     private LocalDateTime signedAt;
 
     private static final long serialVersionUID = 1L;
-
-    @Override
-    public String getAuthCacheKey() {
-        return user.getId().toString();
-    }
 
 }

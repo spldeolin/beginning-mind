@@ -1,30 +1,30 @@
 package com.spldeolin.beginningmind.core.api;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
-import com.spldeolin.beginningmind.core.dto.CacheStatsDTO;
-import tk.mybatis.mapper.entity.Condition;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
 /**
  * @author Deolin
  */
-public interface CommonService<M> {
+public interface CommonService<T> {
 
     /**
      * 创建一个资源
      *
      * @param model 待创建资源
      */
-    void create(M model);
+    void create(T model);
 
     /**
      * 创建一批资源
      *
      * @param models 待创建的资源
      */
-    void create(List<M> models);
+    void create(Collection<T> models);
 
     /**
      * 获取一个资源
@@ -32,7 +32,7 @@ public interface CommonService<M> {
      * @param id 资源ID
      * @return 资源
      */
-    Optional<M> get(Long id);
+    Optional<T> get(Long id);
 
     /**
      * 获取多个资源
@@ -40,7 +40,7 @@ public interface CommonService<M> {
      * @param ids 资源ID列表
      * @return 资源列表
      */
-    List<M> list(List<Long> ids);
+    List<T> list(Collection<Long> ids);
 
     /**
      * 获取多个资源，并以资源ID为key，组成映射表
@@ -48,21 +48,21 @@ public interface CommonService<M> {
      * @param ids 资源ID列表
      * @return 资源映射表
      */
-    Map<Long, M> map(List<Long> ids);
+    Map<Long, T> map(Collection<Long> ids);
 
     /**
      * 获取全部资源
      *
      * @return 资源列表
      */
-    List<M> listAll();
+    List<T> listAll();
 
     /**
      * 获取全部资源，并以资源ID为key，组成映射表
      *
      * @return 资源映射表
      */
-    Map<Long, M> mapAll();
+    Map<Long, T> mapAll();
 
     /**
      * 更新一个资源，本方法不校验资源是否存在
@@ -70,7 +70,7 @@ public interface CommonService<M> {
      * @param model 待更新资源
      * @return TRUE：更新成功，FALSE：更新失败（资源不存在或是乐观锁）
      */
-    boolean update(M model);
+    boolean update(T model);
 
     /**
      * 删除一个资源，本方法不校验资源是否存在
@@ -86,15 +86,7 @@ public interface CommonService<M> {
      * @param ids 待删除资源的ID列表
      * @return TRUE：有资源删除成功，FALSE：所有资源都删除失败（资源都不存在）
      */
-    boolean delete(List<Long> ids);
-
-    /**
-     * 物理删除一个资源（资源将会彻底消失）
-     *
-     * @param id 待删除资源的ID
-     * @return 删除资源的ID
-     */
-    boolean physicallyDelete(Long id);
+    boolean delete(Collection<Long> ids);
 
     /**
      * 根据若干个条件，检索一个资源
@@ -103,7 +95,7 @@ public interface CommonService<M> {
      * @return 满足条件的资源
      * @throws TooManyResultsException 满足条件的资源不止一个时
      */
-    Optional<M> searchOne(M m) throws TooManyResultsException;
+    Optional<T> searchOne(T m) throws TooManyResultsException;
 
     /**
      * 根据一个条件，检索一个资源
@@ -113,7 +105,7 @@ public interface CommonService<M> {
      * @return 满足条件的资源
      * @throws TooManyResultsException 满足条件的资源不止一个时
      */
-    Optional<M> searchOne(String modelFieldName, Object value);
+    Optional<T> searchOne(String modelFieldName, Object value);
 
     /**
      * 根据若干个条件，检索多个资源
@@ -121,7 +113,7 @@ public interface CommonService<M> {
      * @param m 存放检索条件的对象
      * @return 满足条件的资源列表
      */
-    List<M> searchBatch(M m);
+    List<T> searchBatch(T m);
 
     /**
      * 根据一个条件，检索多个资源
@@ -130,7 +122,7 @@ public interface CommonService<M> {
      * @param value 值
      * @return 满足条件的资源列表
      */
-    List<M> searchBatch(String modelFieldName, Object value);
+    List<T> searchBatch(String modelFieldName, Object value);
 
     /**
      * 自由检索
@@ -138,18 +130,10 @@ public interface CommonService<M> {
      * 当单表查询的条件比较复杂，或涉及到distinct，order等限定时，建议使用本方法
      * </pre>
      *
-     * @param condition 条件对象
+     * @param queryWrapper 条件对象
      * @return 满足条件的资源列表
      */
-    List<M> searchBatch(Condition condition);
-
-    /**
-     * 判断资源是否存在
-     *
-     * @param id 资源ID
-     * @return true存在，false不存在
-     */
-    boolean isExist(Long id);
+    List<T> searchBatch(QueryWrapper<T> queryWrapper);
 
     /**
      * 判断满足条件的资源是否存在
@@ -157,7 +141,7 @@ public interface CommonService<M> {
      * @param model 存放条件的对象
      * @return true存在，false不存在
      */
-    boolean isExist(M model);
+    boolean isExist(T model);
 
     /**
      * 检索资源个数
@@ -165,13 +149,6 @@ public interface CommonService<M> {
      * @param model 存放条件的对象
      * @return true存在，false不存在
      */
-    int count(M model);
-
-    /**
-     * 获取本地缓存的缓存统计
-     *
-     * @return 缓存统计
-     */
-    Map<String, CacheStatsDTO> listCacheStatses();
+    int count(T model);
 
 }

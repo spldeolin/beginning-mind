@@ -2,13 +2,10 @@ package com.spldeolin.beginningmind.core.model;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Version;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
+import com.spldeolin.beginningmind.core.api.IdGetable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,75 +15,69 @@ import lombok.experimental.Accessors;
 /**
  * 权限
  *
- * @author Deolin 2018/5/15
+ * @author Deolin 2018/11/15
  */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@Table(name = "permission")
-public class Permission implements Serializable {
+@TableName("permission")
+public class Permission implements IdGetable, Serializable {
 
     /**
      * ID
      */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @TableField("id")
     private Long id;
 
     /**
-     * 审计字段 插入时间
+     * 通用字段 插入时间
      */
-    @Column(name = "inserted_at")
-    @JsonIgnore
+    @TableField("inserted_at")
     private LocalDateTime insertedAt;
 
     /**
-     * 审计字段 更新时间
+     * 通用字段 更新时间
      */
     @Version
-    @Column(name = "updated_at")
+    @TableField("updated_at")
     private LocalDateTime updatedAt;
-
-    /**
-     * 审计字段 删除标记（-1代表未被删除，其他代表被删除）
-     */
-    @Column(name = "deletion_flag")
-    @JsonIgnore
-    private Long deletionFlag;
 
     /**
      * 权限名（perms[xxxx]）
      */
+    @TableField("name")
     private String name;
 
     /**
      * 请求方法的全路由（控制器路由+方法路由）
      */
+    @TableField("mapping")
     private String mapping;
 
     /**
      * 用于展示的名称
      */
+    @TableField("display")
     private String display;
 
     /**
      * 菜单ID
      */
-    @Column(name = "menu_id")
+    @TableField("menu_id")
     private Long menuId;
 
     /**
      * 是否是GET请求
      */
-    @Column(name = "is_get_request")
+    @TableField("is_get_request")
     private Boolean isGetRequest;
 
     /**
      * 是否所有用户都应该拥有该权限
      */
-    @Column(name = "must_have")
+    @TableField("must_have")
     private Boolean mustHave;
 
     private static final long serialVersionUID = 1L;

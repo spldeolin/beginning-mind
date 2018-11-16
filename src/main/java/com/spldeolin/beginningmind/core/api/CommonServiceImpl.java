@@ -1,304 +1,202 @@
 package com.spldeolin.beginningmind.core.api;
 
 import java.lang.reflect.ParameterizedType;
+import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import javax.annotation.Nonnull;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.dto.CacheStatsDTO;
-import lombok.extern.log4j.Log4j2;
-import tk.mybatis.mapper.entity.Condition;
+import com.spldeolin.beginningmind.core.api.dto.LogicDeleteDocument;
 
 /**
  * @author Deolin
  */
-@Log4j2
-public class CommonServiceImpl<M> implements CommonService<M> {
+public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implements CommonService<T> {
 
     @Autowired
-    private CommonMapper<M> mapper;
+    private BaseMapper<T> baseMapper;
 
     @Autowired
-    private CoreProperties coreProperties;
+    private MongoTemplate mongoTemplate;
 
-    private Class<M> clazz;
+    private Class<T> modelClass;
 
     private boolean isIdGetable;
+
+    private String tableName;
 
     @SuppressWarnings("unchecked")
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
-        clazz = (Class<M>) pt.getActualTypeArguments()[0];
-        isIdGetable = ArrayUtils.contains(clazz.getInterfaces(), IdGetable.class);
+        modelClass = (Class<T>) pt.getActualTypeArguments()[0];
+        isIdGetable = ArrayUtils.contains(modelClass.getInterfaces(), IdGetable.class);
+
+        TableName tableName = modelClass.getAnnotation(TableName.class);
+        if (tableName != null) {
+            this.tableName = tableName.value();
+        } else {
+            this.tableName = modelClass.getSimpleName();
+        }
     }
 
     @Override
-    public void create(M model) {
-        mapper.insert(model);
+    protected Class<T> currentModelClass() {
+        return modelClass;
     }
 
     @Override
-    public void create(List<M> models) {
+    public void create(T model) {
+        baseMapper.insert(model);
+    }
+
+    @Override
+    public void create(Collection<T> models) {
         if (models.size() == 0) {
             throw new IllegalArgumentException("models长度不应为0");
         }
-        mapper.insertBatch(models);
+
+        super.saveBatch(models);
     }
 
     @Override
-    public Optional<M> get(Long id) {
-        return selectByIdCacheable.getUnchecked(id);
+    public Optional<T> get(Long id) {
+        return Optional.ofNullable(baseMapper.selectById(id));
     }
 
     @Override
-    public List<M> list(List<Long> ids) {
+    public List<T> list(Collection<Long> ids) {
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
 
-        StringBuilder idsSQL = new StringBuilder(64);
-        for (Long id : ids) {
-            idsSQL.append(id).append(",");
-        }
-        idsSQL.deleteCharAt(idsSQL.length() - 1);
-        return selectBatchByIdsCacheable.getUnchecked(idsSQL.toString());
+        return baseMapper.selectBatchIds(ids);
     }
 
     @Override
-    public Map<Long, M> map(List<Long> ids) {
+    public Map<Long, T> map(Collection<Long> ids) {
         ensureIsIdGetable();
-
-        return listToMap(list(ids));
+        return collectionToMap(list(ids));
     }
 
     @Override
-    public boolean update(M model) {
-        boolean updated = mapper.updateByIdSelective(model) != 0;
-        if (updated) {
-            this.clearCache();
-        }
+    public boolean update(T model) {
+        boolean updated = baseMapper.updateById(model) != 0;
         return updated;
     }
 
+    @Transactional
     @Override
     public boolean delete(Long id) {
-        boolean deleted = mapper.deleteById(id) != 0;
+        T model = baseMapper.selectById(id);
+
+        boolean deleted = baseMapper.deleteById(id) != 0;
         if (deleted) {
-            this.clearCache();
+            LogicDeleteDocument document = new LogicDeleteDocument(model);
+            mongoTemplate.insert(document, "ld_" + tableName);
         }
+
         return deleted;
     }
 
     @Override
-    public boolean delete(List<Long> ids) {
+    public boolean delete(Collection<Long> ids) {
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
 
-        StringBuilder idsSQL = new StringBuilder(64);
-        for (Long id : ids) {
-            idsSQL.append(id).append(",");
-        }
-        idsSQL.deleteCharAt(idsSQL.length() - 1);
+        Collection<T> models = this.list(ids);
 
-        boolean deleted = mapper.deleteBatchByIds(idsSQL.toString()) != 0;
-
+        boolean deleted = super.removeByIds(ids);
         if (deleted) {
-            this.clearCache();
+            List<LogicDeleteDocument> documents = Lists.newArrayListWithCapacity(models.size());
+            LocalDateTime now = LocalDateTime.now();
+            models.forEach(model -> documents.add(new LogicDeleteDocument(now, model)));
+            mongoTemplate.insert(documents, "ld_" + tableName);
         }
 
         return deleted;
     }
 
     @Override
-    public boolean physicallyDelete(Long id) {
-        M model = mapper.selectById(id);
-        if (model != null) {
-            log.warn("物理删除：" + model);
-
-            boolean physicallyDeleted = mapper.physicallyDeleteById(id) != 0;
-            if (physicallyDeleted) {
-                this.clearCache();
-            }
-            return physicallyDeleted;
-        }
-        return false;
-    }
-
-    @Override
-    public Optional<M> searchOne(M model) throws TooManyResultsException {
+    public Optional<T> searchOne(T model) throws TooManyResultsException {
         return batchToOne(searchBatch(model));
     }
 
     @Override
-    public Optional<M> searchOne(String modelFieldName, Object value) {
+    public Optional<T> searchOne(String modelFieldName, Object value) {
         return batchToOne(searchBatch(modelFieldName, value));
     }
 
     @Override
-    public List<M> searchBatch(M model) {
-        return selectBatchByModelCacheable.getUnchecked(model);
+    public List<T> searchBatch(T model) {
+        return baseMapper.selectList(new QueryWrapper<>(model));
     }
 
     @Override
-    public List<M> searchBatch(String modelFieldName, Object value) {
-        Condition condition = new Condition(clazz);
-        condition.createCriteria().andEqualTo(modelFieldName, value);
-        return searchBatch(condition);
+    public List<T> searchBatch(String modelFieldName, Object value) {
+        Wrapper<T> wrapper = new QueryWrapper<T>().eq(modelFieldName, value);
+        return baseMapper.selectList(wrapper);
     }
 
     @Override
-    public List<M> searchBatch(Condition condition) {
-        return selectBatchByConditionCacheable.getUnchecked(condition);
+    public List<T> searchBatch(QueryWrapper<T> queryWrapper) {
+        return baseMapper.selectList(queryWrapper);
     }
 
     @Override
-    public List<M> listAll() {
-        if (selectAllCacheable != null) {
-            return selectAllCacheable;
-        } else {
-            return mapper.selectAll();
-        }
+    public List<T> listAll() {
+        return baseMapper.selectList(null);
     }
 
     @Override
-    public Map<Long, M> mapAll() {
+    public Map<Long, T> mapAll() {
         ensureIsIdGetable();
 
-        return listToMap(listAll());
+        return collectionToMap(listAll());
     }
 
     @Override
-    public boolean isExist(Long id) {
-        Condition condition = new Condition(clazz);
-        condition.selectProperties("id");
-        condition.createCriteria().andEqualTo("id", id);
-        return selectCountByConditionCacheable.getUnchecked(condition) > 0;
-    }
-
-    @Override
-    public boolean isExist(M model) {
+    public boolean isExist(T model) {
         return count(model) > 0;
     }
 
     @Override
-    public int count(M model) {
-        return selectCountByModelCacheable.getUnchecked(model);
+    public int count(T model) {
+        return baseMapper.selectCount(new QueryWrapper<>(model));
     }
 
-    private Optional<M> batchToOne(List<M> models) {
+    private void ensureIsIdGetable() {
+        if (!isIdGetable) {
+            throw new IllegalArgumentException(modelClass.getSimpleName() + " 未实现IdGetable接口");
+        }
+    }
+
+    private Map<Long, T> collectionToMap(Collection<T> list) {
+        Map<Long, T> map = Maps.newHashMapWithExpectedSize(list.size());
+        list.forEach(t -> map.put(((IdGetable) t).getId(), t));
+        return map;
+    }
+
+    private Optional<T> batchToOne(Collection<T> models) {
         if (models.size() == 0) {
             return Optional.empty();
         }
         if (models.size() > 1) {
             throw new TooManyResultsException("满足条件的资源不止一个");
         }
-        return Optional.of(models.get(0));
-    }
-
-    private Map<Long, M> listToMap(List<M> list) {
-        Map<Long, M> map = Maps.newHashMapWithExpectedSize(list.size());
-        list.forEach(m -> map.put(((IdGetable) m).getId(), m));
-        return map;
-    }
-
-    private void ensureIsIdGetable() {
-        if (!isIdGetable) {
-            throw new IllegalArgumentException(clazz.getSimpleName() + " 未实现IdGetable接口");
-        }
-    }
-
-    private final LoadingCache<Long, Optional<M>> selectByIdCacheable = CacheBuilder.newBuilder()
-            .recordStats()
-            .maximumSize(64)
-            .build(new CacheLoader<Long, Optional<M>>() {
-                @Override
-                public Optional<M> load(@Nonnull Long id) {
-                    return Optional.ofNullable(mapper.selectById(id));
-                }
-            });
-
-    private final LoadingCache<String, List<M>> selectBatchByIdsCacheable = CacheBuilder.newBuilder()
-            .recordStats()
-            .maximumSize(64)
-            .build(new CacheLoader<String, List<M>>() {
-                @Override
-                public List<M> load(@Nonnull String ids) {
-                    return mapper.selectBatchByIds(ids);
-                }
-            });
-
-    private List<M> selectAllCacheable;
-
-    private final LoadingCache<M, List<M>> selectBatchByModelCacheable = CacheBuilder.newBuilder()
-            .recordStats()
-            .maximumSize(64)
-            .build(new CacheLoader<M, List<M>>() {
-                @Override
-                public List<M> load(@Nonnull M model) {
-                    return mapper.selectBatchByModel(model);
-                }
-            });
-
-    private final LoadingCache<Condition, List<M>> selectBatchByConditionCacheable = CacheBuilder.newBuilder()
-            .recordStats()
-            .maximumSize(64)
-            .build(new CacheLoader<Condition, List<M>>() {
-                @Override
-                public List<M> load(@Nonnull Condition condition) {
-                    return mapper.selectBatchByCondition(condition);
-                }
-            });
-
-    private final LoadingCache<M, Integer> selectCountByModelCacheable = CacheBuilder.newBuilder()
-            .recordStats()
-            .maximumSize(64)
-            .build(new CacheLoader<M, Integer>() {
-                @Override
-                public Integer load(@Nonnull M condition) {
-                    return mapper.selectCountByModel(condition);
-                }
-            });
-
-    private final LoadingCache<Condition, Integer> selectCountByConditionCacheable = CacheBuilder.newBuilder()
-            .recordStats()
-            .maximumSize(64)
-            .build(new CacheLoader<Condition, Integer>() {
-                @Override
-                public Integer load(@Nonnull Condition condition) {
-                    return mapper.selectCountByCondition(condition);
-                }
-            });
-
-    private void clearCache() {
-        selectByIdCacheable.invalidateAll();
-        selectBatchByIdsCacheable.invalidateAll();
-        selectAllCacheable = null;
-        selectBatchByModelCacheable.invalidateAll();
-        selectBatchByConditionCacheable.invalidateAll();
-        selectCountByModelCacheable.invalidateAll();
-        selectCountByConditionCacheable.invalidateAll();
-    }
-
-    public Map<String, CacheStatsDTO> listCacheStatses() {
-        Map<String, CacheStatsDTO> result = Maps.newHashMap();
-        result.put("selectByIdCacheable", CacheStatsDTO.fromCacheStats(selectByIdCacheable.stats()));
-        result.put("selectBatchByIdsCacheable", CacheStatsDTO.fromCacheStats(selectBatchByIdsCacheable.stats()));
-        result.put("selectBatchByModelCacheable", CacheStatsDTO.fromCacheStats(selectBatchByModelCacheable.stats()));
-        result.put("selectBatchByConditionCacheable",
-                CacheStatsDTO.fromCacheStats(selectBatchByConditionCacheable.stats()));
-        result.put("selectCountByModelCacheable", CacheStatsDTO.fromCacheStats(selectCountByModelCacheable.stats()));
-        result.put("selectCountByConditionCacheable",
-                CacheStatsDTO.fromCacheStats(selectCountByConditionCacheable.stats()));
-        return result;
+        return Optional.of(models.iterator().next());
     }
 
 }

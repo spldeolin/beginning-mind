@@ -4,9 +4,9 @@ Configuration:
   Properties:
     Property:
     - name: log.dir
-      value: # TODO 测试日志目录名
+      value: # TODO 测试环境 日志目录名
     - name: log.name
-      value: # TODO 测试日志文件名
+      value: # TODO 测试环境 日志文件名
     - name: pattern
       value: "%d{yyyy-MM-dd HH:mm:ss} %p [%t][%c{1.}:%L]%X{insignia} - %m%n"
 

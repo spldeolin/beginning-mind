@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.core.util;
 
+import java.util.List;
+import com.google.common.collect.Lists;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -36,6 +38,13 @@ public class Nulls {
             return Boolean.FALSE;
         }
         return b;
+    }
+
+    public static <T> List<T> toEmpty(List<T> list) {
+        if (null == list) {
+            return Lists.newArrayList();
+        }
+        return list;
     }
 
 }

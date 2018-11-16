@@ -8,6 +8,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.spldeolin.beginningmind.core.CoreProperties;
+import com.spldeolin.beginningmind.core.CoreProperties.TaskExecutorProp;
 
 /**
  * 开启异步任务
@@ -23,7 +24,7 @@ public class AsyncConfig {
 
     @Bean
     public TaskExecutor taskExecutor() {
-        CoreProperties.TaskExecutor props = coreProperties.getTaskExecutor();
+        TaskExecutorProp props = coreProperties.getTaskExecutor();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(props.getCoreSize());
         executor.setMaxPoolSize(props.getMaximumSize());

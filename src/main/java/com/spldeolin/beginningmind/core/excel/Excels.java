@@ -25,16 +25,15 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.constant.Abbreviation;
 import com.spldeolin.beginningmind.core.excel.ExcelContext.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.Times;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
-import tk.mybatis.mapper.util.StringUtil;
 
 /**
  * Excel读写工具类
@@ -143,7 +142,7 @@ public class Excels {
             columnDefinition.setModelField(field);
             Class<? extends Formatter> formatter = columnAnno.formatter();
             if (formatter != Formatter.class) {
-                columnDefinition.setFormatter(Abbreviation.objs.newInstance(formatter));
+                columnDefinition.setFormatter(new ObjenesisStd(true).newInstance(formatter));
             }
             columnDefinition.setDefaultValue(columnAnno.defaultValue());
             columnDefinitions.add(columnDefinition);
@@ -252,7 +251,7 @@ public class Excels {
 
     private static <T> T parseRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions,
             Row row) throws ParseInvalidException {
-        T t = Abbreviation.objs.newInstance(clazz);
+        T t = new ObjenesisStd(true).newInstance(clazz);
         List<ParseInvalid> parseInvalids = Lists.newArrayList();
         for (ExcelContext.ColumnDefinition columnDefinition : columnDefinitions) {
             Integer columnNumber = columnDefinition.getColumnNumber();
@@ -278,7 +277,7 @@ public class Excels {
             Field field = columnDefinition.getModelField();
             Object fieldValue = null;
             try {
-                if (StringUtil.isNotEmpty(cellContent)) {
+                if (StringUtils.isNotEmpty(cellContent)) {
                     if (!assignedFormatter) {
                         // 没有指定formatter，尝试用缺省方式指定常用formatter
                         Class fieldType = field.getType();

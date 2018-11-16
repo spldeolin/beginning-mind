@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -18,8 +17,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.github.pagehelper.page.PageMethod;
-import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.api.ControllerAspectPreprocess;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
@@ -27,10 +24,10 @@ import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.model.RequestTrack;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
+import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.util.Requests;
 import com.spldeolin.beginningmind.core.util.Sessions;
-import com.spldeolin.beginningmind.core.util.Signer;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -45,9 +42,6 @@ import lombok.extern.log4j.Log4j2;
 @Aspect
 @Log4j2
 public class ControllerAspect {
-
-    @Autowired
-    private CoreProperties coreProperties;
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
@@ -86,19 +80,16 @@ public class ControllerAspect {
         // 清除LocalThread中的分页信息，防止异常或其他原因不会消耗掉的分页信息，不会因线程复用而影响其他的查询语句
         PageMethod.clearPage();
 
-        // 检查登录者是否被踢出，并刷新会话；被踢出则结束，不
+        // 检查登录者是否被踢出，被踢出则请求结束；否则刷新会话失效时间
         if (isKilled()) {
             throw new UnsignedException("已被管理员请离，请重新登录");
         }
         reflashSessionExpire();
 
-        // 为TrimmedStringFields类执行trimStringFields
-        trimStringFields(requestTrack);
-
         // 解析注解，做一些额外处理
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
-            throw new ExtraInvalidException().setInvalids(invalids);
+            throw new ExtraInvalidException(invalids);
         }
 
         // 执行切点
@@ -126,8 +117,7 @@ public class ControllerAspect {
     }
 
     private void setLogMDC() {
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA,
-                "[" + Requests.getInsignia() + "]");
+        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + Requests.getInsignia() + "]");
     }
 
     private void removeLogMDC() {
@@ -154,21 +144,7 @@ public class ControllerAspect {
     }
 
     private void reflashSessionExpire() {
-        HttpSession session = Sessions.session();
-        if (coreProperties.isDebug()) {
-            session.setMaxInactiveInterval(86400);
-        } else {
-            session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
-        }
-    }
-
-    private void trimStringFields(RequestTrack requestTrack) {
-        for (Object parameterValue : requestTrack.getParameterValues()) {
-            if (parameterValue instanceof ControllerAspectPreprocess) {
-                ControllerAspectPreprocess controllerAspectPreprocess = (ControllerAspectPreprocess) parameterValue;
-                controllerAspectPreprocess.nullToEmptyAndTrim();
-            }
-        }
+        Sessions.session().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
     private List<Invalid> handleAnnotations(RequestTrack requestTrack) {

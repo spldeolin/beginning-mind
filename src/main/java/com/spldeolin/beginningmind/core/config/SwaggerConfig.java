@@ -27,7 +27,7 @@ public class SwaggerConfig {
     @Bean
     public Docket createRestApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-                .enable(coreProperties.isDebug())    // 启用/禁用开关
+                .enable(coreProperties.getEnableSwagger())    // 启用/禁用开关
                 .apiInfo(apiInfo())
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.spldeolin.beginningmind.core"))

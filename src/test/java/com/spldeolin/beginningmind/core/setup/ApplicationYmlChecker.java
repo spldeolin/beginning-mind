@@ -2,9 +2,8 @@ package com.spldeolin.beginningmind.core.setup;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mybatis.spring.boot.autoconfigure.MybatisProperties;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.autoconfigure.ManagementServerProperties;
+import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServerProperties;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
@@ -12,15 +11,16 @@ import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
+import com.github.pagehelper.autoconfigure.PageHelperProperties;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
-//import com.alibaba.druid.pool.DruidDataSource;
-
 /**
- * @author Deolin 2018/08/01
+ * @author Deolin 2018/11/12
  */
+
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
@@ -43,10 +43,10 @@ public class ApplicationYmlChecker {
     private ManagementServerProperties managementServerProperties;
 
     @Autowired
-    private MybatisProperties mybatisProperties;
+    private MybatisPlusProperties mybatisPlusProperties;
 
     @Autowired
-    private tk.mybatis.mapper.autoconfigure.MybatisProperties tkMybatisProperties;
+    private PageHelperProperties pageHelperProperties;
 
     @Autowired
     private CoreProperties coreProperties;
@@ -54,7 +54,7 @@ public class ApplicationYmlChecker {
     @Test
     @SneakyThrows
     public void t() {
-        // spring.datasource.druid
+        // spring.datasource
         log.info(dataSourceProperties);
 
         // spring.redis
@@ -66,19 +66,17 @@ public class ApplicationYmlChecker {
         // spring.rabbitmq
         log.info(rabbitProperties);
 
-        // spring.management
-        log.info(managementServerProperties);
-
-        // spring.mybatis
-        log.info(mybatisProperties);
-        log.info(tkMybatisProperties);
-
-        // mapper
-        // pagehelper
-        // 找不到可以autowired的bean
-
         // logging
         // 找不到ConfigurationProperties的类
+
+        // management
+        log.info(managementServerProperties);
+
+        // mybatisplus
+        log.info(mybatisPlusProperties);
+
+        // pagehelper
+        log.info(pageHelperProperties);
 
         // core
         log.info(coreProperties);

@@ -8,7 +8,7 @@ import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.security.AjaxUtils;
+import com.spldeolin.beginningmind.core.security.util.AjaxUtil;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -34,10 +34,10 @@ public class AuthFilter extends PermissionsAuthorizationFilter {
         Subject subject = getSubject(request, response);
         if (subject.getPrincipal() == null) {
             log.info("请求被AuthFilter过滤，会话失效，返回“未登录或登录超时”");
-            AjaxUtils.outputJson(response, RequestResult.failure(ResultCode.UNSIGNED));
+            AjaxUtil.outputJson(response, RequestResult.failure(ResultCode.UNSIGNED));
         } else {
             log.info("请求被AuthFilter过滤，返回“权限不足”");
-            AjaxUtils.outputJson(response, RequestResult.failure(ResultCode.FORBIDDEN));
+            AjaxUtil.outputJson(response, RequestResult.failure(ResultCode.FORBIDDEN));
         }
         return false;
     }

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 import com.spldeolin.beginningmind.core.input.SignInput;
+import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.SignService;
-import com.spldeolin.beginningmind.core.util.Signer;
 
 /**
  * 登录、登出、登录状态等
@@ -21,21 +21,13 @@ import com.spldeolin.beginningmind.core.util.Signer;
 @Validated
 public class SignController {
 
-    public static final String CAPTCHA_REQUEST_MAPPING = "/sign/captcha";
-
-    public static final String SIGN_IN_REQUEST_MAPPING = "/sign/in";
-
-    public static final String SIGN_OUT_REQUEST_MAPPING = "/sign/out";
-
-    public static final String IS_SIGNING_REQUEST_MAPPING = "/sign/isSigning";
-
     @Autowired
     private SignService signService;
 
     /**
      * 获取验证码
      */
-    @GetMapping(CAPTCHA_REQUEST_MAPPING)
+    @GetMapping("/sign/captcha")
     String captcha() {
         return signService.captcha();
     }
@@ -43,7 +35,7 @@ public class SignController {
     /**
      * 登录
      */
-    @PostMapping(SIGN_IN_REQUEST_MAPPING)
+    @PostMapping("/sign/in")
     SignerProfileDTO signIn(@RequestBody @Valid SignInput input) {
         return signService.signIn(input);
     }
@@ -51,7 +43,7 @@ public class SignController {
     /**
      * 登出
      */
-    @PostMapping(SIGN_OUT_REQUEST_MAPPING)
+    @PostMapping("/sign/out")
     void signOut() {
         signService.signOut();
     }
@@ -59,7 +51,7 @@ public class SignController {
     /**
      * 当前调用者是否登录中
      */
-    @GetMapping(IS_SIGNING_REQUEST_MAPPING)
+    @GetMapping("/sign/isSigning")
     Boolean isSigning() {
         return Signer.isSigning();
     }
