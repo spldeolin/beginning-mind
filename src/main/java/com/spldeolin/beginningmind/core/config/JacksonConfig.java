@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.config;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -36,7 +38,7 @@ public class JacksonConfig {
         Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
 
         // 模块
-        builder.modules(Lists.newArrayList(guavaCollectionModule(), javaTimeModule()));
+        builder.modules(Lists.newArrayList(guavaCollectionModule(), javaTimeModule(), longToStringModulel()));
 
         // 是否将java.util.Date对象转化为时间戳
         if (!Optional.ofNullable(coreProperties.getTime().getSerializeJavaUtilDateToTimestamp()).orElse(true)) {
@@ -73,6 +75,14 @@ public class JacksonConfig {
                 .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
 
         return javaTimeModule;
+    }
+
+    private SimpleModule longToStringModulel() {
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        return simpleModule;
     }
 
 }
