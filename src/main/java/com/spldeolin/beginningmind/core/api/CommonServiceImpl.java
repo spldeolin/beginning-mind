@@ -33,22 +33,25 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
 
     private Class<T> modelClass;
 
+    private String tableName;
+
     private boolean isIdGetable;
 
-    private String tableName;
+    private boolean enableLogicallyDelete;
 
     @SuppressWarnings("unchecked")
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
-        isIdGetable = ArrayUtils.contains(modelClass.getInterfaces(), IdGetable.class);
-
         TableName tableName = modelClass.getAnnotation(TableName.class);
         if (tableName != null) {
             this.tableName = tableName.value();
         } else {
             this.tableName = modelClass.getSimpleName();
         }
+
+        isIdGetable = ArrayUtils.contains(modelClass.getInterfaces(), IdGetable.class);
+        enableLogicallyDelete = !ArrayUtils.contains(modelClass.getAnnotations(), DisableLogicallyDelete.class);
     }
 
     @Override
@@ -102,7 +105,8 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         T model = baseMapper.selectById(id);
 
         boolean deleted = baseMapper.deleteById(id) != 0;
-        if (deleted) {
+
+        if (enableLogicallyDelete && deleted) {
             LogicDeleteDocument document = new LogicDeleteDocument(model);
             mongoTemplate.insert(document, "ld_" + tableName);
         }
@@ -119,7 +123,8 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         Collection<T> models = this.list(ids);
 
         boolean deleted = super.removeByIds(ids);
-        if (deleted) {
+
+        if (enableLogicallyDelete && deleted) {
             List<LogicDeleteDocument> documents = Lists.newArrayListWithCapacity(models.size());
             LocalDateTime now = LocalDateTime.now();
             models.forEach(model -> documents.add(new LogicDeleteDocument(now, model)));
