@@ -43,7 +43,7 @@ public class Cadeau {
 
     private static final String PROJECT_PATH = "C:\\java-development\\projects-repo\\deolin-projects\\beginning-mind";
 
-    private static final String VERSION_COLUMN_NAME = "updated_at";
+    private static final String VERSION_COLUMN_NAME = "version";
 
     private static final String JDBC_IP = "192.168.2.2";
 

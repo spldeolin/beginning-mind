@@ -40,9 +40,14 @@ public class Permission implements IdGetable, Serializable {
     /**
      * 通用字段 更新时间
      */
-    @Version
     @TableField("updated_at")
     private LocalDateTime updatedAt;
+
+    /**
+     * 通用字段 数据版本
+     */
+    @Version
+    private Integer version;
 
     /**
      * 权限名（perms[xxxx]）
