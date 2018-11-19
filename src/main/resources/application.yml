@@ -227,7 +227,7 @@ core:
 
   file:
     mapping: static
-    location: C:/beginning-mind-static
+    location: /opt/beginning-mind-static
 
   snowFlake:
     datacenterId: 1
