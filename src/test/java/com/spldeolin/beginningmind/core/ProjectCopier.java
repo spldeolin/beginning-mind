@@ -34,8 +34,7 @@ public class ProjectCopier {
             String content = readFile(srcFile);
             content = content.replace("com.spldeolin.beginningmind.core", basePackage);
             content = content.replace("beginning-mind", projectName);
-            content = content.replace("beginning-mind", projectNameLowerCamel);
-            content = content.replace("Beginning-mind", projectNameUpperCamel);
+            content = content.replace("beginningMind", projectNameLowerCamel);
             File copiedFile = new File(srcFile.getPath().replace(thisPath, projectPath + sep)
                     .replace("com.spldeolin.beginningmind.core".replace(".", sep), basePackage.replace(".", sep)));
 
