@@ -20,7 +20,7 @@ public class CoupledConstant {
     /**
      * SHA512一次的默认密码（0）
      */
-    public static final String DEFAULT_PASSWORD_EX = DigestUtils.sha512Hex("0");
+    public static final String DEFAULT_PASSWORD_EX = DigestUtils.sha512Hex("000000");
 
     /**
      * 最高层组织架构的parentId

@@ -136,6 +136,14 @@ public interface CommonService<T> {
     List<T> searchBatch(QueryWrapper<T> queryWrapper);
 
     /**
+     * 判断资源是否存在
+     *
+     * @param id 资源ID
+     * @return true存在，false不存在
+     */
+    boolean isExist(Long id);
+
+    /**
      * 判断满足条件的资源是否存在
      *
      * @param model 存放条件的对象

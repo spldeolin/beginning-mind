@@ -173,6 +173,11 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     }
 
     @Override
+    public boolean isExist(Long id) {
+        return baseMapper.selectCount(new QueryWrapper<T>().eq("id", id)) > 0;
+    }
+
+    @Override
     public boolean isExist(T model) {
         return count(model) > 0;
     }

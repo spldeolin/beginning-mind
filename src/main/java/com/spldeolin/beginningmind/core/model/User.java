@@ -50,6 +50,12 @@ public class User implements IdGetable, Serializable {
     private Integer version;
 
     /**
+     * 用户编号
+     */
+    @TableField("serial_number")
+    private String serialNumber;
+
+    /**
      * 名字
      */
     @TableField("name")
