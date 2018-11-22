@@ -70,7 +70,7 @@
         <zxing.version>3.3.3</zxing.version>
 
         <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
-        <simple-java-mail.version>5.0.8</simple-java-mail.version>
+        <simple-java-mail.version>5.1.0</simple-java-mail.version>
 
         <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
         <pinyin4j.version>2.5.1</pinyin4j.version>
