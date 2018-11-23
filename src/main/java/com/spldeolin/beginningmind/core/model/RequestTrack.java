@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Transient;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Field;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.google.common.base.Stopwatch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -137,10 +138,10 @@ public class RequestTrack implements Serializable {
     private Object[] parameterValues;
 
     /**
-     * 请求开始时间
+     * 请求计时
      */
     @Transient
-    private long processedAt;
+    private Stopwatch stopwatch;
 
     private static final long serialVersionUID = 1L;
 

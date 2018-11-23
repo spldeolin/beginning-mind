@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
@@ -87,7 +88,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
 
         track.setHttpMethod(request.getMethod());
 
-        track.setProcessingMilliseconds(System.currentTimeMillis() - track.getProcessedAt());
+        track.setProcessingMilliseconds(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 
         Long signedUserId = track.getUserId();
         if (signedUserId != null) {

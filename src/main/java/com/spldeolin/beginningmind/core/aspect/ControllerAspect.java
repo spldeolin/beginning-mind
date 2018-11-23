@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.github.pagehelper.page.PageMethod;
+import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
@@ -93,7 +94,7 @@ public class ControllerAspect {
         }
 
         // 执行切点
-        requestTrack.setProcessedAt(System.currentTimeMillis());
+        requestTrack.setStopwatch(Stopwatch.createStarted());
         Object data = point.proceed(requestTrack.getParameterValues());
 
         // 请求成功时保存日志
