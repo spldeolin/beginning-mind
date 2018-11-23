@@ -12,36 +12,34 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class StringRandomUtils {
 
-    private static final char[] LOW_EN_CHARS;
+    private static final char[] LOW_EN;
 
-    private static final char[] HIGH_EN_CHARS;
+    private static final char[] UP_EN;
 
-    private static final char[] NUM_CHARS;
+    private static final char[] NUM;
 
-    private static final char[] EN_CHARS;
+    private static final char[] EN;
 
-    private static final char[] EN_NUM_CHARS;
+    private static final char[] EN_NUM;
 
-    private static final char[] LOW_EN_NUM_CHARS;
+    private static final char[] LOW_EN_NUM;
 
     private static final char[] LEGIBLE_EN_NUM_CHARS;
 
     static {
-        LOW_EN_CHARS = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
-                'r',
-                's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
+        LOW_EN = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q',
+                'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
 
-        HIGH_EN_CHARS = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
-                'R',
-                'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
+        UP_EN = new char[]{'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+                'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
 
-        NUM_CHARS = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
+        NUM = new char[]{'0', '1', '2', '3', '4', '5', '6', '7', '8', '9'};
 
-        EN_CHARS = ArrayUtils.addAll(LOW_EN_CHARS, HIGH_EN_CHARS);
+        EN = ArrayUtils.addAll(LOW_EN, UP_EN);
 
-        EN_NUM_CHARS = ArrayUtils.addAll(EN_CHARS, NUM_CHARS);
+        EN_NUM = ArrayUtils.addAll(EN, NUM);
 
-        LOW_EN_NUM_CHARS = ArrayUtils.addAll(LOW_EN_CHARS, NUM_CHARS);
+        LOW_EN_NUM = ArrayUtils.addAll(LOW_EN, NUM);
 
         LEGIBLE_EN_NUM_CHARS = new char[]{'2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g',
                 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
@@ -70,7 +68,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateEnNum(int stringLength) {
-        return generate(EN_NUM_CHARS, stringLength);
+        return generate(EN_NUM, stringLength);
     }
 
     /**
@@ -80,7 +78,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateLowEnNum(int stringLength) {
-        return generate(LOW_EN_NUM_CHARS, stringLength);
+        return generate(LOW_EN_NUM, stringLength);
     }
 
     /**
@@ -90,7 +88,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateNum(int stringLength) {
-        return generate(NUM_CHARS, stringLength);
+        return generate(NUM, stringLength);
     }
 
     /**
