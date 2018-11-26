@@ -68,8 +68,9 @@ Configuration:
         max: 1000
 
   Loggers:
-    Root:
+    AsyncRoot:
       level: all
+      includeLocation: true
       AppenderRef:
       - ref: console
       - ref: infoFile

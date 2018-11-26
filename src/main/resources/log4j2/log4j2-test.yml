@@ -68,16 +68,9 @@ Configuration:
         max: 1000
 
   Loggers:
-    Root:
+    AsyncRoot:
       level: all
-      AppenderRef:
-      - ref: console
-      - ref: infoFile
-      - ref: debugFile
-    logger:
-      name: com.spldeolin
-      level: all
-      additivity: false
+      includeLocation: true
       AppenderRef:
       - ref: console
       - ref: infoFile

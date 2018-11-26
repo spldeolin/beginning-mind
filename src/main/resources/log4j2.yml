@@ -19,16 +19,18 @@ Configuration:
       PatternLayout:
         charset: utf-8
         # 追加“%t”可打印线程名
-        pattern: "%highlight{%d{HH:mm:ss} %p{DEBUG=D,INFO=I,WARN=W,ERROR=E}} [%c{1}:%L]%X{insignia} - %m%n"
+        pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia} - %m%n"
 
   Loggers:
-    Root:
+    AsyncRoot: # 异步root logger
       level: error
+      includeLocation: true # 本异步logger打印行号
       AppenderRef:
       - ref: console
-    logger:
+    AsyncLogger: # 异步logger
       name: com.spldeolin
       level: all
-      additivity: false
+      additivity: false # 当其他logger已经打印过了，本logger将不在打印
+      includeLocation: true
       AppenderRef:
       - ref: console
