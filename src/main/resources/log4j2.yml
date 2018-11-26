@@ -23,6 +23,12 @@ Configuration:
 
   Loggers:
     Root:
+      level: error
+      AppenderRef:
+      - ref: console
+    logger:
+      name: com.spldeolin
       level: all
+      additivity: false
       AppenderRef:
       - ref: console

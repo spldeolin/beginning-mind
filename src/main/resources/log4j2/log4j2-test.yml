@@ -74,3 +74,11 @@ Configuration:
       - ref: console
       - ref: infoFile
       - ref: debugFile
+    logger:
+      name: com.spldeolin
+      level: all
+      additivity: false
+      AppenderRef:
+      - ref: console
+      - ref: infoFile
+      - ref: debugFile
