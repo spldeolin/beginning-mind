@@ -75,6 +75,8 @@ mybatis-plus:
     banner: false
     db-config:
       id-type: INPUT
+      logic-delete-value: true
+      logic-not-delete-value: false
 
 pagehelper:
   helperDialect: mysql

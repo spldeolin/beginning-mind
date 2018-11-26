@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.model;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.spldeolin.beginningmind.core.api.IdGetable;
@@ -42,6 +43,13 @@ public class Permission implements IdGetable, Serializable {
      */
     @TableField("updated_at")
     private LocalDateTime updatedAt;
+
+    /**
+     * 通用字段 是否被删除
+     */
+    @TableLogic
+    @TableField("is_deleted")
+    private Boolean isDeleted;
 
     /**
      * 通用字段 数据版本

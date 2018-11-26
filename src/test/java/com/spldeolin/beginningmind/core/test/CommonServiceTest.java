@@ -109,13 +109,13 @@ public class CommonServiceTest {
 
     @Test
     public void delete() {
-        userService.delete(303270472060928L);
+        userService.delete(400214720647168L);
     }
 
     @Test
     public void deleteBatch() {
         List<Long> ids = Lists
-                .newArrayList(367534259965952L, 367534452903936L, 367534452903937L, 367534457098240L, 367534457098241L);
+                .newArrayList(400214724841472L, 367534452903936L, 367534452903937L, 367534457098240L, 367534457098241L);
         userService.delete(ids);
     }
 

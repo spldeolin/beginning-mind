@@ -31,6 +31,9 @@ public class ${modelName} implements IdGetable, Serializable {
     <#if property.isVersion>
     @Version
     </#if>
+    <#if property.isDeleteFlag>
+    @TableLogic
+    </#if>
     @TableField("${property.columnName}")
     private ${property.fieldType} ${property.fieldName};
 

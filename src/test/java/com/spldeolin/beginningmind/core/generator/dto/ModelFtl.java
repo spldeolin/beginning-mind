@@ -41,6 +41,8 @@ public class ModelFtl implements Serializable {
 
         private String fieldCnsName;
 
+        private Boolean isDeleteFlag;
+
         private Boolean isVersion;
 
         private String columnName;

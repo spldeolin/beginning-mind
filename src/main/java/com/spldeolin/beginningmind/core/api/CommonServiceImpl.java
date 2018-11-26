@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.api;
 
 import java.lang.reflect.ParameterizedType;
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -16,9 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.core.api.dto.LogicDeleteDocument;
 
 /**
  * @author Deolin
@@ -37,8 +34,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
 
     private boolean isIdGetable;
 
-    private boolean enableLogicallyDelete;
-
     @SuppressWarnings("unchecked")
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
@@ -51,7 +46,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         }
 
         isIdGetable = ArrayUtils.contains(modelClass.getInterfaces(), IdGetable.class);
-        enableLogicallyDelete = !ArrayUtils.contains(modelClass.getAnnotations(), DisableLogicallyDelete.class);
     }
 
     @Override
@@ -102,15 +96,7 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     @Transactional
     @Override
     public boolean delete(Long id) {
-        T model = baseMapper.selectById(id);
-
         boolean deleted = baseMapper.deleteById(id) != 0;
-
-        if (enableLogicallyDelete && deleted) {
-            LogicDeleteDocument document = new LogicDeleteDocument(model);
-            mongoTemplate.insert(document, "ld_" + tableName);
-        }
-
         return deleted;
     }
 
@@ -119,18 +105,7 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
-
-        Collection<T> models = this.list(ids);
-
         boolean deleted = super.removeByIds(ids);
-
-        if (enableLogicallyDelete && deleted) {
-            List<LogicDeleteDocument> documents = Lists.newArrayListWithCapacity(models.size());
-            LocalDateTime now = LocalDateTime.now();
-            models.forEach(model -> documents.add(new LogicDeleteDocument(now, model)));
-            mongoTemplate.insert(documents, "ld_" + tableName);
-        }
-
         return deleted;
     }
 

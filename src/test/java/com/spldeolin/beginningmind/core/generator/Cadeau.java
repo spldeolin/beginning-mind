@@ -41,7 +41,9 @@ public class Cadeau {
 
     private static final String BASE_PACKAGE_REFERENCE = "com.spldeolin.beginningmind.core";
 
-    private static final String PROJECT_PATH = "C:\\java-development\\projects-repo\\deolin-projects\\beginning-mind";
+    private static final String PROJECT_PATH = "C:\\java-development\\projects-repo\\deolin\\beginning-mind";
+
+    private static final String DELETE_FLAG_COLUMN_NAME = "is_deleted";
 
     private static final String VERSION_COLUMN_NAME = "version";
 
@@ -51,9 +53,9 @@ public class Cadeau {
 
     private static final String JDBC_DATABASE = "beginning_mind";
 
-    private static final String JDBC_USERNAME = "admin";
+    private static final String JDBC_USERNAME = "guest";
 
-    private static final String JDBC_PASSWORD = "admin";
+    private static final String JDBC_PASSWORD = "guest";
 
     public static void main(String[] args) {
         generateByScanner();
@@ -246,6 +248,7 @@ public class Cadeau {
             ModelFtl.Property property = new ModelFtl.Property();
             property.setFieldCnsName(columnDTO.getComment());
             String columnName = columnDTO.getName();
+            property.setIsDeleteFlag(DELETE_FLAG_COLUMN_NAME.equals(columnName));
             property.setIsVersion(VERSION_COLUMN_NAME.equals(columnName));
             property.setColumnName(columnName);
             property.setFieldType(TypeHander.toJavaTypeName(columnDTO));

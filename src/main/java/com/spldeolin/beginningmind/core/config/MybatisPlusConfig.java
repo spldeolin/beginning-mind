@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.config;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 
 /**
@@ -18,6 +19,14 @@ public class MybatisPlusConfig {
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor() {
         return new OptimisticLockerInterceptor();
+    }
+
+    /**
+     * 启用逻辑删除
+     */
+    @Bean
+    public LogicSqlInjector logicSqlInjector() {
+        return new LogicSqlInjector();
     }
 
 }
