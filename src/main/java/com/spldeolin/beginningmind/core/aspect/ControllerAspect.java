@@ -23,7 +23,7 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.model.RequestTrack;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
@@ -72,7 +72,7 @@ public class ControllerAspect {
 
         // 解析切点
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
-        RequestTrack requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, signedUserId);
+        RequestTrackDTO requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, signedUserId);
         Requests.setRequestTrack(requestTrack);
 
         // 设置Log MDC
@@ -108,7 +108,7 @@ public class ControllerAspect {
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
-        RequestTrack track = Requests.getRequestTrack();
+        RequestTrackDTO track = Requests.getRequestTrack();
         // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不是Controller，所以无法记录日志
         if (track != null) {
             requestTrackService.completeAndSaveTrack(track, Requests.request(), requestResult);
@@ -148,7 +148,7 @@ public class ControllerAspect {
         Sessions.session().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
-    private List<Invalid> handleAnnotations(RequestTrack requestTrack) {
+    private List<Invalid> handleAnnotations(RequestTrackDTO requestTrack) {
         List<Invalid> invalids = new ArrayList<>();
         Annotation[][] annotationsEachParams = requestTrack.getMethod().getParameterAnnotations();
         String[] parameterNames = requestTrack.getParameterNames();

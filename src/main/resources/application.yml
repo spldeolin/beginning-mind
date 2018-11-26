@@ -39,9 +39,6 @@ spring:
       maxIdle: 8
       minIdle: 0
 
-  data.mongodb:
-    uri: 占位符
-
   rabbitmq:
     host: 占位符
     port: 占位符
@@ -151,9 +148,6 @@ spring:
     port: 6379
     password: guest
 
-  data.mongodb:
-    uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
-
   rabbitmq:
     host: 192.168.2.2
     port: 5672
@@ -210,9 +204,6 @@ spring:
     port: 6379
     password: root
 
-  data.mongodb:
-    uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
-
   rabbitmq:
     host: 192.168.2.2
     port: 5672
@@ -268,9 +259,6 @@ spring:
     host: # TODO 生产环境 Redis连接
     port: # TODO 生产环境 Redis连接
     password: # TODO 生产环境 Redis连接
-
-  data.mongodb:
-    uri: # TODO 生产环境 MongoDB连接
 
   rabbitmq:
     host: # TODO 生产环境 RabbitMQ连接

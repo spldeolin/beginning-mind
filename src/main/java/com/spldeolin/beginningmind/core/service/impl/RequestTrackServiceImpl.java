@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.core.service.impl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -12,18 +11,16 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.env.Environment;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.model.RequestTrack;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
-import com.spldeolin.beginningmind.core.util.Times;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -41,18 +38,15 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
     @Override
-    public RequestTrack setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId) {
+    public RequestTrackDTO setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId) {
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
         Object[] parameterValues = joinPoint.getArgs();
 
-        RequestTrack track = new RequestTrack();
+        RequestTrackDTO track = new RequestTrackDTO();
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
-        track.setAcceptedAt(LocalDateTime.now());
+        track.setRequestedAt(LocalDateTime.now());
         track.setController(joinPoint.getTarget().getClass().getSimpleName());
         track.setRequestMethod(requestMethod.getName());
         track.setUserId(userId);
@@ -64,7 +58,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
 
     @Async
     @Override
-    public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, Object dataObject) {
+    public void completeAndSaveTrack(RequestTrackDTO track, HttpServletRequest request, Object dataObject) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
         saveTrack(track);
@@ -72,18 +66,17 @@ public class RequestTrackServiceImpl implements RequestTrackService {
 
     @Async
     @Override
-    public void completeAndSaveTrack(RequestTrack track, HttpServletRequest request, RequestResult requestResult) {
+    public void completeAndSaveTrack(RequestTrackDTO track, HttpServletRequest request, RequestResult requestResult) {
         analysizRequestTrack(track, request);
         track.setResponseBody(Jsons.toJson(requestResult));
         saveTrack(track);
     }
 
-    private void saveTrack(RequestTrack track) {
-        log.info("异步保存请求轨迹 {}", track.getInsignia());
-        mongoTemplate.save(track, "request_track_" + Times.toString(LocalDate.now(), "yyyyMMdd"));
+    private void saveTrack(RequestTrackDTO track) {
+        log.info(Jsons.toJson(track));
     }
 
-    private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {
+    private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
         track.setUrl(getFullUrlFromRequest(request));
 
         track.setHttpMethod(request.getMethod());

@@ -7,7 +7,6 @@ import org.springframework.boot.actuate.autoconfigure.web.server.ManagementServe
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
-import org.springframework.boot.autoconfigure.mongo.MongoProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -34,9 +33,6 @@ public class ApplicationYmlChecker {
     private RedisProperties redisProperties;
 
     @Autowired
-    private MongoProperties mongoProperties;
-
-    @Autowired
     private RabbitProperties rabbitProperties;
 
     @Autowired
@@ -59,9 +55,6 @@ public class ApplicationYmlChecker {
 
         // spring.redis
         log.info(redisProperties);
-
-        // spring.data.mongodb
-        log.info(mongoProperties);
 
         // spring.rabbitmq
         log.info(rabbitProperties);

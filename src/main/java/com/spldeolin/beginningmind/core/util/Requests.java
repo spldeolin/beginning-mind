@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.util;
 
 import javax.servlet.http.HttpServletRequest;
-import com.spldeolin.beginningmind.core.model.RequestTrack;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import lombok.experimental.UtilityClass;
 
 /**
@@ -34,22 +34,22 @@ public class Requests {
     /**
      * @param requestTrack 当前请求轨迹
      */
-    public static void setRequestTrack(RequestTrack requestTrack) {
+    public static void setRequestTrack(RequestTrackDTO requestTrack) {
         request().setAttribute(REQUEST_TRACK_KEY, requestTrack);
     }
 
     /**
      * @return 当前请求轨迹
      */
-    public static RequestTrack getRequestTrack() {
-        return (RequestTrack) request().getAttribute(REQUEST_TRACK_KEY);
+    public static RequestTrackDTO getRequestTrack() {
+        return (RequestTrackDTO) request().getAttribute(REQUEST_TRACK_KEY);
     }
 
     /**
      * @return 当前请求轨迹的标识
      */
     public static String getInsignia() {
-        RequestTrack track = getRequestTrack();
+        RequestTrackDTO track = getRequestTrack();
         if (track == null) {
             return "";
         } else {

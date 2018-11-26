@@ -8,7 +8,6 @@ import java.util.Optional;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
@@ -24,9 +23,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
 
     @Autowired
     private BaseMapper<T> baseMapper;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
 
     private Class<T> modelClass;
 

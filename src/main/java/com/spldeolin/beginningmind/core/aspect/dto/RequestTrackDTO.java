@@ -1,12 +1,9 @@
-package com.spldeolin.beginningmind.core.model;
+package com.spldeolin.beginningmind.core.aspect.dto;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import org.springframework.data.annotation.Transient;
-import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,25 +21,17 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-@TableName("request_track")
-public class RequestTrack implements Serializable {
-
-    /**
-     * ID
-     */
-    @org.springframework.data.annotation.Id
-    private String id;
-
+public class RequestTrackDTO implements Serializable {
+    
     /**
      * 请求标识
      */
-    @Indexed
     private String insignia;
 
     /**
      * 收到请求的时间
      */
-    private LocalDateTime acceptedAt;
+    private LocalDateTime requestedAt;
 
     /**
      * URL
@@ -52,7 +41,6 @@ public class RequestTrack implements Serializable {
     /**
      * 请求动词
      */
-    @Field("http_method")
     private String httpMethod;
 
     /**
@@ -63,25 +51,21 @@ public class RequestTrack implements Serializable {
     /**
      * 请求方法
      */
-    @Field("request_method")
     private String requestMethod;
 
     /**
      * 请求耗时
      */
-    @Field("processing_milliseconds")
     private Long processingMilliseconds;
 
     /**
      * 登录者用户ID
      */
-    @Field("user_id")
     private Long userId;
 
     /**
      * 登录者用户名
      */
-    @Field("user_name")
     private String userName;
 
     /**
@@ -92,55 +76,50 @@ public class RequestTrack implements Serializable {
     /**
      * 会话ID
      */
-    @Field("session_id")
     private String sessionId;
 
     /**
      * 项目启动时指定的profile
      */
-    @Field("active_profile")
     private String activeProfile;
 
     /**
      * 登录者用户手机
      */
-    @Field("user_mobile")
     private String userMobile;
 
     /**
      * 请求体
      */
-    @Field("request_body")
     private String requestBody;
 
     /**
      * 返回值
      */
-    @Field("response_body")
     private String responseBody;
 
     /**
      * 请求方法
      */
-    @Transient
+    @JsonIgnore
     private Method method;
 
     /**
      * 请求方法的参数名
      */
-    @Transient
+    @JsonIgnore
     private String[] parameterNames;
 
     /**
      * 请求方法的参数值
      */
-    @Transient
+    @JsonIgnore
     private Object[] parameterValues;
 
     /**
      * 请求计时
      */
-    @Transient
+    @JsonIgnore
     private Stopwatch stopwatch;
 
     private static final long serialVersionUID = 1L;
