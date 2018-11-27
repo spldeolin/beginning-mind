@@ -73,7 +73,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     }
 
     private void saveTrack(RequestTrackDTO track) {
-        log.info(Jsons.toJson(track));
+        log.info("rq-" + track.getInsignia() + System.getProperty("line.separator") + track);
     }
 
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {

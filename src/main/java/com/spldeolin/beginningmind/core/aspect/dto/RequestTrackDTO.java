@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 public class RequestTrackDTO implements Serializable {
-    
+
     /**
      * 请求标识
      */
@@ -123,5 +123,27 @@ public class RequestTrackDTO implements Serializable {
     private Stopwatch stopwatch;
 
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public String toString() {
+        String br = System.getProperty("line.separator");
+        return "RequestTrackDTO {" + br +
+                "    insignia = " + insignia + br +
+                "    requestedAt = " + requestedAt + br +
+                "    url = " + url + br +
+                "    httpMethod = " + httpMethod + br +
+                "    controller = " + controller + br +
+                "    requestMethod = " + requestMethod + br +
+                "    processingMilliseconds = " + processingMilliseconds + br +
+                "    userId = " + userId + br +
+                "    userName = " + userName + br +
+                "    ip = " + ip + br +
+                "    sessionId = " + sessionId + br +
+                "    activeProfile = " + activeProfile + br +
+                "    userMobile = " + userMobile + br +
+                "    requestBody = " + requestBody + br +
+                "    responseBody = " + responseBody + br +
+                '}';
+    }
 
 }
