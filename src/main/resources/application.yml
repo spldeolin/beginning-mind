@@ -39,6 +39,9 @@ spring:
       maxIdle: 8
       minIdle: 0
 
+  jmx:
+    enable: false
+
   rabbitmq:
     host: 占位符
     port: 占位符
