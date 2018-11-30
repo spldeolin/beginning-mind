@@ -46,7 +46,7 @@
         <commons-lang3.version>3.8.1</commons-lang3.version>
 
         <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <guava.version>27.0-jre</guava.version>
+        <guava.version>27.0.1-jre</guava.version>
 
         <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
         <okhttp.version>3.12.0</okhttp.version>
