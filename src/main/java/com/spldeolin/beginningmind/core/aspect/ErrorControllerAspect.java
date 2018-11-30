@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.aspect;
 
 import java.util.Map;
-import org.apache.shiro.authz.AuthorizationException;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -10,8 +9,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOthersException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
-import com.spldeolin.beginningmind.core.filter.ActuatorFilter;
-import com.spldeolin.beginningmind.core.util.Requests;
 
 /**
  * 控制层切面
@@ -58,8 +55,6 @@ public class ErrorControllerAspect {
             throw new BasicErrorControllerOthersException();
         } else if (404 == (int) errorAttributes.get("status")) {
             throw new RequestNotFoundException();
-        } else if (Boolean.TRUE.equals(Requests.get(ActuatorFilter.TOKEN_INCORRENT_KEY))) {
-            throw new AuthorizationException();
         } else {
             throw new BasicErrorControllerOthersException(errorAttributes);
         }
