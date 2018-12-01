@@ -39,24 +39,6 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     private UserService userService;
 
     @Override
-    public RequestTrackDTO setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId) {
-        Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
-        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
-        Object[] parameterValues = joinPoint.getArgs();
-
-        RequestTrackDTO track = new RequestTrackDTO();
-        track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
-        track.setRequestedAt(LocalDateTime.now());
-        track.setController(joinPoint.getTarget().getClass().getSimpleName());
-        track.setRequestMethod(requestMethod.getName());
-        track.setUserId(userId);
-        track.setMethod(requestMethod);
-        track.setParameterNames(parameterNames);
-        track.setParameterValues(parameterValues);
-        return track;
-    }
-
-    @Override
     public RequestTrackDTO buildRequestTrack() {
         RequestTrackDTO track = new RequestTrackDTO();
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
@@ -77,25 +59,16 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         track.setParameterValues(parameterValues);
     }
 
-    @Override
-    public RequestTrackDTO complete() {
-        return null;
-    }
-
-
     @Async
     @Override
-    public void completeAndSaveTrack(RequestTrackDTO track, HttpServletRequest request, Object dataObject) {
-        analysizRequestTrack(track, request);
-        track.setResponseBody(Jsons.toJson(ensureRequestResult(dataObject)));
-        saveTrack(track);
+    public void fillRequestResultInfo(RequestTrackDTO track, Object requestResult) {
+        track.setResponseBody(Jsons.toJson(ensureRequestResult(requestResult)));
     }
 
     @Async
     @Override
-    public void completeAndSaveTrack(RequestTrackDTO track, HttpServletRequest request, RequestResult requestResult) {
+    public void completeAndSave(RequestTrackDTO track, HttpServletRequest request) {
         analysizRequestTrack(track, request);
-        track.setResponseBody(Jsons.toJson(requestResult));
         saveTrack(track);
     }
 

@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.aspect;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -23,7 +22,6 @@ import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.impl.SignServiceImpl;
-import com.spldeolin.beginningmind.core.util.Requests;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
 
@@ -68,7 +66,6 @@ public class ControllerAspect {
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
-        HttpServletRequest request = Requests.request();
 
         // 检查登录者是否被踢出
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
@@ -76,9 +73,6 @@ public class ControllerAspect {
             signService.signOut();
             throw new ServiceException("已被请离，请重新登录");
         }
-
-        // 填入切点信息
-        requestTrackService.fillJoinPointInfo(requestTrack, point);
 
         // 解析注解，做一些额外处理
         List<Invalid> invalids = handleAnnotations(requestTrack);
@@ -89,8 +83,9 @@ public class ControllerAspect {
         // 执行切点
         Object data = point.proceed(requestTrack.getParameterValues());
 
-        // 请求成功时保存日志
-        requestTrackService.completeAndSaveTrack(requestTrack, request, data);
+        // 填入切点信息与RequestResult
+        requestTrackService.fillJoinPointInfo(requestTrack, point);
+        requestTrackService.fillRequestResultInfo(requestTrack, data);
 
         return data;
     }
@@ -98,10 +93,7 @@ public class ControllerAspect {
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
         RequestTrackDTO track = RequestTrackContext.getRequestTrack();
-        // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不是Controller，所以无法记录日志
-        if (track != null) {
-            requestTrackService.completeAndSaveTrack(track, Requests.request(), requestResult);
-        }
+
     }
 
     private boolean isKilled(Long signedUserId) {

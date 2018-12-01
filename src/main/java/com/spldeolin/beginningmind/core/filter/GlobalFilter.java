@@ -60,6 +60,9 @@ public class GlobalFilter extends OncePerRequestFilter {
         requestTrackDTO.setStopwatch(Stopwatch.createStarted());
         filterChain.doFilter(request, response);
 
+        // 完成并保存
+        requestTrackService.completeAndSave(requestTrackDTO, request);
+
         // 刷新会话与每个会话k-v的失效时间
         reflashSessionExpire();
         reflashSessionAttributeExpire();
