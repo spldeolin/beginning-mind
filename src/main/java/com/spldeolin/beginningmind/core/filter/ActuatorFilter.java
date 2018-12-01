@@ -10,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
-import org.springframework.core.Ordered;
-import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.CoreProperties;
@@ -25,7 +23,6 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2018/06/17
  */
-@Order(Ordered.HIGHEST_PRECEDENCE)
 @Component
 @Log4j2
 public class ActuatorFilter extends OncePerRequestFilter {

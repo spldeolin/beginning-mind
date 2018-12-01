@@ -23,6 +23,10 @@ public class SignerProfileDTO implements Serializable {
 
     private String userName;
 
+    // TODO private 拥有的权限
+
+    // TODO private 拥有的菜单
+
     private static final long serialVersionUID = 1L;
 
 }

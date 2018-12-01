@@ -25,7 +25,7 @@ public interface SignService {
     /**
      * 指定用户是否登录中
      */
-    Boolean isSign(Long userId);
+    Boolean isSigning(Long userId);
 
     /**
      * 将指定用户踢下线

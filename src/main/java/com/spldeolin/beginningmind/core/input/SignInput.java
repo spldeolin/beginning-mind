@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
-import org.apache.shiro.authc.UsernamePasswordToken;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -38,14 +37,5 @@ public class SignInput implements Serializable {
     private String captcha;
 
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 转化为UsernamePasswordToken对象，作为subject.login()的参数
-     */
-    public UsernamePasswordToken toToken() {
-        UsernamePasswordToken token = new UsernamePasswordToken(principal, password);
-        token.setRememberMe(false);
-        return token;
-    }
 
 }

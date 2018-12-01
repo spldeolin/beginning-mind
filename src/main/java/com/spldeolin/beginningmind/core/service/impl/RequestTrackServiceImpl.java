@@ -56,6 +56,15 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         return track;
     }
 
+    @Override
+    public RequestTrackDTO buildRequestTrack() {
+        RequestTrackDTO track = new RequestTrackDTO();
+        track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
+        track.setRequestedAt(LocalDateTime.now());
+        return track;
+    }
+
+
     @Async
     @Override
     public void completeAndSaveTrack(RequestTrackDTO track, HttpServletRequest request, Object dataObject) {

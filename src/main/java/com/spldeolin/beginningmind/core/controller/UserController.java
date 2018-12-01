@@ -14,6 +14,7 @@ import com.spldeolin.beginningmind.core.api.dto.Page;
 import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.input.UserInput;
 import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.UserService;
 
 /**
@@ -28,6 +29,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private SignService signService;
 
     /**
      * 创建一个“用户”
@@ -99,7 +103,7 @@ public class UserController {
      */
     @GetMapping("/isSigning")
     Boolean isSign(@RequestParam Long userId) {
-        return userService.isAccountSigning(userId);
+        return signService.isSigning(userId);
     }
 
     /**
@@ -107,7 +111,7 @@ public class UserController {
      */
     @PostMapping("/kill")
     void kill(@RequestParam Long userId) {
-        userService.killSigner(userId);
+        signService.kill(userId);
     }
 
 }

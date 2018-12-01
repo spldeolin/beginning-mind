@@ -13,6 +13,6 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 @Configuration
 public class SessionConfig {
 
-    public static final int SESSION_EXPIRE_SECONDS = 1801;
+    public static final int SESSION_EXPIRE_SECONDS = Integer.MAX_VALUE;
 
 }

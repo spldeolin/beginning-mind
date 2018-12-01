@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import org.apache.shiro.authz.AuthorizationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -24,11 +23,11 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOthersException;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.Requests;
 import lombok.extern.log4j.Log4j2;
@@ -165,15 +164,6 @@ public class GlobalExceptionAdvance {
     public RequestResult handleUnsignException(UnsignedException e) {
         return RequestResult.failure(ResultCode.UNSIGNED, e.getMessage());
     }
-
-    /**
-     * 403 没有权限
-     */
-    @ExceptionHandler(AuthorizationException.class)
-    public RequestResult handleAuthorizationException() {
-        return RequestResult.failure(ResultCode.FORBIDDEN);
-    }
-
 
     /**
      * 404 找不到请求

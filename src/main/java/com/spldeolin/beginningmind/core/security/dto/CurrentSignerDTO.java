@@ -32,6 +32,10 @@ public class CurrentSignerDTO implements Serializable {
      */
     private LocalDateTime signedAt;
 
+    // TODO private 拥有的权限
+
+    // TODO private 拥有的菜单
+
     private static final long serialVersionUID = 1L;
 
 }

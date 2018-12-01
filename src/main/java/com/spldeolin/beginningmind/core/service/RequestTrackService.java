@@ -17,6 +17,8 @@ public interface RequestTrackService {
      */
     RequestTrackDTO setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId);
 
+    RequestTrackDTO buildRequestTrack();
+
     /**
      * 补全请求轨迹信息，并保存请求轨迹
      */

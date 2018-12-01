@@ -4,9 +4,6 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.logging.log4j.ThreadContext;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
@@ -16,17 +13,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.github.pagehelper.page.PageMethod;
 import com.google.common.base.Stopwatch;
+import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
-import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
+import com.spldeolin.beginningmind.core.filter.GlobalFilter;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
+import com.spldeolin.beginningmind.core.service.SignService;
+import com.spldeolin.beginningmind.core.service.impl.SignServiceImpl;
 import com.spldeolin.beginningmind.core.util.Requests;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
@@ -50,6 +48,12 @@ public class ControllerAspect {
     @Autowired
     private RequestTrackService requestTrackService;
 
+    @Autowired
+    private SignService signService;
+
+    @Autowired
+    private GlobalFilter globalFilter;
+
     /**
      * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
      */
@@ -71,21 +75,19 @@ public class ControllerAspect {
         HttpServletRequest request = Requests.request();
 
         // 解析切点
+        RequestTrackDTO requestTrack = globalFilter.getRequestTrackContext().get();
+
+        // 检查登录者是否被踢出
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
-        RequestTrackDTO requestTrack = requestTrackService.setJoinPointAndHttpRequest(point, signedUserId);
-        Requests.setRequestTrack(requestTrack);
-
-        // 设置Log MDC
-        setLogMDC();
-
-        // 清除LocalThread中的分页信息，防止异常或其他原因不会消耗掉的分页信息，不会因线程复用而影响其他的查询语句
-        PageMethod.clearPage();
-
-        // 检查登录者是否被踢出，被踢出则请求结束；否则刷新会话失效时间
-        if (isKilled()) {
-            throw new UnsignedException("已被管理员请离，请重新登录");
+        if (Signer.isSigning() && isKilled(signedUserId)) {
+            signService.signOut();
+            throw new ServiceException("已被请离，请重新登录");
         }
+
+        // 刷新会话失效时间
         reflashSessionExpire();
+
+        // TODO 刷新会话中k-v的失效时间
 
         // 解析注解，做一些额外处理
         List<Invalid> invalids = handleAnnotations(requestTrack);
@@ -100,48 +102,21 @@ public class ControllerAspect {
         // 请求成功时保存日志
         requestTrackService.completeAndSaveTrack(requestTrack, request, data);
 
-        // 清除Log MDC
-        removeLogMDC();
-
         return data;
     }
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
-        RequestTrackDTO track = Requests.getRequestTrack();
+        RequestTrackDTO track = globalFilter.getRequestTrackContext().get();
         // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不是Controller，所以无法记录日志
         if (track != null) {
             requestTrackService.completeAndSaveTrack(track, Requests.request(), requestResult);
         }
-        // 清除Log MDC
-        removeLogMDC();
     }
 
-    private void setLogMDC() {
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + Requests.getInsignia() + "]");
-    }
-
-    private void removeLogMDC() {
-        ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
-    }
-
-    /**
-     * @return true：已被踢出，false：未被踢出
-     */
-    private boolean isKilled() {
-        Subject subject = SecurityUtils.getSubject();
-        if (subject.isAuthenticated() || subject.isRemembered()) {
-            String cacheKey = "killed:session:" + Sessions.session().getId();
-            // 被踢出
-            if (redisTemplate.opsForValue().get(cacheKey) != null) {
-                // 登出
-                subject.logout();
-                // 删除标识
-                redisTemplate.delete(cacheKey);
-                return true;
-            }
-        }
-        return false;
+    private boolean isKilled(Long signedUserId) {
+        return redisTemplate.opsForHash()
+                .get(SignServiceImpl.SIGN_STATUS_BY_USER_ID + signedUserId, Sessions.session().getId()) == null;
     }
 
     private void reflashSessionExpire() {

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Requests;
+import com.spldeolin.beginningmind.core.util.Sessions;
 
 /**
  * @author Deolin 2018/11/16
@@ -40,6 +41,17 @@ public class TestController {
     @GetMapping("/i18n")
     Object i18n() {
         return messageSource.getMessage("hello", new String[]{"Deolin"}, Requests.request().getLocale());
+    }
+
+    @GetMapping("/setSes")
+    Object ln46() {
+        Sessions.set("one-cookie", "内部号", 10);
+        return null;
+    }
+
+    @GetMapping("/getSes")
+    Object ln54() {
+        return Sessions.get("one-cookie");
     }
 
 }
