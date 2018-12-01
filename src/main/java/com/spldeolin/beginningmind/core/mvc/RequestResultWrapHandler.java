@@ -5,7 +5,7 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.util.Requests;
+import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
 
 /**
  * @author Deolin 2018/11/16
@@ -40,7 +40,7 @@ public class RequestResultWrapHandler implements HandlerMethodReturnValueHandler
     }
 
     private void fillInsignia(RequestResult requestResult) {
-        requestResult.setInsignia(Requests.getInsignia());
+        requestResult.setInsignia(RequestTrackContext.getInsignia());
     }
 
 }

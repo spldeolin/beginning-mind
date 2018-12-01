@@ -14,7 +14,6 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
-import com.spldeolin.beginningmind.core.util.Requests;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
@@ -61,7 +60,7 @@ public class GlobalFilter extends OncePerRequestFilter {
     }
 
     private void setLogMDC() {
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + Requests.getInsignia() + "]");
+        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
     }
 
     private void removeLogMDC() {

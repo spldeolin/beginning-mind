@@ -20,7 +20,7 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
-import com.spldeolin.beginningmind.core.filter.GlobalFilter;
+import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.service.SignService;
@@ -51,9 +51,6 @@ public class ControllerAspect {
     @Autowired
     private SignService signService;
 
-    @Autowired
-    private GlobalFilter globalFilter;
-
     /**
      * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
      */
@@ -74,8 +71,6 @@ public class ControllerAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         HttpServletRequest request = Requests.request();
 
-        // 解析切点
-        RequestTrackDTO requestTrack = globalFilter.getRequestTrackContext().get();
 
         // 检查登录者是否被踢出
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
@@ -90,6 +85,7 @@ public class ControllerAspect {
         // TODO 刷新会话中k-v的失效时间
 
         // 解析注解，做一些额外处理
+        RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
@@ -107,7 +103,7 @@ public class ControllerAspect {
 
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
-        RequestTrackDTO track = globalFilter.getRequestTrackContext().get();
+        RequestTrackDTO track = RequestTrackContext.getRequestTrack();
         // 未进入解析切面的异常，请求是没有RequestTrack的，并在这里的joinPoint对象也不是Controller，所以无法记录日志
         if (track != null) {
             requestTrackService.completeAndSaveTrack(track, Requests.request(), requestResult);

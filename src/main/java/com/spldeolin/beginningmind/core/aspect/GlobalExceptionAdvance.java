@@ -28,8 +28,8 @@ import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOth
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
+import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
-import com.spldeolin.beginningmind.core.util.Requests;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -93,7 +93,7 @@ public class GlobalExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrackDTO requestTrack = Requests.getRequestTrack();
+        RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
         String[] paramNames = requestTrack.getParameterNames();
         Object[] paramValues = requestTrack.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
@@ -200,7 +200,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrackDTO track = Requests.getRequestTrack();
+        RequestTrackDTO track = RequestTrackContext.getRequestTrack();
         RequestResult requestResult;
         if (track == null) {
             log.error("统一异常处理被击穿！", e);
