@@ -1,19 +1,25 @@
 package com.spldeolin.beginningmind.core.filter;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Collections;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.github.pagehelper.page.PageMethod;
+import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
+import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
@@ -46,12 +52,17 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // todo security（是否被踢出、是否登录、鉴权）
 
-        // 当前登录则填入登录信息
+        // 填入登录者信息
         if (Signer.isSigning()) {
             requestTrackDTO.setUserId(Signer.userId());
         }
 
+        requestTrackDTO.setStopwatch(Stopwatch.createStarted());
         filterChain.doFilter(request, response);
+
+        // 刷新会话与每个会话k-v的失效时间
+        reflashSessionExpire();
+        reflashSessionAttributeExpire();
 
         // 清除ThreadLocal（分页、Log MDC、请求轨迹）
         PageMethod.clearPage();
@@ -61,6 +72,22 @@ public class GlobalFilter extends OncePerRequestFilter {
 
     private void setLogMDC() {
         ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
+    }
+
+    private void reflashSessionExpire() {
+        Sessions.session().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
+    }
+
+    private void reflashSessionAttributeExpire() {
+        HttpSession httpSession = Sessions.session();
+        for (String key : Collections.list(httpSession.getAttributeNames())) {
+            Object value = httpSession.getAttribute(key);
+            if (value instanceof Sessions.ValueWrapper) {
+                Sessions.ValueWrapper wrapper = (Sessions.ValueWrapper) value;
+                wrapper.setSetAt(LocalDateTime.now());
+                Sessions.set(key, wrapper, wrapper.getExpiredSeconds());
+            }
+        }
     }
 
     private void removeLogMDC() {

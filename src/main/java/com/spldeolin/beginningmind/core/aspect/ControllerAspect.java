@@ -13,13 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
@@ -69,8 +67,8 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
+        RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
         HttpServletRequest request = Requests.request();
-
 
         // 检查登录者是否被踢出
         Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
@@ -79,20 +77,16 @@ public class ControllerAspect {
             throw new ServiceException("已被请离，请重新登录");
         }
 
-        // 刷新会话失效时间
-        reflashSessionExpire();
-
-        // TODO 刷新会话中k-v的失效时间
+        // 填入切点信息
+        requestTrackService.fillJoinPointInfo(requestTrack, point);
 
         // 解析注解，做一些额外处理
-        RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
         }
 
         // 执行切点
-        requestTrack.setStopwatch(Stopwatch.createStarted());
         Object data = point.proceed(requestTrack.getParameterValues());
 
         // 请求成功时保存日志
@@ -115,9 +109,6 @@ public class ControllerAspect {
                 .get(SignServiceImpl.SIGN_STATUS_BY_USER_ID + signedUserId, Sessions.session().getId()) == null;
     }
 
-    private void reflashSessionExpire() {
-        Sessions.session().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
-    }
 
     private List<Invalid> handleAnnotations(RequestTrackDTO requestTrack) {
         List<Invalid> invalids = new ArrayList<>();

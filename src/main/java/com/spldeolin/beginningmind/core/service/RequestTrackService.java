@@ -12,12 +12,16 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
  */
 public interface RequestTrackService {
 
+    RequestTrackDTO buildRequestTrack();
+
+    void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint);
+
+    RequestTrackDTO complete();
+
     /**
      * 设置 切点、登录者ID，生成请求轨迹
      */
     RequestTrackDTO setJoinPointAndHttpRequest(JoinPoint joinPoint, Long userId);
-
-    RequestTrackDTO buildRequestTrack();
 
     /**
      * 补全请求轨迹信息，并保存请求轨迹

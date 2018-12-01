@@ -65,7 +65,7 @@ public class Sessions {
     }
 
     @Data
-    private static class ValueWrapper implements Serializable {
+    public static class ValueWrapper implements Serializable {
 
         private Object value;
 

@@ -64,6 +64,24 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         return track;
     }
 
+    @Override
+    public void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint) {
+        Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
+        Object[] parameterValues = joinPoint.getArgs();
+
+        track.setController(joinPoint.getTarget().getClass().getSimpleName());
+        track.setRequestMethod(requestMethod.getName());
+        track.setMethod(requestMethod);
+        track.setParameterNames(parameterNames);
+        track.setParameterValues(parameterValues);
+    }
+
+    @Override
+    public RequestTrackDTO complete() {
+        return null;
+    }
+
 
     @Async
     @Override
