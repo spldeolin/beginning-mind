@@ -9,20 +9,14 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
-import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
-import com.spldeolin.beginningmind.core.service.SignService;
-import com.spldeolin.beginningmind.core.service.impl.SignServiceImpl;
-import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -39,13 +33,7 @@ import lombok.extern.log4j.Log4j2;
 public class ControllerAspect {
 
     @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
     private RequestTrackService requestTrackService;
-
-    @Autowired
-    private SignService signService;
 
     /**
      * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
@@ -67,14 +55,7 @@ public class ControllerAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
 
-        // 检查登录者是否被踢出
-        Long signedUserId = Signer.isSigning() ? Signer.userId() : null;
-        if (Signer.isSigning() && isKilled(signedUserId)) {
-            signService.signOut();
-            throw new ServiceException("已被请离，请重新登录");
-        }
-
-        // 解析注解，做一些额外处理
+        // 解析、处理注解
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
@@ -93,12 +74,7 @@ public class ControllerAspect {
     @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
     public void afterReturning(RequestResult requestResult) {
         RequestTrackDTO track = RequestTrackContext.getRequestTrack();
-
-    }
-
-    private boolean isKilled(Long signedUserId) {
-        return redisTemplate.opsForHash()
-                .get(SignServiceImpl.SIGN_STATUS_BY_USER_ID + signedUserId, Sessions.session().getId()) == null;
+        requestTrackService.fillRequestResultInfo(track, requestResult);
     }
 
 

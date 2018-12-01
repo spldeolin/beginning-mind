@@ -29,6 +29,7 @@ import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
+import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import lombok.extern.log4j.Log4j2;
 
@@ -158,11 +159,19 @@ public class GlobalExceptionAdvance {
     }
 
     /**
-     * 401 未登录
+     * 401 未登录（包括已被请离）
      */
     @ExceptionHandler(UnsignedException.class)
     public RequestResult handleUnsignException(UnsignedException e) {
         return RequestResult.failure(ResultCode.UNSIGNED, e.getMessage());
+    }
+
+    /**
+     * 403 未授权
+     */
+    @ExceptionHandler(UnauthorizeException.class)
+    public RequestResult handleUnauthorizeException(UnauthorizeException e) {
+        return RequestResult.failure(ResultCode.FORBIDDEN, e.getMessage());
     }
 
     /**

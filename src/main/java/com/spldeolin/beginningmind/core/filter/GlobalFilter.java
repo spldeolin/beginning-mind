@@ -17,6 +17,7 @@ import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.util.Sessions;
@@ -40,6 +41,9 @@ public class GlobalFilter extends OncePerRequestFilter {
     @Autowired
     private RequestTrackService requestTrackService;
 
+    @Autowired
+    private CheckKilledHandler checkKilledHandler;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -50,7 +54,9 @@ public class GlobalFilter extends OncePerRequestFilter {
         // 设置Log MDC
         setLogMDC();
 
-        // todo security（是否被踢出、是否登录、鉴权）
+        // todo security（是否登录、鉴权）
+        checkKilledHandler.ensureNotKilled();
+
 
         // 填入登录者信息
         if (Signer.isSigning()) {
