@@ -1,25 +1,16 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.io.ByteArrayOutputStream;
 import javax.imageio.ImageIO;
-import org.apache.commons.codec.digest.DigestUtils;
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.codec.binary.Base64;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.core.CoreProperties;
+import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
-import com.spldeolin.beginningmind.core.constant.DirectoryName;
 import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.User;
@@ -28,10 +19,6 @@ import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.SneakyThrows;
 
 /**
@@ -46,37 +33,20 @@ public class SignServiceImpl implements SignService {
     private UserService userService;
 
     @Autowired
-    private CoreProperties coreProperties;
+    private Producer kaptchaProducer;
 
     @SneakyThrows
     public String captcha() {
-        String code = StringRandomUtils.generateNum(4);
-        String location = coreProperties.getFile().getLocation();
-        String mapping = coreProperties.getFile().getMapping();
+        String code = StringRandomUtils.generateLegibleEnNum(4);
+
         // session
         Sessions.set(CAPTCHA_SESSION_KEY, code);
-        // file
-        String fileName = DigestUtils.md5Hex(String.valueOf(System.currentTimeMillis())) + ".jpg";
-        File captchaFile = new File(location + DirectoryName.CAPTCHA_DIRECTORY + File.separator + fileName);
-        int width = 150;
-        int height = 40;
-        BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        Graphics g = image.getGraphics();
-        // 背景色
-        g.setColor(new Color(82, 155, 240));
-        g.fillRect(0, 0, width, height);
-        // 字色
-        g.setColor(Color.white);
-        g.setFont(new Font("黑体", Font.BOLD, 36));
-        for (int i = 0; i < code.length(); i++) {
-            String oneChar = code.substring(i, i + 1);
-            g.drawString(oneChar, 4 + 40 * i, 30);
+
+        // base64
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            ImageIO.write(kaptchaProducer.createImage(code), "jpg", os);
+            return "data:image/jpg;base64," + Base64.encodeBase64String(os.toByteArray());
         }
-        try (FileOutputStream out = FileUtils.openOutputStream(captchaFile)) {
-            ImageIO.write(image, "PNG", out);
-        }
-        // 映射
-        return coreProperties.getAddress() + mapping + DirectoryName.CAPTCHA_DIRECTORY + "/" + fileName;
     }
 
     /**
@@ -130,20 +100,6 @@ public class SignServiceImpl implements SignService {
      */
     public void kill(Long userId) {
         userService.killSigner(userId);
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    private static class CaptchaDTO implements Serializable {
-
-        private String captcha;
-
-        private LocalDateTime generatedAt;
-
-        private static final long serialVersionUID = 1L;
-
     }
 
 }
