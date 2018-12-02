@@ -14,16 +14,18 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.github.pagehelper.page.PageMethod;
 import com.google.common.base.Stopwatch;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
 import com.spldeolin.beginningmind.core.security.CheckSignedHandler;
+import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
+import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.Sessions;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -32,8 +34,6 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin 2018/06/17
  */
 @Component
-@Data
-@EqualsAndHashCode(callSuper = false)
 @Log4j2
 public class GlobalFilter extends OncePerRequestFilter {
 
@@ -57,9 +57,13 @@ public class GlobalFilter extends OncePerRequestFilter {
         setLogMDC();
 
         // todo security（鉴权）
-        checkKilledHandler.ensureNotKilled(request);
-        checkSignedHandler.ensureSigned(request);
-
+        try {
+            checkKilledHandler.ensureNotKilled(request);
+            checkSignedHandler.ensureSigned(request);
+        } catch (UnsignedException e) {
+            handleException(response, e);
+            return;
+        }
 
         // 填入登录者信息
         if (Signer.isSigning()) {
@@ -84,6 +88,11 @@ public class GlobalFilter extends OncePerRequestFilter {
 
     private void setLogMDC() {
         ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
+    }
+
+    private void handleException(HttpServletResponse response, UnsignedException e) throws IOException {
+        response.setContentType("application/json;charset=utf8");
+        response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.UNSIGNED, e.getMessage())));
     }
 
     private void reflashSessionExpire() {
