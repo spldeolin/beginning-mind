@@ -1,7 +1,9 @@
 package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,6 +14,7 @@ import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Requests;
 import com.spldeolin.beginningmind.core.util.Sessions;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/11/16
@@ -20,6 +23,7 @@ import com.spldeolin.beginningmind.core.util.Sessions;
 @RestController
 @RequestMapping("/test")
 @Validated
+@Log4j2
 public class TestController {
 
     @Autowired
@@ -52,6 +56,21 @@ public class TestController {
     @GetMapping("/getSes")
     Object ln54() {
         return Sessions.get("one-cookie");
+    }
+
+    @Autowired
+    @Qualifier("anonUrls")
+    private Set<String> anonUrls;
+
+
+    @Autowired
+    @Qualifier("authUrls")
+    private Set<String> authUrls;
+
+    @GetMapping("/qualifier")
+    Object qualifier() {
+        log.info(authUrls);
+        return anonUrls;
     }
 
 }

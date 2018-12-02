@@ -36,8 +36,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class GlobalFilter extends OncePerRequestFilter {
 
-    private ThreadLocal<RequestTrackDTO> requestTrackContext = new ThreadLocal<>();
-
     @Autowired
     private RequestTrackService requestTrackService;
 
@@ -49,7 +47,7 @@ public class GlobalFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         // 构造请求轨迹，存入ThreadLocal
         RequestTrackDTO requestTrackDTO = requestTrackService.buildRequestTrack();
-        requestTrackContext.set(requestTrackDTO);
+        RequestTrackContext.setRequestTrack(requestTrackDTO);
 
         // 设置Log MDC
         setLogMDC();
@@ -76,7 +74,7 @@ public class GlobalFilter extends OncePerRequestFilter {
         // 清除ThreadLocal（分页、Log MDC、请求轨迹）
         PageMethod.clearPage();
         removeLogMDC();
-        requestTrackContext.remove();
+        RequestTrackContext.clearRequestTrack();
     }
 
     private void setLogMDC() {

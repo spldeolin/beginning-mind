@@ -9,7 +9,7 @@ import com.spldeolin.beginningmind.core.service.SignService;
  * @author Deolin 2018/12/02
  */
 @Component
-public class AuthcHandler {
+public class CheckSignHandler {
 
     @Autowired
     private SignService signService;

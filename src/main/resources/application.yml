@@ -17,6 +17,8 @@ spring:
 
   profiles.active: ${profile}
 
+  mvc.favicon.enabled: false
+
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: 占位符
@@ -166,8 +168,8 @@ core:
   address: http://localhost:2333
 
   file:
-    mapping: static
-    location: C:/beginning-mind-static
+    mapping: /static/
+    location: C:/beginning-mind-static/
 
   snowFlake:
     datacenterId: 1
@@ -222,8 +224,8 @@ core:
   address: http://localhost:2333
 
   file:
-    mapping: static
-    location: /opt/beginning-mind-static
+    mapping: /static/
+    location: /opt/beginning-mind-static/
 
   snowFlake:
     datacenterId: 1

@@ -27,15 +27,12 @@ public class InitTask implements CommandLineRunner {
     private CoreProperties coreProperties;
 
     @Override
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         // 将配置中出现的所有localhost替换为本地IP
         localhostToLocalIp();
 
         // 在file.mapping前追加content-path
         appendContextPathBeforeFileMapping();
-
-        // 确保file.mapping以 / 开头和结尾，确保file.location以 / 结尾
-        ensureMappingAndLocationStartEndWithVirgule();
 
         // 确保本地目录存在
         ensureDirectoryExist();
@@ -57,30 +54,10 @@ public class InitTask implements CommandLineRunner {
         }
     }
 
-    public void ensureMappingAndLocationStartEndWithVirgule() {
-        FileProp file = coreProperties.getFile();
-        String mapping = file.getMapping();
-        String location = file.getLocation();
-
-        if (!mapping.endsWith("/")) {
-            mapping = (mapping + "/");
-        }
-        if (!mapping.startsWith("/")) {
-            mapping = ("/" + mapping);
-        }
-        if (!location.endsWith("/")) {
-            location = (location + "/");
-        }
-
-        file.setMapping(mapping);
-        file.setLocation(location);
-    }
-
     @SneakyThrows
     public void ensureDirectoryExist() {
         FileProp file = coreProperties.getFile();
         FileUtils.mkdir(new java.io.File(file.getLocation() + DirectoryName.IMAGE_DIRECTORY), true);
-        FileUtils.mkdir(new java.io.File(file.getLocation() + DirectoryName.CAPTCHA_DIRECTORY), true);
     }
 
 }

@@ -7,6 +7,4 @@ public class DirectoryName {
 
     public static final String IMAGE_DIRECTORY = "image";
 
-    public static final String CAPTCHA_DIRECTORY = "captcha";
-
 }

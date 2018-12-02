@@ -55,7 +55,10 @@ public class ControllerAspect {
     public Object around(ProceedingJoinPoint point) throws Throwable {
         RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
 
-        // 解析、处理注解
+        // 填入切点信息
+        requestTrackService.fillJoinPointInfo(requestTrack, point);
+
+        // 注解校验
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
@@ -64,8 +67,7 @@ public class ControllerAspect {
         // 执行切点
         Object data = point.proceed(requestTrack.getParameterValues());
 
-        // 填入切点信息与RequestResult
-        requestTrackService.fillJoinPointInfo(requestTrack, point);
+        // 填入RequestResult
         requestTrackService.fillRequestResultInfo(requestTrack, data);
 
         return data;
