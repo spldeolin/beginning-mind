@@ -16,8 +16,8 @@ public class SecurityConfig {
     @Autowired
     private CoreProperties coreProperties;
 
-    @Bean("anonUrls")
-    public Set<String> anonUrls() {
+    @Bean("anonUrlsPrefix")
+    public Set<String> anonUrlsPrefix() {
         Set<String> urls = Sets.newHashSet();
         // 错误页面
         urls.add("/error");
@@ -27,6 +27,7 @@ public class SecurityConfig {
         urls.add("/sign/captcha");
         urls.add("/sign/in");
         urls.add("/sign/isSigning");
+        urls.add("/test");
         return urls;
     }
 

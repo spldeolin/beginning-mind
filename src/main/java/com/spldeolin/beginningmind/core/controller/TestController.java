@@ -59,8 +59,8 @@ public class TestController {
     }
 
     @Autowired
-    @Qualifier("anonUrls")
-    private Set<String> anonUrls;
+    @Qualifier("anonUrlsPrefix")
+    private Set<String> anonUrlsPrefix;
 
 
     @Autowired
@@ -70,7 +70,7 @@ public class TestController {
     @GetMapping("/qualifier")
     Object qualifier() {
         log.info(authUrls);
-        return anonUrls;
+        return anonUrlsPrefix;
     }
 
 }
