@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.github.pagehelper.page.PageMethod;
-import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
@@ -70,7 +69,6 @@ public class GlobalFilter extends OncePerRequestFilter {
             requestTrackDTO.setUserId(Signer.userId());
         }
 
-        requestTrackDTO.setStopwatch(Stopwatch.createStarted());
         filterChain.doFilter(request, response);
 
         // 完成并保存
@@ -106,7 +104,7 @@ public class GlobalFilter extends OncePerRequestFilter {
             if (value instanceof Sessions.ValueWrapper) {
                 Sessions.ValueWrapper wrapper = (Sessions.ValueWrapper) value;
                 wrapper.setSetAt(LocalDateTime.now());
-                Sessions.set(key, wrapper, wrapper.getExpiredSeconds());
+                Sessions.set(key, wrapper.getValue(), wrapper.getExpiredSeconds());
             }
         }
     }

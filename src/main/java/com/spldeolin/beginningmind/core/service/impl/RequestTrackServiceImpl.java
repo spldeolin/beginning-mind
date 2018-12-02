@@ -14,6 +14,7 @@ import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
+import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.model.User;
@@ -43,6 +44,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         RequestTrackDTO track = new RequestTrackDTO();
         track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
         track.setRequestedAt(LocalDateTime.now());
+        track.setStopwatch(Stopwatch.createStarted());
         return track;
     }
 
