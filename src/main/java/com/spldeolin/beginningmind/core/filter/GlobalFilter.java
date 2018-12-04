@@ -21,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 import com.github.pagehelper.page.PageMethod;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
@@ -82,8 +83,10 @@ public class GlobalFilter extends OncePerRequestFilter {
         }
 
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
-        filterChain.doFilter(wrappedRequest, response);
+        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
+        filterChain.doFilter(wrappedRequest, wrappedResponse);
         log.info(new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8));
+        log.info(new String(wrappedResponse.getContentAsByteArray(), StandardCharsets.UTF_8));
 
         // 完成并保存
         requestTrackService.completeAndSave(requestTrackDTO, request);
