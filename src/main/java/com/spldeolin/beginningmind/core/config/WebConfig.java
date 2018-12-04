@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.core.config;
 
 import javax.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
@@ -21,16 +20,13 @@ public class WebConfig implements WebMvcConfigurer {
     @Autowired
     private CoreProperties coreProperties;
 
-    @Value("${core.file.mapping}")
-    private String mapping;
-
     /**
      * 额外监听路径
      */
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        String location = coreProperties.getFile().getLocation();
-        registry.addResourceHandler(mapping + "/**").addResourceLocations("file:" + location);
+        registry.addResourceHandler(coreProperties.getFile().getMapping() + "/**")
+                .addResourceLocations("file:" + coreProperties.getFile().getLocation());
     }
 
     /**
