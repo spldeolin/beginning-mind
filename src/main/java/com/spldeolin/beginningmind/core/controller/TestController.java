@@ -8,6 +8,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.model.User;
@@ -71,6 +72,11 @@ public class TestController {
     Object qualifier() {
         log.info(authUrls);
         return anonUrlsPrefix;
+    }
+
+    @PostMapping("/post")
+    String post(@RequestBody User user) {
+        return "SUCEESS" + user;
     }
 
 }
