@@ -11,7 +11,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.1.0.RELEASE</version>
+        <version>2.1.1.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -52,7 +52,7 @@
         <objenesis.version>3.0.1</objenesis.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
-        <poi.version>4.0.0</poi.version>
+        <poi.version>4.0.1</poi.version>
 
         <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
         <commons-io.version>2.6</commons-io.version>
