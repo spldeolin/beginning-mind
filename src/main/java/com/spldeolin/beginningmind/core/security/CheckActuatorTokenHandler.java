@@ -1,31 +1,22 @@
-package com.spldeolin.beginningmind.core.filter;
+package com.spldeolin.beginningmind.core.security;
 
-import java.io.IOException;
 import java.util.UUID;
 import javax.annotation.PostConstruct;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.util.Jsons;
+import com.spldeolin.beginningmind.core.security.exception.ActuatorTokenIncorrectException;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 过滤器：统一返回值包装
- *
- * @author Deolin 2018/06/17
+ * @author Deolin 2018/12/05
  */
 @Component
 @Log4j2
-public class ActuatorFilter extends OncePerRequestFilter {
+public class CheckActuatorTokenHandler {
 
     @Autowired
     private WebEndpointProperties webEndpointProperties;
@@ -39,24 +30,18 @@ public class ActuatorFilter extends OncePerRequestFilter {
     public void init() {
         if (enableAuth()) {
             token = UUID.randomUUID().toString();
-            log.info("Actuator Filter Token : " + token);
+            log.info("Actuator token: " + token);
         }
     }
 
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-            throws ServletException, IOException {
+    public void ensureTokenCorrect(HttpServletRequest request) {
         if (enableAuth()) {
             if (isActuatorRequest(request)) {
                 if (isTokenIncorrect(request)) {
-                    response.setContentType("application/json;charset=UTF-8");
-                    response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.FORBIDDEN)));
-                    return;
+                    throw new ActuatorTokenIncorrectException("Token错误");
                 }
             }
         }
-
-        filterChain.doFilter(request, response);
     }
 
     private boolean enableAuth() {

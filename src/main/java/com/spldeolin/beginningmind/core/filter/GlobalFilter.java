@@ -19,6 +19,7 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
+import com.spldeolin.beginningmind.core.security.CheckActuatorTokenHandler;
 import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
 import com.spldeolin.beginningmind.core.security.CheckSignedHandler;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
@@ -41,6 +42,9 @@ public class GlobalFilter extends OncePerRequestFilter {
     private RequestTrackService requestTrackService;
 
     @Autowired
+    private CheckActuatorTokenHandler checkActuatorTokenHandler;
+
+    @Autowired
     private CheckKilledHandler checkKilledHandler;
 
     @Autowired
@@ -58,6 +62,7 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // todo security（鉴权）
         try {
+            checkActuatorTokenHandler.ensureTokenCorrect(request);
             checkKilledHandler.ensureNotKilled(request);
             checkSignedHandler.ensureSigned(request);
         } catch (UnsignedException e) {
@@ -70,15 +75,14 @@ public class GlobalFilter extends OncePerRequestFilter {
             requestTrackDTO.setUserId(Signer.userId());
         }
 
+        // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
-        filterChain.doFilter(request, response);
-        log.info(new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding()));
-        wrappedResponse.copyBodyToResponse();
-        log.info(new String(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()));
+
+        filterChain.doFilter(wrappedRequest, wrappedResponse);
 
         // 完成并保存
-        requestTrackService.completeAndSave(requestTrackDTO, request);
+        requestTrackService.asyncCompleteAndSave(requestTrackDTO, wrappedRequest, wrappedResponse);
 
         // 刷新会话与每个会话k-v的失效时间
         reflashSessionExpire();

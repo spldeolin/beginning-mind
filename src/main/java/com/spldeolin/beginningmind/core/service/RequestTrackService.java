@@ -1,7 +1,8 @@
 package com.spldeolin.beginningmind.core.service;
 
-import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 
 /**
@@ -15,8 +16,7 @@ public interface RequestTrackService {
 
     void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint);
 
-    void fillRequestResultInfo(RequestTrackDTO track, Object requestResult);
-
-    void completeAndSave(RequestTrackDTO track, HttpServletRequest request);
+    void asyncCompleteAndSave(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+            ContentCachingResponseWrapper wrappedResponse);
 
 }

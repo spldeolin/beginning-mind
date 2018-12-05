@@ -4,7 +4,6 @@ import java.lang.annotation.Annotation;
 import java.util.ArrayList;
 import java.util.List;
 import org.aspectj.lang.ProceedingJoinPoint;
-import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
@@ -43,14 +41,6 @@ public class ControllerAspect {
     public void controllerMethod() {
     }
 
-    /**
-     * Spring可扫描的， 声明了@RestControllerAdvice注解的类， 中声明了ExceptionHandler注解的， 所有方法
-     */
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestControllerAdvice)" +
-            " && @annotation(org.springframework.web.bind.annotation.ExceptionHandler)")
-    public void exceptionHandler() {
-    }
-
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
@@ -65,20 +55,8 @@ public class ControllerAspect {
         }
 
         // 执行切点
-        Object data = point.proceed(requestTrack.getParameterValues());
-
-        // 填入RequestResult
-        requestTrackService.fillRequestResultInfo(requestTrack, data);
-
-        return data;
+        return point.proceed(requestTrack.getParameterValues());
     }
-
-    @AfterReturning(value = "exceptionHandler()", returning = "requestResult")
-    public void afterReturning(RequestResult requestResult) {
-        RequestTrackDTO track = RequestTrackContext.getRequestTrack();
-        requestTrackService.fillRequestResultInfo(track, requestResult);
-    }
-
 
     private List<Invalid> handleAnnotations(RequestTrackDTO requestTrack) {
         List<Invalid> invalids = new ArrayList<>();

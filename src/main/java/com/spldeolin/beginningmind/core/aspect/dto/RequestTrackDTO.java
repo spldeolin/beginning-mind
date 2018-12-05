@@ -34,29 +34,34 @@ public class RequestTrackDTO implements Serializable {
     private LocalDateTime requestedAt;
 
     /**
-     * URL
+     * HTTP协议 URL
      */
     private String url;
 
     /**
-     * 请求动词
+     * HTTP协议 请求动词
      */
     private String httpMethod;
 
     /**
-     * 控制器
+     * HTTP协议 request content
      */
-    private String controller;
+    private String requestContent;
 
     /**
-     * 请求方法
+     * HTTP协议 response content
      */
-    private String requestMethod;
+    private String responseContent;
 
     /**
-     * 请求耗时
+     * 处理本请求的控制层请求方法的全限定名
      */
-    private Long processingMilliseconds;
+    private String fullyQualifiedName;
+
+    /**
+     * 耗时
+     */
+    private Long elapsedMilliseconds;
 
     /**
      * 登录者用户ID
@@ -67,6 +72,11 @@ public class RequestTrackDTO implements Serializable {
      * 登录者用户名
      */
     private String userName;
+
+    /**
+     * 登录者用户手机
+     */
+    private String userMobile;
 
     /**
      * 请求者IP
@@ -82,21 +92,6 @@ public class RequestTrackDTO implements Serializable {
      * 项目启动时指定的profile
      */
     private String activeProfile;
-
-    /**
-     * 登录者用户手机
-     */
-    private String userMobile;
-
-    /**
-     * 请求体
-     */
-    private String requestBody;
-
-    /**
-     * 返回值
-     */
-    private String responseBody;
 
     /**
      * 请求方法
@@ -132,17 +127,16 @@ public class RequestTrackDTO implements Serializable {
                 "    requestedAt = " + requestedAt + br +
                 "    url = " + url + br +
                 "    httpMethod = " + httpMethod + br +
-                "    controller = " + controller + br +
-                "    requestMethod = " + requestMethod + br +
-                "    processingMilliseconds = " + processingMilliseconds + br +
+                "    requestContent = " + requestContent + br +
+                "    responseContent = " + responseContent + br +
+                "    fullyQualifiedName = " + fullyQualifiedName + br +
+                "    elapsedMilliseconds = " + elapsedMilliseconds + br +
                 "    userId = " + userId + br +
                 "    userName = " + userName + br +
+                "    userMobile = " + userMobile + br +
                 "    ip = " + ip + br +
                 "    sessionId = " + sessionId + br +
                 "    activeProfile = " + activeProfile + br +
-                "    userMobile = " + userMobile + br +
-                "    requestBody = " + requestBody + br +
-                "    responseBody = " + responseBody + br +
                 '}';
     }
 

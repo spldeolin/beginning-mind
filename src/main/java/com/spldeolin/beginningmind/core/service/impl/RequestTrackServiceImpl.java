@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
-import java.lang.annotation.Annotation;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.Map.Entry;
@@ -13,14 +14,13 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.google.common.base.Stopwatch;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.service.UserService;
-import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,9 +53,7 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
         Object[] parameterValues = joinPoint.getArgs();
-
-        track.setController(joinPoint.getTarget().getClass().getSimpleName());
-        track.setRequestMethod(requestMethod.getName());
+        track.setFullyQualifiedName(joinPoint.getTarget().getClass().getName() + "#" + requestMethod.getName());
         track.setMethod(requestMethod);
         track.setParameterNames(parameterNames);
         track.setParameterValues(parameterValues);
@@ -63,14 +61,10 @@ public class RequestTrackServiceImpl implements RequestTrackService {
 
     @Async
     @Override
-    public void fillRequestResultInfo(RequestTrackDTO track, Object requestResult) {
-        track.setResponseBody(Jsons.toJson(ensureRequestResult(requestResult)));
-    }
-
-    @Async
-    @Override
-    public void completeAndSave(RequestTrackDTO track, HttpServletRequest request) {
-        analysizRequestTrack(track, request);
+    public void asyncCompleteAndSave(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+            ContentCachingResponseWrapper wrappedResponse) {
+        readAndFillContent(track, wrappedRequest, wrappedResponse);
+        analysizRequestTrack(track, wrappedRequest);
         saveTrack(track);
     }
 
@@ -78,12 +72,32 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         log.info("rq-" + track.getInsignia() + System.getProperty("line.separator") + track);
     }
 
+    private void readAndFillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+            ContentCachingResponseWrapper wrappedResponse) {
+        String requestContent = null;
+        String responseContent = null;
+        try {
+            requestContent = new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding());
+        } catch (UnsupportedEncodingException e) {
+            log.error("读取requestContent失败", e);
+        }
+        try {
+            responseContent = new String(wrappedResponse.getContentAsByteArray(),
+                    wrappedResponse.getCharacterEncoding());
+            wrappedResponse.copyBodyToResponse();
+        } catch (IOException e) {
+            log.error("读取requestContent失败", e);
+        }
+        track.setRequestContent(requestContent);
+        track.setResponseContent(responseContent);
+    }
+
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
         track.setUrl(getFullUrlFromRequest(request));
 
         track.setHttpMethod(request.getMethod());
 
-        track.setProcessingMilliseconds(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
+        track.setElapsedMilliseconds(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 
         Long signedUserId = track.getUserId();
         if (signedUserId != null) {
@@ -97,33 +111,6 @@ public class RequestTrackServiceImpl implements RequestTrackService {
         track.setSessionId(request.getSession().getId());
 
         track.setActiveProfile(environment.getActiveProfiles()[0]);
-
-        Object requestBodyValue = getRequestBodyValueByAnnotation(track.getParameterValues(), track.getMethod());
-        if (requestBodyValue != null) {
-            track.setRequestBody(Jsons.toJson(requestBodyValue));
-        } else {
-            track.setRequestBody("");
-        }
-    }
-
-    private Object getRequestBodyValueByAnnotation(Object[] parameterValues, Method method) {
-        Annotation[][] annotations = method.getParameterAnnotations();
-        for (int parameterIndex = 0; parameterIndex < annotations.length; parameterIndex++) {
-            Annotation[] annotationsEachParameter = annotations[parameterIndex];
-            for (Annotation annotation : annotationsEachParameter) {
-                if (annotation instanceof RequestBody) {
-                    return parameterValues[parameterIndex];
-                }
-            }
-        }
-        return null;
-    }
-
-    private RequestResult ensureRequestResult(Object object) {
-        if (object instanceof RequestResult) {
-            return (RequestResult) object;
-        }
-        return RequestResult.success(object);
     }
 
     private String getFullUrlFromRequest(HttpServletRequest request) {
