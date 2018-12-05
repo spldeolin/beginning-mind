@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.spldeolin.beginningmind.core.dao.UserMapper;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Requests;
@@ -77,6 +79,15 @@ public class TestController {
     @PostMapping("/post")
     String post(@RequestBody User user) {
         return "SUCEESS" + user;
+    }
+
+    @Autowired
+    private UserMapper userMapper;
+
+    @GetMapping("/page")
+    Page<User> page(Page<User> page) {
+
+        return page.setRecords(userMapper.pages(page));
     }
 
 }

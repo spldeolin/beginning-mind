@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.baomidou.mybatisplus.extension.injector.LogicSqlInjector;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 
 /**
  * @author Deolin 2018/11/10
@@ -27,6 +28,14 @@ public class MybatisPlusConfig {
     @Bean
     public LogicSqlInjector logicSqlInjector() {
         return new LogicSqlInjector();
+    }
+
+    /**
+     * 启用分页
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
     }
 
 }

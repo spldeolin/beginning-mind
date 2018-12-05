@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.input.UserInput;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.SignService;
@@ -74,17 +72,6 @@ public class UserController {
     @PostMapping("/delete")
     void delete(@RequestParam Long id) {
         userService.deleteEX(id);
-    }
-
-    /**
-     * 获取一批“用户”
-     *
-     * @param pageParam 页码和每页条目数
-     * @return “用户”分页
-     */
-    @GetMapping("/search")
-    Page<User> search(PageParam pageParam) {
-        return userService.page(pageParam);
     }
 
     /**

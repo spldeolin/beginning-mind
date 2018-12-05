@@ -80,12 +80,6 @@ mybatis-plus:
       logic-delete-value: true
       logic-not-delete-value: false
 
-pagehelper:
-  helperDialect: mysql
-  reasonable: true
-  supportMethodsArguments: true
-  params: count=countSql
-
 core:
 
   address: 占位符

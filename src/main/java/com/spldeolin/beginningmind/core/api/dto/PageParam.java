@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.api.dto;
 
 import org.apache.commons.lang3.math.NumberUtils;
-import com.github.pagehelper.PageHelper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.Data;
 
 /**
@@ -17,30 +17,31 @@ import lombok.Data;
 @Data
 public class PageParam {
 
-    private static final int DEFAULT_PAGE_NO = 1;
+    private static final long DEFAULT_PAGE_NO = 1;
 
-    private static final int DEFAULT_PAGE_SIZE = 10;
+    private static final long DEFAULT_PAGE_SIZE = 10;
 
     private String pageNo;
 
     private String pageSize;
 
-    public void startPage() {
-        int pageNoEx;
-        if (NumberUtils.isCreatable(pageNo)) {
-            pageNoEx = NumberUtils.toInt(pageNo);
-            pageNoEx = pageNoEx > 0 ? pageNoEx : DEFAULT_PAGE_NO;
+    public <T> Page<T> build() {
+        long rationalPageNo = retionalise(pageNo, DEFAULT_PAGE_NO);
+        long rationalPageSize = retionalise(pageSize, DEFAULT_PAGE_SIZE);
+        Page<T> mybatisPlusPageParam = new Page<>();
+        mybatisPlusPageParam.setCurrent(rationalPageNo).setSize(rationalPageSize);
+        return mybatisPlusPageParam;
+    }
+
+    private long retionalise(String rawNumber, long defaultNumber) {
+        long result;
+        if (NumberUtils.isCreatable(rawNumber)) {
+            result = NumberUtils.toLong(rawNumber);
+            result = result > 0 ? result : defaultNumber;
         } else {
-            pageNoEx = DEFAULT_PAGE_NO;
+            result = defaultNumber;
         }
-        int pageSizeEx;
-        if (NumberUtils.isCreatable(pageSize)) {
-            pageSizeEx = NumberUtils.toInt(pageSize);
-            pageSizeEx = pageSizeEx > 0 ? pageSizeEx : DEFAULT_PAGE_SIZE;
-        } else {
-            pageSizeEx = DEFAULT_PAGE_SIZE;
-        }
-        PageHelper.startPage(pageNoEx, pageSizeEx);
+        return result;
     }
 
 }

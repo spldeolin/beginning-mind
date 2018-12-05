@@ -15,11 +15,10 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
-import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.dao.UserMapper;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.PermissionService;
@@ -44,6 +43,9 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Autowired
     private SnowFlakeService snowFlakeService;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public Long createEX(User user) {
@@ -111,13 +113,6 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         }
         super.delete(ids);
         return "操作成功";
-    }
-
-    @Override
-    public Page<User> page(PageParam pageParam) {
-        QueryWrapper<User> query = new QueryWrapper<>();
-        pageParam.startPage();
-        return Page.wrap(super.searchBatch(query));
     }
 
     @Override

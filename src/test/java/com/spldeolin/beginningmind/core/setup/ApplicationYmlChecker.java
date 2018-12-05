@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.github.pagehelper.autoconfigure.PageHelperProperties;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
@@ -42,9 +41,6 @@ public class ApplicationYmlChecker {
     private MybatisPlusProperties mybatisPlusProperties;
 
     @Autowired
-    private PageHelperProperties pageHelperProperties;
-
-    @Autowired
     private CoreProperties coreProperties;
 
     @Test
@@ -67,9 +63,6 @@ public class ApplicationYmlChecker {
 
         // mybatisplus
         log.info(mybatisPlusProperties);
-
-        // pagehelper
-        log.info(pageHelperProperties);
 
         // core
         log.info(coreProperties);

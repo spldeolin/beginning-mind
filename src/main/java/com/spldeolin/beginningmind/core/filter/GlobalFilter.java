@@ -1,13 +1,8 @@
 package com.spldeolin.beginningmind.core.filter;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
-import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,15 +10,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.reactive.error.ErrorAttributes;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.OncePerRequestFilter;
-import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import org.springframework.web.util.WebUtils;
-import com.github.pagehelper.page.PageMethod;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
@@ -56,8 +46,6 @@ public class GlobalFilter extends OncePerRequestFilter {
     @Autowired
     private CheckSignedHandler checkSignedHandler;
 
-    private ErrorAttributes errorAttributes;
-
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
@@ -84,9 +72,10 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
-        filterChain.doFilter(wrappedRequest, wrappedResponse);
-        log.info(new String(wrappedRequest.getContentAsByteArray(), StandardCharsets.UTF_8));
-        log.info(new String(wrappedResponse.getContentAsByteArray(), StandardCharsets.UTF_8));
+        filterChain.doFilter(request, response);
+        log.info(new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding()));
+        wrappedResponse.copyBodyToResponse();
+        log.info(new String(wrappedResponse.getContentAsByteArray(), wrappedResponse.getCharacterEncoding()));
 
         // 完成并保存
         requestTrackService.completeAndSave(requestTrackDTO, request);
@@ -95,10 +84,8 @@ public class GlobalFilter extends OncePerRequestFilter {
         reflashSessionExpire();
         reflashSessionAttributeExpire();
 
-        // 清除ThreadLocal（分页、Log MDC、请求轨迹）
-        PageMethod.clearPage();
-        removeLogMDC();
-        RequestTrackContext.clearRequestTrack();
+        // 清除ThreadLocal（Log MDC、请求轨迹）
+        clearAllThreadLocal();
     }
 
     private void setLogMDC() {
@@ -126,45 +113,9 @@ public class GlobalFilter extends OncePerRequestFilter {
         }
     }
 
-    private void removeLogMDC() {
+    private void clearAllThreadLocal() {
         ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
+        RequestTrackContext.clearRequestTrack();
     }
 
-
-    protected Map<String, Object> getTrace(HttpServletRequest request, int status) {
-        Throwable exception = (Throwable) request.getAttribute("javax.servlet.error.exception");
-
-        Principal principal = request.getUserPrincipal();
-
-        Map<String, Object> trace = new LinkedHashMap<>();
-        trace.put("method", request.getMethod());
-        trace.put("path", request.getRequestURI());
-        trace.put("principal", principal.getName());
-        trace.put("query", request.getQueryString());
-        trace.put("statusCode", status);
-
-        if (exception != null && this.errorAttributes != null) {
-            trace.put("error", this.errorAttributes
-                    .getErrorAttributes((ServerRequest) new ServletRequestAttributes(request), true));
-        }
-
-        return trace;
-    }
-
-    private void getBody(ContentCachingRequestWrapper request, Map<String, Object> trace) {
-        ContentCachingRequestWrapper wrapper = WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-        if (wrapper != null) {
-            byte[] buf = wrapper.getContentAsByteArray();
-            if (buf.length > 0) {
-                String payload;
-                try {
-                    payload = new String(buf, 0, buf.length, wrapper.getCharacterEncoding());
-                } catch (UnsupportedEncodingException ex) {
-                    payload = "[unknown]";
-                }
-
-                trace.put("body", payload);
-            }
-        }
-    }
 }

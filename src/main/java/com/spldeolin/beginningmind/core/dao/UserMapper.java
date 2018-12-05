@@ -1,6 +1,10 @@
 package com.spldeolin.beginningmind.core.dao;
 
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.spldeolin.beginningmind.core.model.User;
 
 /**
@@ -9,5 +13,8 @@ import com.spldeolin.beginningmind.core.model.User;
  * @author Deolin 2018/11/15
  */
 public interface UserMapper extends BaseMapper<User> {
+
+    @Select("select * from user")
+    List<User> pages(@Param("page") Page<User> param);
 
 }

@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import com.spldeolin.beginningmind.core.api.CommonService;
-import com.spldeolin.beginningmind.core.api.dto.Page;
-import com.spldeolin.beginningmind.core.api.dto.PageParam;
 import com.spldeolin.beginningmind.core.model.User;
 
 /**
@@ -50,14 +48,6 @@ public interface UserService extends CommonService<User> {
      * @return 删除情况
      */
     String deleteEX(List<Long> ids);
-
-    /**
-     * 分页获取资源
-     *
-     * @param pageParam 页码和每页条目数
-     * @return Page 分页对象
-     */
-    Page<User> page(PageParam pageParam);
 
     /**
      * 通过用户名或手机号或email搜索用户
