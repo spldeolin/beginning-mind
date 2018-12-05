@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
-import java.time.LocalDateTime;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
@@ -16,12 +15,10 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.service.UserService;
-import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -38,15 +35,6 @@ public class RequestTrackServiceImpl implements RequestTrackService {
 
     @Autowired
     private UserService userService;
-
-    @Override
-    public RequestTrackDTO buildRequestTrack() {
-        RequestTrackDTO track = new RequestTrackDTO();
-        track.setInsignia(StringRandomUtils.generateLegibleEnNum(6));
-        track.setRequestedAt(LocalDateTime.now());
-        track.setStopwatch(Stopwatch.createStarted());
-        return track;
-    }
 
     @Override
     public void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint) {

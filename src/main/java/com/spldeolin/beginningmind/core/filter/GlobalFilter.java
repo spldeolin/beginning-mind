@@ -1,13 +1,10 @@
 package com.spldeolin.beginningmind.core.filter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,7 +13,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.security.CheckActuatorTokenHandler;
@@ -50,11 +46,14 @@ public class GlobalFilter extends OncePerRequestFilter {
     @Autowired
     private CheckSignedHandler checkSignedHandler;
 
+    @Autowired
+    private SessionReflashHandler sessionReflashHandler;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         // 构造请求轨迹
-        RequestTrackDTO track = requestTrackService.buildRequestTrack();
+        RequestTrackDTO track = new RequestTrackDTO();
 
         // 设置ThreadLocal（Log MDC、请求轨迹）
         setAllThreadLocal(track);
@@ -65,7 +64,7 @@ public class GlobalFilter extends OncePerRequestFilter {
             checkKilledHandler.ensureNotKilled(request);
             checkSignedHandler.ensureSigned(request);
         } catch (UnsignedException e) {
-            handleException(response, e);
+            returnExceptionAsJson(response, e);
             return;
         }
 
@@ -80,45 +79,24 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
-        // 完成并保存请求轨迹
+        // 完成并保存请求轨迹（异步）
         requestTrackService.asyncCompleteAndSave(track, wrappedRequest, wrappedResponse);
 
-        // 刷新会话与每个会话k-v的失效时间
-        reflashSessionExpire();
-        reflashSessionAttributeExpire();
+        // 刷新会话的失效时间（异步）
+        sessionReflashHandler.asyncReflashExpire(Sessions.session());
 
         // 清除ThreadLocal（Log MDC、请求轨迹）
         clearAllThreadLocal();
     }
 
-    private void setLogMDC() {
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
-    }
-
-    private void handleException(HttpServletResponse response, UnsignedException e) throws IOException {
+    private void returnExceptionAsJson(HttpServletResponse response, UnsignedException e) throws IOException {
         response.setContentType("application/json;charset=utf8");
         response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.UNSIGNED, e.getMessage())));
     }
 
-    private void reflashSessionExpire() {
-        Sessions.session().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
-    }
-
-    private void reflashSessionAttributeExpire() {
-        HttpSession httpSession = Sessions.session();
-        for (String key : Collections.list(httpSession.getAttributeNames())) {
-            Object value = httpSession.getAttribute(key);
-            if (value instanceof Sessions.ValueWrapper) {
-                Sessions.ValueWrapper wrapper = (Sessions.ValueWrapper) value;
-                wrapper.setSetAt(LocalDateTime.now());
-                Sessions.set(key, wrapper.getValue(), wrapper.getExpiredSeconds());
-            }
-        }
-    }
-
     private void setAllThreadLocal(RequestTrackDTO track) {
         RequestTrackContext.setRequestTrack(track);
-        setLogMDC();
+        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
     }
 
     private void clearAllThreadLocal() {

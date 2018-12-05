@@ -1,0 +1,1 @@
+-Dprofile=dev -Xmx512m -noverify -XX:TieredStopAtLevel=1

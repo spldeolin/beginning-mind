@@ -4,11 +4,8 @@ import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import com.google.common.base.Stopwatch;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
  * 请求轨迹
@@ -16,10 +13,6 @@ import lombok.experimental.Accessors;
  * @author Deolin 2018/11/15
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Accessors(chain = true)
 public class RequestTrackDTO implements Serializable {
 
     /**
@@ -113,6 +106,12 @@ public class RequestTrackDTO implements Serializable {
     private transient Stopwatch stopwatch;
 
     private static final long serialVersionUID = 1L;
+
+    public RequestTrackDTO() {
+        insignia = StringRandomUtils.generateLegibleEnNum(6);
+        requestedAt = LocalDateTime.now();
+        stopwatch = Stopwatch.createStarted();
+    }
 
     @Override
     public String toString() {

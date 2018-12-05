@@ -12,8 +12,6 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
  */
 public interface RequestTrackService {
 
-    RequestTrackDTO buildRequestTrack();
-
     void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint);
 
     void asyncCompleteAndSave(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
