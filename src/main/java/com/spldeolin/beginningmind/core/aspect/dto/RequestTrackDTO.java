@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.aspect.dto;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -96,26 +95,22 @@ public class RequestTrackDTO implements Serializable {
     /**
      * 请求方法
      */
-    @JsonIgnore
-    private Method method;
+    private transient Method method;
 
     /**
      * 请求方法的参数名
      */
-    @JsonIgnore
-    private String[] parameterNames;
+    private transient String[] parameterNames;
 
     /**
      * 请求方法的参数值
      */
-    @JsonIgnore
-    private Object[] parameterValues;
+    private transient Object[] parameterValues;
 
     /**
      * 请求计时
      */
-    @JsonIgnore
-    private Stopwatch stopwatch;
+    private transient Stopwatch stopwatch;
 
     private static final long serialVersionUID = 1L;
 
@@ -137,7 +132,7 @@ public class RequestTrackDTO implements Serializable {
                 "    ip = " + ip + br +
                 "    sessionId = " + sessionId + br +
                 "    activeProfile = " + activeProfile + br +
-                '}';
+                "}";
     }
 
 }
