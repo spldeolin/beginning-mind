@@ -53,12 +53,11 @@ public class GlobalFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // 构造请求轨迹，存入ThreadLocal
-        RequestTrackDTO requestTrackDTO = requestTrackService.buildRequestTrack();
-        RequestTrackContext.setRequestTrack(requestTrackDTO);
+        // 构造请求轨迹
+        RequestTrackDTO track = requestTrackService.buildRequestTrack();
 
-        // 设置Log MDC
-        setLogMDC();
+        // 设置ThreadLocal（Log MDC、请求轨迹）
+        setAllThreadLocal(track);
 
         // todo security（鉴权）
         try {
@@ -72,7 +71,7 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 填入登录者信息
         if (Signer.isSigning()) {
-            requestTrackDTO.setUserId(Signer.userId());
+            track.setUserId(Signer.userId());
         }
 
         // 包装request和response
@@ -81,8 +80,8 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
-        // 完成并保存
-        requestTrackService.asyncCompleteAndSave(requestTrackDTO, wrappedRequest, wrappedResponse);
+        // 完成并保存请求轨迹
+        requestTrackService.asyncCompleteAndSave(track, wrappedRequest, wrappedResponse);
 
         // 刷新会话与每个会话k-v的失效时间
         reflashSessionExpire();
@@ -115,6 +114,11 @@ public class GlobalFilter extends OncePerRequestFilter {
                 Sessions.set(key, wrapper.getValue(), wrapper.getExpiredSeconds());
             }
         }
+    }
+
+    private void setAllThreadLocal(RequestTrackDTO track) {
+        RequestTrackContext.setRequestTrack(track);
+        setLogMDC();
     }
 
     private void clearAllThreadLocal() {
