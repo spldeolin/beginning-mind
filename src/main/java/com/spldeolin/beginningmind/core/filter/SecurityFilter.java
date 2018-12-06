@@ -25,7 +25,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * 前置：Actuator请求的token校验 -> 是否被请离校验 -> 是否登录校验 -> 鉴权校验 -> 填入登录者信息
  *
- * 后置：无
+ * 后置：向RequestTrack填入登录者信息
  *
  * @author Deolin 2018/12/06
  */
@@ -60,7 +60,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-        // 填入登录者信息
+        // 向RequestTrack填入登录者信息
         if (Signer.isSigning()) {
             RequestTrackContext.getRequestTrack().setUserId(Signer.userId());
         }
