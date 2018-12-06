@@ -1,7 +1,5 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
@@ -51,33 +49,12 @@ public class RequestTrackServiceImpl implements RequestTrackService {
     @Override
     public void asyncCompleteAndSave(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
             ContentCachingResponseWrapper wrappedResponse) {
-        readAndFillContent(track, wrappedRequest, wrappedResponse);
         analysizRequestTrack(track, wrappedRequest);
         saveTrack(track);
     }
 
     private void saveTrack(RequestTrackDTO track) {
         log.info("rq-" + track.getInsignia() + System.getProperty("line.separator") + track);
-    }
-
-    private void readAndFillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
-            ContentCachingResponseWrapper wrappedResponse) {
-        String requestContent = null;
-        String responseContent = null;
-        try {
-            requestContent = new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding());
-        } catch (UnsupportedEncodingException e) {
-            log.error("读取requestContent失败", e);
-        }
-        try {
-            responseContent = new String(wrappedResponse.getContentAsByteArray(),
-                    wrappedResponse.getCharacterEncoding());
-            wrappedResponse.copyBodyToResponse();
-        } catch (IOException e) {
-            log.error("读取requestContent失败", e);
-        }
-        track.setRequestContent(requestContent);
-        track.setResponseContent(responseContent);
     }
 
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {

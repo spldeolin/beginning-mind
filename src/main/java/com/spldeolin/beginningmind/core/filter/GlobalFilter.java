@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.filter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -79,6 +80,9 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
+        // 填入request和response的content（同步）
+        fillContent(track, wrappedRequest, wrappedResponse);
+
         // 完成并保存请求轨迹（异步）
         requestTrackService.asyncCompleteAndSave(track, wrappedRequest, wrappedResponse);
 
@@ -87,6 +91,26 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 清除ThreadLocal（Log MDC、请求轨迹）
         clearAllThreadLocal();
+    }
+
+    private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+            ContentCachingResponseWrapper wrappedResponse) {
+        String requestContent = null;
+        String responseContent = null;
+        try {
+            requestContent = new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding());
+        } catch (UnsupportedEncodingException e) {
+            log.error("读取requestContent失败", e);
+        }
+        try {
+            responseContent = new String(wrappedResponse.getContentAsByteArray(),
+                    wrappedResponse.getCharacterEncoding());
+            wrappedResponse.copyBodyToResponse();
+        } catch (IOException e) {
+            log.error("读取responseContent失败", e);
+        }
+        track.setRequestContent(requestContent);
+        track.setResponseContent(responseContent);
     }
 
     private void returnExceptionAsJson(HttpServletResponse response, UnsignedException e) throws IOException {
