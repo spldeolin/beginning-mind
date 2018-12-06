@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
-import com.spldeolin.beginningmind.core.util.async.RequestTrackFilterPostHandler;
+import com.spldeolin.beginningmind.core.filter.async.RequestTrackFilterPostHandler;
 import lombok.extern.log4j.Log4j2;
 
 /**

@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.filter;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.web.util.ContentCachingRequestWrapper;
+import org.springframework.web.util.ContentCachingResponseWrapper;
+import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -29,9 +34,33 @@ public class ReadContentFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        log.info("start");
+        // 包装request和response
+        ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
+        ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
+
         filterChain.doFilter(request, response);
-        log.info("over");
+
+        // 向RequestTrack填入request和response的content（同步）
+        fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
     }
 
+    private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+            ContentCachingResponseWrapper wrappedResponse) {
+        String requestContent = null;
+        String responseContent = null;
+        try {
+            requestContent = new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding());
+        } catch (UnsupportedEncodingException e) {
+            log.error("读取requestContent失败", e);
+        }
+        try {
+            responseContent = new String(wrappedResponse.getContentAsByteArray(),
+                    wrappedResponse.getCharacterEncoding());
+            wrappedResponse.copyBodyToResponse();
+        } catch (IOException e) {
+            log.error("读取responseContent失败", e);
+        }
+        track.setRequestContent(requestContent);
+        track.setResponseContent(responseContent);
+    }
 }
