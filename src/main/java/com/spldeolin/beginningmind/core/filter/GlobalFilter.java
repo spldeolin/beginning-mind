@@ -6,14 +6,12 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
-import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -24,9 +22,6 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @Log4j2
 public class GlobalFilter extends OncePerRequestFilter {
-
-    @Autowired
-    private SessionReflashHandler sessionReflashHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -39,9 +34,6 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 填入request和response的content（同步）
         fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
-
-        // 刷新会话的失效时间（异步）
-        sessionReflashHandler.asyncReflashExpire(Sessions.session());
     }
 
     private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
