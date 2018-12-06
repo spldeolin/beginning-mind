@@ -6,7 +6,6 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.logging.log4j.ThreadContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -14,7 +13,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.security.CheckActuatorTokenHandler;
 import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
@@ -54,9 +52,6 @@ public class GlobalFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // 设置Log MDC
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
-
         // todo security（鉴权）
         try {
             checkActuatorTokenHandler.ensureTokenCorrect(request);
@@ -83,9 +78,6 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 刷新会话的失效时间（异步）
         sessionReflashHandler.asyncReflashExpire(Sessions.session());
-
-        // 清除Log MDC
-        ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
     }
 
     private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
