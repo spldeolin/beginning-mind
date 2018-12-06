@@ -11,16 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.security.CheckActuatorTokenHandler;
-import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
-import com.spldeolin.beginningmind.core.security.CheckSignedHandler;
-import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
-import com.spldeolin.beginningmind.core.security.util.Signer;
-import com.spldeolin.beginningmind.core.service.RequestTrackService;
-import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
@@ -35,33 +26,11 @@ import lombok.extern.log4j.Log4j2;
 public class GlobalFilter extends OncePerRequestFilter {
 
     @Autowired
-    private RequestTrackService requestTrackService;
-
-    @Autowired
-    private CheckActuatorTokenHandler checkActuatorTokenHandler;
-
-    @Autowired
-    private CheckKilledHandler checkKilledHandler;
-
-    @Autowired
-    private CheckSignedHandler checkSignedHandler;
-
-    @Autowired
     private SessionReflashHandler sessionReflashHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // todo security（鉴权）
-        try {
-            checkActuatorTokenHandler.ensureTokenCorrect(request);
-            checkKilledHandler.ensureNotKilled(request);
-            checkSignedHandler.ensureSigned(request);
-        } catch (UnsignedException e) {
-            returnExceptionAsJson(response, e);
-            return;
-        }
-
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
@@ -70,11 +39,6 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 填入request和response的content（同步）
         fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
-
-        // 填入登录者信息
-        if (Signer.isSigning()) {
-            RequestTrackContext.getRequestTrack().setUserId(Signer.userId());
-        }
 
         // 刷新会话的失效时间（异步）
         sessionReflashHandler.asyncReflashExpire(Sessions.session());
@@ -98,11 +62,6 @@ public class GlobalFilter extends OncePerRequestFilter {
         }
         track.setRequestContent(requestContent);
         track.setResponseContent(responseContent);
-    }
-
-    private void returnExceptionAsJson(HttpServletResponse response, UnsignedException e) throws IOException {
-        response.setContentType("application/json;charset=utf8");
-        response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.UNSIGNED, e.getMessage())));
     }
 
 }
