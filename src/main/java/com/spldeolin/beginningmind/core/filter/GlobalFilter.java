@@ -62,11 +62,6 @@ public class GlobalFilter extends OncePerRequestFilter {
             return;
         }
 
-        // 填入登录者信息
-        if (Signer.isSigning()) {
-            RequestTrackContext.getRequestTrack().setUserId(Signer.userId());
-        }
-
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
@@ -75,6 +70,11 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 填入request和response的content（同步）
         fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
+
+        // 填入登录者信息
+        if (Signer.isSigning()) {
+            RequestTrackContext.getRequestTrack().setUserId(Signer.userId());
+        }
 
         // 刷新会话的失效时间（异步）
         sessionReflashHandler.asyncReflashExpire(Sessions.session());
