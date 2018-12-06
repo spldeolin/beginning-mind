@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.filter;
+package com.spldeolin.beginningmind.core.util;
 
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import lombok.extern.log4j.Log4j2;

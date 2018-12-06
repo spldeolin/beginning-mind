@@ -23,6 +23,7 @@ import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.util.Jsons;
+import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
 
@@ -53,11 +54,8 @@ public class GlobalFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
-        // 构造请求轨迹
-        RequestTrackDTO track = new RequestTrackDTO();
-
-        // 设置ThreadLocal（Log MDC、请求轨迹）
-        setAllThreadLocal(track);
+        // 设置Log MDC
+        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
 
         // todo security（鉴权）
         try {
@@ -71,7 +69,7 @@ public class GlobalFilter extends OncePerRequestFilter {
 
         // 填入登录者信息
         if (Signer.isSigning()) {
-            track.setUserId(Signer.userId());
+            RequestTrackContext.getRequestTrack().setUserId(Signer.userId());
         }
 
         // 包装request和response
@@ -81,16 +79,13 @@ public class GlobalFilter extends OncePerRequestFilter {
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
         // 填入request和response的content（同步）
-        fillContent(track, wrappedRequest, wrappedResponse);
-
-        // 完成并保存请求轨迹（异步）
-        requestTrackService.asyncCompleteAndSave(track, wrappedRequest, wrappedResponse);
+        fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
 
         // 刷新会话的失效时间（异步）
         sessionReflashHandler.asyncReflashExpire(Sessions.session());
 
-        // 清除ThreadLocal（Log MDC、请求轨迹）
-        clearAllThreadLocal();
+        // 清除Log MDC
+        ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
     }
 
     private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
@@ -116,16 +111,6 @@ public class GlobalFilter extends OncePerRequestFilter {
     private void returnExceptionAsJson(HttpServletResponse response, UnsignedException e) throws IOException {
         response.setContentType("application/json;charset=utf8");
         response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.UNSIGNED, e.getMessage())));
-    }
-
-    private void setAllThreadLocal(RequestTrackDTO track) {
-        RequestTrackContext.setRequestTrack(track);
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + RequestTrackContext.getInsignia() + "]");
-    }
-
-    private void clearAllThreadLocal() {
-        ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
-        RequestTrackContext.clearRequestTrack();
     }
 
 }

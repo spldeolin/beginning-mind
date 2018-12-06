@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.filter.RequestTrackContext;
 import com.spldeolin.beginningmind.core.service.RequestTrackService;
+import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
