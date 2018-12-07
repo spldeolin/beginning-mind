@@ -13,6 +13,10 @@ import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;
 
 /**
+ * Mybatis Plus配置
+ *
+ * 启用乐观锁、逻辑删除、分页，注册通用字段补全策略
+ *
  * @author Deolin 2018/11/10
  */
 @MapperScan("com.spldeolin.beginningmind.core.dao")
@@ -23,7 +27,7 @@ public class MybatisPlusConfig {
     private SnowFlakeService snowFlakeService;
 
     /**
-     * 启用乐观锁
+     * 乐观锁
      */
     @Bean
     public OptimisticLockerInterceptor optimisticLockerInterceptor() {
@@ -31,7 +35,7 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * 启用逻辑删除
+     * 逻辑删除
      */
     @Bean
     public LogicSqlInjector logicSqlInjector() {
@@ -39,13 +43,16 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * 启用分页
+     * 分页
      */
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }
 
+    /**
+     * 通用字段补全
+     */
     @Bean
     public MetaObjectHandler commonFieldFillHandler() {
         return new CommonFieldFillHandler(snowFlakeService);

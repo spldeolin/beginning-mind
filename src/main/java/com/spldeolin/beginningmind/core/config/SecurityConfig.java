@@ -8,6 +8,8 @@ import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
+ * 安全配置
+ *
  * @author Deolin 2018/12/02
  */
 @Configuration

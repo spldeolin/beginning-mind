@@ -6,7 +6,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 
 /**
- * @author beingmate2016 2018/11/28
+ * 注册国际化组件 MessageSource
+ *
+ * @author Deolin 2018/11/28
  */
 @Configuration
 public class I18nConfig {

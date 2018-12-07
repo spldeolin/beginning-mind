@@ -7,6 +7,8 @@ import org.springframework.context.annotation.Configuration;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * RabbitMQ
+ *
  * @author Deolin 2018/09/05
  */
 @Configuration

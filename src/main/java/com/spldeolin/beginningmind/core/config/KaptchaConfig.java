@@ -8,7 +8,7 @@ import com.google.code.kaptcha.Producer;
 import com.google.code.kaptcha.util.Config;
 
 /**
- * 图片验证码
+ * 注册验证码生成器 Producer
  *
  * @author Deolin 2018/12/01
  */

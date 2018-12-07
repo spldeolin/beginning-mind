@@ -25,6 +25,8 @@ import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
+ * 配置用于转化@RequestBody和@ResponseBody对象ObjectMapper
+ *
  * @author Deolin
  */
 @Configuration
@@ -37,7 +39,8 @@ public class JacksonConfig {
     public Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder() {
         Jackson2ObjectMapperBuilder builder = Jackson2ObjectMapperBuilder.json();
 
-        // 模块
+        // 使ObjectMapper支持Guava Collection、java.time包
+        // 使Long类型作为String类型转化为JSON
         builder.modules(Lists.newArrayList(guavaCollectionModule(), javaTimeModule(), longToStringModulel()));
 
         // 是否将java.util.Date对象转化为时间戳

@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.CoreProperties.TaskExecutorProp;
 
 /**
- * 开启异步任务
+ * 启用异步注解 @Async
  *
  * @author Deolin 2018/07/30
  */

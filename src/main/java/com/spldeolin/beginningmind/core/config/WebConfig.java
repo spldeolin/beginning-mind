@@ -12,6 +12,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
+ * Web配置
+ *
  * @author Deolin
  */
 @Component

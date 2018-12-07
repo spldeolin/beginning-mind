@@ -9,6 +9,8 @@ import com.spldeolin.beginningmind.core.redis.ProtostuffSerializer;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * Redis
+ *
  * @author Deolin 2018/07/16
  */
 @Configuration
