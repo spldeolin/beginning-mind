@@ -1,5 +1,10 @@
 package com.spldeolin.beginningmind.core.constant;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
+
 /**
  * 控制器通用返回值的结果码
  * <pre>
@@ -14,6 +19,8 @@ package com.spldeolin.beginningmind.core.constant;
  *
  * @author Deolin
  */
+@AllArgsConstructor
+@ToString
 public enum ResultCode {
 
     // 成功，预想的结果
@@ -37,34 +44,12 @@ public enum ResultCode {
     // 用户名被占用 等
     SERVICE_ERROR(1001, "业务异常");
 
+    @Getter
+    @Setter
     private Integer code;
 
+    @Getter
+    @Setter
     private String defaultMessage;
-
-    ResultCode(Integer code, String defaultMessage) {
-        this.code = code;
-        this.defaultMessage = defaultMessage;
-    }
-
-    public Integer getCode() {
-        return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
-    }
-
-    public String getDefaultMessage() {
-        return defaultMessage;
-    }
-
-    public void setDefaultMessage(String defaultMessage) {
-        this.defaultMessage = defaultMessage;
-    }
-
-    @Override
-    public String toString() {
-        return "ResultCode{" + "code=" + code + ", defaultMessage='" + defaultMessage + '\'' + '}';
-    }
 
 }
