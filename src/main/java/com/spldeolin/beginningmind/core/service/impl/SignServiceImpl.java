@@ -3,7 +3,9 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -14,6 +16,7 @@ import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
+import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.exception.PasswordIncorretException;
@@ -70,24 +73,27 @@ public class SignServiceImpl implements SignService {
      */
     @Override
     public SignerProfileVO signIn(SignInput input) {
-        // 验证码、重复登录、用户名密码校验
+        // 获取用户，同时进行验证码、重复登录、用户名密码校验
         User user = signCheck(input);
 
-        // 用户信息存入会话
-        String sessionId = Sessions.session().getId();
-        CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder()
-                .user(user)
-                .sessionId(sessionId)
-                .signedAt(LocalDateTime.now())
-                .permissions(permissionService.listGrantedPermission(user.getId())).build();
+        // 获取权限一览
+        List<Permission> permissions = permissionService.listGrantedPermission(user.getId());
 
+        // 获取会话ID
+        String sessionId = Sessions.session().getId();
+
+        // 用户信息存入Session
+        CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder()
+                .user(user).permissions(permissions).sessionId(sessionId).signedAt(LocalDateTime.now())
+                .build();
         Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO, 30 * 60);
 
         // 登录状态（用户信息+会话ID）存入Redis
         redisTemplate.opsForHash().put(SIGN_STATUS_BY_USER_ID + user.getId(), sessionId, currentSignerDTO);
 
         // profile
-        return SignerProfileVO.builder().userName(user.getName()).build();
+        return SignerProfileVO.builder().userName(user.getName())
+                .permissionIds(permissions.stream().map(Permission::getId).collect(Collectors.toList())).build();
     }
 
     /**

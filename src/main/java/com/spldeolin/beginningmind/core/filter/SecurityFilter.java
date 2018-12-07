@@ -53,7 +53,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-
         try {
             // actuator token是否正确
             checkActuatorTokenHandler.ensureTokenCorrect(request);

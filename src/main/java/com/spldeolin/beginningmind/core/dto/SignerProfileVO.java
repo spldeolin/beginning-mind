@@ -5,6 +5,7 @@
 package com.spldeolin.beginningmind.core.dto;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class SignerProfileVO implements Serializable {
 
     private String userName;
 
-    // TODO private 拥有的权限
+    private List<Long> permissionIds;
 
     private static final long serialVersionUID = 1L;
 
