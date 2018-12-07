@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,14 +11,11 @@ import org.springframework.session.FindByIndexNameSessionRepository;
 import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dao.UserMapper;
-import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;
@@ -124,20 +120,6 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
             return Optional.empty();
         }
         return Optional.ofNullable(users.get(0));
-    }
-
-    @Override
-    public Set<String> listUserPermissions(Long userId) {
-        List<String> result = Lists.newArrayList();
-        // 用户
-        User user = this.getEX(userId);
-        // TODO 用户被直接、间接授予的权限
-        List<Permission> permissions = Lists.newArrayList();
-        // 过滤器链
-        for (Permission permission : permissions) {
-            result.add(permission.getName());
-        }
-        return Sets.newHashSet(result);
     }
 
     @Override

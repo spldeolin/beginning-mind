@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.core.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.model.User;
 
@@ -53,11 +52,6 @@ public interface UserService extends CommonService<User> {
      * 通过用户名或手机号或email搜索用户
      */
     Optional<User> searchOneByPrincipal(String principal);
-
-    /**
-     * 获取用户关联到的所有权限
-     */
-    Set<String> listUserPermissions(Long userId);
 
     /**
      * 获取指定用户的在线情况

@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2018-11-26 15:46:00
+Date: 2018-12-07 15:59:07
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -94,24 +94,17 @@ CREATE TABLE `permission` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '通用字段 更新时间',
   `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '通用字段 是否被删除',
   `version` int(11) NOT NULL DEFAULT '1' COMMENT '通用字段 数据版本',
-  `name` varchar(255) NOT NULL COMMENT '权限名（perms[xxxx]）',
-  `mapping` varchar(255) NOT NULL COMMENT '请求方法的全路由（控制器路由+方法路由）',
-  `display` varchar(255) NOT NULL DEFAULT '' COMMENT '用于展示的名称',
-  `menu_id` bigint(20) unsigned NOT NULL COMMENT '菜单ID',
-  `is_get_request` tinyint(1) unsigned NOT NULL COMMENT '是否是GET请求',
-  `must_have` tinyint(1) unsigned NOT NULL COMMENT '是否所有用户都应该拥有该权限',
+  `mapping_method` varchar(255) DEFAULT NULL COMMENT '映射方法（HTTP方法，e.g.: POST）',
+  `mapping_path` varchar(255) DEFAULT NULL COMMENT '映射路由（控制器路由+方法路由，e.g.: /user/create）',
+  `display` varchar(255) DEFAULT NULL COMMENT '用于展示的名称',
+  `is_granted_for_all` tinyint(1) unsigned DEFAULT NULL COMMENT '是否所有用户都拥有本权限',
+  `is_forbidden` tinyint(1) unsigned DEFAULT NULL COMMENT '是否所有用户都不拥有本权限',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限';
 
 -- ----------------------------
 -- Records of permission
 -- ----------------------------
-INSERT INTO `permission` VALUES ('1', '2018-08-05 08:45:48', '2018-08-05 08:45:48', '0', '1', 'image_upload', '/image/upload', '普通上传', '1', '0', '0');
-INSERT INTO `permission` VALUES ('2', '2018-08-05 08:45:48', '2018-08-05 08:45:48', '0', '1', 'signManagement_isSigning', '/signManagement/isSigning', '查看指定用户是否登录中', '1', '1', '0');
-INSERT INTO `permission` VALUES ('3', '2018-08-05 08:45:48', '2018-08-05 08:45:48', '0', '1', 'signManagement_kill', '/signManagement/kill', '将指定用户踢下线', '1', '0', '0');
-INSERT INTO `permission` VALUES ('4', '2018-08-05 08:45:48', '2018-08-05 08:45:48', '0', '1', 'test_ppp', '/test/ppp', '', '9223372036854775807', '1', '1');
-INSERT INTO `permission` VALUES ('5', '2018-08-05 08:45:48', '2018-08-05 08:45:48', '0', '1', 'test_ggg', '/test/ggg', '', '1', '1', '0');
-INSERT INTO `permission` VALUES ('6', '2018-08-05 08:46:38', '2018-08-05 08:46:38', '0', '1', 'test_pp1p', '/test/pp1p', '', '9223372036854775807', '1', '1');
 
 -- ----------------------------
 -- Table structure for user
@@ -150,3 +143,23 @@ INSERT INTO `user` VALUES ('400214720647168', '2018-11-13 15:57:56', '2018-11-26
 INSERT INTO `user` VALUES ('400214720647169', '2018-11-13 15:57:56', '2018-11-19 10:32:38', '0', '1', '', '批量2', '2', 'aa@a', '', '', '0');
 INSERT INTO `user` VALUES ('400214724841472', '2018-11-13 15:57:56', '2018-11-26 07:33:13', '1', '1', '', '批量3', '3', '', '', '', '0');
 INSERT INTO `user` VALUES ('400214724841473', '2018-11-13 15:57:56', '2018-11-19 10:16:43', '0', '1', '', '批量4', '4', '', '', '', '0');
+INSERT INTO `user` VALUES ('8999000162308096', '2018-12-07 09:26:26', '2018-12-07 01:26:26', '0', '1', null, '汉字', '1', null, null, null, null);
+
+-- ----------------------------
+-- Table structure for user2permission
+-- ----------------------------
+DROP TABLE IF EXISTS `user2permission`;
+CREATE TABLE `user2permission` (
+  `id` bigint(20) unsigned NOT NULL COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '通用字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '通用字段 更新时间',
+  `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '通用字段 是否被删除',
+  `version` int(11) NOT NULL DEFAULT '1' COMMENT '通用字段 数据版本',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '用户ID',
+  `permission_id` bigint(20) DEFAULT NULL COMMENT '权限ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户与权限的关联关系';
+
+-- ----------------------------
+-- Records of user2permission
+-- ----------------------------

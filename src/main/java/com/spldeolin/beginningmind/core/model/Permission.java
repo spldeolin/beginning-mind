@@ -58,16 +58,16 @@ public class Permission implements IdGetable, Serializable {
     private Integer version;
 
     /**
-     * 权限名（perms[xxxx]）
+     * 映射方法（HTTP方法，e.g.: POST）
      */
-    @TableField("name")
-    private String name;
+    @TableField("mapping_method")
+    private String mappingMethod;
 
     /**
-     * 请求方法的全路由（控制器路由+方法路由）
+     * 映射路由（控制器路由+方法路由，e.g.: /user/create）
      */
-    @TableField("mapping")
-    private String mapping;
+    @TableField("mapping_path")
+    private String mappingPath;
 
     /**
      * 用于展示的名称
@@ -76,22 +76,16 @@ public class Permission implements IdGetable, Serializable {
     private String display;
 
     /**
-     * 菜单ID
+     * 是否所有用户都拥有本权限
      */
-    @TableField("menu_id")
-    private Long menuId;
+    @TableField("is_granted_for_all")
+    private Boolean isGrantedForAll;
 
     /**
-     * 是否是GET请求
+     * 是否所有用户都不拥有本权限
      */
-    @TableField("is_get_request")
-    private Boolean isGetRequest;
-
-    /**
-     * 是否所有用户都应该拥有该权限
-     */
-    @TableField("must_have")
-    private Boolean mustHave;
+    @TableField("is_forbidden")
+    private Boolean isForbidden;
 
     private static final long serialVersionUID = 1L;
 
