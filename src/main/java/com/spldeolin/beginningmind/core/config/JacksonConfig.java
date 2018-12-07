@@ -32,6 +32,8 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 @Configuration
 public class JacksonConfig {
 
+    public static Jackson2ObjectMapperBuilder jackson2ObjectMapperBuilder;
+
     @Autowired
     private CoreProperties coreProperties;
 
@@ -54,6 +56,7 @@ public class JacksonConfig {
         // 时区
         builder.timeZone(TimeZone.getDefault());
 
+        jackson2ObjectMapperBuilder = builder;
         return builder;
     }
 

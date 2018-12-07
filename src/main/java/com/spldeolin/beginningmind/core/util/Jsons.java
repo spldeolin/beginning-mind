@@ -1,23 +1,9 @@
 package com.spldeolin.beginningmind.core.util;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
-import java.util.TimeZone;
 import org.apache.commons.lang3.math.NumberUtils;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.spldeolin.beginningmind.core.config.JacksonConfig;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
 
@@ -34,34 +20,7 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Jsons {
 
-    private static ObjectMapper defaultObjectMapper;
-
-    /*
-      @see 与JacksonConfig#jackson2ObjectMapperBuilder()保持一致
-     */
-    static {
-        defaultObjectMapper = new ObjectMapper();
-        // jsr310的“时间”类型
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        SimpleModule javaTimeModule = new JavaTimeModule();
-        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date))
-                .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
-                .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime));
-        javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
-                .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
-                .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
-        defaultObjectMapper.registerModule(javaTimeModule);
-
-        // Guava Collection
-        defaultObjectMapper.registerModule(new GuavaModule());
-
-        // 忽略不认识的属性名
-        defaultObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-        // 时区
-        defaultObjectMapper.setTimeZone(TimeZone.getDefault());
-    }
+    private static ObjectMapper defaultObjectMapper = JacksonConfig.jackson2ObjectMapperBuilder.build();
 
     /**
      * 转化成美化的JSON
