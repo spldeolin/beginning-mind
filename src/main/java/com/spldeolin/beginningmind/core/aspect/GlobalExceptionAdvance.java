@@ -114,11 +114,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(BindException.class)
     public RequestResult handle(BindException e) {
-        List<Invalid> invalids = new ArrayList<>();
-        for (FieldError fieldError : e.getFieldErrors()) {
-            invalids.add(Invalid.builder().name(fieldError.getField()).value(fieldError.getRejectedValue())
-                    .cause(fieldError.getDefaultMessage()).build());
-        }
+        List<Invalid> invalids = buildInvalids(e.getBindingResult());
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
 
@@ -141,12 +137,7 @@ public class GlobalExceptionAdvance {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
-        BindingResult bindingResult = e.getBindingResult();
-        List<Invalid> invalids = new ArrayList<>();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            invalids.add(Invalid.builder().name(fieldError.getField()).value(fieldError.getRejectedValue()).cause(
-                    fieldError.getDefaultMessage()).build());
-        }
+        List<Invalid> invalids = buildInvalids(e.getBindingResult());
         return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
     }
 
@@ -191,7 +182,6 @@ public class GlobalExceptionAdvance {
         return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
     }
 
-
     /**
      * 500 由BasicErrorController产生的异常（HTTP 404以外的）
      */
@@ -220,6 +210,15 @@ public class GlobalExceptionAdvance {
             requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
         }
         return requestResult;
+    }
+
+    private List<Invalid> buildInvalids(BindingResult bindingResult) {
+        List<Invalid> invalids = new ArrayList<>();
+        for (FieldError fieldError : bindingResult.getFieldErrors()) {
+            invalids.add(Invalid.builder().name(fieldError.getField()).value(fieldError.getRejectedValue()).cause(
+                    fieldError.getDefaultMessage()).build());
+        }
+        return invalids;
     }
 
 }
