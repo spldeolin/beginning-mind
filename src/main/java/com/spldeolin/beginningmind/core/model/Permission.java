@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.google.common.base.Objects;
 import com.spldeolin.beginningmind.core.api.IdGetable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -88,5 +89,23 @@ public class Permission implements IdGetable, Serializable {
     private Boolean isForbidden;
 
     private static final long serialVersionUID = 1L;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        Permission that = (Permission) o;
+        return Objects.equal(mappingMethod, that.mappingMethod) &&
+                Objects.equal(mappingPath, that.mappingPath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(mappingMethod, mappingPath);
+    }
 
 }
