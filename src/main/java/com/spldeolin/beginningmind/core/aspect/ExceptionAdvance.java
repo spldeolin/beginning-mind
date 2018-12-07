@@ -22,7 +22,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.spldeolin.beginningmind.core.api.exception.ServiceException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOthersException;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
@@ -92,7 +92,7 @@ public class ExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
+        RequestTrack requestTrack = RequestTrackContext.getRequestTrack();
         String[] paramNames = requestTrack.getParameterNames();
         Object[] paramValues = requestTrack.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
@@ -197,7 +197,7 @@ public class ExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrackDTO track = RequestTrackContext.getRequestTrack();
+        RequestTrack track = RequestTrackContext.getRequestTrack();
         RequestResult requestResult;
         if (track == null) {
             log.error("统一异常处理被击穿！", e);

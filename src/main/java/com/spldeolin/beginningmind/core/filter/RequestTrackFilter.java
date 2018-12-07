@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import com.spldeolin.beginningmind.core.filter.async.RequestTrackFilterPostHandler;
 import lombok.extern.log4j.Log4j2;
@@ -39,7 +39,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        RequestTrackDTO track = new RequestTrackDTO();
+        RequestTrack track = new RequestTrack();
         RequestTrackContext.setRequestTrack(track);
 
         filterChain.doFilter(request, response);

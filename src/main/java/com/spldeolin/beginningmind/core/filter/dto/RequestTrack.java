@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.aspect.dto;
+package com.spldeolin.beginningmind.core.filter.dto;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -13,7 +13,7 @@ import lombok.Data;
  * @author Deolin 2018/11/15
  */
 @Data
-public class RequestTrackDTO implements Serializable {
+public class RequestTrack implements Serializable {
 
     /**
      * 请求标识
@@ -107,7 +107,7 @@ public class RequestTrackDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public RequestTrackDTO() {
+    public RequestTrack() {
         insignia = StringRandomUtils.generateLegibleEnNum(6);
         requestedAt = LocalDateTime.now();
         stopwatch = Stopwatch.createStarted();

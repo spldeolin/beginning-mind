@@ -14,7 +14,7 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import lombok.extern.log4j.Log4j2;
@@ -43,7 +43,7 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
+        RequestTrack requestTrack = RequestTrackContext.getRequestTrack();
 
         // 填入切点信息
         fillJoinPointInfo(requestTrack, point);
@@ -58,7 +58,7 @@ public class ControllerAspect {
         return point.proceed(requestTrack.getParameterValues());
     }
 
-    private void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint) {
+    private void fillJoinPointInfo(RequestTrack track, JoinPoint joinPoint) {
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
         Object[] parameterValues = joinPoint.getArgs();
@@ -68,7 +68,7 @@ public class ControllerAspect {
         track.setParameterValues(parameterValues);
     }
 
-    private List<Invalid> handleAnnotations(RequestTrackDTO track) {
+    private List<Invalid> handleAnnotations(RequestTrack track) {
         List<Invalid> invalids = new ArrayList<>();
         Annotation[][] annotationsEachParams = track.getMethod().getParameterAnnotations();
         String[] parameterNames = track.getParameterNames();

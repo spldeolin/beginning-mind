@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -44,7 +44,7 @@ public class ReadContentFilter extends OncePerRequestFilter {
         fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
     }
 
-    private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+    private void fillContent(RequestTrack track, ContentCachingRequestWrapper wrappedRequest,
             ContentCachingResponseWrapper wrappedResponse) {
         String requestContent = null;
         String responseContent = null;

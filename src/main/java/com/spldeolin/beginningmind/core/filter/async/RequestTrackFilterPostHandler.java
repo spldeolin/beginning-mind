@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -26,16 +26,16 @@ public class RequestTrackFilterPostHandler {
     private UserService userService;
 
     @Async
-    public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {
+    public void asyncCompleteAndSave(RequestTrack track, HttpServletRequest request) {
         analysizRequestTrack(track, request);
         saveTrack(track);
     }
 
-    private void saveTrack(RequestTrackDTO track) {
+    private void saveTrack(RequestTrack track) {
         log.info("rq-" + track.getInsignia() + System.getProperty("line.separator") + track);
     }
 
-    private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
+    private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {
         track.setUrl(getFullUrlFromRequest(request));
 
         track.setHttpMethod(request.getMethod());

@@ -1,6 +1,6 @@
 package com.spldeolin.beginningmind.core.util;
 
-import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -11,19 +11,19 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestTrackContext {
 
-    private static final ThreadLocal<RequestTrackDTO> threadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<RequestTrack> threadLocal = new ThreadLocal<>();
 
     /**
      * @param requestTrack 当前请求轨迹
      */
-    public static void setRequestTrack(RequestTrackDTO requestTrack) {
+    public static void setRequestTrack(RequestTrack requestTrack) {
         threadLocal.set(requestTrack);
     }
 
     /**
      * @return 当前请求轨迹
      */
-    public static RequestTrackDTO getRequestTrack() {
+    public static RequestTrack getRequestTrack() {
         return threadLocal.get();
     }
 
@@ -31,7 +31,7 @@ public class RequestTrackContext {
      * @return 当前请求轨迹的标识
      */
     public static String getInsignia() {
-        RequestTrackDTO track = getRequestTrack();
+        RequestTrack track = getRequestTrack();
         if (track == null) {
             return "";
         } else {
