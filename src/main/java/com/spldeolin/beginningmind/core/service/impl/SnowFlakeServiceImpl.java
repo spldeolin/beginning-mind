@@ -79,6 +79,7 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
     private long lastStmp = -1L;
 
     @PostConstruct
+    @Override
     public void initDatacenterAndMachine() {
         long datacenterId = coreProperties.getSnowFlake().getDatacenterId();
         long machineId = coreProperties.getSnowFlake().getMachineId();
@@ -97,6 +98,7 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
     /**
      * 产生下一个ID
      */
+    @Override
     public synchronized long nextId() {
         long currStmp = getNewstmp();
         if (currStmp < lastStmp) {
@@ -117,10 +119,14 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
 
         lastStmp = currStmp;
 
-        return (currStmp - START_STMP) << TIMESTMP_LEFT //时间戳部分
-                | datacenterId << DATACENTER_LEFT       //数据中心部分
-                | machineId << MACHINE_LEFT             //机器标识部分
-                | sequence;                             //序列号部分
+        //时间戳部分
+        //数据中心部分
+        //机器标识部分
+        //序列号部分
+        return (currStmp - START_STMP) << TIMESTMP_LEFT
+                | datacenterId << DATACENTER_LEFT
+                | machineId << MACHINE_LEFT
+                | sequence;
     }
 
     private long getNextMill() {

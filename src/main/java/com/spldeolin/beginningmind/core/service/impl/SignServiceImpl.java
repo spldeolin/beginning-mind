@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import javax.imageio.ImageIO;
@@ -22,7 +23,6 @@ import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -47,7 +47,7 @@ public class SignServiceImpl implements SignService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @SneakyThrows
+    @Override
     public String captcha() {
         String captcha = StringRandomUtils.generateLegibleEnNum(4);
         // session
@@ -56,12 +56,15 @@ public class SignServiceImpl implements SignService {
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ImageIO.write(kaptchaProducer.createImage(captcha), "jpg", os);
             return "data:image/jpg;base64," + Base64.encodeBase64String(os.toByteArray());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
     /**
      * 登录
      */
+    @Override
     public SignerProfileDTO signIn(SignInput input) {
         // 验证码、重复登录、用户名密码校验
         User user = signCheck(input);
@@ -93,6 +96,7 @@ public class SignServiceImpl implements SignService {
     /**
      * 指定用户是否登录中
      */
+    @Override
     public Boolean isSigning(Long userId) {
         return redisTemplate.opsForHash().entries(SIGN_STATUS_BY_USER_ID + userId).size() > 0;
     }
@@ -100,6 +104,7 @@ public class SignServiceImpl implements SignService {
     /**
      * 将指定用户踢下线
      */
+    @Override
     public void kill(Long userId) {
         redisTemplate.delete(SIGN_STATUS_BY_USER_ID + userId);
     }

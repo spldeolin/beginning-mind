@@ -89,7 +89,7 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         return updated;
     }
 
-    @Transactional
+    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delete(Long id) {
         boolean deleted = baseMapper.deleteById(id) != 0;

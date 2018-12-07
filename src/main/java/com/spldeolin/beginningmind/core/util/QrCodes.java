@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @UtilityClass
 @Log4j2
-public class QRCodes {
+public class QrCodes {
 
     /**
      * 生成二维码图片
@@ -44,7 +44,7 @@ public class QRCodes {
      */
     @SneakyThrows
     public static void generate(String filePath, String content) {
-        QRCodes.encode(content, null, filePath, true);
+        QrCodes.encode(content, null, filePath, true);
     }
 
     /**
@@ -55,7 +55,7 @@ public class QRCodes {
      */
     @SneakyThrows
     public static void generate(String filePath, Object data) {
-        QRCodes.encode(Jsons.toJson(data), null, filePath, true);
+        QrCodes.encode(Jsons.toJson(data), null, filePath, true);
     }
 
     private static final String FORMAT = "PNG";
@@ -85,7 +85,7 @@ public class QRCodes {
             return image;
         }
         // 插入图片
-        QRCodes.insertImage(image, logoPath, needCompress);
+        QrCodes.insertImage(image, logoPath, needCompress);
         return image;
     }
 
@@ -104,7 +104,8 @@ public class QRCodes {
         Image src = ImageIO.read(new File(logoPath));
         int width = src.getWidth(null);
         int height = src.getHeight(null);
-        if (needCompress) { // 压缩LOGO
+        // 压缩LOGO
+        if (needCompress) {
             if (width > LOGO_WIDTH) {
                 width = LOGO_WIDTH;
             }
@@ -114,7 +115,8 @@ public class QRCodes {
             Image image = src.getScaledInstance(width, height, Image.SCALE_SMOOTH);
             BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
             Graphics g = tag.getGraphics();
-            g.drawImage(image, 0, 0, null); // 绘制缩小后的图
+            // 绘制缩小后的图
+            g.drawImage(image, 0, 0, null);
             g.dispose();
             src = image;
         }
@@ -139,7 +141,7 @@ public class QRCodes {
      */
     public static String encode(String content, String logoPath, String destPath,
             boolean needCompress) throws Exception {
-        BufferedImage image = QRCodes.createImage(content, logoPath, needCompress);
+        BufferedImage image = QrCodes.createImage(content, logoPath, needCompress);
         File destFile = new File(destPath);
         ImageIO.write(image, FORMAT, destFile);
         return destFile.getName();
@@ -156,7 +158,7 @@ public class QRCodes {
      */
     public static String encode(String content, String logoPath, String destPath, String fileName,
             boolean needCompress) throws Exception {
-        BufferedImage image = QRCodes.createImage(content, logoPath, needCompress);
+        BufferedImage image = QrCodes.createImage(content, logoPath, needCompress);
         mkdirs(destPath);
         fileName = fileName.substring(0, fileName.indexOf(".") > 0 ? fileName.indexOf(".") : fileName.length())
                 + "." + FORMAT.toLowerCase();
@@ -186,7 +188,7 @@ public class QRCodes {
      * @param destPath 存储地址
      */
     public static String encode(String content, String logoPath, String destPath) throws Exception {
-        return QRCodes.encode(content, logoPath, destPath, false);
+        return QrCodes.encode(content, logoPath, destPath, false);
     }
 
     /**
@@ -197,7 +199,7 @@ public class QRCodes {
      * @param needCompress 是否压缩LOGO
      */
     public static String encode(String content, String destPath, boolean needCompress) throws Exception {
-        return QRCodes.encode(content, null, destPath, needCompress);
+        return QrCodes.encode(content, null, destPath, needCompress);
     }
 
     /**
@@ -207,7 +209,7 @@ public class QRCodes {
      * @param destPath 存储地址
      */
     public static String encode(String content, String destPath) throws Exception {
-        return QRCodes.encode(content, null, destPath, false);
+        return QrCodes.encode(content, null, destPath, false);
     }
 
     /**
@@ -220,7 +222,7 @@ public class QRCodes {
      */
     public static void encode(String content, String logoPath, OutputStream output, boolean needCompress)
             throws Exception {
-        BufferedImage image = QRCodes.createImage(content, logoPath, needCompress);
+        BufferedImage image = QrCodes.createImage(content, logoPath, needCompress);
         ImageIO.write(image, FORMAT, output);
     }
 
@@ -231,7 +233,7 @@ public class QRCodes {
      * @param output 输出流
      */
     public static void encode(String content, OutputStream output) throws Exception {
-        QRCodes.encode(content, null, output, false);
+        QrCodes.encode(content, null, output, false);
     }
 
     /**
@@ -260,7 +262,7 @@ public class QRCodes {
      * @param path 二维码图片地址
      */
     public static String decode(String path) throws Exception {
-        return QRCodes.decode(new File(path));
+        return QrCodes.decode(new File(path));
     }
 
 }

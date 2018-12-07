@@ -11,20 +11,20 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestTrackContext {
 
-    private static final ThreadLocal<RequestTrack> threadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<RequestTrack> REQUEST_TRACK_CONTEXT = new ThreadLocal<>();
 
     /**
      * @param requestTrack 当前请求轨迹
      */
     public static void setRequestTrack(RequestTrack requestTrack) {
-        threadLocal.set(requestTrack);
+        REQUEST_TRACK_CONTEXT.set(requestTrack);
     }
 
     /**
      * @return 当前请求轨迹
      */
     public static RequestTrack getRequestTrack() {
-        return threadLocal.get();
+        return REQUEST_TRACK_CONTEXT.get();
     }
 
     /**
@@ -43,7 +43,7 @@ public class RequestTrackContext {
      * 清空当前请求轨迹
      */
     public static void clearRequestTrack() {
-        threadLocal.remove();
+        REQUEST_TRACK_CONTEXT.remove();
     }
 
 }

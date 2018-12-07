@@ -10,6 +10,9 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBody
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.util.Nulls;
 
+/**
+ * @author Deolin
+ */
 @Component
 public class RequestResultWrapHandlerFactoryBean implements InitializingBean {
 

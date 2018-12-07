@@ -46,7 +46,7 @@ public class InitTask implements CommandLineRunner {
     }
 
     public void appendContextPathBeforeFileMapping() {
-        if (StringUtils.isNotBlank(serverContextPath) && !serverContextPath.equals("/")) {
+        if (StringUtils.isNotBlank(serverContextPath) && !"/".equals(serverContextPath)) {
             FileProp file = coreProperties.getFile();
             String mapping = serverContextPath + file.getMapping();
             log.info("由于指定了context-path为" + serverContextPath + "，故file.mapping变更为" + mapping);
