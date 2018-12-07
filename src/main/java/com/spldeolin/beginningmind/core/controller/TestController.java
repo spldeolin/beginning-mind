@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.spldeolin.beginningmind.core.dao.UserMapper;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
-import com.spldeolin.beginningmind.core.util.Requests;
+import com.spldeolin.beginningmind.core.util.RequestContextUtils;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
 
@@ -47,7 +47,7 @@ public class TestController {
 
     @GetMapping("/i18n")
     Object i18n() {
-        return messageSource.getMessage("hello", new String[]{"Deolin"}, Requests.request().getLocale());
+        return messageSource.getMessage("hello", new String[]{"Deolin"}, RequestContextUtils.request().getLocale());
     }
 
     @GetMapping("/setSes")
