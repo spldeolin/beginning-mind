@@ -3,15 +3,15 @@ package com.spldeolin.beginningmind.core.api.exception;
 /**
  * @author Deolin
  */
-public class ServiceException extends RuntimeException {
+public class BizException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
-    public ServiceException(String message) {
+    public BizException(String message) {
         super(message);
     }
 
-    public ServiceException(Throwable cause) {
+    public BizException(Throwable cause) {
         super(cause);
     }
 

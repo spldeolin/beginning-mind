@@ -28,7 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.excel.ExcelContext.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.Times;
 import lombok.SneakyThrows;
@@ -415,7 +415,7 @@ public class Excels {
         } else if ("xls".equals(fileExtension)) {
             return new HSSFWorkbook();
         } else {
-            throw new ServiceException("文件拓展名不正确");
+            throw new BizException("文件拓展名不正确");
         }
     }
 

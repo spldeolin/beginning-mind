@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.User;
@@ -109,14 +109,14 @@ public class SignServiceImpl implements SignService {
         String captcha = Sessions.get(CAPTCHA_SESSION_KEY);
         Sessions.remove(CAPTCHA_SESSION_KEY);
         if (captcha == null) {
-            throw new ServiceException("验证码超时");
+            throw new BizException("验证码超时");
         }
         if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
-            throw new ServiceException("验证码错误");
+            throw new BizException("验证码错误");
         }
         // 重复登录校验
         if (Signer.isSigning()) {
-            throw new ServiceException("已登录，请勿重复登录");
+            throw new BizException("已登录，请勿重复登录");
         }
         // 用户名密码校验
         try {
@@ -125,7 +125,7 @@ public class SignServiceImpl implements SignService {
 
             return user;
         } catch (UserNotExistException | PasswordIncorretException e) {
-            throw new ServiceException("用户不存在或是密码错误");
+            throw new BizException("用户不存在或是密码错误");
         }
     }
 

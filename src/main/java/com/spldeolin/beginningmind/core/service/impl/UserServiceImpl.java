@@ -15,7 +15,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dao.UserMapper;
@@ -69,7 +69,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public User getEX(Long id) {
-        return super.get(id).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+        return super.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
     }
 
     @Override
@@ -77,25 +77,25 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         Long id = user.getId();
 
         if (!isExist(id)) {
-            throw new ServiceException("用户不存在或是已被删除");
+            throw new BizException("用户不存在或是已被删除");
         }
         if (getSignerSession(id).isPresent()) {
-            throw new ServiceException("用户登录中，等待用户退出或是将用户请离后再次操作");
+            throw new BizException("用户登录中，等待用户退出或是将用户请离后再次操作");
         }
         checkOccupationForUpdating(user);
 
         if (!super.update(user)) {
-            throw new ServiceException("用户数据过时");
+            throw new BizException("用户数据过时");
         }
     }
 
     @Override
     public void deleteEX(Long id) {
         if (!isExist(id)) {
-            throw new ServiceException("用户不存在或是已被删除");
+            throw new BizException("用户不存在或是已被删除");
         }
         if (getSignerSession(id).isPresent()) {
-            throw new ServiceException("用户登录中，等待用户退出或是将用户请离后再次操作");
+            throw new BizException("用户登录中，等待用户退出或是将用户请离后再次操作");
         }
         super.delete(id);
     }
@@ -104,11 +104,11 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     public String deleteEX(List<Long> ids) {
         List<User> exist = super.list(ids);
         if (exist.size() < ids.size()) {
-            throw new ServiceException("部分用户不存在或是已被删除");
+            throw new BizException("部分用户不存在或是已被删除");
         }
         for (Long id : ids) {
             if (getSignerSession(id).isPresent()) {
-                throw new ServiceException("部分用户登录中，无法删除");
+                throw new BizException("部分用户登录中，无法删除");
             }
         }
         super.delete(ids);
@@ -147,7 +147,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public void killSigner(Long userId) {
-        Session session = getSignerSession(userId).orElseThrow(() -> new ServiceException("用户已离线"));
+        Session session = getSignerSession(userId).orElseThrow(() -> new BizException("用户已离线"));
         // 被踢登录者 会在切面中通过自身的当前会话ID找个这个标识，找到后直接调用Shiro登出
         redisTemplate.opsForValue().set("killed:session:" + session.getId(), "killed",
                 SessionConfig.SESSION_EXPIRE_SECONDS, TimeUnit.SECONDS);
@@ -155,7 +155,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public void banPick(Long userId) {
-        User user = get(userId).orElseThrow(() -> new ServiceException("用户不存在或是已被删除"));
+        User user = get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
         super.update(user.setEnableSign(!user.getEnableSign()));
     }
 
@@ -178,15 +178,15 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
      */
     private void checkOccupationForCreating(User user) {
         if (searchOne("name", user.getName()).isPresent()) {
-            throw new ServiceException("用户名已被占用");
+            throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
         if (mobile != null && searchOne("mobile", mobile).isPresent()) {
-            throw new ServiceException("手机号已被占用");
+            throw new BizException("手机号已被占用");
         }
         String email = user.getEmail();
         if (email != null && searchOne("email", email).isPresent()) {
-            throw new ServiceException("E-Mail已被占用");
+            throw new BizException("E-Mail已被占用");
         }
     }
 
@@ -197,18 +197,18 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
         Long id = user.getId();
         String username = user.getName();
         if (!id.equals(searchOne("name", username).orElse(new User()).getId())) {
-            throw new ServiceException("用户名已被占用");
+            throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
         if (mobile != null) {
             if (!id.equals(searchOne("mobile", mobile).orElse(new User()).getId())) {
-                throw new ServiceException("手机号已被占用");
+                throw new BizException("手机号已被占用");
             }
         }
         String email = user.getEmail();
         if (email != null) {
             if (!id.equals(searchOne("email", email).orElse(new User()).getId())) {
-                throw new ServiceException("E-Mail已被占用");
+                throw new BizException("E-Mail已被占用");
             }
         }
     }

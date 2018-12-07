@@ -19,7 +19,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import com.spldeolin.beginningmind.core.api.exception.ServiceException;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
@@ -175,8 +175,8 @@ public class ExceptionAdvance {
     /**
      * 1001 业务异常
      */
-    @ExceptionHandler(ServiceException.class)
-    public RequestResult handle(ServiceException e) {
+    @ExceptionHandler(BizException.class)
+    public RequestResult handle(BizException e) {
         return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
     }
 
