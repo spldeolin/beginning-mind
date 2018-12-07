@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
+import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.service.SignService;
@@ -36,7 +36,7 @@ public class SignController {
      * 登录
      */
     @PostMapping("/sign/in")
-    SignerProfileDTO signIn(@RequestBody @Valid SignInput input) {
+    SignerProfileVO signIn(@RequestBody @Valid SignInput input) {
         return signService.signIn(input);
     }
 

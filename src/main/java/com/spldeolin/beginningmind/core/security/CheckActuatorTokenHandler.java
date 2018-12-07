@@ -34,7 +34,7 @@ public class CheckActuatorTokenHandler {
         }
     }
 
-    public void ensureTokenCorrect(HttpServletRequest request) {
+    public void ensureTokenCorrect(HttpServletRequest request) throws ActuatorTokenIncorrectException {
         if (enableAuth()) {
             if (isActuatorRequest(request)) {
                 if (isTokenIncorrect(request)) {

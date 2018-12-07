@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
+import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 
 /**
@@ -15,7 +15,7 @@ public interface SignService {
     /**
      * 登录
      */
-    SignerProfileDTO signIn(SignInput input);
+    SignerProfileVO signIn(SignInput input);
 
     /**
      * 登出

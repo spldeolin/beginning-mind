@@ -28,7 +28,7 @@ public class CheckKilledHandler {
     @Qualifier("anonUrlsPrefix")
     private Set<String> anonUrlsPrefix;
 
-    public void ensureNotKilled(HttpServletRequest request) {
+    public void ensureNotKilled(HttpServletRequest request) throws KilledException {
         if (startsWithAnonUrlsPrefix(request.getRequestURI())) {
             return;
         }

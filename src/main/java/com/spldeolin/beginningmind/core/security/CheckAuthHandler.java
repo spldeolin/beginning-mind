@@ -5,26 +5,37 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
+import com.spldeolin.beginningmind.core.model.Permission;
+import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
+import lombok.extern.log4j.Log4j2;
 
 /**
- * @author Deolin 2018/12/02
+ * @author Deolin 2018/12/07
  */
 @Component
-public class CheckSignedHandler {
+@Log4j2
+public class CheckAuthHandler {
 
     @Autowired
     @Qualifier("anonUrlsPrefix")
     private Set<String> anonUrlsPrefix;
 
-    public void ensureSigned(HttpServletRequest request) throws UnsignedException {
+    public void ensureAuth(HttpServletRequest request) throws UnauthorizeException {
+        String url = request.getRequestURI();
         if (startsWithAnonUrlsPrefix(request.getRequestURI())) {
             return;
         }
 
-        if (!Signer.isSigning()) {
-            throw new UnsignedException("未登录或登录超时");
+        boolean isPermit = false;
+        for (Permission permission : Signer.current().getPermissions()) {
+            if (request.getMethod().equalsIgnoreCase(permission.getMappingMethod())
+                    && url.startsWith(permission.getMappingPath())) {
+                isPermit = true;
+            }
+        }
+        if (!isPermit) {
+            throw new UnauthorizeException("权限不足");
         }
     }
 

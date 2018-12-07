@@ -12,8 +12,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.security.CheckActuatorTokenHandler;
+import com.spldeolin.beginningmind.core.security.CheckAuthHandler;
 import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
 import com.spldeolin.beginningmind.core.security.CheckSignedHandler;
+import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
 import com.spldeolin.beginningmind.core.util.Jsons;
@@ -45,16 +47,24 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     private CheckSignedHandler checkSignedHandler;
 
+    @Autowired
+    private CheckAuthHandler checkAuthHandler;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        // todo security（鉴权）
+
         try {
+            // actuator token是否正确
             checkActuatorTokenHandler.ensureTokenCorrect(request);
+            // 是否被请离
             checkKilledHandler.ensureNotKilled(request);
+            // 是否未登录
             checkSignedHandler.ensureSigned(request);
-        } catch (UnsignedException e) {
-            returnExceptionAsJson(response, e);
+            // 是否未授权
+            checkAuthHandler.ensureAuth(request);
+        } catch (UnsignedException | UnauthorizeException e) {
+            returnExceptionAsJson(response, e.getMessage());
             return;
         }
 
@@ -66,9 +76,9 @@ public class SecurityFilter extends OncePerRequestFilter {
         }
     }
 
-    private void returnExceptionAsJson(HttpServletResponse response, UnsignedException e) throws IOException {
+    private void returnExceptionAsJson(HttpServletResponse response, String exceptionMessage) throws IOException {
         response.setContentType("application/json;charset=utf8");
-        response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.UNSIGNED, e.getMessage())));
+        response.getWriter().write(Jsons.toJson(RequestResult.failure(ResultCode.UNSIGNED, exceptionMessage)));
     }
 
 }

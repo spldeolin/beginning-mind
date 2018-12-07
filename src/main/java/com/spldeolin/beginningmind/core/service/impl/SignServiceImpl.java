@@ -12,13 +12,14 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
-import com.spldeolin.beginningmind.core.dto.SignerProfileDTO;
+import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.exception.PasswordIncorretException;
 import com.spldeolin.beginningmind.core.security.exception.UserNotExistException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
@@ -40,6 +41,9 @@ public class SignServiceImpl implements SignService {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private PermissionService permissionService;
 
     @Autowired
     private Producer kaptchaProducer;
@@ -65,21 +69,25 @@ public class SignServiceImpl implements SignService {
      * 登录
      */
     @Override
-    public SignerProfileDTO signIn(SignInput input) {
+    public SignerProfileVO signIn(SignInput input) {
         // 验证码、重复登录、用户名密码校验
         User user = signCheck(input);
 
         // 用户信息存入会话
         String sessionId = Sessions.session().getId();
-        CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder().sessionId(sessionId).user(user)
-                .signedAt(LocalDateTime.now()).build();
+        CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder()
+                .user(user)
+                .sessionId(sessionId)
+                .signedAt(LocalDateTime.now())
+                .permissions(permissionService.listGrantedPermission(user.getId())).build();
+
         Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO, 30 * 60);
 
         // 登录状态（用户信息+会话ID）存入Redis
         redisTemplate.opsForHash().put(SIGN_STATUS_BY_USER_ID + user.getId(), sessionId, currentSignerDTO);
 
         // profile
-        return SignerProfileDTO.builder().userName(user.getName()).build();
+        return SignerProfileVO.builder().userName(user.getName()).build();
     }
 
     /**

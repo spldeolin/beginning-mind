@@ -83,8 +83,6 @@ public class PermissionSync {
         if (toCreatePermissions.size() > 0) {
             permissionService.create(toCreatePermissions);
         }
-
-        log.info("结束");
     }
 
     private boolean isSwaggerMapping(String mappingUrl) {
