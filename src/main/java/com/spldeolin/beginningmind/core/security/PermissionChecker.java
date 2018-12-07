@@ -15,7 +15,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Log4j2
-public class CheckAuthHandler {
+public class PermissionChecker {
 
     @Autowired
     @Qualifier("anonUrlsPrefix")

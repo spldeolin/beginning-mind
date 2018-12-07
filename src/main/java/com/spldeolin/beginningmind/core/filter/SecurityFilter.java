@@ -11,10 +11,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.security.CheckActuatorTokenHandler;
-import com.spldeolin.beginningmind.core.security.CheckAuthHandler;
-import com.spldeolin.beginningmind.core.security.CheckKilledHandler;
-import com.spldeolin.beginningmind.core.security.CheckSignedHandler;
+import com.spldeolin.beginningmind.core.security.ActuatorTokenChecker;
+import com.spldeolin.beginningmind.core.security.PermissionChecker;
+import com.spldeolin.beginningmind.core.security.KilledChecker;
+import com.spldeolin.beginningmind.core.security.SignedChecker;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.security.util.Signer;
@@ -39,16 +39,16 @@ public class SecurityFilter extends OncePerRequestFilter {
     public static final int ORDER = 1 + LogMdcFilter.ORDER;
 
     @Autowired
-    private CheckActuatorTokenHandler checkActuatorTokenHandler;
+    private ActuatorTokenChecker checkActuatorTokenHandler;
 
     @Autowired
-    private CheckKilledHandler checkKilledHandler;
+    private KilledChecker checkKilledHandler;
 
     @Autowired
-    private CheckSignedHandler checkSignedHandler;
+    private SignedChecker checkSignedHandler;
 
     @Autowired
-    private CheckAuthHandler checkAuthHandler;
+    private PermissionChecker checkAuthHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

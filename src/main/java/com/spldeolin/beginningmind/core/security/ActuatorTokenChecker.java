@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Log4j2
-public class CheckActuatorTokenHandler {
+public class ActuatorTokenChecker {
 
     @Autowired
     private WebEndpointProperties webEndpointProperties;

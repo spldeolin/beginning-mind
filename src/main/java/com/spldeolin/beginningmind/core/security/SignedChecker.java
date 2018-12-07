@@ -12,7 +12,7 @@ import com.spldeolin.beginningmind.core.security.util.Signer;
  * @author Deolin 2018/12/02
  */
 @Component
-public class CheckSignedHandler {
+public class SignedChecker {
 
     @Autowired
     @Qualifier("anonUrlsPrefix")

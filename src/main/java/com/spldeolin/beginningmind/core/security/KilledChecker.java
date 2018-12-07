@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.core.util.Sessions;
  * @author Deolin 2018/12/02
  */
 @Component
-public class CheckKilledHandler {
+public class KilledChecker {
 
     @Autowired
     private SignService signService;
