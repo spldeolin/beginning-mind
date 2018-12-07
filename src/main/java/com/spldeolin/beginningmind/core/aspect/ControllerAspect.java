@@ -1,26 +1,29 @@
 package com.spldeolin.beginningmind.core.aspect;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.service.RequestTrackService;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * 控制层切面
  * <pre>
- * 基础处理：控制器解析、额外注解处理、日志处理
+ * 前置：填入切点信息、注解额外校验
+ * 后置：无
  * </pre>
  *
  * @author Deolin
@@ -29,9 +32,6 @@ import lombok.extern.log4j.Log4j2;
 @Aspect
 @Log4j2
 public class ControllerAspect {
-
-    @Autowired
-    private RequestTrackService requestTrackService;
 
     /**
      * Spring可扫描的， com.spldeolin.beginningmind.core.controller包及其子包下的， 声明了@RestController注解的类， 中的所有方法
@@ -46,9 +46,9 @@ public class ControllerAspect {
         RequestTrackDTO requestTrack = RequestTrackContext.getRequestTrack();
 
         // 填入切点信息
-        requestTrackService.fillJoinPointInfo(requestTrack, point);
+        fillJoinPointInfo(requestTrack, point);
 
-        // 注解校验
+        // 注解额外校验
         List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
@@ -58,11 +58,21 @@ public class ControllerAspect {
         return point.proceed(requestTrack.getParameterValues());
     }
 
-    private List<Invalid> handleAnnotations(RequestTrackDTO requestTrack) {
+    private void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint) {
+        Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
+        String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
+        Object[] parameterValues = joinPoint.getArgs();
+        track.setFullyQualifiedName(joinPoint.getTarget().getClass().getName() + "#" + requestMethod.getName());
+        track.setMethod(requestMethod);
+        track.setParameterNames(parameterNames);
+        track.setParameterValues(parameterValues);
+    }
+
+    private List<Invalid> handleAnnotations(RequestTrackDTO track) {
         List<Invalid> invalids = new ArrayList<>();
-        Annotation[][] annotationsEachParams = requestTrack.getMethod().getParameterAnnotations();
-        String[] parameterNames = requestTrack.getParameterNames();
-        Object[] parameterValues = requestTrack.getParameterValues();
+        Annotation[][] annotationsEachParams = track.getMethod().getParameterAnnotations();
+        String[] parameterNames = track.getParameterNames();
+        Object[] parameterValues = track.getParameterValues();
         for (int i = 0; i < annotationsEachParams.length; i++) {
             Annotation[] annotations = annotationsEachParams[i];
             String parameterName = parameterNames[i];

@@ -9,7 +9,6 @@ import javax.validation.ConstraintViolationException;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -34,15 +33,14 @@ import com.spldeolin.beginningmind.core.util.RequestTrackContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 控制层增强：统一异常处理
+ * 控制层增强：异常处理
  *
  * @author Deolin
  * @see ResultCode
  */
-@Component
 @RestControllerAdvice
 @Log4j2
-public class GlobalExceptionAdvance {
+public class ExceptionAdvance {
 
     /**
      * 400 请求动词错误
