@@ -23,7 +23,6 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOthersException;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
@@ -181,33 +180,14 @@ public class ExceptionAdvance {
     }
 
     /**
-     * 500 由BasicErrorController产生的异常（HTTP 404以外的）
-     */
-    @ExceptionHandler(BasicErrorControllerOthersException.class)
-    public RequestResult handle(BasicErrorControllerOthersException e) {
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR, e.getErrorAttributes().toString());
-    }
-
-    /**
      * 500 内部BUG
-     * <pre>
-     * 控制层上方发生的BUG（如过滤器中的BUG），无法返回标识符。因为没有进入切面
-     * 控制层下方发生的BUG（如果业务层、持久层的BUG），能够返回标识符
-     * </pre>
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
         RequestTrack track = WebContext.getRequestTrack();
-        RequestResult requestResult;
-        if (track == null) {
-            log.error("统一异常处理被击穿！", e);
-            requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR);
-        } else {
-            String insignia = track.getInsignia();
-            log.error("统一异常处理被击穿！标识：" + insignia, e);
-            requestResult = RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
-        }
-        return requestResult;
+        String insignia = track.getInsignia();
+        log.error("统一异常处理被击穿！标识：" + insignia, e);
+        return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
     }
 
     private List<Invalid> buildInvalids(BindingResult bindingResult) {
