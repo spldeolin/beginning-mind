@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.util.RequestTrackContext;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -43,7 +43,7 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        RequestTrack requestTrack = RequestTrackContext.getRequestTrack();
+        RequestTrack requestTrack = WebContext.getRequestTrack();
 
         // 填入切点信息
         fillJoinPointInfo(requestTrack, point);

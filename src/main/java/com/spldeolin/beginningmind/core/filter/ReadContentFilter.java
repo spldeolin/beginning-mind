@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
-import com.spldeolin.beginningmind.core.util.RequestTrackContext;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -41,7 +41,7 @@ public class ReadContentFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
 
         // 向RequestTrack填入request和response的content（同步）
-        fillContent(RequestTrackContext.getRequestTrack(), wrappedRequest, wrappedResponse);
+        fillContent(WebContext.getRequestTrack(), wrappedRequest, wrappedResponse);
     }
 
     private void fillContent(RequestTrack track, ContentCachingRequestWrapper wrappedRequest,

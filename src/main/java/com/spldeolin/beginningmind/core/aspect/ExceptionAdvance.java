@@ -29,7 +29,7 @@ import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
-import com.spldeolin.beginningmind.core.util.RequestTrackContext;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -92,7 +92,7 @@ public class ExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrack requestTrack = RequestTrackContext.getRequestTrack();
+        RequestTrack requestTrack = WebContext.getRequestTrack();
         String[] paramNames = requestTrack.getParameterNames();
         Object[] paramValues = requestTrack.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
@@ -197,7 +197,7 @@ public class ExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrack track = RequestTrackContext.getRequestTrack();
+        RequestTrack track = WebContext.getRequestTrack();
         RequestResult requestResult;
         if (track == null) {
             log.error("统一异常处理被击穿！", e);

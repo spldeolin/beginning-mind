@@ -17,8 +17,6 @@ spring:
 
   profiles.active: ${profile}
 
-  mvc.favicon.enabled: false
-
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
     url: 占位符

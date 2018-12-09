@@ -27,6 +27,7 @@ import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -80,7 +81,7 @@ public class SignServiceImpl implements SignService {
         List<Permission> permissions = permissionService.listGrantedPermission(user.getId());
 
         // 获取会话ID
-        String sessionId = Sessions.session().getId();
+        String sessionId = WebContext.getSession().getId();
 
         // 用户信息存入Session
         CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder()
@@ -102,7 +103,7 @@ public class SignServiceImpl implements SignService {
     @Override
     public void signOut() {
         Long userId = Signer.userId();
-        String sessionId = Sessions.session().getId();
+        String sessionId = WebContext.getSession().getId();
         Sessions.remove(SIGNER_SESSION_KEY);
         redisTemplate.opsForHash().delete(SIGN_STATUS_BY_USER_ID + userId, sessionId);
     }

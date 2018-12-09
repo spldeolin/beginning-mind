@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
-import com.spldeolin.beginningmind.core.util.RequestTrackContext;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import com.spldeolin.beginningmind.core.filter.async.RequestTrackFilterPostHandler;
 import lombok.extern.log4j.Log4j2;
 
@@ -40,12 +40,18 @@ public class RequestTrackFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         RequestTrack track = new RequestTrack();
-        RequestTrackContext.setRequestTrack(track);
+        WebContext.setRequestTrack(track);
+        WebContext.setRequest(request);
+        WebContext.setResponse(response);
+        WebContext.setSession(request.getSession());
 
         filterChain.doFilter(request, response);
 
         requestTrackFilterPostHandler.asyncCompleteAndSave(track, request);
-        RequestTrackContext.clearRequestTrack();
+        WebContext.removeRequestTrack();
+        WebContext.removeRequest();
+        WebContext.removeResponse();
+        WebContext.removeSession();
     }
 
 }

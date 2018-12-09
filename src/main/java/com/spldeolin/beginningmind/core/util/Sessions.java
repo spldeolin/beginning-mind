@@ -15,8 +15,8 @@ import lombok.experimental.UtilityClass;
 @UtilityClass
 public class Sessions {
 
-    public static HttpSession session() {
-        return RequestContextUtils.request().getSession();
+    private static HttpSession session() {
+        return WebContext.getSession();
     }
 
     /**

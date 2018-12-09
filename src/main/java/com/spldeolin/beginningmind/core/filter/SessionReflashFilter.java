@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.util.Sessions;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,16 +38,17 @@ public class SessionReflashFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
 
         // 刷新全局会话的失效时间
-        reflashGlobalSession(Sessions.session());
+        reflashGlobalSession();
         // 刷新会话每个k-v的失效时间
-        reflashSessionAttributes(Sessions.session());
+        reflashSessionAttributes();
     }
 
-    private void reflashGlobalSession(HttpSession session) {
-        session.setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
+    private void reflashGlobalSession() {
+        WebContext.getSession().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
-    private void reflashSessionAttributes(HttpSession session) {
+    private void reflashSessionAttributes() {
+        HttpSession session = WebContext.getSession();
         for (String key : Collections.list(session.getAttributeNames())) {
             Object value = session.getAttribute(key);
             if (value instanceof Sessions.ValueWrapper) {
