@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import com.spldeolin.beginningmind.core.filter.async.RequestTrackFilterPostHandler;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.util.WebContext;
-import com.spldeolin.beginningmind.core.filter.async.RequestTrackFilterPostHandler;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -39,6 +39,9 @@ public class RequestTrackFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        if (request.getRequestURI().equals("/favicon.ico")) {
+            return;
+        }
         RequestTrack track = new RequestTrack();
         WebContext.setRequestTrack(track);
         WebContext.setRequest(request);
