@@ -4,9 +4,11 @@ import javax.servlet.MultipartConfigElement;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
+import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.spldeolin.beginningmind.core.CoreProperties;
@@ -16,7 +18,8 @@ import com.spldeolin.beginningmind.core.CoreProperties;
  *
  * @author Deolin
  */
-@Component
+@EnableWebMvc
+@Configuration
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
@@ -55,4 +58,15 @@ public class WebConfig implements WebMvcConfigurer {
         return factory.createMultipartConfig();
     }
 
+    /**
+     * 请求404时不再转发到Whitelabel Error Page，而是抛出NoHandlerFoundException异常
+     *
+     * 必须声明@EnableWebMvc，才能使dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);生效
+     */
+    @Bean
+    DispatcherServlet dispatcherServlet() {
+        DispatcherServlet dispatcherServlet = new DispatcherServlet();
+        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
+        return dispatcherServlet;
+    }
 }

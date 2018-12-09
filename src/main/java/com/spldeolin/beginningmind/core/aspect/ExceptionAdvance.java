@@ -19,14 +19,14 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.aspect.exception.BasicErrorControllerOthersException;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.aspect.exception.RequestNotFoundException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.RequestTrackContext;
@@ -166,11 +166,11 @@ public class ExceptionAdvance {
     /**
      * 404 找不到请求
      */
-    @ExceptionHandler(RequestNotFoundException.class)
-    public RequestResult handleRequestNotFoundException() {
-        return RequestResult.failure(ResultCode.NOT_FOUND);
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public RequestResult requestHandlingNoHandlerFound(NoHandlerFoundException ex) {
+        return RequestResult
+                .failure(ResultCode.NOT_FOUND, "请求或资源不存在" + " [" + ex.getHttpMethod() + "]" + ex.getRequestURL());
     }
-
 
     /**
      * 1001 业务异常
