@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * 优先级：最外层
  *
- * 前置：将request、response、session、新构造的请求轨迹存入ThreadLocal
+ * 前置：将request、response、session、新构造的请求轨迹存入ThreadLocal，insignia存入headers
  *
  * 后置：补全并保存RequestTrackDTO对象（异步），清空ThreadLocal
  *
@@ -43,14 +43,21 @@ public class WebContextFilter extends OncePerRequestFilter {
             return;
         }
 
+        // 将request、response、session、新构造的请求轨迹存入ThreadLocal
         WebContext.setRequestTrack(new RequestTrack());
         WebContext.setRequest(request);
         WebContext.setResponse(response);
         WebContext.setSession(request.getSession());
 
+        // insignia存入headers
+        response.setHeader("insignia", WebContext.getInsignia());
+
         filterChain.doFilter(request, response);
 
+        // 补全并保存RequestTrackDTO对象（异步）
         requestTrackAsyncHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
+
+        // 清空ThreadLocal
         WebContext.removeRequestTrack();
         WebContext.removeRequest();
         WebContext.removeResponse();

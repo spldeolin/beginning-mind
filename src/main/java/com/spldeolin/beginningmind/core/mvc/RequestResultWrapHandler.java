@@ -5,7 +5,6 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.method.support.ModelAndViewContainer;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.core.util.WebContext;
 
 /**
  * @author Deolin 2018/11/16
@@ -27,8 +26,6 @@ public class RequestResultWrapHandler implements HandlerMethodReturnValueHandler
     public void handleReturnValue(Object returnValue, MethodParameter returnType, ModelAndViewContainer mavContainer,
             NativeWebRequest webRequest) throws Exception {
         RequestResult result = ensureWrapped(returnValue);
-        fillInsignia(result);
-
         delegate.handleReturnValue(result, returnType, mavContainer, webRequest);
     }
 
@@ -37,10 +34,6 @@ public class RequestResultWrapHandler implements HandlerMethodReturnValueHandler
             return (RequestResult) returnValue;
         }
         return RequestResult.success(returnValue);
-    }
-
-    private void fillInsignia(RequestResult requestResult) {
-        requestResult.setInsignia(WebContext.getInsignia());
     }
 
 }
