@@ -127,7 +127,7 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     }
 
     @Override
-    public List<T> searchBatch(QueryWrapper<T> queryWrapper) {
+    public List<T> searchBatch(Wrapper<T> queryWrapper) {
         return baseMapper.selectList(queryWrapper);
     }
 

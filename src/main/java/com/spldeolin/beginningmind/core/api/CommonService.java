@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 
 /**
  * @author Deolin
@@ -133,7 +133,7 @@ public interface CommonService<T> {
      * @param queryWrapper 条件对象
      * @return 满足条件的资源列表
      */
-    List<T> searchBatch(QueryWrapper<T> queryWrapper);
+    List<T> searchBatch(Wrapper<T> queryWrapper);
 
     /**
      * 判断资源是否存在
