@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Log4j2
-public class RequestTrackFilterPostHandler {
+public class RequestTrackAsyncHandler {
 
     @Autowired
     private Environment environment;
