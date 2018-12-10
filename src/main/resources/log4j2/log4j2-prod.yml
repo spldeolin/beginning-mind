@@ -67,6 +67,8 @@ Configuration:
       DefaultRolloverStrategy:
         max: 1000
 
+  # 声明了一个logger，异步且显示行号，打印所有级别
+  # 打印到console，infoFile，debugFile这三个Appenders，Appenders各自的level再过滤一次打印级别
   Loggers:
     AsyncRoot:
       level: all
