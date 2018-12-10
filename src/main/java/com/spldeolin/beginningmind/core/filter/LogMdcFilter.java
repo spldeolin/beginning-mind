@@ -27,7 +27,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class LogMdcFilter extends OncePerRequestFilter {
 
-    public static final int ORDER = 1 + RequestTrackFilter.ORDER;
+    public static final int ORDER = 1 + WebContextFilter.ORDER;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

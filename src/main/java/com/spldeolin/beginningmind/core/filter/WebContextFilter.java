@@ -17,16 +17,16 @@ import lombok.extern.log4j.Log4j2;
 /**
  * 优先级：最外层
  *
- * 前置：构造RequestTrackDTO对象，并存入ThreadLocal
+ * 前置：将request、response、session、新构造的请求轨迹存入ThreadLocal
  *
  * 后置：补全并保存RequestTrackDTO对象（异步），清空ThreadLocal
  *
  * @author Deolin 2018/12/06
  */
-@Order(RequestTrackFilter.ORDER)
+@Order(WebContextFilter.ORDER)
 @Component
 @Log4j2
-public class RequestTrackFilter extends OncePerRequestFilter {
+public class WebContextFilter extends OncePerRequestFilter {
 
     /**
      * 最外层过滤器Order数字
@@ -42,15 +42,15 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         if (request.getRequestURI().equals("/favicon.ico")) {
             return;
         }
-        RequestTrack track = new RequestTrack();
-        WebContext.setRequestTrack(track);
+
+        WebContext.setRequestTrack(new RequestTrack());
         WebContext.setRequest(request);
         WebContext.setResponse(response);
         WebContext.setSession(request.getSession());
 
         filterChain.doFilter(request, response);
 
-        requestTrackFilterPostHandler.asyncCompleteAndSave(track, request);
+        requestTrackFilterPostHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
         WebContext.removeRequestTrack();
         WebContext.removeRequest();
         WebContext.removeResponse();
