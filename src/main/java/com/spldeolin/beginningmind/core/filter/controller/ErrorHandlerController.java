@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.controller;
+package com.spldeolin.beginningmind.core.filter.controller;
 
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
