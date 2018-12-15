@@ -187,7 +187,7 @@ public class ExceptionAdvance {
         RequestTrack track = WebContext.getRequestTrack();
         String insignia = track.getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误（" + insignia + "）");
+        return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误");
     }
 
     private List<Invalid> buildInvalids(BindingResult bindingResult) {
