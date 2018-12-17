@@ -63,6 +63,27 @@ public class QueryWrapperLambdaTest {
         query.ne(User::getName, "随意").or().eq(User::getName, "随意");
         userService.searchBatch(query).forEach(log::info);
 
+        // ORDER BY id DESC
+        query = new LambdaQueryWrapper<>();
+        query.orderByDesc(User::getId); // 暂时无法消除这个警告
+        userService.searchBatch(query).forEach(log::info);
+
+        // SELECT id,name
+        query = new LambdaQueryWrapper<>();
+        query.select(User::getId, User::getName);
+        userService.searchBatch(query).forEach(log::info);
+
+        // ==>  Preparing: LIKE ?
+        // ==> Parameters: %a%(String)
+        query = new LambdaQueryWrapper<>();
+        query.like(User::getName, "a");
+        userService.searchBatch(query).forEach(log::info);
+
+        // ==>  Preparing: LIKE ?
+        // ==> Parameters: D%(String)
+        query = new LambdaQueryWrapper<>();
+        query.likeRight(User::getName, "D");
+        userService.searchBatch(query).forEach(log::info);
     }
 
 }

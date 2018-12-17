@@ -22,7 +22,7 @@ Configuration:
 
   # 声明了两个logger，都是异步且显示行号的，都只打印到console
   # root logger：只打印error及以上级别的日志
-  # com.spldeolin logger：打印所有日志，已被root logger打印过的日志不再答应
+  # com.spldeolin logger：打印debug及以上日志，已被root logger打印过的日志不再答应
   Loggers:
     AsyncRoot:
       level: error # 修改为“debug”可查看所有类的DEBUG级日志
@@ -31,7 +31,7 @@ Configuration:
       - ref: console
     AsyncLogger:
       name: com.spldeolin
-      level: all
+      level: debug
       additivity: false
       includeLocation: true
       AppenderRef:
