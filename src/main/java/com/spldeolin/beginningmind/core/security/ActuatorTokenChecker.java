@@ -7,7 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.endpoint.web.WebEndpointProperties;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.security.exception.ActuatorTokenIncorrectException;
 import lombok.extern.log4j.Log4j2;
 
@@ -21,31 +20,20 @@ public class ActuatorTokenChecker {
     @Autowired
     private WebEndpointProperties webEndpointProperties;
 
-    @Autowired
-    private CoreProperties coreProperties;
-
     private String token;
 
     @PostConstruct
     public void init() {
-        if (enableAuth()) {
-            token = UUID.randomUUID().toString();
-            log.info("Actuator token: " + token);
-        }
+        token = UUID.randomUUID().toString();
+        log.info("Actuator token: " + token);
     }
 
     public void ensureTokenCorrect(HttpServletRequest request) throws ActuatorTokenIncorrectException {
-        if (enableAuth()) {
-            if (isActuatorRequest(request)) {
-                if (isTokenIncorrect(request)) {
-                    throw new ActuatorTokenIncorrectException("Token错误");
-                }
+        if (isActuatorRequest(request)) {
+            if (isTokenIncorrect(request)) {
+                throw new ActuatorTokenIncorrectException("Token错误");
             }
         }
-    }
-
-    private boolean enableAuth() {
-        return coreProperties.getEnableActuatorFilter();
     }
 
     private boolean isActuatorRequest(ServletRequest request) {

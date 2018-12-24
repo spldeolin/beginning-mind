@@ -115,8 +115,6 @@ core:
 
   enableSwagger: 占位符
 
-  enableActuatorFilter: 占位符
-
 ---
 
 ########################
@@ -170,8 +168,6 @@ core:
   enableSecurity: false
 
   enableSwagger: true
-
-  enableActuatorFilter: true
 
 ---
 
@@ -227,8 +223,6 @@ core:
 
   enableSwagger: true
 
-  enableActuatorFilter: false
-
 ---
 
 ########################
@@ -282,5 +276,3 @@ core:
   enableSecurity: true
 
   enableSwagger: false
-
-  enableActuatorFilter: true

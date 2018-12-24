@@ -118,9 +118,4 @@ public class CoreProperties {
      */
     private Boolean enableSwagger;
 
-    /**
-     * 是否启用actuator相关接口的Token认证过滤器
-     */
-    private Boolean enableActuatorFilter;
-
 }
