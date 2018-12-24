@@ -38,7 +38,7 @@ public class ReadContentFilter extends OncePerRequestFilter {
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(wrappedRequest, wrappedResponse);
 
         // 向RequestTrack填入request和response的content（同步）
         fillContent(WebContext.getRequestTrack(), wrappedRequest, wrappedResponse);

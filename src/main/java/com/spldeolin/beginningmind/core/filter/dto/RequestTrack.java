@@ -5,6 +5,7 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import com.google.common.base.Stopwatch;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
+import com.spldeolin.beginningmind.core.util.Times;
 import lombok.Data;
 
 /**
@@ -124,7 +125,7 @@ public class RequestTrack implements Serializable {
         String br = System.getProperty("line.separator");
         return "RequestTrackDTO {" + br +
                 "    insignia = " + insignia + br +
-                "    requestedAt = " + requestedAt + br +
+                "    requestedAt = " + Times.toString(requestedAt, "yyyy-MM-dd HH:mm:ss.SSS") + br +
                 "    url = " + url + br +
                 "    httpMethod = " + httpMethod + br +
                 "    requestContent = " + requestContent + br +
