@@ -56,6 +56,11 @@ public class RequestTrack implements Serializable {
     private Long elapsedMilliseconds;
 
     /**
+     * 这次请求调用Mapper中方法的次数
+     */
+    private Integer mapperCalledTimes;
+
+    /**
      * 登录者用户ID
      */
     private Long userId;
@@ -111,6 +116,7 @@ public class RequestTrack implements Serializable {
         insignia = StringRandomUtils.generateLegibleEnNum(6);
         requestedAt = LocalDateTime.now();
         stopwatch = Stopwatch.createStarted();
+        mapperCalledTimes = 0;
     }
 
     @Override
@@ -125,6 +131,7 @@ public class RequestTrack implements Serializable {
                 "    responseContent = " + responseContent + br +
                 "    fullyQualifiedName = " + fullyQualifiedName + br +
                 "    elapsedMilliseconds = " + elapsedMilliseconds + br +
+                "    mapperCalledTimes = " + mapperCalledTimes + br +
                 "    userId = " + userId + br +
                 "    userName = " + userName + br +
                 "    userMobile = " + userMobile + br +
