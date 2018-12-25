@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.spldeolin.beginningmind.core.CoreProperties;
@@ -18,7 +17,6 @@ import com.spldeolin.beginningmind.core.CoreProperties;
  *
  * @author Deolin
  */
-@EnableWebMvc
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
@@ -60,8 +58,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     /**
      * 请求404时不再转发到Whitelabel Error Page，而是抛出NoHandlerFoundException异常
-     *
-     * 必须声明@EnableWebMvc，才能使dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);生效
      */
     @Bean
     DispatcherServlet dispatcherServlet() {
