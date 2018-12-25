@@ -6,7 +6,6 @@ import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
-import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -56,13 +55,4 @@ public class WebConfig implements WebMvcConfigurer {
         return factory.createMultipartConfig();
     }
 
-    /**
-     * 请求404时不再转发到Whitelabel Error Page，而是抛出NoHandlerFoundException异常
-     */
-    @Bean
-    DispatcherServlet dispatcherServlet() {
-        DispatcherServlet dispatcherServlet = new DispatcherServlet();
-        dispatcherServlet.setThrowExceptionIfNoHandlerFound(true);
-        return dispatcherServlet;
-    }
 }
