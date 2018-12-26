@@ -20,7 +20,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 @Aspect
 @Log4j2
-public class MapperAcpect {
+public class MapperAspect {
 
     /**
      * Spring可扫描的，BaseMapper的所有派生类
