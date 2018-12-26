@@ -5,15 +5,15 @@ import org.simplejavamail.email.EmailBuilder;
 import org.simplejavamail.email.EmailPopulatingBuilder;
 import org.simplejavamail.mailer.MailerBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.CoreProperties.EmailProp;
 import com.spldeolin.beginningmind.core.service.EmailService;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/11/16
  */
-@Log4j2
+@Service
 public class EmailServiceImpl implements EmailService {
 
     @Autowired
