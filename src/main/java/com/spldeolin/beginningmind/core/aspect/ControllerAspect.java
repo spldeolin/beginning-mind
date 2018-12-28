@@ -34,9 +34,10 @@ import lombok.extern.log4j.Log4j2;
 public class ControllerAspect {
 
     /**
-     * Spring可扫描的，声明了@RestController注解的类， 中的所有方法
+     * Spring可扫描的，包名以com.spldeolin.beginningmind.开头的，声明了@RestController注解的类， 中的所有方法
      */
-    @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
+    @Pointcut("execution(* com.spldeolin.beginningmind..*.*(..))"
+            + "&& @within(org.springframework.web.bind.annotation.RestController)")
     public void controllerMethod() {
     }
 
