@@ -109,6 +109,26 @@ public class CoreProperties {
     }
 
     /**
+     * OSS
+     */
+    private OssProp oss;
+
+    @Data
+    public static class OssProp {
+
+        private String buckeName;
+
+        private String endPoint;
+
+        private String accessKeyId;
+
+        private String accessKeySecret;
+
+        private String fileHost;
+
+    }
+
+    /**
      * 是否启用安全模块
      */
     private Boolean enableSecurity;

@@ -77,6 +77,9 @@
 
         <!-- https://mvnrepository.com/artifact/commons-dbutils/commons-dbutils -->
         <commons-dbutils.version>1.7</commons-dbutils.version>
+
+        <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
+        <oss.version>3.4.0</oss.version>
     </properties>
 
     <dependencies>
@@ -290,6 +293,12 @@
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
             <version>${kaptcha.version}</version>
+        </dependency>
+        <!-- oss -->
+        <dependency>
+            <groupId>com.aliyun.oss</groupId>
+            <artifactId>aliyun-sdk-oss</artifactId>
+            <version>${oss.version}</version>
         </dependency>
 
         <!-- mysql -->

@@ -28,7 +28,7 @@ public class ImageController {
      */
     @PostMapping("/upload")
     String upload(@RequestParam("image") @NotNull MultipartFile multipartFile) {
-        return imageService.uploadToLocal(multipartFile);
+        return imageService.upload(multipartFile);
     }
 
 }

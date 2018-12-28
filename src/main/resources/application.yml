@@ -111,6 +111,13 @@ core:
     addresserEmail: # TODO E-Mail
     addresserAuthCode: # TODO E-Mail
 
+  oss:
+    buckeName: beginning-mind
+    endPoint: oss-cn-hangzhou.aliyuncs.com
+    accessKeyId: # TODO 阿里云OSS
+    accessKeySecret: # TODO 阿里云OSS
+    fileHost: image
+
   enableSecurity: 占位符
 
   enableSwagger: 占位符

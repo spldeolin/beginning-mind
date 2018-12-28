@@ -7,6 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public interface ImageService {
 
-    String uploadToLocal(MultipartFile multipartFile);
+    String upload(MultipartFile multipartFile);
 
 }
