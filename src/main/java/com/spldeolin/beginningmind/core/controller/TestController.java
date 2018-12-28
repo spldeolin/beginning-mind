@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -14,7 +15,10 @@ import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.model.User2permission;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.WebContext;
@@ -87,6 +91,58 @@ public class TestController {
         LambdaQueryWrapper<User> query = new LambdaQueryWrapper<>();
         query.le(User::getMobile, "999");
         return userService.page(page, query);
+    }
+
+    @PostMapping("/requestTrackReport")
+    Map<Integer, Object> requestTrackReport(@RequestBody User2permission user2permission) {
+        log.info(user2permission);
+        Map<Integer, Object> result = Maps.newHashMap();
+
+        LambdaQueryWrapper<User> query = new LambdaQueryWrapper<>();
+        query.gt(User::getMobile, 4);
+        result.put(1, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.ge(User::getMobile, 3);
+        result.put(1, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.lt(User::getMobile, 2);
+        result.put(2, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.le(User::getMobile, "999");
+        result.put(3, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.eq(User::getEnableSign, false);
+        result.put(4, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.in(User::getPassword, Lists.newArrayList("abc_111", "12312_de", "")).eq(User::getName, "汉字");
+        result.put(5, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.ne(User::getName, "随意").or().eq(User::getName, "随意");
+        result.put(6, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.orderByDesc(User::getId); // 暂时无法消除这个警告
+        result.put(7, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.select(User::getId, User::getName);
+        result.put(8, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.like(User::getName, "a");
+        result.put(9, userService.searchBatch(query));
+
+        query = new LambdaQueryWrapper<>();
+        query.likeRight(User::getName, "D");
+        result.put(10, userService.searchBatch(query));
+
+        return result;
     }
 
 }

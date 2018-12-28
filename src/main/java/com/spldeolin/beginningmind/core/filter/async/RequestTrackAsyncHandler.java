@@ -36,9 +36,9 @@ public class RequestTrackAsyncHandler {
     }
 
     private void analysizRequestTrack(RequestTrack track, HttpServletRequest request) {
-        track.setUrl(getFullUrlFromRequest(request));
-
         track.setHttpMethod(request.getMethod());
+
+        track.setUrl(getFullUrlFromRequest(request));
 
         track.setElapsed(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 

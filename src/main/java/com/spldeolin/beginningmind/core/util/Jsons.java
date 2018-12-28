@@ -23,7 +23,7 @@ public class Jsons {
     private static ObjectMapper defaultObjectMapper = JacksonConfig.jackson2ObjectMapperBuilder.build();
 
     /**
-     * 转化成美化的JSON
+     * 美化JSON
      * <pre>
      * e.g.:
      * {
@@ -34,8 +34,19 @@ public class Jsons {
      * </pre>
      */
     @SneakyThrows
-    public static String toBeauty(Object object) {
+    public static String beautify(Object object) {
         return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+    }
+
+    /**
+     * 压缩JSON
+     * <pre>
+     * e.g.:
+     * {"name":"Deolin","age":18,"isVip":true}
+     * </pre>
+     */
+    public static String compress(String json) {
+        return json.replace(" ", "").replace("\r", "").replace("\n", "").replace("\t", "");
     }
 
     /**
