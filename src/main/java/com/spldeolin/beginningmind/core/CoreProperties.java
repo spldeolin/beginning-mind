@@ -61,20 +61,6 @@ public class CoreProperties {
     }
 
     /**
-     * 文件支持
-     */
-    private FileProp file;
-
-    @Data
-    public static class FileProp {
-
-        private String mapping;
-
-        private String location;
-
-    }
-
-    /**
      * 雪花算法的机器区分ID和数据库区分ID
      */
     private SnowFlakeProp snowFlake;

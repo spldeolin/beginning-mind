@@ -96,10 +96,6 @@ core:
     queueCapacity: 20
     keepAliveSeconds: 60
 
-  file:
-    mapping: 占位符
-    location: 占位符
-
   snowFlake:
     datacenterId: 占位符
     machineId: 占位符

@@ -1,11 +1,9 @@
 package com.spldeolin.beginningmind.core.config;
 
 import java.util.Set;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import com.google.common.collect.Sets;
-import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
  * 安全配置
@@ -15,16 +13,14 @@ import com.spldeolin.beginningmind.core.CoreProperties;
 @Configuration
 public class SecurityConfig {
 
-    @Autowired
-    private CoreProperties coreProperties;
-
+    /**
+     * 以返回值中字符串开头的uri对应的请求，可以匿名访问
+     */
     @Bean("anonUrlsPrefix")
     public Set<String> anonUrlsPrefix() {
         Set<String> urls = Sets.newHashSet();
         // 错误页面
         urls.add("/error");
-        // 静态资源
-        urls.add(coreProperties.getFile().getMapping());
         // 验证码请求、登录请求、测试
         urls.add("/sign/captcha");
         urls.add("/sign/in");

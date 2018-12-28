@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.spldeolin.beginningmind.core.CoreProperties;
 
@@ -21,15 +20,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
     private CoreProperties coreProperties;
-
-    /**
-     * 额外监听路径
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler(coreProperties.getFile().getMapping() + "/**")
-                .addResourceLocations("file:" + coreProperties.getFile().getLocation());
-    }
 
     /**
      * 跨域
