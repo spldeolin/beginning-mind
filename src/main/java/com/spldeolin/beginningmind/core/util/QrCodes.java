@@ -7,9 +7,10 @@ import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Hashtable;
 import javax.imageio.ImageIO;
 import com.google.zxing.BarcodeFormat;
@@ -23,7 +24,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import lombok.SneakyThrows;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -36,28 +37,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class QrCodes {
 
-    /**
-     * 生成二维码图片
-     *
-     * @param filePath 文件路径，以png为结尾
-     * @param content 二维码信息
-     */
-    @SneakyThrows
-    public static void generate(String filePath, String content) {
-        QrCodes.encode(content, null, filePath, true);
-    }
-
-    /**
-     * 生成二维码图片
-     *
-     * @param filePath 文件路径，以png为结尾
-     * @param data 二维码信息，这个对象将会转化为JSON
-     */
-    @SneakyThrows
-    public static void generate(String filePath, Object data) {
-        QrCodes.encode(Jsons.toJson(data), null, filePath, true);
-    }
-
     private static final String FORMAT = "PNG";
 
     private static final int QRCODE_SIZE = 300;
@@ -65,6 +44,24 @@ public class QrCodes {
     private static final int LOGO_WIDTH = 140;
 
     private static final int LOGO_HEIGHT = 140;
+
+    /**
+     * 生成二维码图片
+     *
+     * @param content 内容
+     * @return 二维码Base64
+     */
+    public static String generate(String content) {
+        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
+            BufferedImage bufferedImage = QrCodes.createImage(content, null, true);
+
+            ImageIO.write(bufferedImage, FORMAT, os);
+            return "data:image/png;base64," + Base64.getEncoder().encodeToString(os.toByteArray());
+        } catch (Exception e) {
+            log.error("生成二维码失败", e);
+            throw new BizException("生成二维码失败");
+        }
+    }
 
     private static BufferedImage createImage(String content, String logoPath, boolean needCompress) throws Exception {
         Hashtable<EncodeHintType, Object> hints = new Hashtable<>();
@@ -132,41 +129,6 @@ public class QrCodes {
     }
 
     /**
-     * 生成二维码(内嵌LOGO) 二维码文件名随机，文件名可能会有重复
-     *
-     * @param content 内容
-     * @param logoPath LOGO地址
-     * @param destPath 存放目录
-     * @param needCompress 是否压缩LOGO
-     */
-    public static String encode(String content, String logoPath, String destPath,
-            boolean needCompress) throws Exception {
-        BufferedImage image = QrCodes.createImage(content, logoPath, needCompress);
-        File destFile = new File(destPath);
-        ImageIO.write(image, FORMAT, destFile);
-        return destFile.getName();
-    }
-
-    /**
-     * 生成二维码(内嵌LOGO) 调用者指定二维码文件名
-     *
-     * @param content 内容
-     * @param logoPath LOGO地址
-     * @param destPath 存放目录
-     * @param fileName 二维码文件名
-     * @param needCompress 是否压缩LOGO
-     */
-    public static String encode(String content, String logoPath, String destPath, String fileName,
-            boolean needCompress) throws Exception {
-        BufferedImage image = QrCodes.createImage(content, logoPath, needCompress);
-        mkdirs(destPath);
-        fileName = fileName.substring(0, fileName.indexOf(".") > 0 ? fileName.indexOf(".") : fileName.length())
-                + "." + FORMAT.toLowerCase();
-        ImageIO.write(image, FORMAT, new File(destPath + "/" + fileName));
-        return fileName;
-    }
-
-    /**
      * 当文件夹不存在时，mkdirs会自动创建多层目录，区别于mkdir． (mkdir如果父目录不存在则会抛出异常)
      *
      * @param destPath 存放目录
@@ -178,62 +140,6 @@ public class QrCodes {
                 throw new RuntimeException("创建失败");
             }
         }
-    }
-
-    /**
-     * 生成二维码(内嵌LOGO)
-     *
-     * @param content 内容
-     * @param logoPath LOGO地址
-     * @param destPath 存储地址
-     */
-    public static String encode(String content, String logoPath, String destPath) throws Exception {
-        return QrCodes.encode(content, logoPath, destPath, false);
-    }
-
-    /**
-     * 生成二维码
-     *
-     * @param content 内容
-     * @param destPath 存储地址
-     * @param needCompress 是否压缩LOGO
-     */
-    public static String encode(String content, String destPath, boolean needCompress) throws Exception {
-        return QrCodes.encode(content, null, destPath, needCompress);
-    }
-
-    /**
-     * 生成二维码
-     *
-     * @param content 内容
-     * @param destPath 存储地址
-     */
-    public static String encode(String content, String destPath) throws Exception {
-        return QrCodes.encode(content, null, destPath, false);
-    }
-
-    /**
-     * 生成二维码(内嵌LOGO)
-     *
-     * @param content 内容
-     * @param logoPath LOGO地址
-     * @param output 输出流
-     * @param needCompress 是否压缩LOGO
-     */
-    public static void encode(String content, String logoPath, OutputStream output, boolean needCompress)
-            throws Exception {
-        BufferedImage image = QrCodes.createImage(content, logoPath, needCompress);
-        ImageIO.write(image, FORMAT, output);
-    }
-
-    /**
-     * 生成二维码
-     *
-     * @param content 内容
-     * @param output 输出流
-     */
-    public static void encode(String content, OutputStream output) throws Exception {
-        QrCodes.encode(content, null, output, false);
     }
 
     /**
@@ -256,13 +162,5 @@ public class QrCodes {
         return resultStr;
     }
 
-    /**
-     * 解析二维码
-     *
-     * @param path 二维码图片地址
-     */
-    public static String decode(String path) throws Exception {
-        return QrCodes.decode(new File(path));
-    }
 
 }
