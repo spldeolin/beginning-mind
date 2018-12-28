@@ -49,12 +49,12 @@ public class RequestTrack implements Serializable {
     /**
      * 处理本请求的控制层请求方法的全限定名
      */
-    private String fullyQualifiedName;
+    private String fullName;
 
     /**
      * 耗时
      */
-    private Long elapsedMilliseconds;
+    private Long elapsed;
 
     /**
      * 这次请求调用Mapper中方法的次数
@@ -130,8 +130,8 @@ public class RequestTrack implements Serializable {
                 "    httpMethod = " + httpMethod + br +
                 "    requestContent = " + requestContent + br +
                 "    responseContent = " + responseContent + br +
-                "    fullyQualifiedName = " + fullyQualifiedName + br +
-                "    elapsedMilliseconds = " + elapsedMilliseconds + br +
+                "    fullName = " + fullName + br +
+                "    elapsed = " + elapsed + br +
                 "    mapperCalledTimes = " + mapperCalledTimes + br +
                 "    userId = " + userId + br +
                 "    userName = " + userName + br +

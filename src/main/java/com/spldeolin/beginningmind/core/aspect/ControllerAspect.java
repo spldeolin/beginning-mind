@@ -62,7 +62,7 @@ public class ControllerAspect {
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
         Object[] parameterValues = joinPoint.getArgs();
-        track.setFullyQualifiedName(joinPoint.getTarget().getClass().getName() + "#" + requestMethod.getName());
+        track.setFullName(joinPoint.getTarget().getClass().getName() + "#" + requestMethod.getName());
         track.setMethod(requestMethod);
         track.setParameterNames(parameterNames);
         track.setParameterValues(parameterValues);

@@ -40,7 +40,7 @@ public class RequestTrackAsyncHandler {
 
         track.setHttpMethod(request.getMethod());
 
-        track.setElapsedMilliseconds(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
+        track.setElapsed(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 
         Long signedUserId = track.getUserId();
         if (signedUserId != null) {
