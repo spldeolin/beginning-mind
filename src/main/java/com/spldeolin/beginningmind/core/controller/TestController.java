@@ -11,8 +11,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.spldeolin.beginningmind.core.dao.UserMapper;
 import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
@@ -81,13 +82,11 @@ public class TestController {
         return "SUCEESS" + user;
     }
 
-    @Autowired
-    private UserMapper userMapper;
-
     @GetMapping("/page")
-    Page<User> page(Page<User> page) {
-
-        return page.setRecords(userMapper.pages(page));
+    IPage<User> page(Page page) {
+        LambdaQueryWrapper<User> query = new LambdaQueryWrapper<>();
+        query.le(User::getMobile, "999");
+        return userService.page(page, query);
     }
 
 }

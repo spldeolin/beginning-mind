@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
  * @author Deolin
@@ -158,5 +160,7 @@ public interface CommonService<T> {
      * @return true存在，false不存在
      */
     int count(T model);
+
+    IPage<T> page(Page page, Wrapper<T> queryWrapper);
 
 }

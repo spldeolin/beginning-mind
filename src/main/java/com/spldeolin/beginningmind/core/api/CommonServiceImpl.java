@@ -13,6 +13,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
 
@@ -156,6 +158,12 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     @Override
     public int count(T model) {
         return baseMapper.selectCount(new QueryWrapper<>(model));
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public IPage<T> page(Page page, Wrapper<T> queryWrapper) {
+        return baseMapper.selectPage(page, queryWrapper);
     }
 
     private void ensureIsIdGetable() {
