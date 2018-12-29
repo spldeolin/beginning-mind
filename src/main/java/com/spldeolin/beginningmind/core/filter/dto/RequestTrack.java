@@ -166,8 +166,6 @@ public class RequestTrack implements Serializable {
         for (MappedCallDTO dto : mapperCalls) {
             sb.append(sp2).append("{").append(br);
             sb.append(sp3).append("target = ").append(dto.getTarget()).append(br);
-            sb.append(sp3).append("parameters = ").append(dto.getParameters().toString()).append(br);
-            sb.append(sp3).append("returnSize = ").append(dto.getReturnSize()).append(br);
             sb.append(sp3).append("elapsed = ").append(dto.getElapsed()).append(br);
             sb.append(sp2).append("}").append(br);
         }
