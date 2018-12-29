@@ -14,7 +14,6 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import lombok.extern.log4j.Log4j2;
@@ -43,8 +42,7 @@ public class PermissionSync {
         for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMapping.getHandlerMethods().entrySet()) {
             RequestMappingInfo mappingInfo = entry.getKey();
             String mappingPath = getFirstPath(mappingInfo);
-            if (isSwaggerMapping(mappingPath)
-                    || mappingPath.startsWith("/error")) {
+            if (mappingPath.startsWith("/error")) {
                 continue;
             }
             String mappingMethod = getFirstMethod(mappingInfo);
@@ -83,15 +81,6 @@ public class PermissionSync {
         if (toCreatePermissions.size() > 0) {
             permissionService.create(toCreatePermissions);
         }
-    }
-
-    private boolean isSwaggerMapping(String mappingUrl) {
-        for (String swaggerUrlPrefix : CoupledConstant.SWAGGER_URL_PREFIXES) {
-            if (mappingUrl.startsWith(swaggerUrlPrefix)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private String getFirstPath(RequestMappingInfo mappingInfo) {

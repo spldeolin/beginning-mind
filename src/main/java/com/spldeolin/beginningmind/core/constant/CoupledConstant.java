@@ -10,11 +10,6 @@ import org.apache.commons.codec.digest.DigestUtils;
 public interface CoupledConstant {
 
     /**
-     * 这个常量必须包含了所有swagger请求URL的开头片段
-     */
-    String[] SWAGGER_URL_PREFIXES = {"/swagger", "/webjars/", "/v2/"};
-
-    /**
      * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同
      */
     String LOG_MDC_INSIGNIA = "insignia";

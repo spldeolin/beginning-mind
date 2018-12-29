@@ -101,9 +101,4 @@ public class CoreProperties {
      */
     private Boolean enableSecurity;
 
-    /**
-     * 是否启用Swagger
-     */
-    private Boolean enableSwagger;
-
 }

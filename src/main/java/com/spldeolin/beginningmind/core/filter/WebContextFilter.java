@@ -55,11 +55,8 @@ public class WebContextFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-        if (!uri.startsWith("/swagger") && !uri.startsWith("/webjars") && !uri.startsWith("/v2")
-                && !uri.startsWith("/csrf")) {
-            // 补全并保存RequestTrackDTO对象（异步）
-            requestTrackAsyncHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
-        }
+        // 补全并保存RequestTrackDTO对象（异步）
+        requestTrackAsyncHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
 
         // 清空ThreadLocal
         WebContext.removeRequestTrack();

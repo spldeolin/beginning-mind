@@ -110,8 +110,6 @@ core:
 
   enableSecurity: 占位符
 
-  enableSwagger: 占位符
-
 ---
 
 ########################
@@ -154,17 +152,11 @@ core:
 
   address: http://localhost:2333
 
-  file:
-    mapping: /static/
-    location: C:/beginning-mind-static/
-
   snowFlake:
     datacenterId: 1
     machineId: 1
 
   enableSecurity: false
-
-  enableSwagger: true
 
 ---
 
@@ -208,17 +200,11 @@ core:
 
   address: http://localhost:2333
 
-  file:
-    mapping: /static/
-    location: /opt/beginning-mind-static/
-
   snowFlake:
     datacenterId: 1
     machineId: 1
 
   enableSecurity: false
-
-  enableSwagger: true
 
 ---
 
@@ -262,14 +248,8 @@ core:
 
   address: # TODO 生产环境 Web地址
 
-  file:
-    mapping: static
-    location: # TODO 生产环境 静态目录
-
   snowFlake:
     datacenterId: # TODO 生产环境 雪花算法数据中心ID
     machineId: # TODO 生产环境 雪花算法机器ID
 
   enableSecurity: true
-
-  enableSwagger: false
