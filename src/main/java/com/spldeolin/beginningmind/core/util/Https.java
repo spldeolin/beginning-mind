@@ -1,8 +1,10 @@
 package com.spldeolin.beginningmind.core.util;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -54,6 +56,20 @@ public class Https {
             return null;
         }
         return responseBody.string();
+    }
+
+    @SneakyThrows
+    public static BufferedImage getImage(String url) {
+        Request request = new Request.Builder().url(url).header("User-Agent", DISGUISED_USER_AGENT).build();
+
+        // 请求
+        Response response = doRequest(request);
+
+        ResponseBody responseBody = response.body();
+        if (responseBody == null) {
+            return null;
+        }
+        return ImageIO.read(responseBody.byteStream());
     }
 
     /**
