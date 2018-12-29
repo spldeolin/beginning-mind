@@ -19,7 +19,6 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
-import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
@@ -160,15 +159,6 @@ public class ExceptionAdvance {
     @ExceptionHandler(UnauthorizeException.class)
     public RequestResult handleUnauthorizeException(UnauthorizeException e) {
         return RequestResult.failure(ResultCode.FORBIDDEN, e.getMessage());
-    }
-
-    /**
-     * 404 找不到请求
-     */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public RequestResult requestHandlingNoHandlerFound(NoHandlerFoundException ex) {
-        return RequestResult
-                .failure(ResultCode.NOT_FOUND, "请求或资源不存在" + " [" + ex.getHttpMethod() + "]" + ex.getRequestURL());
     }
 
     /**
