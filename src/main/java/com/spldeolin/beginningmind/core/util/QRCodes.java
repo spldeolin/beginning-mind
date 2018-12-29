@@ -123,7 +123,7 @@ public class QRCodes {
      */
     public static String generateBase64(String content, String logoUrl) {
         BufferedImage qrCode = generateImage(content);
-        insertLogo(qrCode, Https.getImage(logoUrl));
+        insertLogo(qrCode, Https.getAsImage(logoUrl));
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();

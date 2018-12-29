@@ -1,11 +1,14 @@
 package com.spldeolin.beginningmind.core.util;
 
+import java.io.IOException;
 import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.config.JacksonConfig;
-import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * JSON工具类
@@ -18,6 +21,7 @@ import lombok.experimental.UtilityClass;
  * @author Deolin
  */
 @UtilityClass
+@Log4j2
 public class Jsons {
 
     private static ObjectMapper defaultObjectMapper = JacksonConfig.jackson2ObjectMapperBuilder.build();
@@ -33,9 +37,13 @@ public class Jsons {
      * }
      * </pre>
      */
-    @SneakyThrows
     public static String beautify(Object object) {
-        return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        try {
+            return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            log.error("转化JSON失败", e);
+            throw new BizException("转化JSON失败");
+        }
     }
 
     /**
@@ -59,9 +67,13 @@ public class Jsons {
     /**
      * 将对象转化为JSON，支持自定义ObjectMapper
      */
-    @SneakyThrows
     public static String toJson(Object object, ObjectMapper om) {
-        return om.writeValueAsString(object);
+        try {
+            return om.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            log.error("转化JSON失败", e);
+            throw new BizException("转化JSON失败");
+        }
     }
 
     /**
@@ -74,9 +86,13 @@ public class Jsons {
     /**
      * 将JSON转化为对象，支持自定义ObjectMapper
      */
-    @SneakyThrows
     public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
-        return om.readValue(json, clazz);
+        try {
+            return om.readValue(json, clazz);
+        } catch (IOException e) {
+            log.error("转化对象失败", e);
+            throw new BizException("转化对象失败");
+        }
     }
 
     /**
@@ -106,16 +122,21 @@ public class Jsons {
      * @param nodeKeys 抵达目标节点所有的节点key或数组下标
      * @return 目标值
      */
-    @SneakyThrows
     public static String getValue(String json, String... nodeKeys) {
-        JsonNode node = defaultObjectMapper.readTree(json);
+        JsonNode node;
+        try {
+            node = defaultObjectMapper.readTree(json);
+        } catch (Exception e) {
+            log.error("读取JSON失败", e);
+            throw new BizException("读取JSON失败");
+        }
+
         for (String nodeKey : nodeKeys) {
             if (node == null) {
                 return null;
             }
             if (NumberUtils.isCreatable(nodeKey)) {
-                Integer index = Integer.valueOf(nodeKey);
-                node = node.get(index);
+                node = node.get(Integer.parseInt(nodeKey));
             } else {
                 node = node.get(nodeKey);
             }
