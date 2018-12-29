@@ -1,12 +1,28 @@
 package com.spldeolin.beginningmind.core.util;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import org.apache.commons.lang3.math.NumberUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
-import com.spldeolin.beginningmind.core.config.JacksonConfig;
 import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
@@ -24,7 +40,44 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Jsons {
 
-    private static ObjectMapper defaultObjectMapper = JacksonConfig.jackson2ObjectMapperBuilder.build();
+    public static final ObjectMapper defaultObjectMapper;
+
+    static {
+        defaultObjectMapper = new ObjectMapper();
+
+        // 模组（guava collection、jsr310、Long转String）
+        defaultObjectMapper.registerModule(new GuavaModule());
+        defaultObjectMapper.registerModule(longToStringModulel());
+        defaultObjectMapper.registerModule(timeModule());
+
+        // json -> object时，忽略json中不认识的属性名
+        defaultObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        // 时区
+        defaultObjectMapper.setTimeZone(TimeZone.getDefault());
+    }
+
+    private SimpleModule timeModule() {
+        SimpleModule javaTimeModule = new JavaTimeModule();
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date))
+                .addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
+                .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
+                .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
+                .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime))
+                .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
+        return javaTimeModule;
+    }
+
+    private SimpleModule longToStringModulel() {
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        return simpleModule;
+    }
 
     /**
      * 美化JSON

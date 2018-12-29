@@ -25,24 +25,6 @@ public class CoreProperties {
     private String redisNamespace;
 
     /**
-     * “时间”格式
-     */
-    private TimeProp time;
-
-    @Data
-    public static class TimeProp {
-
-        private String defaultDatePattern;
-
-        private String defaultTimePattern;
-
-        private String defaultDatetimePattern;
-
-        private Boolean serializeJavaUtilDateToTimestamp;
-
-    }
-
-    /**
      * SpringBoot内部的@Async线程池规格
      */
     private TaskExecutorProp taskExecutor;

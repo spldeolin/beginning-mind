@@ -84,12 +84,6 @@ core:
 
   redisNamespace: beginningMind
 
-  time:
-    defaultDatePattern: yyyy-MM-dd
-    defaultTimePattern: HH:mm:ss
-    defaultDatetimePattern: yyyy-MM-dd HH:mm:ss
-    serializeJavaUtilDateToTimestamp: true
-
   taskExecutor:
     coreSize: 5
     maximumSize: 10
