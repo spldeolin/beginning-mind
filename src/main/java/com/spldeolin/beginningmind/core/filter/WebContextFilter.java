@@ -39,7 +39,8 @@ public class WebContextFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        if (request.getRequestURI().equals("/favicon.ico")) {
+        String uri = request.getRequestURI();
+        if (uri.equals("/favicon.ico") || uri.equals("/")) {
             return;
         }
 
@@ -54,8 +55,11 @@ public class WebContextFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
 
-        // 补全并保存RequestTrackDTO对象（异步）
-        requestTrackAsyncHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
+        if (!uri.startsWith("/swagger") && !uri.startsWith("/webjars") && !uri.startsWith("/v2")
+                && !uri.startsWith("/csrf")) {
+            // 补全并保存RequestTrackDTO对象（异步）
+            requestTrackAsyncHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
+        }
 
         // 清空ThreadLocal
         WebContext.removeRequestTrack();
