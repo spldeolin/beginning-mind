@@ -35,9 +35,6 @@ public enum ResultCode {
     // 会话中没有该请求需要的权限
     FORBIDDEN(403, "权限不足"),
 
-    // uri不存在
-    NOT_FOUND(404, "请求或资源不存在"),
-
     // 出现无法解决的异常
     INTERNAL_ERROR(500, "内部错误"),
 

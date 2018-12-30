@@ -1,11 +1,30 @@
 package com.spldeolin.beginningmind.core.util;
 
+import java.io.IOException;
+import java.math.BigInteger;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.TimeZone;
 import org.apache.commons.lang3.math.NumberUtils;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.spldeolin.beginningmind.core.config.JacksonConfig;
-import lombok.SneakyThrows;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
+import com.spldeolin.beginningmind.core.api.exception.BizException;
 import lombok.experimental.UtilityClass;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * JSON工具类
@@ -18,9 +37,47 @@ import lombok.experimental.UtilityClass;
  * @author Deolin
  */
 @UtilityClass
+@Log4j2
 public class Jsons {
 
-    private static ObjectMapper defaultObjectMapper = JacksonConfig.jackson2ObjectMapperBuilder.build();
+    public static final ObjectMapper defaultObjectMapper;
+
+    static {
+        defaultObjectMapper = new ObjectMapper();
+
+        // 模组（guava collection、jsr310、Long转String）
+        defaultObjectMapper.registerModule(new GuavaModule());
+        defaultObjectMapper.registerModule(longToStringModulel());
+        defaultObjectMapper.registerModule(timeModule());
+
+        // json -> object时，忽略json中不认识的属性名
+        defaultObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        // 时区
+        defaultObjectMapper.setTimeZone(TimeZone.getDefault());
+    }
+
+    private SimpleModule timeModule() {
+        SimpleModule javaTimeModule = new JavaTimeModule();
+        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
+        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date))
+                .addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
+                .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
+                .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
+                .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime))
+                .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
+        return javaTimeModule;
+    }
+
+    private SimpleModule longToStringModulel() {
+        SimpleModule simpleModule = new SimpleModule();
+        simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+        simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+        return simpleModule;
+    }
 
     /**
      * 美化JSON
@@ -33,9 +90,13 @@ public class Jsons {
      * }
      * </pre>
      */
-    @SneakyThrows
     public static String beautify(Object object) {
-        return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        try {
+            return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            log.error("转化JSON失败", e);
+            throw new BizException("转化JSON失败");
+        }
     }
 
     /**
@@ -59,9 +120,13 @@ public class Jsons {
     /**
      * 将对象转化为JSON，支持自定义ObjectMapper
      */
-    @SneakyThrows
     public static String toJson(Object object, ObjectMapper om) {
-        return om.writeValueAsString(object);
+        try {
+            return om.writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            log.error("转化JSON失败", e);
+            throw new BizException("转化JSON失败");
+        }
     }
 
     /**
@@ -74,9 +139,13 @@ public class Jsons {
     /**
      * 将JSON转化为对象，支持自定义ObjectMapper
      */
-    @SneakyThrows
     public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
-        return om.readValue(json, clazz);
+        try {
+            return om.readValue(json, clazz);
+        } catch (IOException e) {
+            log.error("转化对象失败", e);
+            throw new BizException("转化对象失败");
+        }
     }
 
     /**
@@ -106,16 +175,21 @@ public class Jsons {
      * @param nodeKeys 抵达目标节点所有的节点key或数组下标
      * @return 目标值
      */
-    @SneakyThrows
     public static String getValue(String json, String... nodeKeys) {
-        JsonNode node = defaultObjectMapper.readTree(json);
+        JsonNode node;
+        try {
+            node = defaultObjectMapper.readTree(json);
+        } catch (Exception e) {
+            log.error("读取JSON失败", e);
+            throw new BizException("读取JSON失败");
+        }
+
         for (String nodeKey : nodeKeys) {
             if (node == null) {
                 return null;
             }
             if (NumberUtils.isCreatable(nodeKey)) {
-                Integer index = Integer.valueOf(nodeKey);
-                node = node.get(index);
+                node = node.get(Integer.parseInt(nodeKey));
             } else {
                 node = node.get(nodeKey);
             }

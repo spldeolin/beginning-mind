@@ -20,10 +20,16 @@ Configuration:
         # 追加“%t”可打印线程名
         pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia} - %m%n"
 
-  # root logger：异步且显示行号、只打印到console
   Loggers:
-    AsyncRoot:
+    AsyncRoot: # 异步
       level: info # 修改为“debug”可查看所有类的DEBUG级日志
-      includeLocation: true
+      includeLocation: true # 显示行号
       AppenderRef:
       - ref: console
+    AsyncLogger:
+      name: com.spldeolin
+      level: debug
+      additivity: false # AsyncRoot打印过了日志，将不会在这个logger中打印
+      includeLocation: true
+      AppenderRef:
+        - ref: console

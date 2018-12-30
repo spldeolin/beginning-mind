@@ -1,11 +1,8 @@
 package com.spldeolin.beginningmind.core;
 
-import java.net.InetAddress;
-import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
-import lombok.SneakyThrows;
 
 /**
  * 配置一览
@@ -26,24 +23,6 @@ public class CoreProperties {
      * Redis缓存的key命名空间
      */
     private String redisNamespace;
-
-    /**
-     * “时间”格式
-     */
-    private TimeProp time;
-
-    @Data
-    public static class TimeProp {
-
-        private String defaultDatePattern;
-
-        private String defaultTimePattern;
-
-        private String defaultDatetimePattern;
-
-        private Boolean serializeJavaUtilDateToTimestamp;
-
-    }
 
     /**
      * SpringBoot内部的@Async线程池规格

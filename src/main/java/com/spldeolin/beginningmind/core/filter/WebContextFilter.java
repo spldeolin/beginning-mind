@@ -39,7 +39,8 @@ public class WebContextFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        if (request.getRequestURI().equals("/favicon.ico")) {
+        String uri = request.getRequestURI();
+        if (uri.equals("/favicon.ico") || uri.equals("/")) {
             return;
         }
 
