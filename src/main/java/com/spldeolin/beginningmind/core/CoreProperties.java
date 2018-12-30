@@ -1,8 +1,11 @@
 package com.spldeolin.beginningmind.core;
 
+import java.net.InetAddress;
+import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 /**
  * 配置一览
@@ -123,5 +126,14 @@ public class CoreProperties {
      * 是否启用Swagger
      */
     private Boolean enableSwagger;
+
+    /**
+     * 将配置中出现的localhost替换为本地IP
+     */
+    @PostConstruct
+    @SneakyThrows
+    public void localhostToLocalIp() {
+        address = address.replace("localhost", InetAddress.getLocalHost().getHostAddress());
+    }
 
 }
