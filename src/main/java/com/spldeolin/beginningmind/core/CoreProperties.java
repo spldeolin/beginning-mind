@@ -1,11 +1,8 @@
 package com.spldeolin.beginningmind.core;
 
-import java.net.InetAddress;
-import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
-import lombok.SneakyThrows;
 
 /**
  * 配置一览
@@ -18,11 +15,6 @@ import lombok.SneakyThrows;
 public class CoreProperties {
 
     /**
-     * 本项目的访问地址（http://localhost:2333）
-     */
-    private String address;
-
-    /**
      * Redis缓存的key命名空间
      */
     private String redisNamespace;
@@ -31,6 +23,26 @@ public class CoreProperties {
      * SpringBoot内部的@Async线程池规格
      */
     private TaskExecutorProp taskExecutor;
+
+    /**
+     * 雪花算法的机器区分ID和数据库区分ID
+     */
+    private SnowFlakeProp snowFlake;
+
+    /**
+     * E-Mail
+     */
+    private EmailProp email;
+
+    /**
+     * OSS
+     */
+    private OssProp oss;
+
+    /**
+     * 是否启用安全模块
+     */
+    private Boolean enableSecurity;
 
     @Data
     public static class TaskExecutorProp {
@@ -45,11 +57,6 @@ public class CoreProperties {
 
     }
 
-    /**
-     * 雪花算法的机器区分ID和数据库区分ID
-     */
-    private SnowFlakeProp snowFlake;
-
     @Data
     public static class SnowFlakeProp {
 
@@ -58,11 +65,6 @@ public class CoreProperties {
         private Long machineId;
 
     }
-
-    /**
-     * E-Mail
-     */
-    private EmailProp email;
 
     @Data
     public static class EmailProp {
@@ -79,11 +81,6 @@ public class CoreProperties {
 
     }
 
-    /**
-     * OSS
-     */
-    private OssProp oss;
-
     @Data
     public static class OssProp {
 
@@ -97,25 +94,6 @@ public class CoreProperties {
 
         private String fileHost;
 
-    }
-
-    /**
-     * 是否启用安全模块
-     */
-    private Boolean enableSecurity;
-
-    /**
-     * 是否启用Swagger
-     */
-    private Boolean enableSwagger;
-
-    /**
-     * 将配置中出现的localhost替换为本地IP
-     */
-    @PostConstruct
-    @SneakyThrows
-    public void localhostToLocalIp() {
-        address = address.replace("localhost", InetAddress.getLocalHost().getHostAddress());
     }
 
 }

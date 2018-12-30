@@ -80,8 +80,6 @@ mybatis-plus:
 
 core:
 
-  address: 占位符
-
   redisNamespace: beginningMind
 
   taskExecutor:
@@ -150,8 +148,6 @@ logging:
 
 core:
 
-  address: http://localhost:2333
-
   snowFlake:
     datacenterId: 1
     machineId: 1
@@ -198,8 +194,6 @@ logging:
 
 core:
 
-  address: http://localhost:2333
-
   snowFlake:
     datacenterId: 1
     machineId: 1
@@ -245,8 +239,6 @@ logging:
   config: classpath:log4j2/log4j2-prod.yml
 
 core:
-
-  address: # TODO 生产环境 Web地址
 
   snowFlake:
     datacenterId: # TODO 生产环境 雪花算法数据中心ID
