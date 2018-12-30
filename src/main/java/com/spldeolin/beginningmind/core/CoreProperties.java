@@ -1,8 +1,11 @@
 package com.spldeolin.beginningmind.core;
 
+import java.net.InetAddress;
+import javax.annotation.PostConstruct;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 import lombok.Data;
+import lombok.SneakyThrows;
 
 /**
  * 配置一览
