@@ -96,9 +96,21 @@ public interface CommonService<T> {
      *
      * @param m 存放检索条件的对象
      * @return 满足条件的资源
-     * @throws TooManyResultsException 满足条件的资源不止一个时
+     * @throws TooManyResultsException 满足条件的资源不止一个时（e.g.: Expected one result (or null) to be returned by selectOne(),
+     * but found: 2 ）
      */
     Optional<T> searchOne(T m) throws TooManyResultsException;
+
+    /**
+     * 根据参数字段和参数字段值，检索一个资源
+     *
+     * @param field 字段的Lambda表达式（e.g.: User::getId）
+     * @param value 字段的值
+     * @return 满足条件的资源
+     * @throws TooManyResultsException 满足条件的资源不止一个时（e.g.: Expected one result (or null) to be returned by selectOne(),
+     * but found: 2 ）
+     */
+    Optional<T> searchOne(SFunction<T, ?> field, Object value) throws TooManyResultsException;
 
     /**
      * 根据若干个条件，检索多个资源
@@ -107,6 +119,15 @@ public interface CommonService<T> {
      * @return 满足条件的资源列表
      */
     List<T> searchBatch(T m);
+
+    /**
+     * 根据参数字段和参数字段值，检索多个资源
+     *
+     * @param field 字段的Lambda表达式（e.g.: User::getSex）
+     * @param value 字段的值
+     * @return 满足条件的列表
+     */
+    List<T> searchBatch(SFunction<T, ?> field, Object value);
 
     /**
      * 自由检索
@@ -143,26 +164,13 @@ public interface CommonService<T> {
      */
     int count(T model);
 
+    /**
+     * 分页
+     *
+     * @param page 分页参数
+     * @param queryWrapper 条件对象
+     * @return 分页对象
+     */
     IPage<T> page(Page page, Wrapper<T> queryWrapper);
-
-    /**
-     * 根据参数字段和参数字段值，检索多个资源
-     *
-     * @param field 字段的Lambda表达式（e.g.: User::getSex）
-     * @param value 字段的值
-     * @return 满足条件的列表
-     */
-    List<T> searchBatch(SFunction<T, ?> field, Object value);
-
-    /**
-     * 根据参数字段和参数字段值，检索一个资源
-     *
-     * @param field 字段的Lambda表达式（e.g.: User::getId）
-     * @param value 字段的值
-     * @return 满足条件的资源
-     * @throws TooManyResultsException 满足条件的资源不止一个时 （e.g.: Expected one result (or null) to be returned by selectOne(),
-     * but found: 2 ）
-     */
-    Optional<T> searchOne(SFunction<T, ?> field, Object value) throws TooManyResultsException;
 
 }
