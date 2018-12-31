@@ -9,7 +9,6 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -28,7 +27,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
 
     private Class<T> modelClass;
 
-    private String tableName;
 
     private boolean isIdGetable;
 
@@ -36,13 +34,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
-        TableName tableName = modelClass.getAnnotation(TableName.class);
-        if (tableName != null) {
-            this.tableName = tableName.value();
-        } else {
-            this.tableName = modelClass.getSimpleName();
-        }
-
         isIdGetable = ArrayUtils.contains(modelClass.getInterfaces(), IdGetable.class);
     }
 
@@ -113,19 +104,8 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     }
 
     @Override
-    public Optional<T> searchOne(String modelFieldName, Object value) {
-        return batchToOne(searchBatch(modelFieldName, value));
-    }
-
-    @Override
     public List<T> searchBatch(T model) {
         return baseMapper.selectList(new QueryWrapper<>(model));
-    }
-
-    @Override
-    public List<T> searchBatch(String modelFieldName, Object value) {
-        Wrapper<T> wrapper = new QueryWrapper<T>().eq(modelFieldName, value);
-        return baseMapper.selectList(wrapper);
     }
 
     @Override

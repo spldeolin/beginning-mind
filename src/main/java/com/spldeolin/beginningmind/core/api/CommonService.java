@@ -100,31 +100,12 @@ public interface CommonService<T> {
     Optional<T> searchOne(T m) throws TooManyResultsException;
 
     /**
-     * 根据一个条件，检索一个资源
-     *
-     * @param modelFieldName 条件名
-     * @param value 值
-     * @return 满足条件的资源
-     * @throws TooManyResultsException 满足条件的资源不止一个时
-     */
-    Optional<T> searchOne(String modelFieldName, Object value);
-
-    /**
      * 根据若干个条件，检索多个资源
      *
      * @param m 存放检索条件的对象
      * @return 满足条件的资源列表
      */
     List<T> searchBatch(T m);
-
-    /**
-     * 根据一个条件，检索多个资源
-     *
-     * @param modelFieldName 条件名
-     * @param value 值
-     * @return 满足条件的资源列表
-     */
-    List<T> searchBatch(String modelFieldName, Object value);
 
     /**
      * 自由检索
