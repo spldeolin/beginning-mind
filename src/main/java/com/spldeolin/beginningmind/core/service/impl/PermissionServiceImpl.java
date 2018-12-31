@@ -25,7 +25,7 @@ public class PermissionServiceImpl extends CommonServiceImpl<Permission> impleme
 
     @Override
     public List<Permission> listGrantedPermission(Long userId) {
-        List<Long> permissionIds = user2permissionService.searchBatch("user_id", userId).stream()
+        List<Long> permissionIds = user2permissionService.searchBatch(User2permission::getUserId, userId).stream()
                 .map(User2permission::getPermissionId).collect(Collectors.toList());
 
         return Lists.newArrayList(super.listByIds(permissionIds));

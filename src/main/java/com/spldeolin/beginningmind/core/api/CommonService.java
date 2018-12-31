@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
@@ -143,5 +144,25 @@ public interface CommonService<T> {
     int count(T model);
 
     IPage<T> page(Page page, Wrapper<T> queryWrapper);
+
+    /**
+     * 根据参数字段和参数字段值，检索多个资源
+     *
+     * @param field 字段的Lambda表达式（e.g.: User::getSex）
+     * @param value 字段的值
+     * @return 满足条件的列表
+     */
+    List<T> searchBatch(SFunction<T, ?> field, Object value);
+
+    /**
+     * 根据参数字段和参数字段值，检索一个资源
+     *
+     * @param field 字段的Lambda表达式（e.g.: User::getId）
+     * @param value 字段的值
+     * @return 满足条件的资源
+     * @throws TooManyResultsException 满足条件的资源不止一个时 （e.g.: Expected one result (or null) to be returned by selectOne(),
+     * but found: 2 ）
+     */
+    Optional<T> searchOne(SFunction<T, ?> field, Object value) throws TooManyResultsException;
 
 }

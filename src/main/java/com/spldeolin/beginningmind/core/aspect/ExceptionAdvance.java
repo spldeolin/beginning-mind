@@ -91,6 +91,10 @@ public class ExceptionAdvance {
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
         RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack == null) {
+            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+        }
+
         String[] paramNames = requestTrack.getParameterNames();
         Object[] paramValues = requestTrack.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
@@ -175,6 +179,10 @@ public class ExceptionAdvance {
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
         RequestTrack track = WebContext.getRequestTrack();
+        if (track == null) {
+            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+        }
+
         String insignia = track.getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
         return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误");

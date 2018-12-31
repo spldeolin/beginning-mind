@@ -129,7 +129,7 @@ public class CommonServiceTest {
 
     @Test
     public void searchOne2() {
-        log.info(userService.searchOne("email", "1"));
+        log.info(userService.searchOne(User::getEmail, "1"));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class CommonServiceTest {
 
     @Test
     public void searchBatch2() {
-        userService.searchBatch("email", "2").forEach(log::info);
+        userService.searchBatch(User::getEmail, "2").forEach(log::info);
     }
 
     @Test

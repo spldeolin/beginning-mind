@@ -10,9 +10,11 @@ import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.google.common.collect.Maps;
@@ -144,6 +146,22 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     @SuppressWarnings("unchecked")
     public IPage<T> page(Page page, Wrapper<T> queryWrapper) {
         return baseMapper.selectPage(page, queryWrapper);
+    }
+
+    @Override
+    public List<T> searchBatch(SFunction<T, ?> field, Object value) {
+        LambdaQueryWrapper<T> query = new LambdaQueryWrapper<>();
+        query.eq(field, value);
+
+        return baseMapper.selectList(query);
+    }
+
+    @Override
+    public Optional<T> searchOne(SFunction<T, ?> field, Object value) {
+        LambdaQueryWrapper<T> query = new LambdaQueryWrapper<>();
+        query.eq(field, value);
+
+        return Optional.ofNullable(baseMapper.selectOne(query));
     }
 
     private void ensureIsIdGetable() {

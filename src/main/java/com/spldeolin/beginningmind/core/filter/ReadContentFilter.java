@@ -34,6 +34,11 @@ public class ReadContentFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
+        RequestTrack track = WebContext.getRequestTrack();
+        if (track == null) {
+            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+        }
+
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
         ContentCachingResponseWrapper wrappedResponse = new ContentCachingResponseWrapper(response);
@@ -41,7 +46,7 @@ public class ReadContentFilter extends OncePerRequestFilter {
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
         // 向RequestTrack填入request和response的content（同步）
-        fillContent(WebContext.getRequestTrack(), wrappedRequest, wrappedResponse);
+        fillContent(track, wrappedRequest, wrappedResponse);
     }
 
     private void fillContent(RequestTrack track, ContentCachingRequestWrapper wrappedRequest,

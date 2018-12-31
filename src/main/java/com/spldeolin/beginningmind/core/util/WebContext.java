@@ -33,7 +33,7 @@ public class WebContext {
     public static RequestTrack getRequestTrack() {
         RequestTrack requestTrack = REQUEST_TRACK.get();
         if (requestTrack == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+            return null;
         }
         return requestTrack;
     }

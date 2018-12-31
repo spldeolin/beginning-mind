@@ -44,6 +44,9 @@ public class ControllerAspect {
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack == null) {
+            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+        }
 
         // 填入切点信息
         fillJoinPointInfo(requestTrack, point);

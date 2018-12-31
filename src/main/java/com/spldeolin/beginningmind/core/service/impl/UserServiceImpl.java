@@ -159,15 +159,15 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForCreating(User user) {
-        if (searchOne("name", user.getName()).isPresent()) {
+        if (searchOne(User::getName, user.getName()).isPresent()) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
-        if (mobile != null && searchOne("mobile", mobile).isPresent()) {
+        if (mobile != null && searchOne(User::getMobile, mobile).isPresent()) {
             throw new BizException("手机号已被占用");
         }
         String email = user.getEmail();
-        if (email != null && searchOne("email", email).isPresent()) {
+        if (email != null && searchOne(User::getEmail, email).isPresent()) {
             throw new BizException("E-Mail已被占用");
         }
     }
@@ -178,18 +178,18 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     private void checkOccupationForUpdating(User user) {
         Long id = user.getId();
         String username = user.getName();
-        if (!id.equals(searchOne("name", username).orElse(new User()).getId())) {
+        if (!id.equals(searchOne(User::getName, username).orElse(new User()).getId())) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
         if (mobile != null) {
-            if (!id.equals(searchOne("mobile", mobile).orElse(new User()).getId())) {
+            if (!id.equals(searchOne(User::getMobile, mobile).orElse(new User()).getId())) {
                 throw new BizException("手机号已被占用");
             }
         }
         String email = user.getEmail();
         if (email != null) {
-            if (!id.equals(searchOne("email", email).orElse(new User()).getId())) {
+            if (!id.equals(searchOne(User::getEmail, email).orElse(new User()).getId())) {
                 throw new BizException("E-Mail已被占用");
             }
         }
