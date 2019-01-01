@@ -3,9 +3,7 @@ package com.spldeolin.beginningmind.core.api;
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import org.apache.commons.lang3.ArrayUtils;
 import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +15,6 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.google.common.collect.Maps;
 
 /**
  * @author Deolin
@@ -29,14 +26,10 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
 
     private Class<T> modelClass;
 
-
-    private boolean isIdGetable;
-
     @SuppressWarnings("unchecked")
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         modelClass = (Class<T>) pt.getActualTypeArguments()[0];
-        isIdGetable = ArrayUtils.contains(modelClass.getInterfaces(), IdGetable.class);
     }
 
     @Override
@@ -70,12 +63,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         }
 
         return baseMapper.selectBatchIds(ids);
-    }
-
-    @Override
-    public Map<Long, T> map(Collection<Long> ids) {
-        ensureIsIdGetable();
-        return collectionToMap(list(ids));
     }
 
     @Override
@@ -121,13 +108,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     }
 
     @Override
-    public Map<Long, T> mapAll() {
-        ensureIsIdGetable();
-
-        return collectionToMap(listAll());
-    }
-
-    @Override
     public boolean isExist(Long id) {
         return baseMapper.selectCount(new QueryWrapper<T>().eq("id", id)) > 0;
     }
@@ -162,18 +142,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
         query.eq(field, value);
 
         return Optional.ofNullable(baseMapper.selectOne(query));
-    }
-
-    private void ensureIsIdGetable() {
-        if (!isIdGetable) {
-            throw new IllegalArgumentException(modelClass.getSimpleName() + " 未实现IdGetable接口");
-        }
-    }
-
-    private Map<Long, T> collectionToMap(Collection<T> list) {
-        Map<Long, T> map = Maps.newHashMapWithExpectedSize(list.size());
-        list.forEach(t -> map.put(((IdGetable) t).getId(), t));
-        return map;
     }
 
     private Optional<T> batchToOne(Collection<T> models) {

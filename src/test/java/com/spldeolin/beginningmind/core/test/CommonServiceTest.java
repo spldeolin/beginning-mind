@@ -70,21 +70,8 @@ public class CommonServiceTest {
     }
 
     @Test
-    public void map() {
-        log.info(userService.map(Lists.newArrayList(309844787728385L, 303270472060928L, 0L, 290956356227072L)));
-        ;
-
-        log.info(userService.list(Lists.newArrayList(9L, 10L, 0L, 11L)).size());
-    }
-
-    @Test
     public void listAll() {
         userService.listAll().forEach(log::info);
-    }
-
-    @Test
-    public void mapAll() {
-        log.info(userService.mapAll());
     }
 
     @Test
