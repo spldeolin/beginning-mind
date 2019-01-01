@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.baomidou.mybatisplus.annotation.Version;
-import com.spldeolin.beginningmind.core.api.IdGetable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +23,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @TableName("user")
-public class User implements IdGetable, Serializable {
+public class User implements Serializable {
 
     /**
      * ID

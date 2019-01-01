@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.model;
 import java.io.Serializable;
 import java.time.*;
 import com.baomidou.mybatisplus.annotation.*;
-import com.spldeolin.beginningmind.core.api.IdGetable;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -18,7 +17,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @TableName("user2permission")
-public class User2permission implements IdGetable, Serializable {
+public class User2permission implements Serializable {
 
     /**
      * ID

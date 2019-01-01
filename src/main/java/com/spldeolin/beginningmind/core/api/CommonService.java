@@ -119,10 +119,10 @@ public interface CommonService<T> {
      * 当单表查询的条件比较复杂，或涉及到distinct，order等限定时，建议使用本方法
      * </pre>
      *
-     * @param queryWrapper 条件对象
+     * @param query 条件对象
      * @return 满足条件的资源列表
      */
-    List<T> searchBatch(Wrapper<T> queryWrapper);
+    List<T> searchBatch(Wrapper<T> query);
 
     /**
      * 判断资源是否存在
@@ -152,9 +152,9 @@ public interface CommonService<T> {
      * 分页
      *
      * @param page 分页参数
-     * @param queryWrapper 条件对象
+     * @param query 条件对象
      * @return 分页对象
      */
-    IPage<T> page(Page page, Wrapper<T> queryWrapper);
+    IPage<T> page(Page page, Wrapper<T> query);
 
 }

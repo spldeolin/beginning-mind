@@ -3,7 +3,6 @@ package ${packageReference}.model;
 import java.io.Serializable;
 import java.time.*;
 import com.baomidou.mybatisplus.annotation.*;
-import ${packageReference}.api.IdGetable;
 import lombok.*;
 import lombok.experimental.Accessors;
 
@@ -20,7 +19,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @TableName("${tableName}")
-public class ${modelName} implements IdGetable, Serializable {
+public class ${modelName} implements Serializable {
 
 <#list properties as property>
     <#if property.fieldCnsName??  && property.fieldCnsName?trim != "">
