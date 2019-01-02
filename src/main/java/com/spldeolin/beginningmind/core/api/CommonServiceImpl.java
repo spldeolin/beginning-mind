@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.core.api;
 
-import java.lang.reflect.ParameterizedType;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -23,19 +22,6 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
 
     @Autowired
     private BaseMapper<T> baseMapper;
-
-    private Class<T> modelClass;
-
-    @SuppressWarnings("unchecked")
-    public CommonServiceImpl() {
-        ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
-        modelClass = (Class<T>) pt.getActualTypeArguments()[0];
-    }
-
-    @Override
-    protected Class<T> currentModelClass() {
-        return modelClass;
-    }
 
     @Override
     public void create(T model) {
