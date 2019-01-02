@@ -1,14 +1,12 @@
 package com.spldeolin.beginningmind.core.config;
 
 import javax.servlet.MultipartConfigElement;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.MultipartConfigFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import com.spldeolin.beginningmind.core.CoreProperties;
 
 /**
  * Web配置
@@ -17,9 +15,6 @@ import com.spldeolin.beginningmind.core.CoreProperties;
  */
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-
-    @Autowired
-    private CoreProperties coreProperties;
 
     /**
      * 跨域
