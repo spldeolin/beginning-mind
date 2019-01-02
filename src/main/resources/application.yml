@@ -69,8 +69,11 @@ management:
     health.show-details: always
 
 mybatis-plus:
+
   mapper-locations: classpath:mapper/*.xml
+
   type-aliases-package: com.spldeolin.beginningmind.core.model
+
   global-config:
     banner: false
     db-config:
