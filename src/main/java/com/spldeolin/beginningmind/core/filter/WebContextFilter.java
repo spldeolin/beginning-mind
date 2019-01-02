@@ -45,18 +45,19 @@ public class WebContextFilter extends OncePerRequestFilter {
         }
 
         // 将request、response、session、新构造的请求轨迹存入ThreadLocal
-        WebContext.setRequestTrack(new RequestTrack());
+        RequestTrack track = new RequestTrack();
+        WebContext.setRequestTrack(track);
         WebContext.setRequest(request);
         WebContext.setResponse(response);
         WebContext.setSession(request.getSession());
 
         // insignia存入headers
-        response.setHeader("insignia", WebContext.getInsignia());
+        response.setHeader("insignia", track.getInsignia());
 
         filterChain.doFilter(request, response);
 
         // 补全并保存RequestTrackDTO对象（异步）
-        requestTrackAsyncHandler.asyncCompleteAndSave(WebContext.getRequestTrack(), request);
+        requestTrackAsyncHandler.asyncCompleteAndSave(track, request);
 
         // 清空ThreadLocal
         WebContext.removeRequestTrack();

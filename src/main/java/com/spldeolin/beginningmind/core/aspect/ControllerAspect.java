@@ -43,22 +43,22 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        RequestTrack requestTrack = WebContext.getRequestTrack();
-        if (requestTrack == null) {
+        RequestTrack track = WebContext.getRequestTrack();
+        if (track == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
 
         // 填入切点信息
-        fillJoinPointInfo(requestTrack, point);
+        fillJoinPointInfo(track, point);
 
         // 注解额外校验
-        List<Invalid> invalids = handleAnnotations(requestTrack);
+        List<Invalid> invalids = handleAnnotations(track);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
         }
 
         // 执行切点
-        return point.proceed(requestTrack.getParameterValues());
+        return point.proceed(track.getParameterValues());
     }
 
     private void fillJoinPointInfo(RequestTrack track, JoinPoint joinPoint) {

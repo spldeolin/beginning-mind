@@ -47,9 +47,9 @@ public class MapperAspect {
                 .elapsed(end)
                 .build();
 
-        RequestTrack requestTrack = WebContext.getRequestTrack();
-        if (requestTrack != null) {
-            requestTrack.getMapperCalls().add(dto);
+        RequestTrack track = WebContext.getRequestTrack();
+        if (track != null) {
+            track.getMapperCalls().add(dto);
         }
 
         return result;

@@ -26,16 +26,16 @@ public class WebContext {
 
     private static final ThreadLocal<HttpSession> SESSION = new ThreadLocal<>();
 
-    public static void setRequestTrack(RequestTrack requestTrack) {
-        REQUEST_TRACK.set(requestTrack);
+    public static void setRequestTrack(RequestTrack track) {
+        REQUEST_TRACK.set(track);
     }
 
     public static RequestTrack getRequestTrack() {
-        RequestTrack requestTrack = REQUEST_TRACK.get();
-        if (requestTrack == null) {
+        RequestTrack track = REQUEST_TRACK.get();
+        if (track == null) {
             return null;
         }
-        return requestTrack;
+        return track;
     }
 
     public static void removeRequestTrack() {
@@ -88,13 +88,6 @@ public class WebContext {
 
     public static void removeSession() {
         SESSION.remove();
-    }
-
-    /**
-     * @return 当前请求轨迹的标识
-     */
-    public static String getInsignia() {
-        return getRequestTrack().getInsignia();
     }
 
 }

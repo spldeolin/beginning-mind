@@ -90,13 +90,13 @@ public class ExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrack requestTrack = WebContext.getRequestTrack();
-        if (requestTrack == null) {
+        RequestTrack track = WebContext.getRequestTrack();
+        if (track == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
 
-        String[] paramNames = requestTrack.getParameterNames();
-        Object[] paramValues = requestTrack.getParameterValues();
+        String[] paramNames = track.getParameterNames();
+        Object[] paramValues = track.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
         for (ConstraintViolation<?> cv : cvs) {
             // 参数路径
