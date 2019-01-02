@@ -6,6 +6,8 @@ import com.spldeolin.beginningmind.core.api.CommonService;
 import com.spldeolin.beginningmind.core.model.User;
 
 /**
+ * 用户
+ *
  * @author Deolin 2018/11/12
  */
 public interface UserService extends CommonService<User> {

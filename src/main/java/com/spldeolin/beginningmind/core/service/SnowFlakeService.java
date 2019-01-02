@@ -5,13 +5,15 @@ package com.spldeolin.beginningmind.core.service;
  * <p>
  * 用于获取唯一业务流水号
  * <p>
- * Long uid = new SnowFlake(0, 0).nextId();
+ * snowFlakeService.nextId();
  *
  * @author Deolin 2018/07/04
  */
 public interface SnowFlakeService {
 
-
+    /**
+     * 初始化datacenter和服务器码
+     */
     void initDatacenterAndMachine();
 
     /**

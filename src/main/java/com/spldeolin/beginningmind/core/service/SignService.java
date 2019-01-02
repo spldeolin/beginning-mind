@@ -5,6 +5,8 @@ import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 
 /**
+ * 登录
+ *
  * @author Deolin
  */
 @Service
