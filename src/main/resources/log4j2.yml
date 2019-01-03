@@ -12,8 +12,7 @@ Appenders:
     target: SYSTEM_OUT
     PatternLayout:
       charset: utf-8
-      # 追加“%t”可打印线程名
-      pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia} - %m%n"
+      pattern: "%d{HH:mm:ss} %p [%c{1}:%L][%X{insignia}][%X{server}] - %m%n"
 
   # mongo appender
   NoSQL:

@@ -6,10 +6,10 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.ThreadContext;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
@@ -30,6 +30,19 @@ public class LogMdcFilter extends OncePerRequestFilter {
 
     public static final int ORDER = 1 + WebContextFilter.ORDER;
 
+    /**
+     * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同
+     */
+    private static final String LOG_MDC_INSIGNIA = "insignia";
+
+    /**
+     * 必须与log4j2.yml的PatternLayout.pattern中的%X{server}占位符名相同
+     */
+    private static final String LOG_MDC_SERVER = "server";
+
+    @Value("${spring.application.name}")
+    private String serverName;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
@@ -39,12 +52,13 @@ public class LogMdcFilter extends OncePerRequestFilter {
         }
 
         // 设置Log MDC
-        ThreadContext.put(CoupledConstant.LOG_MDC_INSIGNIA, "[" + track.getInsignia() + "]");
+        ThreadContext.put(LOG_MDC_INSIGNIA, track.getInsignia());
+        ThreadContext.put(LOG_MDC_SERVER, serverName);
 
         filterChain.doFilter(request, response);
 
         // 清除Log MDC
-        ThreadContext.remove(CoupledConstant.LOG_MDC_INSIGNIA);
+        ThreadContext.remove(LOG_MDC_INSIGNIA);
     }
 
 }
