@@ -52,8 +52,8 @@ public class LogMdcFilter extends OncePerRequestFilter {
         }
 
         // 设置Log MDC
-        ThreadContext.put(LOG_MDC_INSIGNIA, track.getInsignia());
-        ThreadContext.put(LOG_MDC_SERVER, serverName);
+        ThreadContext.put(LOG_MDC_INSIGNIA, "[" + track.getInsignia() + "]");
+        ThreadContext.put(LOG_MDC_SERVER, "[" + serverName + "]");
 
         filterChain.doFilter(request, response);
 

@@ -12,7 +12,7 @@ Appenders:
     target: SYSTEM_OUT
     PatternLayout:
       charset: utf-8
-      pattern: "%d{HH:mm:ss} %p [%c{1}:%L][%X{insignia}][%X{server}] - %m%n"
+      pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia} - %m%n"
 
   # mongo appender
   NoSQL:
