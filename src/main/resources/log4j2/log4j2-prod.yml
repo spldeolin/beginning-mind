@@ -16,11 +16,11 @@ Appenders:
     name: mongo
     bufferSize: 10
     MongoDb:
-      server: 192.168.2.2
-      port: 27017
-      username: beginning_mind_app
-      password: beginning_mind_app
-      databaseName: beginning_mind_prod
+      server: # TODO 生产环境 Mongo
+      port: # TODO 生产环境 Mongo
+      username: # TODO 生产环境 Mongo
+      password: # TODO 生产环境 Mongo
+      databaseName: # TODO 生产环境 Mongo
       collectionName: log_${sys:server}
 
 Loggers:

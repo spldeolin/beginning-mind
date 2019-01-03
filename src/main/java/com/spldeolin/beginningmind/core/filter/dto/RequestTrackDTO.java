@@ -96,11 +96,6 @@ public class RequestTrackDTO {
     private String sessionId;
 
     /**
-     * 项目启动时指定的profile
-     */
-    private String activeProfile;
-
-    /**
      * 请求方法
      */
     @JsonIgnore
@@ -155,7 +150,6 @@ public class RequestTrackDTO {
         result.append(sp).append("userMobile = ").append(userMobile).append(br);
         result.append(sp).append("ip = ").append(ip).append(br);
         result.append(sp).append("sessionId = ").append(sessionId).append(br);
-        result.append(sp).append("activeProfile = ").append(activeProfile).append(br);
         result.append("}");
 
         return result.toString();
