@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.security.ActuatorTokenChecker;
 import com.spldeolin.beginningmind.core.security.PermissionChecker;
 import com.spldeolin.beginningmind.core.security.KilledChecker;
@@ -78,7 +78,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         // 向RequestTrack填入登录者信息
         if (Signer.isSigning()) {
-            RequestTrack track = WebContext.getRequestTrack();
+            RequestTrackDTO track = WebContext.getRequestTrack();
             if (track == null) {
                 throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
             }

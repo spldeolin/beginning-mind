@@ -24,7 +24,7 @@ import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
-import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.WebContext;
@@ -90,7 +90,7 @@ public class ExceptionAdvance {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrack track = WebContext.getRequestTrack();
+        RequestTrackDTO track = WebContext.getRequestTrack();
         if (track == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
@@ -178,7 +178,7 @@ public class ExceptionAdvance {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrack track = WebContext.getRequestTrack();
+        RequestTrackDTO track = WebContext.getRequestTrack();
         if (track == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }

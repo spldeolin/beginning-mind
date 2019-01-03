@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -34,7 +34,7 @@ public class ReadContentFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        RequestTrack track = WebContext.getRequestTrack();
+        RequestTrackDTO track = WebContext.getRequestTrack();
         if (track == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
@@ -49,7 +49,7 @@ public class ReadContentFilter extends OncePerRequestFilter {
         fillContent(track, wrappedRequest, wrappedResponse);
     }
 
-    private void fillContent(RequestTrack track, ContentCachingRequestWrapper wrappedRequest,
+    private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
             ContentCachingResponseWrapper wrappedResponse) {
         String requestContent = null;
         String responseContent = null;

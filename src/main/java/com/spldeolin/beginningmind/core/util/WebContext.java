@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.core.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -18,7 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class WebContext {
 
-    private static final ThreadLocal<RequestTrack> REQUEST_TRACK = new ThreadLocal<>();
+    private static final ThreadLocal<RequestTrackDTO> REQUEST_TRACK = new ThreadLocal<>();
 
     private static final ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<>();
 
@@ -26,12 +26,12 @@ public class WebContext {
 
     private static final ThreadLocal<HttpSession> SESSION = new ThreadLocal<>();
 
-    public static void setRequestTrack(RequestTrack track) {
+    public static void setRequestTrack(RequestTrackDTO track) {
         REQUEST_TRACK.set(track);
     }
 
-    public static RequestTrack getRequestTrack() {
-        RequestTrack track = REQUEST_TRACK.get();
+    public static RequestTrackDTO getRequestTrack() {
+        RequestTrackDTO track = REQUEST_TRACK.get();
         if (track == null) {
             return null;
         }

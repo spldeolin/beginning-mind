@@ -10,7 +10,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.filter.async.RequestTrackAsyncHandler;
-import com.spldeolin.beginningmind.core.filter.dto.RequestTrack;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -45,7 +45,7 @@ public class WebContextFilter extends OncePerRequestFilter {
         }
 
         // 将request、response、session、新构造的请求轨迹存入ThreadLocal
-        RequestTrack track = new RequestTrack();
+        RequestTrackDTO track = new RequestTrackDTO();
         WebContext.setRequestTrack(track);
         WebContext.setRequest(request);
         WebContext.setResponse(response);
