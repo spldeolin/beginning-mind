@@ -15,7 +15,7 @@ server:
 
 spring:
 
-  application.name: bm-1 # 集群部署时，每个服务都应该有一个区分于其他服务的名称
+  application.name: ${server}
 
   profiles.active: ${profile}
 

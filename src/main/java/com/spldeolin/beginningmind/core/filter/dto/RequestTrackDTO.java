@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.filter.dto;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.annotation.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
@@ -103,24 +104,28 @@ public class RequestTrackDTO {
      * 请求方法
      */
     @JsonIgnore
+    @Transient
     private transient Method method;
 
     /**
      * 请求方法的参数名
      */
     @JsonIgnore
+    @Transient
     private transient String[] parameterNames;
 
     /**
      * 请求方法的参数值
      */
     @JsonIgnore
+    @Transient
     private transient Object[] parameterValues;
 
     /**
      * 请求计时
      */
     @JsonIgnore
+    @Transient
     private transient Stopwatch stopwatch;
 
     public RequestTrackDTO() {
