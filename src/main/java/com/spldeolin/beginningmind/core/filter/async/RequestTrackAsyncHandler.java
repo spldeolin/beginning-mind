@@ -64,8 +64,6 @@ public class RequestTrackAsyncHandler {
         track.setIp(getIpFromRequest(request));
 
         track.setSessionId(request.getSession().getId());
-
-        track.setActiveProfile(environment.getActiveProfiles()[0]);
     }
 
     private String getFullUrlFromRequest(HttpServletRequest request) {
