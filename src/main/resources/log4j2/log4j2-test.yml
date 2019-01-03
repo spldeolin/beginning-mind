@@ -12,7 +12,7 @@ Appenders:
     target: SYSTEM_OUT
     PatternLayout:
       charset: utf-8
-      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%t][%c:%L]%X{insignia}%X{server} - %m%n"
+      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%t][%c:%L]%X{insignia}%X - %m%n"
 
   # mongo appender
   NoSQL:
@@ -23,8 +23,8 @@ Appenders:
       port: 27017
       username: beginning_mind_app
       password: beginning_mind_app
-      databaseName: beginning_mind
-      collectionName: test-log
+      databaseName: beginning_mind_test
+      collectionName: log
 
 Loggers:
 

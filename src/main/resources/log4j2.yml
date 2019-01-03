@@ -24,7 +24,7 @@ Appenders:
       username: beginning_mind_app
       password: beginning_mind_app
       databaseName: beginning_mind
-      collectionName: dev-log
+      collectionName: log
 
 Loggers:
 

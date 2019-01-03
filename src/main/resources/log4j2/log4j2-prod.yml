@@ -15,8 +15,8 @@ Appenders:
       port: 27017
       username: beginning_mind_app
       password: beginning_mind_app
-      databaseName: beginning_mind
-      collectionName: prod-log
+      databaseName: beginning_mind_prod
+      collectionName: log
 
 Loggers:
 
