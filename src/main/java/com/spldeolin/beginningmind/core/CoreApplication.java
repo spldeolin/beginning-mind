@@ -11,8 +11,12 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CoreApplication {
 
     public static void main(String[] args) {
+        if (StringUtils.isBlank(System.getProperty("server"))) {
+            System.out.println("没有指定-Dserver，启动被阻止。");
+            return;
+        }
         if (!StringUtils.equalsAny(System.getProperty("profile"), "dev", "test", "prod")) {
-            System.out.println("没有正确指定-Dprofile，启动被阻止。");
+            System.out.println("没有正确地指定-Dprofile，启动被阻止。");
             return;
         }
 

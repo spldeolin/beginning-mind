@@ -4,6 +4,11 @@
 ##                    ##
 ########################
 
+Properties:
+  Property:
+    - name: server
+      value: unknown
+
 Appenders:
 
   # mongo appender
@@ -16,7 +21,7 @@ Appenders:
       username: beginning_mind_app
       password: beginning_mind_app
       databaseName: beginning_mind_prod
-      collectionName: log
+      collectionName: log_${sys:server}
 
 Loggers:
 

@@ -4,6 +4,11 @@
 ##                    ##
 ########################
 
+Properties:
+  Property:
+    - name: server
+      value: unknown
+
 Appenders:
 
   # 控制台 appender
@@ -24,7 +29,7 @@ Appenders:
       username: beginning_mind_app
       password: beginning_mind_app
       databaseName: beginning_mind
-      collectionName: log
+      collectionName: log_${sys:server}
 
 Loggers:
 
