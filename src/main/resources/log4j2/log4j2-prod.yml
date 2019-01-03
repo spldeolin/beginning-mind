@@ -1,79 +1,35 @@
-Configuration:
-  status: warn
+########################
+##                    ##
+##     Production     ##
+##                    ##
+########################
 
-  Properties:
-    Property:
-    - name: log.dir
-      value: # TODO 生产环境 日志目录名
-    - name: log.name
-      value: # TODO 生产环境 日志文件名
-    - name: pattern
-      value: "%d{yyyy-MM-dd HH:mm:ss} %p [%t][%c{1.}:%L]%X{insignia} - %m%n"
+Appenders:
 
-  Appenders:
-    # 控制台
-    Console:
-      name: console
-      target: SYSTEM_OUT
-      ThresholdFilter:
-        level: info
-        onMatch: ACCEPT
-        onMismatch: DENY
-      PatternLayout:
-        charset: utf-8
-        pattern: ${pattern}
+  # mongo appender
+  NoSQL:
+    name: mongo
+    bufferSize: 10
+    MongoDb:
+      server: 192.168.2.2
+      port: 27017
+      username: beginning_mind_app
+      password: beginning_mind_app
+      databaseName: beginning_mind
+      collectionName: prod-log
 
-    RollingFile:
-    # INFO及以上日志
-    - name: infoFile
-      ignoreExceptions: false
-      fileName: ${sys:log.dir}/${sys:log.name}-INFO+.log
-      filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-INFO+.log.gz"
-      append: true
-      ThresholdFilter:
-        level: info
-        onMatch: ACCEPT
-        onMismatch: DENY
-      PatternLayout:
-        charset: utf-8
-        pattern: ${pattern}
-      Policies:
-        TimeBasedTriggeringPolicy:
-          modulate: true
-          interval: 1
-        SizeBasedTriggeringPolicy:
-          size: "128 MB"
-      DefaultRolloverStrategy:
-        max: 1000
-    # DEBUG及以上日志
-    - name: debugFile
-      ignoreExceptions: false
-      fileName: ${sys:log.dir}/${sys:log.name}-DEBUG+.log
-      filePattern: "${sys:log.dir}/${date:yyyy-MM}/${sys:log.name}-%d{yyyy-MM-dd}-DEBUG+.log.gz"
-      append: true
-      ThresholdFilter:
-        level: debug
-        onMatch: ACCEPT
-        onMismatch: DENY
-      PatternLayout:
-        charset: utf-8
-        pattern: ${pattern}
-      Policies:
-        TimeBasedTriggeringPolicy:
-          modulate: true
-          interval: 1
-        SizeBasedTriggeringPolicy:
-          size: "128 MB"
-      DefaultRolloverStrategy:
-        max: 1000
+Loggers:
 
-  # 声明了一个logger，异步且显示行号，打印所有级别
-  # 打印到console，infoFile，debugFile这三个Appenders，Appenders各自的level再过滤一次打印级别
-  Loggers:
-    AsyncRoot:
-      level: all
-      includeLocation: true
-      AppenderRef:
-      - ref: console
-      - ref: infoFile
-      - ref: debugFile
+  AsyncRoot:
+    level: warn # 非com.spldeolin开头类的过滤级别
+    includeLocation: false # “Extracting location is an expensive operation (it can make logging 5 - 20 times slower).”
+    AppenderRef:
+      - ref: mongo
+
+  AsyncLogger:
+    name: com.spldeolin
+    additivity: false
+    level: info # com.spldeolin开头类的过滤级别
+    includeLocation: false
+    AppenderRef:
+      - ref: mongo

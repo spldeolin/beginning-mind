@@ -53,6 +53,9 @@ spring:
       simple:
         acknowledgeMode: manual # ACK
 
+  data.mongodb:
+    uri: 占位符
+
 logging:
 
   config: #未被覆盖时使用默认log4j2.yml
@@ -139,6 +142,9 @@ spring:
     port: 6379
     password: guest
 
+  data.mongodb:
+    uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
+
   rabbitmq:
     host: 192.168.2.2
     port: 5672
@@ -185,6 +191,9 @@ spring:
     port: 6379
     password: root
 
+  data.mongodb:
+    uri: mongodb://beginning_mind_app:beginning_mind_app@192.168.2.2:27017/beginning_mind
+
   rabbitmq:
     host: 192.168.2.2
     port: 5672
@@ -230,6 +239,9 @@ spring:
     host: # TODO 生产环境 Redis连接
     port: # TODO 生产环境 Redis连接
     password: # TODO 生产环境 Redis连接
+
+  data.mongodb:
+    uri: # TODO 生产环境 Mongo连接
 
   rabbitmq:
     host: # TODO 生产环境 RabbitMQ连接
