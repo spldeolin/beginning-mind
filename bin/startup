@@ -1,1 +1,1 @@
--Dprofile=dev -Xmx512m -noverify -XX:TieredStopAtLevel=1
+-Dprofile=dev -Dserver=deolin -Xmx512m -noverify -XX:TieredStopAtLevel=1
