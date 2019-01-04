@@ -26,9 +26,9 @@ Appenders:
     MongoDb:
       server: 192.168.2.2
       port: 27017
-      username: beginning_mind_app
-      password: beginning_mind_app
-      databaseName: beginning_mind
+      username: guest
+      password: guest
+      databaseName: beginning_mind_dev
       collectionName: log_${sys:server}
 
 Loggers:
