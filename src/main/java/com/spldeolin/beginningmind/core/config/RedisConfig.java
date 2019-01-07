@@ -14,7 +14,7 @@ import io.lettuce.core.api.sync.RedisCommands;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * Redis
+ * RedisTemplate和Redis分布式锁的配置
  *
  * @author Deolin 2018/07/16
  */
