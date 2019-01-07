@@ -57,7 +57,7 @@ public class TestController {
 
     @GetMapping("/setSes")
     Object ln46() {
-        Sessions.set("one-cookie", "内部号", 10);
+        Sessions.set("one-cookie", "内部号");
         return null;
     }
 

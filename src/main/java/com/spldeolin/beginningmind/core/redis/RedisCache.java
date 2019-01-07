@@ -19,8 +19,6 @@ import lombok.extern.log4j.Log4j2;
  *
  * 注释中的“缓存不存在”、“缓存失效”、“缓存被删除”三者等价
  *
- * 所有方法中参数key都会被追加上命名空间前缀
- *
  * @author Deolin 2018/08/10
  */
 @Component

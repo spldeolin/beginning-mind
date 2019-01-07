@@ -59,7 +59,7 @@ public class SignServiceImpl implements SignService {
     public String captcha() {
         String captcha = StringRandomUtils.generateLegibleEnNum(4);
         // session
-        Sessions.set(CAPTCHA_SESSION_KEY, captcha, 5 * 60);
+        Sessions.set(CAPTCHA_SESSION_KEY, captcha);
         // base64
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
             ImageIO.write(kaptchaProducer.createImage(captcha), "jpg", os);
@@ -87,7 +87,7 @@ public class SignServiceImpl implements SignService {
         CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder()
                 .user(user).permissions(permissions).sessionId(sessionId).signedAt(LocalDateTime.now())
                 .build();
-        Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO, 30 * 60);
+        Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO);
 
         // 登录状态（用户信息+会话ID）存入Redis
         redisTemplate.opsForHash().put(SIGN_STATUS_BY_USER_ID + user.getId(), sessionId, currentSignerDTO);

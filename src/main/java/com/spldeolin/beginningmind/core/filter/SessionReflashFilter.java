@@ -1,18 +1,14 @@
 package com.spldeolin.beginningmind.core.filter;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.Collections;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
-import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -39,24 +35,10 @@ public class SessionReflashFilter extends OncePerRequestFilter {
 
         // 刷新全局会话的失效时间
         reflashGlobalSession();
-        // 刷新会话每个k-v的失效时间
-        reflashSessionAttributes();
     }
 
     private void reflashGlobalSession() {
         WebContext.getSession().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
-    }
-
-    private void reflashSessionAttributes() {
-        HttpSession session = WebContext.getSession();
-        for (String key : Collections.list(session.getAttributeNames())) {
-            Object value = session.getAttribute(key);
-            if (value instanceof Sessions.ValueWrapper) {
-                Sessions.ValueWrapper wrapper = (Sessions.ValueWrapper) value;
-                wrapper.setSetAt(LocalDateTime.now());
-                Sessions.set(key, wrapper.getValue(), wrapper.getExpiredSeconds());
-            }
-        }
     }
 
 }
