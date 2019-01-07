@@ -6,13 +6,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.util.Times;
 import lombok.extern.log4j.Log4j2;
 
@@ -32,20 +30,13 @@ public class RedisCache {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
-    @Autowired
-    private CoreProperties coreProperties;
-
-    private String concatNamespace(String rawKey) {
-        return coreProperties.getRedisNamespace() + ":" + rawKey;
-    }
-
     /**
      * 创建一个有失效时间的缓存
      *
      * 如果key对应的缓存存在，则覆盖value和失效时间
      */
     public <T> void set(String key, T value, long timeout, TimeUnit unit) {
-        redisTemplate.opsForValue().set(concatNamespace(key), value, timeout, unit);
+        redisTemplate.opsForValue().set(key, value, timeout, unit);
     }
 
     /**
@@ -56,7 +47,7 @@ public class RedisCache {
      * 如果key对应的缓存存在，则覆盖原缓存
      */
     public <T> void set(String key, T value) {
-        redisTemplate.opsForValue().set(concatNamespace(key), value);
+        redisTemplate.opsForValue().set(key, value);
     }
 
     /**
@@ -67,7 +58,7 @@ public class RedisCache {
      * 如果key对应的缓存存在，则什么都不发生，并返回false
      */
     public <T> boolean setIfAbsent(String key, T value) {
-        return redisTemplate.opsForValue().setIfAbsent(concatNamespace(key), value);
+        return redisTemplate.opsForValue().setIfAbsent(key, value);
     }
 
     /**
@@ -78,7 +69,7 @@ public class RedisCache {
     public <T> void multiSet(Map<String, T> map) {
         Map<String, T> newMap = Maps.newHashMap();
         for (Map.Entry<String, T> entry : map.entrySet()) {
-            newMap.put(concatNamespace(entry.getKey()), entry.getValue());
+            newMap.put(entry.getKey(), entry.getValue());
         }
         redisTemplate.opsForValue().multiSet(newMap);
     }
@@ -93,7 +84,7 @@ public class RedisCache {
     public <T> boolean multiSetIfAllAbsent(Map<String, T> maps) {
         Map<String, T> newMap = Maps.newHashMap();
         for (Map.Entry<String, T> entry : maps.entrySet()) {
-            newMap.put(concatNamespace(entry.getKey()), entry.getValue());
+            newMap.put(entry.getKey(), entry.getValue());
         }
         return redisTemplate.opsForValue().multiSetIfAbsent(newMap);
     }
@@ -107,7 +98,7 @@ public class RedisCache {
      */
     @SuppressWarnings("unchecked")
     public <T> T getAndSet(String key, T value) {
-        return (T) redisTemplate.opsForValue().getAndSet(concatNamespace(key), value);
+        return (T) redisTemplate.opsForValue().getAndSet(key, value);
     }
 
     /**
@@ -115,16 +106,14 @@ public class RedisCache {
      */
     @SuppressWarnings("unchecked")
     public <T> T get(String key) {
-        return (T) redisTemplate.opsForValue().get(concatNamespace(key));
+        return (T) redisTemplate.opsForValue().get(key);
     }
 
     /**
      * 查找匹配的key
      */
     public Set<String> searchKeys(String pattern) {
-        String namespace = coreProperties.getRedisNamespace();
-        return redisTemplate.keys(pattern).stream().filter(key -> key.startsWith(namespace))
-                .map(key -> key.replaceFirst(namespace, "")).collect(Collectors.toSet());
+        return redisTemplate.keys(pattern);
     }
 
     /**
@@ -132,7 +121,6 @@ public class RedisCache {
      */
     @SuppressWarnings("unchecked")
     public <T> List<T> multiGet(Collection<String> keys) {
-        keys = keys.stream().map(this::concatNamespace).collect(Collectors.toList());
         List<Object> objects = redisTemplate.opsForValue().multiGet(keys);
         List<T> result = Lists.newArrayList();
         objects.forEach(obj -> result.add((T) obj));
@@ -145,14 +133,14 @@ public class RedisCache {
      * 缓存不存在则返回-2 缓存永久有效则返回-1
      */
     public Long getExpire(String key, TimeUnit unit) {
-        return redisTemplate.getExpire(concatNamespace(key), unit);
+        return redisTemplate.getExpire(key, unit);
     }
 
     /**
      * 判断Redis缓存是否存在
      */
     public Boolean isExist(String key) {
-        return redisTemplate.hasKey(concatNamespace(key));
+        return redisTemplate.hasKey(key);
     }
 
     /**
@@ -161,7 +149,7 @@ public class RedisCache {
      * key不存在则返回false
      */
     public Boolean updateExpire(String key, long timeout, TimeUnit unit) {
-        return redisTemplate.expire(concatNamespace(key), timeout, unit);
+        return redisTemplate.expire(key, timeout, unit);
     }
 
     /**
@@ -170,7 +158,7 @@ public class RedisCache {
      * key不存在则返回false
      */
     public Boolean updateExpire(String key, LocalDateTime localDateTime) {
-        return redisTemplate.expireAt(concatNamespace(key), Times.toDate(localDateTime));
+        return redisTemplate.expireAt(key, Times.toDate(localDateTime));
     }
 
     /**
@@ -179,7 +167,7 @@ public class RedisCache {
      * 不存在则什么都不会发生
      */
     public void delete(String key) {
-        redisTemplate.delete(concatNamespace(key));
+        redisTemplate.delete(key);
     }
 
     /**
@@ -188,7 +176,6 @@ public class RedisCache {
      * 忽略不存在的缓存
      */
     public void delete(Collection<String> keys) {
-        keys = keys.stream().map(this::concatNamespace).collect(Collectors.toList());
         redisTemplate.delete(keys);
     }
 
@@ -198,7 +185,7 @@ public class RedisCache {
      * 缓存不存在返回false
      */
     public Boolean deleteExpire(String key) {
-        return redisTemplate.persist(concatNamespace(key));
+        return redisTemplate.persist(key);
     }
 
 }

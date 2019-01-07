@@ -15,11 +15,6 @@ import lombok.Data;
 public class CoreProperties {
 
     /**
-     * Redis缓存的key命名空间
-     */
-    private String redisNamespace;
-
-    /**
      * SpringBoot内部的@Async线程池规格
      */
     private TaskExecutorProp taskExecutor;

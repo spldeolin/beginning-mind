@@ -37,7 +37,7 @@ public class RedisConfig {
 
         ProtostuffSerializer valueSerializer = new ProtostuffSerializer();
         redisTemplate.setValueSerializer(valueSerializer);
-        redisTemplate.setHashKeySerializer(valueSerializer);
+        redisTemplate.setHashValueSerializer(valueSerializer);
         return redisTemplate;
     }
 

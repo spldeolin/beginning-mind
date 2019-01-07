@@ -88,8 +88,6 @@ mybatis-plus:
 
 core:
 
-  redisNamespace: beginningMind
-
   taskExecutor:
     coreSize: 5
     maximumSize: 10
