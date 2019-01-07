@@ -3,8 +3,8 @@ package com.spldeolin.beginningmind.core.filter.async;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
@@ -30,8 +30,14 @@ public class RequestTrackAsyncHandler {
     @Autowired
     private MongoTemplate mongoTemplate;
 
-    @Value("${spring.application.name}")
     private String server;
+
+    public RequestTrackAsyncHandler() {
+        server = System.getProperty("server");
+        if (StringUtils.isBlank(server)) {
+            server = "unknown";
+        }
+    }
 
     @Async
     public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {

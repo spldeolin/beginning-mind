@@ -15,8 +15,6 @@ server:
 
 spring:
 
-  application.name: ${server}
-
   profiles.active: ${profile}
 
   datasource:
