@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.permission;
+package com.spldeolin.beginningmind.core.security;
 
 import java.util.List;
 import java.util.Map;

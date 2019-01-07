@@ -36,6 +36,12 @@ public class SignInput implements Serializable {
     @NotBlank
     private String captcha;
 
+    /**
+     * 用于获取验证码缓存的token
+     */
+    @NotBlank
+    private String captchaToken;
+
     private static final long serialVersionUID = 1L;
 
 }

@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
 import org.springframework.stereotype.Service;
+import com.spldeolin.beginningmind.core.dto.CaptchaVO;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 
@@ -12,7 +13,10 @@ import com.spldeolin.beginningmind.core.input.SignInput;
 @Service
 public interface SignService {
 
-    String captcha();
+    /**
+     * 生成验证码图片与用于获取验证码缓存的token
+     */
+    CaptchaVO captcha();
 
     /**
      * 登录

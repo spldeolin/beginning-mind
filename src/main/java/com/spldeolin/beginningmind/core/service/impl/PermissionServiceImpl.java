@@ -22,13 +22,18 @@ public class PermissionServiceImpl extends CommonServiceImpl<Permission> impleme
     @Autowired
     private User2permissionService user2permissionService;
 
-
     @Override
     public List<Permission> listGrantedPermission(Long userId) {
         List<Long> permissionIds = user2permissionService.searchBatch(User2permission::getUserId, userId).stream()
                 .map(User2permission::getPermissionId).collect(Collectors.toList());
 
-        return Lists.newArrayList(super.listByIds(permissionIds));
+        List<Permission> permissions;
+        if (permissionIds.size() > 0) {
+            permissions = list(permissionIds);
+        } else {
+            permissions = Lists.newArrayList();
+        }
+        return permissions;
     }
 
 }

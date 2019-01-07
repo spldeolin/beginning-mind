@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
 import org.apache.commons.codec.binary.Base64;
@@ -14,6 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
+import com.spldeolin.beginningmind.core.dto.CaptchaVO;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.model.Permission;
@@ -37,8 +40,6 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class SignServiceImpl implements SignService {
 
-    private static final String CAPTCHA_SESSION_KEY = "captcha";
-
     public static final String SIGNER_SESSION_KEY = "signer";
 
     public static final String SIGN_STATUS_BY_USER_ID = "signStatusByUserId:";
@@ -56,17 +57,24 @@ public class SignServiceImpl implements SignService {
     private RedisTemplate<String, Object> redisTemplate;
 
     @Override
-    public String captcha() {
+    public CaptchaVO captcha() {
         String captcha = StringRandomUtils.generateLegibleEnNum(4);
-        // session
-        Sessions.set(CAPTCHA_SESSION_KEY, captcha);
+
+        // cache
+        String token = UUID.randomUUID().toString();
+        redisTemplate.opsForValue().set(token, captcha, 5, TimeUnit.MINUTES);
+
         // base64
+        String base64;
         try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            ImageIO.write(kaptchaProducer.createImage(captcha), "jpg", os);
-            return "data:image/jpg;base64," + Base64.encodeBase64String(os.toByteArray());
+            ImageIO.write(kaptchaProducer.createImage(captcha), "png", os);
+            base64 = "data:image/jpg;base64," + Base64.encodeBase64String(os.toByteArray());
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            log.error("验证码生成失败", e);
+            throw new BizException("验证码生成失败");
         }
+
+        return CaptchaVO.builder().image(base64).token(token).build();
     }
 
     /**
@@ -85,7 +93,10 @@ public class SignServiceImpl implements SignService {
 
         // 用户信息存入Session
         CurrentSignerDTO currentSignerDTO = CurrentSignerDTO.builder()
-                .user(user).permissions(permissions).sessionId(sessionId).signedAt(LocalDateTime.now())
+                .user(user)
+                .permissions(permissions)
+                .sessionId(sessionId)
+                .signedAt(LocalDateTime.now())
                 .build();
         Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO);
 
@@ -126,27 +137,30 @@ public class SignServiceImpl implements SignService {
 
     private User signCheck(SignInput input) {
         // 验证码校验
-        String captcha = Sessions.get(CAPTCHA_SESSION_KEY);
-        Sessions.remove(CAPTCHA_SESSION_KEY);
+        String token = input.getCaptchaToken();
+        String captcha = (String) redisTemplate.opsForValue().get(token);
+        redisTemplate.delete(token);
         if (captcha == null) {
             throw new BizException("验证码超时");
         }
         if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
             throw new BizException("验证码错误");
         }
+
         // 重复登录校验
         if (Signer.isSigning()) {
             throw new BizException("已登录，请勿重复登录");
         }
-        // 用户名密码校验
-        try {
-            User user = tryGetUser(input.getPrincipal());
-            checkPassword(user, input.getPassword());
 
-            return user;
+        // 用户名密码校验
+        User user;
+        try {
+            user = tryGetUser(input.getPrincipal());
+            checkPassword(user, input.getPassword());
         } catch (UserNotExistException | PasswordIncorretException e) {
             throw new BizException("用户不存在或是密码错误");
         }
+        return user;
     }
 
     private User tryGetUser(String principal) throws UserNotExistException {
