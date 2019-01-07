@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * 前置：无
  *
- * 后置：刷新全局会话和会话每个k-v的失效时间
+ * 后置：刷新会话
  *
  * @author Deolin 2018/12/06
  */
