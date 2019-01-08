@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.dto.CaptchaVO;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
-import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.SignService;
 
 /**
@@ -54,7 +54,7 @@ public class SignController {
      */
     @GetMapping("/sign/isSigning")
     Boolean isSigning() {
-        return Signer.isSigning();
+        return SignContext.isSigning();
     }
 
 }

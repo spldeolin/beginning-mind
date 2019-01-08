@@ -19,7 +19,7 @@ import com.spldeolin.beginningmind.core.security.KilledChecker;
 import com.spldeolin.beginningmind.core.security.SignedChecker;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
-import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
@@ -77,12 +77,12 @@ public class SecurityFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
 
         // 向RequestTrack填入登录者信息
-        if (Signer.isSigning()) {
+        if (SignContext.isSigning()) {
             RequestTrackDTO track = WebContext.getRequestTrack();
             if (track == null) {
                 throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
             }
-            track.setUserId(Signer.userId());
+            track.setUserId(SignContext.userId());
         }
     }
 

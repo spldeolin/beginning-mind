@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.security.exception.KilledException;
-import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.impl.SignServiceImpl;
 import com.spldeolin.beginningmind.core.util.WebContext;
@@ -33,11 +33,11 @@ public class KilledChecker {
             return;
         }
 
-        boolean isSigning = Signer.isSigning();
+        boolean isSigning = SignContext.isSigning();
         if (isSigning) {
 
             boolean isKilled = redisTemplate.opsForHash()
-                    .get(SignServiceImpl.SIGN_STATUS_BY_USER_ID + Signer.userId(), WebContext.getSession().getId())
+                    .get(SignServiceImpl.SIGN_STATUS_BY_USER_ID + SignContext.userId(), WebContext.getSession().getId())
                     == null;
             if (isKilled) {
                 signService.signOut();

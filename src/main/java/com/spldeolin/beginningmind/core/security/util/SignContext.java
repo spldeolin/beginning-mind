@@ -7,12 +7,12 @@ import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.experimental.UtilityClass;
 
 /**
- * 工具类：登录者
+ * 工具类：登录者上下文
  *
  * @author Deolin
  */
 @UtilityClass
-public class Signer {
+public class SignContext {
 
     /**
      * @return 当前会话是否登录中

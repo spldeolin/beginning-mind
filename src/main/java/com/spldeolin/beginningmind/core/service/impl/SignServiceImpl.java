@@ -24,7 +24,7 @@ import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.exception.PasswordIncorretException;
 import com.spldeolin.beginningmind.core.security.exception.UserNotExistException;
-import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SignService;
 import com.spldeolin.beginningmind.core.service.UserService;
@@ -113,7 +113,7 @@ public class SignServiceImpl implements SignService {
      */
     @Override
     public void signOut() {
-        Long userId = Signer.userId();
+        Long userId = SignContext.userId();
         String sessionId = WebContext.getSession().getId();
         Sessions.remove(SIGNER_SESSION_KEY);
         redisTemplate.opsForHash().delete(SIGN_STATUS_BY_USER_ID + userId, sessionId);
@@ -148,7 +148,7 @@ public class SignServiceImpl implements SignService {
         }
 
         // 重复登录校验
-        if (Signer.isSigning()) {
+        if (SignContext.isSigning()) {
             throw new BizException("已登录，请勿重复登录");
         }
 

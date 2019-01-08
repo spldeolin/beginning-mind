@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.model.Permission;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
-import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.security.util.SignContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -28,7 +28,7 @@ public class PermissionChecker {
         }
 
         boolean isPermit = false;
-        for (Permission permission : Signer.current().getPermissions()) {
+        for (Permission permission : SignContext.current().getPermissions()) {
             if (request.getMethod().equalsIgnoreCase(permission.getMappingMethod())
                     && url.startsWith(permission.getMappingPath())) {
                 isPermit = true;

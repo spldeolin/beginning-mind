@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
-import com.spldeolin.beginningmind.core.security.util.Signer;
+import com.spldeolin.beginningmind.core.security.util.SignContext;
 
 /**
  * @author Deolin 2018/12/02
@@ -23,7 +23,7 @@ public class SignedChecker {
             return;
         }
 
-        if (!Signer.isSigning()) {
+        if (!SignContext.isSigning()) {
             throw new UnsignedException("未登录或登录超时");
         }
     }
