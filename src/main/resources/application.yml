@@ -131,9 +131,9 @@ spring:
   profiles: dev
 
   datasource:
-    url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true&useTimezone=true&serverTimezone=GMT%2B8
+    url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&useSSL=false&allowMultiQueries=true&useTimezone=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
     username: guest
-    password: guest
+    password: guest_gUe5t
 
   redis:
     host: 192.168.2.2
