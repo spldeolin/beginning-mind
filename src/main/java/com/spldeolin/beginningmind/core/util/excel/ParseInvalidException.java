@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.excel;
+package com.spldeolin.beginningmind.core.util.excel;
 
 import java.util.List;
 import lombok.Data;

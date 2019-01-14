@@ -57,7 +57,7 @@ public class Jsons {
         defaultObjectMapper.setTimeZone(TimeZone.getDefault());
     }
 
-    private SimpleModule timeModule() {
+    public SimpleModule timeModule() {
         SimpleModule javaTimeModule = new JavaTimeModule();
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");

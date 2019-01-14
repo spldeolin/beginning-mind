@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.excel;
+package com.spldeolin.beginningmind.core.util.excel;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -29,7 +29,7 @@ import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
-import com.spldeolin.beginningmind.core.excel.ExcelContext.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.ExcelContext.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.Times;
 import lombok.SneakyThrows;
 import lombok.experimental.UtilityClass;
@@ -37,6 +37,8 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Excel读写工具类
+ *
+ * （除非有合并单元格或是自定义单元格样式的需求，否则不建议导出为Excel，建议导出为CSV）
  *
  * @author Deolin 2018/07/07
  */
