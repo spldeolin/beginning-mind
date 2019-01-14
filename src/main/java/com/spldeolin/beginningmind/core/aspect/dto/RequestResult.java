@@ -1,9 +1,9 @@
 package com.spldeolin.beginningmind.core.aspect.dto;
 
+import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 控制器通用返回类型
@@ -11,15 +11,16 @@ import lombok.experimental.Accessors;
  * @author Deolin
  */
 @Data
-@Accessors(chain = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RequestResult {
+public class RequestResult implements Serializable {
 
     private Integer code;
 
     private Object data;
 
     private String message;
+
+    private static final long serialVersionUID = 1L;
 
     private RequestResult() {
     }
@@ -43,6 +44,12 @@ public class RequestResult {
         RequestResult instance = new RequestResult();
         instance.setCode(code.getCode());
         instance.setMessage(message);
+        return instance;
+    }
+
+    public static RequestResult failure(ResultCode code, Object data, String message) {
+        RequestResult instance = failure(code, message);
+        instance.setData(data);
         return instance;
     }
 

@@ -28,7 +28,10 @@ public class RedisChecker {
     @Test
     @SneakyThrows
     public void t() {
-        redisCache.set("one-cookie", UserEntity.builder().name("曲奇").build(), 100, TimeUnit.SECONDS);
+        UserEntity entity = new UserEntity();
+        entity.setName("曲奇");
+
+        redisCache.set("one-cookie", entity, 100, TimeUnit.SECONDS);
 
         UserEntity user = redisCache.get("one-cookie");
         log.info(user);

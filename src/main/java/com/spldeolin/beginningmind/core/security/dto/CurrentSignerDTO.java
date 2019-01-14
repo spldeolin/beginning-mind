@@ -5,9 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.Accessors;
 
 /**
  * 当前登录者的信息
@@ -15,8 +13,6 @@ import lombok.experimental.Accessors;
  * @author Deolin
  */
 @Data
-@Builder
-@Accessors(chain = true)
 public class CurrentSignerDTO implements Serializable {
 
     /**

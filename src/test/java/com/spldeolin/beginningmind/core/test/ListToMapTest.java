@@ -23,10 +23,26 @@ public class ListToMapTest {
     @Before
     public void init() {
         users = Lists.newArrayList();
-        users.add(UserEntity.builder().id(1L).name("d").serialNumber("d").build());
-        users.add(UserEntity.builder().id(2L).name("c").serialNumber("b").build());
-        users.add(UserEntity.builder().id(3L).name("a").serialNumber("b").build());
-        users.add(UserEntity.builder().id(4L).name("a").serialNumber("a").build());
+        UserEntity entity = new UserEntity();
+        entity.setId(1L);
+        entity.setName("d");
+        entity.setSerialNumber("d");
+        users.add(entity);
+        entity = new UserEntity();
+        entity.setId(2L);
+        entity.setName("c");
+        entity.setSerialNumber("b");
+        users.add(entity);
+        entity = new UserEntity();
+        entity.setId(3L);
+        entity.setName("a");
+        entity.setSerialNumber("b");
+        users.add(entity);
+        entity = new UserEntity();
+        entity.setId(4L);
+        entity.setName("a");
+        entity.setSerialNumber("a");
+        users.add(entity);
     }
 
     @Test

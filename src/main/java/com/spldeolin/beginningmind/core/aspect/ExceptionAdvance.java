@@ -103,10 +103,10 @@ public class ExceptionAdvance {
             PathImpl pathImpl = (PathImpl) cv.getPropertyPath();
             // 参数下标
             int paramIndex = pathImpl.getLeafNode().getParameterIndex();
-            invalids.add(Invalid.builder().name(paramNames[paramIndex]).value(paramValues[paramIndex]).cause(
-                    cv.getMessage()).build());
+            Invalid invalid = new Invalid(paramNames[paramIndex], paramValues[paramIndex], cv.getMessage());
+            invalids.add(invalid);
         }
-        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST, invalids, "数据校验未通过");
     }
 
     /**
@@ -115,7 +115,7 @@ public class ExceptionAdvance {
     @ExceptionHandler(BindException.class)
     public RequestResult handle(BindException e) {
         List<Invalid> invalids = buildInvalids(e.getBindingResult());
-        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST, invalids, "数据校验未通过");
     }
 
     /**
@@ -138,7 +138,7 @@ public class ExceptionAdvance {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
         List<Invalid> invalids = buildInvalids(e.getBindingResult());
-        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST, invalids, "数据校验未通过");
     }
 
     /**
@@ -146,7 +146,7 @@ public class ExceptionAdvance {
      */
     @ExceptionHandler(ExtraInvalidException.class)
     public RequestResult handle(ExtraInvalidException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST, "数据校验未通过").setData(e.getInvalids());
+        return RequestResult.failure(ResultCode.BAD_REQEUST, e.getInvalids(), "数据校验未通过");
     }
 
     /**
@@ -191,8 +191,9 @@ public class ExceptionAdvance {
     private List<Invalid> buildInvalids(BindingResult bindingResult) {
         List<Invalid> invalids = new ArrayList<>();
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            invalids.add(Invalid.builder().name(fieldError.getField()).value(fieldError.getRejectedValue()).cause(
-                    fieldError.getDefaultMessage()).build());
+            Invalid invalid = new Invalid(fieldError.getField(), fieldError.getRejectedValue(),
+                    fieldError.getDefaultMessage());
+            invalids.add(invalid);
         }
         return invalids;
     }

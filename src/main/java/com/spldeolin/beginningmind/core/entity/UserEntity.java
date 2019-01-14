@@ -1,16 +1,10 @@
 package com.spldeolin.beginningmind.core.entity;
 
-import java.io.Serializable;
-import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.annotation.Version;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.spldeolin.beginningmind.core.api.CommonEntity;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户
@@ -18,43 +12,9 @@ import lombok.experimental.Accessors;
  * @author Deolin 2018/11/15
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @TableName("user")
-public class UserEntity implements Serializable {
-
-    /**
-     * ID
-     */
-    @TableField("id")
-    private Long id;
-
-    /**
-     * 通用字段 插入时间
-     */
-    @TableField("inserted_at")
-    private LocalDateTime insertedAt;
-
-    /**
-     * 通用字段 更新时间
-     */
-    @TableField("updated_at")
-    private LocalDateTime updatedAt;
-
-    /**
-     * 通用字段 是否被删除
-     */
-    @TableLogic
-    @TableField("is_deleted")
-    private Boolean isDeleted;
-
-    /**
-     * 通用字段 数据版本
-     */
-    @Version
-    private Integer version;
+public class UserEntity extends CommonEntity {
 
     /**
      * 用户编号

@@ -1,10 +1,10 @@
 package com.spldeolin.beginningmind.core.entity;
 
-import java.io.Serializable;
-import java.time.*;
-import com.baomidou.mybatisplus.annotation.*;
-import lombok.*;
-import lombok.experimental.Accessors;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.spldeolin.beginningmind.core.api.CommonEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户与权限的关联关系
@@ -12,44 +12,9 @@ import lombok.experimental.Accessors;
  * @author Deolin 2018/12/07
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = true)
 @TableName("user2permission")
-public class User2permissionEntity implements Serializable {
-
-    /**
-     * ID
-     */
-    @TableField("id")
-    private Long id;
-
-    /**
-     * 通用字段 插入时间
-     */
-    @TableField("inserted_at")
-    private LocalDateTime insertedAt;
-
-    /**
-     * 通用字段 更新时间
-     */
-    @TableField("updated_at")
-    private LocalDateTime updatedAt;
-
-    /**
-     * 通用字段 是否被删除
-     */
-    @TableLogic
-    @TableField("is_deleted")
-    private Boolean isDeleted;
-
-    /**
-     * 通用字段 数据版本
-     */
-    @Version
-    @TableField("version")
-    private Integer version;
+public class User2permissionEntity extends CommonEntity {
 
     /**
      * 用户ID

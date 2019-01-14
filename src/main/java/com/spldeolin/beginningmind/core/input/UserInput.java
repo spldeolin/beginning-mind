@@ -2,11 +2,7 @@ package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
  * “用户”Input类
@@ -14,16 +10,7 @@ import lombok.experimental.Accessors;
  * @author Deolin 2018/8/4
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Accessors(chain = true)
 public class UserInput implements Serializable {
-
-    /**
-     * ID
-     */
-    private Long id;
 
     /**
      * 通用字段 数据版本
@@ -52,9 +39,20 @@ public class UserInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    public UserEntity toEntity(Long id) {
+        UserEntity userEntity = toEntity();
+        userEntity.setId(id);
+        return userEntity;
+    }
+
     public UserEntity toEntity() {
-        return UserEntity.builder().id(id).version(version).serialNumber(serialNumber).name(name).mobile(mobile).email(email)
-                .build();
+        UserEntity userEntity = new UserEntity();
+        userEntity.setSerialNumber(this.serialNumber);
+        userEntity.setName(this.name);
+        userEntity.setMobile(this.mobile);
+        userEntity.setEmail(this.email);
+        userEntity.setVersion(this.version);
+        return userEntity;
     }
 
 }

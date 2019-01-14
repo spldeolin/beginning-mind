@@ -38,14 +38,11 @@ public class MapperAspect {
 
         long start = System.currentTimeMillis();
         Object result = point.proceed(parameterValues);
-        long end = System.currentTimeMillis() - start;
+        long end = System.currentTimeMillis();
 
         String className = point.getTarget().getClass().getInterfaces()[0].getSimpleName();
         String methodName = ((MethodSignature) point.getSignature()).getMethod().getName();
-        MappedCallDTO dto = MappedCallDTO.builder()
-                .target(className + "." + methodName)
-                .elapsed(end)
-                .build();
+        MappedCallDTO dto = new MappedCallDTO(className + "." + methodName, end - start);
 
         RequestTrackDTO track = WebContext.getRequestTrack();
         if (track != null) {

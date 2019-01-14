@@ -46,7 +46,7 @@ public class PermissionSync {
                 continue;
             }
             String mappingMethod = getFirstMethod(mappingInfo);
-            PermissionEntity permission = PermissionEntity.builder().mappingPath(mappingPath).mappingMethod(mappingMethod).build();
+            PermissionEntity permission = new PermissionEntity(mappingMethod, mappingPath);
             actualPermissions.add(permission);
         }
 
@@ -69,7 +69,9 @@ public class PermissionSync {
                 toDeleteIds.add(id);
             } else {
                 log.info("创建 {} {}", difference.getMappingMethod(), difference.getMappingPath());
-                difference.setDisplay("未命名").setIsForbidden(false).setIsGrantedForAll(false);
+                difference.setDisplay("未命名");
+                difference.setIsForbidden(false);
+                difference.setIsGrantedForAll(false);
                 toCreatePermissions.add(difference);
             }
         }

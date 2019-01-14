@@ -61,7 +61,7 @@ public class UserController {
      */
     @PostMapping("/update")
     void update(@RequestParam Long id, @RequestBody @Valid UserInput userInput) {
-        userService.updateEX(userInput.toEntity().setId(id));
+        userService.updateEX(userInput.toEntity(id));
     }
 
     /**

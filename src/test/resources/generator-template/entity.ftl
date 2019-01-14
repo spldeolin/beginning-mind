@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.time.*;
 import com.baomidou.mybatisplus.annotation.*;
 import lombok.*;
-import lombok.experimental.Accessors;
 
 /**
 <#if entityCnsName??  && entityCnsName?trim != "">
@@ -14,10 +13,6 @@ import lombok.experimental.Accessors;
  * @author ${author}
  */
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
-@Accessors(chain = true)
 @TableName("${tableName}")
 public class ${entityName}Entity implements Serializable {
 

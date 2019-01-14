@@ -31,8 +31,9 @@ public class VersionTest {
     public void t() {
         UserEntity user = userService.get(285221975101440L).orElseThrow(() -> new BizException("不存在或是已被删除"));
 
-        user.setUpdatedAt(LocalDateTime.of(1844, 1, 1, 2, 3, 4)).setName("乐观锁2")
-                .setVersion(1);
+        user.setUpdatedAt(LocalDateTime.of(1844, 1, 1, 2, 3, 4));
+        user.setName("乐观锁2");
+        user.setVersion(1);
 
         userService.update(user);
 

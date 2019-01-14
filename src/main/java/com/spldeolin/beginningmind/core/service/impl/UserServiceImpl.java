@@ -138,7 +138,9 @@ public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements Us
     @Override
     public void banPick(Long userId) {
         UserEntity user = get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
-        super.update(user.setEnableSign(!user.getEnableSign()));
+        user.setEnableSign(!user.getEnableSign());
+
+        super.update(user);
     }
 
     /**

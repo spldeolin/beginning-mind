@@ -106,7 +106,7 @@ public class ControllerAspect {
             // 空对象
             if (parameterValue == null ||
                     (parameterValue instanceof String && ((String) parameterValue).length() == 0)) {
-                invalids.add(Invalid.builder().name(parameterName).value(null).cause("不能为空").build());
+                invalids.add(new Invalid(parameterName, null, "不能为空"));
             }
         }
     }
