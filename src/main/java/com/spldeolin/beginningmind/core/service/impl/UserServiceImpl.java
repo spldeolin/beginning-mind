@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.dao.UserMapper;
-import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;
 import com.spldeolin.beginningmind.core.service.UserService;
@@ -26,7 +26,7 @@ import com.spldeolin.beginningmind.core.util.StringRandomUtils;
  * @author Deolin 2018/11/12
  */
 @Service
-public class UserServiceImpl extends CommonServiceImpl<User> implements UserService {
+public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements UserService {
 
     @Autowired
     private PermissionService permissionService;
@@ -44,7 +44,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     private UserMapper userMapper;
 
     @Override
-    public Long createEX(User user) {
+    public Long createEX(UserEntity user) {
         checkOccupationForCreating(user);
 
         // 盐、密码
@@ -64,12 +64,12 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     }
 
     @Override
-    public User getEX(Long id) {
+    public UserEntity getEX(Long id) {
         return super.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
     }
 
     @Override
-    public void updateEX(User user) {
+    public void updateEX(UserEntity user) {
         Long id = user.getId();
 
         if (!isExist(id)) {
@@ -98,7 +98,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public String deleteEX(List<Long> ids) {
-        List<User> exist = super.list(ids);
+        List<UserEntity> exist = super.list(ids);
         if (exist.size() < ids.size()) {
             throw new BizException("部分用户不存在或是已被删除");
         }
@@ -112,10 +112,10 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     }
 
     @Override
-    public Optional<User> searchOneByPrincipal(String principal) {
-        QueryWrapper<User> query = new QueryWrapper<>();
+    public Optional<UserEntity> searchOneByPrincipal(String principal) {
+        QueryWrapper<UserEntity> query = new QueryWrapper<>();
         query.or().eq("name", principal).or().eq("mobile", principal).or().eq("email", principal);
-        List<User> users = super.searchBatch(query);
+        List<UserEntity> users = super.searchBatch(query);
         if (users.size() == 0) {
             return Optional.empty();
         }
@@ -137,7 +137,7 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
 
     @Override
     public void banPick(Long userId) {
-        User user = get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
+        UserEntity user = get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
         super.update(user.setEnableSign(!user.getEnableSign()));
     }
 
@@ -158,16 +158,16 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     /**
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
-    private void checkOccupationForCreating(User user) {
-        if (searchOne(User::getName, user.getName()).isPresent()) {
+    private void checkOccupationForCreating(UserEntity user) {
+        if (searchOne(UserEntity::getName, user.getName()).isPresent()) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
-        if (mobile != null && searchOne(User::getMobile, mobile).isPresent()) {
+        if (mobile != null && searchOne(UserEntity::getMobile, mobile).isPresent()) {
             throw new BizException("手机号已被占用");
         }
         String email = user.getEmail();
-        if (email != null && searchOne(User::getEmail, email).isPresent()) {
+        if (email != null && searchOne(UserEntity::getEmail, email).isPresent()) {
             throw new BizException("E-Mail已被占用");
         }
     }
@@ -175,21 +175,21 @@ public class UserServiceImpl extends CommonServiceImpl<User> implements UserServ
     /**
      * 更新场合下的用户名、手机号、E-Mail占用校验
      */
-    private void checkOccupationForUpdating(User user) {
+    private void checkOccupationForUpdating(UserEntity user) {
         Long id = user.getId();
         String username = user.getName();
-        if (!id.equals(searchOne(User::getName, username).orElse(new User()).getId())) {
+        if (!id.equals(searchOne(UserEntity::getName, username).orElse(new UserEntity()).getId())) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
         if (mobile != null) {
-            if (!id.equals(searchOne(User::getMobile, mobile).orElse(new User()).getId())) {
+            if (!id.equals(searchOne(UserEntity::getMobile, mobile).orElse(new UserEntity()).getId())) {
                 throw new BizException("手机号已被占用");
             }
         }
         String email = user.getEmail();
         if (email != null) {
-            if (!id.equals(searchOne(User::getEmail, email).orElse(new User()).getId())) {
+            if (!id.equals(searchOne(UserEntity::getEmail, email).orElse(new UserEntity()).getId())) {
                 throw new BizException("E-Mail已被占用");
             }
         }

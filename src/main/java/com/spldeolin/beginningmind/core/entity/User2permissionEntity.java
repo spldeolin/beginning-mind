@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.model;
+package com.spldeolin.beginningmind.core.entity;
 
 import java.io.Serializable;
 import java.time.*;
@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @TableName("user2permission")
-public class User2permission implements Serializable {
+public class User2permissionEntity implements Serializable {
 
     /**
      * ID

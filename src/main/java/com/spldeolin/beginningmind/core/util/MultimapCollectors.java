@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j2;
 /**
  * 将List转化为Guava Multimap
  *
- * e.g.: users.stream().collect(MultimapCollectors.groupingBy(User::getName));
+ * e.g.: users.stream().collect(MultimapCollectors.groupingBy(UserEntity::getName));
  *
  * @author Deolin 2019/01/01
  */

@@ -1,6 +1,6 @@
 package com.spldeolin.beginningmind.core.security.util;
 
-import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.service.impl.SignServiceImpl;
 import com.spldeolin.beginningmind.core.util.Sessions;
@@ -31,7 +31,7 @@ public class SignContext {
     /**
      * @return 当前登录者用户
      */
-    public static User user() {
+    public static UserEntity user() {
         CurrentSignerDTO current = current();
         if (current == null) {
             return null;
@@ -43,7 +43,7 @@ public class SignContext {
      * @return 当前登录者用户ID
      */
     public static Long userId() {
-        User user = user();
+        UserEntity user = user();
         if (user == null) {
             return null;
         }
@@ -54,7 +54,7 @@ public class SignContext {
      * @return 当前登录者用户名称
      */
     public static String userName() {
-        User user = user();
+        UserEntity user = user();
         if (user == null) {
             return null;
         }

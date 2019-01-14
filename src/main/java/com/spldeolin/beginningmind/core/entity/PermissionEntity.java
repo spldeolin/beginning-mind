@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.model;
+package com.spldeolin.beginningmind.core.entity;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @TableName("permission")
-public class Permission implements Serializable {
+public class PermissionEntity implements Serializable {
 
     /**
      * ID
@@ -97,7 +97,7 @@ public class Permission implements Serializable {
         if (o == null || getClass() != o.getClass()) {
             return false;
         }
-        Permission that = (Permission) o;
+        PermissionEntity that = (PermissionEntity) o;
         return Objects.equal(mappingMethod, that.mappingMethod) &&
                 Objects.equal(mappingPath, that.mappingPath);
     }

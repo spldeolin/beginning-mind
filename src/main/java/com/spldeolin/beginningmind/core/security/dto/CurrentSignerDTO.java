@@ -3,8 +3,8 @@ package com.spldeolin.beginningmind.core.security.dto;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
-import com.spldeolin.beginningmind.core.model.Permission;
-import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.entity.PermissionEntity;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -27,7 +27,7 @@ public class CurrentSignerDTO implements Serializable {
     /**
      * 用户
      */
-    private User user;
+    private UserEntity user;
 
     /**
      * 登录时间
@@ -37,7 +37,7 @@ public class CurrentSignerDTO implements Serializable {
     /**
      * 被授予的权限
      */
-    private List<Permission> permissions;
+    private List<PermissionEntity> permissions;
 
     private static final long serialVersionUID = 1L;
 

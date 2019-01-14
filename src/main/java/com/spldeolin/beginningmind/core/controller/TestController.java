@@ -17,8 +17,8 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.core.model.User;
-import com.spldeolin.beginningmind.core.model.User2permission;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
+import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.WebContext;
@@ -43,7 +43,7 @@ public class TestController {
     }
 
     @PostMapping("/s")
-    List<User> ln23(User user) {
+    List<UserEntity> ln23(UserEntity user) {
         return userService.listAll();
     }
 
@@ -82,64 +82,64 @@ public class TestController {
     }
 
     @PostMapping("/post")
-    String post(@RequestBody User user) {
+    String post(@RequestBody UserEntity user) {
         return "SUCEESS" + user;
     }
 
     @GetMapping("/page")
-    IPage<User> page(Page page) {
-        LambdaQueryWrapper<User> query = new LambdaQueryWrapper<>();
-        query.le(User::getMobile, "999");
+    IPage<UserEntity> page(Page page) {
+        LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
+        query.le(UserEntity::getMobile, "999");
         return userService.page(page, query);
     }
 
     @PostMapping("/requestTrackReport")
-    Map<Integer, Object> requestTrackReport(@RequestBody User2permission user2permission) {
+    Map<Integer, Object> requestTrackReport(@RequestBody User2permissionEntity user2permission) {
         log.info(user2permission);
         Map<Integer, Object> result = Maps.newHashMap();
 
-        LambdaQueryWrapper<User> query = new LambdaQueryWrapper<>();
-        query.gt(User::getMobile, 4);
+        LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
+        query.gt(UserEntity::getMobile, 4);
         result.put(1, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.ge(User::getMobile, 3);
+        query.ge(UserEntity::getMobile, 3);
         result.put(1, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.lt(User::getMobile, 2);
+        query.lt(UserEntity::getMobile, 2);
         result.put(2, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.le(User::getMobile, "999");
+        query.le(UserEntity::getMobile, "999");
         result.put(3, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.eq(User::getEnableSign, false);
+        query.eq(UserEntity::getEnableSign, false);
         result.put(4, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.in(User::getPassword, Lists.newArrayList("abc_111", "12312_de", "")).eq(User::getName, "汉字");
+        query.in(UserEntity::getPassword, Lists.newArrayList("abc_111", "12312_de", "")).eq(UserEntity::getName, "汉字");
         result.put(5, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.ne(User::getName, "随意").or().eq(User::getName, "随意");
+        query.ne(UserEntity::getName, "随意").or().eq(UserEntity::getName, "随意");
         result.put(6, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.orderByDesc(User::getId); // 暂时无法消除这个警告
+        query.orderByDesc(UserEntity::getId); // 暂时无法消除这个警告
         result.put(7, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.select(User::getId, User::getName);
+        query.select(UserEntity::getId, UserEntity::getName);
         result.put(8, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.like(User::getName, "a");
+        query.like(UserEntity::getName, "a");
         result.put(9, userService.searchBatch(query));
 
         query = new LambdaQueryWrapper<>();
-        query.likeRight(User::getName, "D");
+        query.likeRight(UserEntity::getName, "D");
         result.put(10, userService.searchBatch(query));
 
         return result;

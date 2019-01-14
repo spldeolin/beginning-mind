@@ -9,8 +9,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.model.User;
 import com.spldeolin.beginningmind.core.service.UserService;
 import lombok.extern.log4j.Log4j2;
 
@@ -62,7 +62,7 @@ public class RequestTrackAsyncHandler {
 
         Long signedUserId = track.getUserId();
         if (signedUserId != null) {
-            User user = userService.get(track.getUserId()).orElseThrow(() -> new RuntimeException("不存在或是已被删除"));
+            UserEntity user = userService.get(track.getUserId()).orElseThrow(() -> new RuntimeException("不存在或是已被删除"));
             track.setUserName(user.getName());
             track.setUserMobile(user.getMobile());
         }

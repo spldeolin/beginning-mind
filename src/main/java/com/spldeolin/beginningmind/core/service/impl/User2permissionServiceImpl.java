@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.core.service.impl;
 
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
-import com.spldeolin.beginningmind.core.model.User2permission;
+import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.core.service.User2permissionService;
 
 /**
@@ -11,6 +11,6 @@ import com.spldeolin.beginningmind.core.service.User2permissionService;
  * @author Deolin 2018/12/07
  */
 @Service
-public class User2permissionServiceImpl extends CommonServiceImpl<User2permission> implements User2permissionService {
+public class User2permissionServiceImpl extends CommonServiceImpl<User2permissionEntity> implements User2permissionService {
 
 }

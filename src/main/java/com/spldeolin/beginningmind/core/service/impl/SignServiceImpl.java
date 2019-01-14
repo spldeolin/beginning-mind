@@ -18,9 +18,9 @@ import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.dto.CaptchaVO;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.input.SignInput;
-import com.spldeolin.beginningmind.core.model.Permission;
-import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.exception.PasswordIncorretException;
 import com.spldeolin.beginningmind.core.security.exception.UserNotExistException;
@@ -83,10 +83,10 @@ public class SignServiceImpl implements SignService {
     @Override
     public SignerProfileVO signIn(SignInput input) {
         // 获取用户，同时进行验证码、重复登录、用户名密码校验
-        User user = signCheck(input);
+        UserEntity user = signCheck(input);
 
         // 获取权限一览
-        List<Permission> permissions = permissionService.listGrantedPermission(user.getId());
+        List<PermissionEntity> permissions = permissionService.listGrantedPermission(user.getId());
 
         // 获取会话ID
         String sessionId = WebContext.getSession().getId();
@@ -105,7 +105,7 @@ public class SignServiceImpl implements SignService {
 
         // profile
         return SignerProfileVO.builder().userName(user.getName())
-                .permissionIds(permissions.stream().map(Permission::getId).collect(Collectors.toList())).build();
+                .permissionIds(permissions.stream().map(PermissionEntity::getId).collect(Collectors.toList())).build();
     }
 
     /**
@@ -135,7 +135,7 @@ public class SignServiceImpl implements SignService {
         redisTemplate.delete(SIGN_STATUS_BY_USER_ID + userId);
     }
 
-    private User signCheck(SignInput input) {
+    private UserEntity signCheck(SignInput input) {
         // 验证码校验
         String token = input.getCaptchaToken();
         String captcha = (String) redisTemplate.opsForValue().get(token);
@@ -153,7 +153,7 @@ public class SignServiceImpl implements SignService {
         }
 
         // 用户名密码校验
-        User user;
+        UserEntity user;
         try {
             user = tryGetUser(input.getPrincipal());
             checkPassword(user, input.getPassword());
@@ -163,8 +163,8 @@ public class SignServiceImpl implements SignService {
         return user;
     }
 
-    private User tryGetUser(String principal) throws UserNotExistException {
-        Optional<User> userOpt = userService.searchOneByPrincipal(principal);
+    private UserEntity tryGetUser(String principal) throws UserNotExistException {
+        Optional<UserEntity> userOpt = userService.searchOneByPrincipal(principal);
         if (userOpt.isPresent()) {
             return userOpt.get();
         } else {
@@ -173,7 +173,7 @@ public class SignServiceImpl implements SignService {
         }
     }
 
-    private void checkPassword(User user, String inputPassword) throws PasswordIncorretException {
+    private void checkPassword(UserEntity user, String inputPassword) throws PasswordIncorretException {
         String salt = user.getSalt();
         String inputPasswordEx = DigestUtils.sha512Hex(inputPassword);
         if (!DigestUtils.sha512Hex(inputPasswordEx + salt).equals(user.getPassword())) {

@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
-import com.spldeolin.beginningmind.core.model.Permission;
-import com.spldeolin.beginningmind.core.model.User2permission;
+import com.spldeolin.beginningmind.core.entity.PermissionEntity;
+import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.User2permissionService;
 
@@ -17,17 +17,17 @@ import com.spldeolin.beginningmind.core.service.User2permissionService;
  * @author Deolin 2018/11/15
  */
 @Service
-public class PermissionServiceImpl extends CommonServiceImpl<Permission> implements PermissionService {
+public class PermissionServiceImpl extends CommonServiceImpl<PermissionEntity> implements PermissionService {
 
     @Autowired
     private User2permissionService user2permissionService;
 
     @Override
-    public List<Permission> listGrantedPermission(Long userId) {
-        List<Long> permissionIds = user2permissionService.searchBatch(User2permission::getUserId, userId).stream()
-                .map(User2permission::getPermissionId).collect(Collectors.toList());
+    public List<PermissionEntity> listGrantedPermission(Long userId) {
+        List<Long> permissionIds = user2permissionService.searchBatch(User2permissionEntity::getUserId, userId).stream()
+                .map(User2permissionEntity::getPermissionId).collect(Collectors.toList());
 
-        List<Permission> permissions;
+        List<PermissionEntity> permissions;
         if (permissionIds.size() > 0) {
             permissions = list(permissionIds);
         } else {

@@ -19,45 +19,45 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 /**
  * @author Deolin
  */
-public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implements CommonService<T> {
+public class CommonServiceImpl<E> extends ServiceImpl<BaseMapper<E>, E> implements CommonService<E> {
 
     @Autowired
-    private BaseMapper<T> baseMapper;
+    private BaseMapper<E> baseMapper;
 
-    private Class<T> modelClass;
+    private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
     public CommonServiceImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
-        modelClass = (Class<T>) pt.getActualTypeArguments()[0];
+        entityClass = (Class<E>) pt.getActualTypeArguments()[0];
     }
 
     @Override
-    protected Class<T> currentModelClass() {
-        return modelClass;
+    protected Class<E> currentModelClass() {
+        return entityClass;
     }
 
     @Override
-    public void create(T model) {
-        baseMapper.insert(model);
+    public void create(E entity) {
+        baseMapper.insert(entity);
     }
 
     @Override
-    public void create(Collection<T> models) {
-        if (models.size() == 0) {
-            throw new IllegalArgumentException("models长度不应为0");
+    public void create(Collection<E> entities) {
+        if (entities.size() == 0) {
+            throw new IllegalArgumentException("entities长度不应为0");
         }
 
-        super.saveBatch(models);
+        super.saveBatch(entities);
     }
 
     @Override
-    public Optional<T> get(Long id) {
+    public Optional<E> get(Long id) {
         return Optional.ofNullable(baseMapper.selectById(id));
     }
 
     @Override
-    public List<T> list(Collection<Long> ids) {
+    public List<E> list(Collection<Long> ids) {
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
@@ -66,8 +66,8 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     }
 
     @Override
-    public boolean update(T model) {
-        boolean updated = baseMapper.updateById(model) != 0;
+    public boolean update(E entity) {
+        boolean updated = baseMapper.updateById(entity) != 0;
         return updated;
     }
 
@@ -88,70 +88,70 @@ public class CommonServiceImpl<T> extends ServiceImpl<BaseMapper<T>, T> implemen
     }
 
     @Override
-    public Optional<T> searchOne(T model) throws TooManyResultsException {
-        return batchToOne(searchBatch(model));
+    public Optional<E> searchOne(E entity) throws TooManyResultsException {
+        return batchToOne(searchBatch(entity));
     }
 
     @Override
-    public List<T> searchBatch(T model) {
-        return baseMapper.selectList(new QueryWrapper<>(model));
+    public List<E> searchBatch(E entity) {
+        return baseMapper.selectList(new QueryWrapper<>(entity));
     }
 
     @Override
-    public List<T> searchBatch(Wrapper<T> queryWrapper) {
+    public List<E> searchBatch(Wrapper<E> queryWrapper) {
         return baseMapper.selectList(queryWrapper);
     }
 
     @Override
-    public List<T> listAll() {
+    public List<E> listAll() {
         return baseMapper.selectList(null);
     }
 
     @Override
     public boolean isExist(Long id) {
-        return baseMapper.selectCount(new QueryWrapper<T>().eq("id", id)) > 0;
+        return baseMapper.selectCount(new QueryWrapper<E>().eq("id", id)) > 0;
     }
 
     @Override
-    public boolean isExist(T model) {
-        return count(model) > 0;
+    public boolean isExist(E entity) {
+        return count(entity) > 0;
     }
 
     @Override
-    public int count(T model) {
-        return baseMapper.selectCount(new QueryWrapper<>(model));
+    public int count(E entity) {
+        return baseMapper.selectCount(new QueryWrapper<>(entity));
     }
 
     @Override
     @SuppressWarnings("unchecked")
-    public IPage<T> page(Page page, Wrapper<T> queryWrapper) {
+    public IPage<E> page(Page page, Wrapper<E> queryWrapper) {
         return baseMapper.selectPage(page, queryWrapper);
     }
 
     @Override
-    public List<T> searchBatch(SFunction<T, ?> field, Object value) {
-        LambdaQueryWrapper<T> query = new LambdaQueryWrapper<>();
+    public List<E> searchBatch(SFunction<E, ?> field, Object value) {
+        LambdaQueryWrapper<E> query = new LambdaQueryWrapper<>();
         query.eq(field, value);
 
         return baseMapper.selectList(query);
     }
 
     @Override
-    public Optional<T> searchOne(SFunction<T, ?> field, Object value) {
-        LambdaQueryWrapper<T> query = new LambdaQueryWrapper<>();
+    public Optional<E> searchOne(SFunction<E, ?> field, Object value) {
+        LambdaQueryWrapper<E> query = new LambdaQueryWrapper<>();
         query.eq(field, value);
 
         return Optional.ofNullable(baseMapper.selectOne(query));
     }
 
-    private Optional<T> batchToOne(Collection<T> models) {
-        if (models.size() == 0) {
+    private Optional<E> batchToOne(Collection<E> entities) {
+        if (entities.size() == 0) {
             return Optional.empty();
         }
-        if (models.size() > 1) {
+        if (entities.size() > 1) {
             throw new TooManyResultsException("满足条件的资源不止一个");
         }
-        return Optional.of(models.iterator().next());
+        return Optional.of(entities.iterator().next());
     }
 
 }

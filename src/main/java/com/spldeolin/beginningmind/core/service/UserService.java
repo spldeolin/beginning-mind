@@ -3,14 +3,14 @@ package com.spldeolin.beginningmind.core.service;
 import java.util.List;
 import java.util.Optional;
 import com.spldeolin.beginningmind.core.api.CommonService;
-import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 
 /**
  * 用户
  *
  * @author Deolin 2018/11/12
  */
-public interface UserService extends CommonService<User> {
+public interface UserService extends CommonService<UserEntity> {
 
     /**
      * 创建一个“用户” （附带业务校验）
@@ -18,7 +18,7 @@ public interface UserService extends CommonService<User> {
      * @param user 待创建“用户”
      * @return 自增ID
      */
-    Long createEX(User user);
+    Long createEX(UserEntity user);
 
     /**
      * 获取一个“用户” （附带业务校验）
@@ -26,14 +26,14 @@ public interface UserService extends CommonService<User> {
      * @param id “用户”的ID
      * @return “用户”
      */
-    User getEX(Long id);
+    UserEntity getEX(Long id);
 
     /**
      * 更新一个“用户” （附带业务校验）
      *
      * @param user 待更新“用户”
      */
-    void updateEX(User user);
+    void updateEX(UserEntity user);
 
     /**
      * 删除一个“用户”
@@ -53,7 +53,7 @@ public interface UserService extends CommonService<User> {
     /**
      * 通过用户名或手机号或email搜索用户
      */
-    Optional<User> searchOneByPrincipal(String principal);
+    Optional<UserEntity> searchOneByPrincipal(String principal);
 
     /**
      * 获取指定用户的在线情况

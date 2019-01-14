@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.input;
 
 import java.io.Serializable;
-import com.spldeolin.beginningmind.core.model.User;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -52,8 +52,8 @@ public class UserInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public User toModel() {
-        return User.builder().id(id).version(version).serialNumber(serialNumber).name(name).mobile(mobile).email(email)
+    public UserEntity toModel() {
+        return UserEntity.builder().id(id).version(version).serialNumber(serialNumber).name(name).mobile(mobile).email(email)
                 .build();
     }
 
