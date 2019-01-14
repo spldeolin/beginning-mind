@@ -1,15 +1,15 @@
 package ${packageReference}.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import ${packageReference}.model.${modelName};
+import ${packageReference}.entity.${entityName}Entity;
 
 /**
-<#if modelCnsName??  && modelCnsName?trim != "">
- * ${modelCnsName}
+<#if entityCnsName??  && entityCnsName?trim != "">
+ * ${entityCnsName}
  *
 </#if>
  * @author ${author}
  */
-public interface ${modelName}Mapper extends BaseMapper<${modelName}> {
+public interface ${entityName}Mapper extends BaseMapper<${entityName}Entity> {
 
 }

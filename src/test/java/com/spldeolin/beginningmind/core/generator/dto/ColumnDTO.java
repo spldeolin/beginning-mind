@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.generator.dto;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,7 +24,7 @@ public class ColumnDTO implements Serializable {
 
     private String type;
 
-    private BigInteger length;
+    private Long length;
 
     private Boolean isTinyint1Unsigned;
 

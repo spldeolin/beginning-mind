@@ -16,17 +16,17 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 @Builder
 @Accessors(chain = true)
-public class ModelFtl implements Serializable {
+public class EntityFtl implements Serializable {
 
     private String packageReference;
 
-    private String modelCnsName;
+    private String entityCnsName;
 
     private String author;
 
     private String tableName;
 
-    private String modelName;
+    private String entityName;
 
     private List<Property> properties;
 

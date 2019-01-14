@@ -1,15 +1,15 @@
 package ${packageReference}.service;
 
 import ${packageReference}.api.CommonService;
-import ${packageReference}.model.${modelName};
+import ${packageReference}.entity.${entityName}Entity;
 
 /**
-<#if modelCnsName??  && modelCnsName?trim != "">
- * ${modelCnsName}
+<#if entityCnsName??  && entityCnsName?trim != "">
+ * ${entityCnsName}
  *
 </#if>
  * @author ${author}
  */
-public interface ${modelName}Service extends CommonService<${modelName}> {
+public interface ${entityName}Service extends CommonService<${entityName}Entity> {
 
 }

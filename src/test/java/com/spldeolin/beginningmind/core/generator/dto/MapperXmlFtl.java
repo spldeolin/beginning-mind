@@ -20,7 +20,7 @@ public class MapperXmlFtl implements Serializable {
 
     private String packageReference;
 
-    private String modelName;
+    private String entityName;
 
     private static final long serialVersionUID = 1L;
 

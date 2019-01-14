@@ -1,4 +1,4 @@
-package ${packageReference}.model;
+package ${packageReference}.entity;
 
 import java.io.Serializable;
 import java.time.*;
@@ -7,8 +7,8 @@ import lombok.*;
 import lombok.experimental.Accessors;
 
 /**
-<#if modelCnsName??  && modelCnsName?trim != "">
- * ${modelCnsName}
+<#if entityCnsName??  && entityCnsName?trim != "">
+ * ${entityCnsName}
  *
 </#if>
  * @author ${author}
@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @Builder
 @Accessors(chain = true)
 @TableName("${tableName}")
-public class ${modelName} implements Serializable {
+public class ${entityName}Entity implements Serializable {
 
 <#list properties as property>
     <#if property.fieldCnsName??  && property.fieldCnsName?trim != "">

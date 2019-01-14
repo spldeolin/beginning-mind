@@ -75,7 +75,7 @@ mybatis-plus:
 
   mapper-locations: classpath:mapper/*.xml
 
-  type-aliases-package: com.spldeolin.beginningmind.core.model
+  type-aliases-package: com.spldeolin.beginningmind.core.entity
 
   global-config:
     banner: false

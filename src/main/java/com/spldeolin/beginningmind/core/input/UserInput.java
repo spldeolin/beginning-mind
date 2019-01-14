@@ -52,7 +52,7 @@ public class UserInput implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public UserEntity toModel() {
+    public UserEntity toEntity() {
         return UserEntity.builder().id(id).version(version).serialNumber(serialNumber).name(name).mobile(mobile).email(email)
                 .build();
     }

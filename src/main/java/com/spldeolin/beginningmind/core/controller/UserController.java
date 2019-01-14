@@ -39,7 +39,7 @@ public class UserController {
      */
     @PostMapping("/create")
     Long create(@RequestBody @Valid UserInput userInput) {
-        return userService.createEX(userInput.toModel());
+        return userService.createEX(userInput.toEntity());
     }
 
     /**
@@ -61,7 +61,7 @@ public class UserController {
      */
     @PostMapping("/update")
     void update(@RequestParam Long id, @RequestBody @Valid UserInput userInput) {
-        userService.updateEX(userInput.toModel().setId(id));
+        userService.updateEX(userInput.toEntity().setId(id));
     }
 
     /**

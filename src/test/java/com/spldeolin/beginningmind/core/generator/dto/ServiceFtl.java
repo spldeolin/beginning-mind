@@ -20,9 +20,9 @@ public class ServiceFtl implements Serializable {
 
     private String packageReference;
 
-    private String modelName;
+    private String entityName;
 
-    private String modelCnsName;
+    private String entityCnsName;
 
     private String author;
 

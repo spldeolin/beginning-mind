@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.generator;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.math.BigInteger;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -17,9 +16,9 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.generator.dto.ColumnDTO;
+import com.spldeolin.beginningmind.core.generator.dto.EntityFtl;
 import com.spldeolin.beginningmind.core.generator.dto.MapperJavaFtl;
 import com.spldeolin.beginningmind.core.generator.dto.MapperXmlFtl;
-import com.spldeolin.beginningmind.core.generator.dto.ModelFtl;
 import com.spldeolin.beginningmind.core.generator.dto.ServiceFtl;
 import com.spldeolin.beginningmind.core.generator.dto.TableColumnDTO;
 import com.spldeolin.beginningmind.core.generator.util.StringCaseUtils;
@@ -37,11 +36,11 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Cadeau {
 
-    private static final String AUTHOR = "Deolin" + " " + Times.toString(LocalDate.now(), "yyyy/MM/dd");
+    private static final String AUTHOR = "Deolin" + " " + Times.toString(LocalDate.now());
 
     private static final String BASE_PACKAGE_REFERENCE = "com.spldeolin.beginningmind.core";
 
-    private static final String PROJECT_PATH = "C:\\java-development\\projects-repo\\deolin\\beginning-mind";
+    private static final String PROJECT_PATH = "C:\\development\\projects-repo\\deolin-projects\\beginning-mind";
 
     private static final String DELETE_FLAG_COLUMN_NAME = "is_deleted";
 
@@ -55,7 +54,7 @@ public class Cadeau {
 
     private static final String JDBC_USERNAME = "guest";
 
-    private static final String JDBC_PASSWORD = "guest";
+    private static final String JDBC_PASSWORD = "guest_gUe5t";
 
     public static void main(String[] args) {
         generateByScanner();
@@ -101,16 +100,16 @@ public class Cadeau {
         List<Map<String, Object>> columnInfos = selectAsMapList(dataSource, columnInfoSql.toString());
         fillColumnInfo(tableColumnDTO, columnInfos);
 
-        String modelName = StringCaseUtils.snakeToUpperCamel(tableName);
+        String entityName = StringCaseUtils.snakeToUpperCamel(tableName);
 
-        // 生成Model层
-        generateModel(modelName, tableColumnDTO);
+        // 生成Entity层
+        generateEntity(entityName, tableColumnDTO);
 
         // 生成持久层
-        generateMapper(modelName, tableColumnDTO);
+        generateMapper(entityName, tableColumnDTO);
 
         // 生成业务层
-        generateService(modelName, tableColumnDTO);
+        generateService(entityName, tableColumnDTO);
     }
 
     private static DataSource createDataSource() {
@@ -178,7 +177,7 @@ public class Cadeau {
                     .name((String) columnInfo.get("COLUMN_NAME"))
                     .comment((String) columnInfo.get("COLUMN_COMMENT"))
                     .type((String) columnInfo.get("DATA_TYPE"))
-                    .length((BigInteger) columnInfo.get("CHARACTER_MAXIMUM_LENGTH"))
+                    .length((Long) columnInfo.get("CHARACTER_MAXIMUM_LENGTH"))
                     .isTinyint1Unsigned("tinyint(1) unsigned".equals(columnInfo.get("COLUMN_TYPE")))
                     .build();
             tableColumnDTO.getColumns().add(column);
@@ -226,26 +225,26 @@ public class Cadeau {
         }
     }
 
-    private static void generateModel(String modelName, TableColumnDTO tableColumnDTO) {
-        // Model Freemarker
-        ModelFtl modelFtl = createModelFtl(tableColumnDTO);
-        String fileContent = formatFreemarker("model.ftl", modelFtl);
+    private static void generateEntity(String entityName, TableColumnDTO tableColumnDTO) {
+        // Entity Freemarker
+        EntityFtl entityFtl = createEntityFtl(tableColumnDTO);
+        String fileContent = formatFreemarker("entity.ftl", entityFtl);
         // 输出文件
-        writeJavaFileToPackage("model", modelName, fileContent);
+        writeJavaFileToPackage("entity", entityName + "Entity", fileContent);
     }
 
-    private static ModelFtl createModelFtl(TableColumnDTO tableColumnDTO) {
-        ModelFtl modelFtl = new ModelFtl();
-        modelFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        modelFtl.setModelCnsName(tableColumnDTO.getComment());
-        modelFtl.setAuthor(AUTHOR);
+    private static EntityFtl createEntityFtl(TableColumnDTO tableColumnDTO) {
+        EntityFtl entityFtl = new EntityFtl();
+        entityFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
+        entityFtl.setEntityCnsName(tableColumnDTO.getComment());
+        entityFtl.setAuthor(AUTHOR);
         String tableName = tableColumnDTO.getName();
-        modelFtl.setTableName(tableName);
-        modelFtl.setModelName(StringCaseUtils.snakeToUpperCamel(tableName));
+        entityFtl.setTableName(tableName);
+        entityFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableName));
 
-        List<ModelFtl.Property> properties = Lists.newArrayList();
+        List<EntityFtl.Property> properties = Lists.newArrayList();
         for (ColumnDTO columnDTO : tableColumnDTO.getColumns()) {
-            ModelFtl.Property property = new ModelFtl.Property();
+            EntityFtl.Property property = new EntityFtl.Property();
             property.setFieldCnsName(columnDTO.getComment());
             String columnName = columnDTO.getName();
             property.setIsDeleteFlag(DELETE_FLAG_COLUMN_NAME.equals(columnName));
@@ -255,58 +254,58 @@ public class Cadeau {
             property.setFieldName(StringCaseUtils.snakeToLowerCamel(columnName));
             properties.add(property);
         }
-        modelFtl.setProperties(properties);
+        entityFtl.setProperties(properties);
 
-        return modelFtl;
+        return entityFtl;
     }
 
-    private static void generateMapper(String modelName, TableColumnDTO tableColumnDTO) {
+    private static void generateMapper(String entityName, TableColumnDTO tableColumnDTO) {
         // Mapper.java Freemarker
         MapperJavaFtl mapperJavaFtl = createMapperJavaFtl(tableColumnDTO);
         String fileContent = formatFreemarker("mapper-java.ftl", mapperJavaFtl);
         // Mapper.java 输出文件
-        writeJavaFileToPackage("dao", modelName + "Mapper", fileContent);
+        writeJavaFileToPackage("dao", entityName + "Mapper", fileContent);
         // Mapper.xml Freemarker
         MapperXmlFtl mapperXmlFtl = createMapperXmlFtl(tableColumnDTO);
         fileContent = formatFreemarker("mapper-xml.ftl", mapperXmlFtl);
         // Mapper.xml 输出文件
-        writeXmlFileToDirectory("mapper", modelName + "Mapper", fileContent);
+        writeXmlFileToDirectory("mapper", entityName + "Mapper", fileContent);
     }
 
     private static MapperJavaFtl createMapperJavaFtl(TableColumnDTO tableColumnDTO) {
         MapperJavaFtl mapperJavaFtl = new MapperJavaFtl();
         mapperJavaFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        mapperJavaFtl.setModelCnsName(tableColumnDTO.getComment());
+        mapperJavaFtl.setEntityCnsName(tableColumnDTO.getComment());
         mapperJavaFtl.setAuthor(AUTHOR);
         String tableName = tableColumnDTO.getName();
-        mapperJavaFtl.setModelName(StringCaseUtils.snakeToUpperCamel(tableName));
+        mapperJavaFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableName));
         return mapperJavaFtl;
     }
 
     private static MapperXmlFtl createMapperXmlFtl(TableColumnDTO tableColumnDTO) {
         MapperXmlFtl mapperXmlFtl = new MapperXmlFtl();
         mapperXmlFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        mapperXmlFtl.setModelName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()));
+        mapperXmlFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()));
         return mapperXmlFtl;
     }
 
-    private static void generateService(String modelName, TableColumnDTO tableColumnDTO) {
+    private static void generateService(String entityName, TableColumnDTO tableColumnDTO) {
         // Service Freemarker
         ServiceFtl serviceFtl = createServiceFtl(tableColumnDTO);
         String fileContent = formatFreemarker("service.ftl", serviceFtl);
         // Service 生成文件
-        writeJavaFileToPackage("service", modelName + "Service", fileContent);
+        writeJavaFileToPackage("service", entityName + "Service", fileContent);
         // ServiceImpl Freemarker
         fileContent = formatFreemarker("service-impl.ftl", serviceFtl);
         // ServiceImpl 生成文件
-        writeJavaFileToPackage("service.impl", modelName + "ServiceImpl", fileContent);
+        writeJavaFileToPackage("service.impl", entityName + "ServiceImpl", fileContent);
     }
 
     private static ServiceFtl createServiceFtl(TableColumnDTO tableColumnDTO) {
         ServiceFtl serviceFtl = new ServiceFtl();
         serviceFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        serviceFtl.setModelName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()));
-        serviceFtl.setModelCnsName(tableColumnDTO.getComment());
+        serviceFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()));
+        serviceFtl.setEntityCnsName(tableColumnDTO.getComment());
         serviceFtl.setAuthor(AUTHOR);
         return serviceFtl;
     }
