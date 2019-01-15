@@ -3,6 +3,8 @@ package com.spldeolin.beginningmind.core.aspect.dto;
 import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.Data;
 
 /**
@@ -20,9 +22,19 @@ public class RequestResult implements Serializable {
 
     private String message;
 
+    private String insignia;
+
     private static final long serialVersionUID = 1L;
 
     private RequestResult() {
+        setupCurrentInsignia();
+    }
+
+    private void setupCurrentInsignia() {
+        RequestTrackDTO track = WebContext.getRequestTrack();
+        if (track != null) {
+            insignia = track.getInsignia();
+        }
     }
 
     public static RequestResult success() {

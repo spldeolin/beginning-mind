@@ -51,9 +51,6 @@ public class WebContextFilter extends OncePerRequestFilter {
         WebContext.setResponse(response);
         WebContext.setSession(request.getSession());
 
-        // insignia存入headers
-        response.setHeader("insignia", track.getInsignia());
-
         filterChain.doFilter(request, response);
 
         // 补全并保存RequestTrackDTO对象（异步）
