@@ -7,7 +7,6 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
-import lombok.experimental.UtilityClass;
 
 /**
  * java.time包下的“时间”类型工具类
@@ -21,7 +20,6 @@ import lombok.experimental.UtilityClass;
  *
  * @author Deolin 2018/05/23
  */
-@UtilityClass
 public class Times {
 
     public static final ZoneId SYSTEM_ZONE = ZoneId.systemDefault();

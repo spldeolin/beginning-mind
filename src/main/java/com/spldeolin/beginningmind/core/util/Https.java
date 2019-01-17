@@ -7,7 +7,6 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
-import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -28,7 +27,6 @@ import okhttp3.ResponseBody;
  *
  * @author Deolin
  */
-@UtilityClass
 @Log4j2
 public class Https {
 
@@ -155,14 +153,14 @@ public class Https {
     /**
      * 为GET请求，构造request对象
      */
-    private Request buildGetRequest(String url) {
+    private static Request buildGetRequest(String url) {
         return new Request.Builder().url(url).header("UserEntity-Agent", DISGUISED_USER_AGENT).build();
     }
 
     /**
      * 为POST请求，构造body是JSON的request对象
      */
-    private Request buildJsonPostRequest(String url, String json) {
+    private static Request buildJsonPostRequest(String url, String json) {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
         return new Request.Builder().url(url).post(body).header("UserEntity-Agent", DISGUISED_USER_AGENT).build();
     }
@@ -170,7 +168,7 @@ public class Https {
     /**
      * 确保response的body为JSON，并返回body的String形式
      */
-    private String ensureJsonAndGetBody(Response response) throws IOException {
+    private static String ensureJsonAndGetBody(Response response) throws IOException {
         if (!Nulls.toEmpty(response.header("Content-Type")).startsWith("application/json")) {
             throw new RuntimeException("请求结果不是JSON");
         }
@@ -184,7 +182,7 @@ public class Https {
     /**
      * 发送请求，获取response，非200则重试5次，第5次后依然非200则抛出异常
      */
-    private Response doRequest(Request request) throws IOException {
+    private static Response doRequest(Request request) throws IOException {
         // 发送请求，获取response，非200则重试5次
         Response response = null;
         for (int i = 0; i < 5; i++) {

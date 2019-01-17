@@ -2,14 +2,12 @@ package com.spldeolin.beginningmind.core.util;
 
 import java.util.Random;
 import org.apache.commons.lang3.ArrayUtils;
-import lombok.experimental.UtilityClass;
 
 /**
  * 随机字符串
  *
  * @author Deolin
  */
-@UtilityClass
 public class StringRandomUtils {
 
     private static final char[] LOW_EN;

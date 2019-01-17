@@ -23,7 +23,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
-import lombok.experimental.UtilityClass;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -36,7 +35,6 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin
  */
-@UtilityClass
 @Log4j2
 public class Jsons {
 
@@ -57,7 +55,7 @@ public class Jsons {
         defaultObjectMapper.setTimeZone(TimeZone.getDefault());
     }
 
-    public SimpleModule timeModule() {
+    public static SimpleModule timeModule() {
         SimpleModule javaTimeModule = new JavaTimeModule();
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -71,7 +69,7 @@ public class Jsons {
         return javaTimeModule;
     }
 
-    private SimpleModule longToStringModulel() {
+    private static SimpleModule longToStringModulel() {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);

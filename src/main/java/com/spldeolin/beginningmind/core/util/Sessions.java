@@ -1,7 +1,5 @@
 package com.spldeolin.beginningmind.core.util;
 
-import lombok.experimental.UtilityClass;
-
 /**
  * 工具类：简化向HttpSession对象存取attribute的代码量
  *
@@ -9,7 +7,6 @@ import lombok.experimental.UtilityClass;
  *
  * @author Deolin
  */
-@UtilityClass
 public class Sessions {
 
     /**

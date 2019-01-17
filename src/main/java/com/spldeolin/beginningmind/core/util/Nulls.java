@@ -2,14 +2,12 @@ package com.spldeolin.beginningmind.core.util;
 
 import java.util.List;
 import com.google.common.collect.Lists;
-import lombok.experimental.UtilityClass;
 
 /**
  * 将null转化为其他默认值
  *
  * @author Deolin
  */
-@UtilityClass
 public class Nulls {
 
     public static Integer toZero(Integer i) {

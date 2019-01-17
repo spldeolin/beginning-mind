@@ -4,14 +4,12 @@ import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.service.impl.SignServiceImpl;
 import com.spldeolin.beginningmind.core.util.Sessions;
-import lombok.experimental.UtilityClass;
 
 /**
  * 工具类：登录者上下文
  *
  * @author Deolin
  */
-@UtilityClass
 public class SignContext {
 
     /**
