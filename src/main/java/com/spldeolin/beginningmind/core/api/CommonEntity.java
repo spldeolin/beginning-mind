@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -23,12 +24,14 @@ public abstract class CommonEntity implements Serializable {
      * 通用字段 插入时间
      */
     @TableField("inserted_at")
+    @JsonIgnore
     private LocalDateTime insertedAt;
 
     /**
      * 通用字段 更新时间
      */
     @TableField("updated_at")
+    @JsonIgnore
     private LocalDateTime updatedAt;
 
     /**
@@ -36,6 +39,7 @@ public abstract class CommonEntity implements Serializable {
      */
     @TableLogic
     @TableField("is_deleted")
+    @JsonIgnore
     private Boolean isDeleted;
 
     /**

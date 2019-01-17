@@ -19,7 +19,8 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 /**
  * @author Deolin
  */
-public abstract class CommonServiceImpl<E> extends ServiceImpl<BaseMapper<E>, E> implements CommonService<E> {
+public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceImpl<BaseMapper<E>, E> implements
+        CommonService<E> {
 
     @Autowired
     private BaseMapper<E> baseMapper;

@@ -12,7 +12,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 /**
  * @author Deolin
  */
-public interface CommonService<E> {
+public interface CommonService<E extends CommonEntity> {
 
     /**
      * 创建一个实体
