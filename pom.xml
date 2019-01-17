@@ -31,7 +31,7 @@
         <java.version>1.8</java.version>
 
         <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
-        <spring-session.version>2.1.2.RELEASE</spring-session.version>
+        <spring-session.version>2.1.3.RELEASE</spring-session.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-nosql -->
         <log4j2-nosql.version>2.9.1</log4j2-nosql.version>
@@ -70,7 +70,7 @@
         <zxing.version>3.3.3</zxing.version>
 
         <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
-        <simple-java-mail.version>5.1.2</simple-java-mail.version>
+        <simple-java-mail.version>5.1.3</simple-java-mail.version>
 
         <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
         <pinyin4j.version>2.5.1</pinyin4j.version>
