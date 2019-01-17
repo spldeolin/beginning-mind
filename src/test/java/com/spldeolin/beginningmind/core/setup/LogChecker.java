@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -19,7 +18,6 @@ import lombok.extern.log4j.Log4j2;
 public class LogChecker {
 
     @Test
-    @SneakyThrows
     public void t() {
         log.warn("123123");
         log.error("123123");

@@ -1,11 +1,11 @@
 package com.spldeolin.beginningmind.core;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import org.apache.commons.io.FileUtils;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.generator.util.StringCaseUtils;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -24,7 +24,7 @@ public class ProjectCopier {
 
     private static String sep = File.separator;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         String thisPath = System.getProperty("user.dir") + sep;
         String projectNameLowerCamel = StringCaseUtils.snakeToLowerCamel(projectName);
         String projectNameUpperCamel = StringCaseUtils.snakeToUpperCamel(projectName);
@@ -51,13 +51,11 @@ public class ProjectCopier {
         log.info("SUCCESS");
     }
 
-    @SneakyThrows
-    private static String readFile(File file) {
+    private static String readFile(File file) throws IOException {
         return FileUtils.readFileToString(file, StandardCharsets.UTF_8);
     }
 
-    @SneakyThrows
-    private static void writeFile(File file, String content) {
+    private static void writeFile(File file, String content) throws IOException {
         FileUtils.writeStringToFile(file, content, StandardCharsets.UTF_8);
     }
 

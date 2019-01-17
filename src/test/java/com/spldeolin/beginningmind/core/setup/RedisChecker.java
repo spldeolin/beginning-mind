@@ -9,7 +9,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.redis.RedisCache;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -26,7 +25,6 @@ public class RedisChecker {
     private RedisCache redisCache;
 
     @Test
-    @SneakyThrows
     public void t() {
         UserEntity entity = new UserEntity();
         entity.setName("曲奇");

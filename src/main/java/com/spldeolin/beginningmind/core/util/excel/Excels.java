@@ -29,10 +29,8 @@ import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
-import com.spldeolin.beginningmind.core.util.excel.ExcelContext.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.Times;
-import lombok.SneakyThrows;
-import lombok.experimental.UtilityClass;
+import com.spldeolin.beginningmind.core.util.excel.ExcelContext.ColumnDefinition;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -42,7 +40,6 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2018/07/07
  */
-@UtilityClass
 @Log4j2
 public class Excels {
 
@@ -100,7 +97,7 @@ public class Excels {
                 }
             }
             if (parseInvalids.size() > 0) {
-                throw new ParseInvalidException().setParseInvalids(parseInvalids);
+                throw new ParseInvalidException(parseInvalids);
             }
             return result;
         } catch (IOException e) {
@@ -317,8 +314,8 @@ public class Excels {
             } catch (IllegalAccessException e) {
                 throw new RuntimeException(e);
             } catch (Exception e) {
-                ParseInvalid parseInvalid = ParseInvalid.builder().rowNumber(row.getRowNum() + 1).columnLetter(
-                        columnDefinition.getColumnLetter()).cause("数据格式非法").build();
+                ParseInvalid parseInvalid = new ParseInvalid(columnDefinition.getColumnLetter(), row.getRowNum() + 1,
+                        "数据格式非法");
                 if (assignedFormatter) {
                     parseInvalid.setCause(e.getMessage());
                 }
@@ -326,7 +323,7 @@ public class Excels {
             }
         }
         if (parseInvalids.size() > 0) {
-            throw new ParseInvalidException().setParseInvalids(parseInvalids);
+            throw new ParseInvalidException(parseInvalids);
         }
         return t;
     }
@@ -364,7 +361,6 @@ public class Excels {
         return rs.toString();
     }
 
-    @SneakyThrows
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ensureFileExist(file);
         ExcelContext excelContext = new ExcelContext();
@@ -391,14 +387,14 @@ public class Excels {
             writeRows(excelContext, cellStyle, sheet, list);
 
             workbook.write(os);
-        } catch (IOException e) {
-            throw new ExcelAnalyzeException("文件读写失败");
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
         } finally {
             close(excelContext);
         }
     }
 
-    private void ensureFileExist(File file) {
+    private static void ensureFileExist(File file) {
         if (!file.exists()) {
             try {
                 if (!file.createNewFile()) {
@@ -439,7 +435,8 @@ public class Excels {
         }
     }
 
-    private static <T> void writeRows(ExcelContext excelContext, CellStyle cellStyle, Sheet sheet, List<T> list) {
+    private static <T> void writeRows(ExcelContext excelContext, CellStyle cellStyle, Sheet sheet, List<T> list)
+            throws Exception {
         for (int j = 0; j < list.size(); j++) {
             T t = list.get(j);
             int rowIndex = j + 1;
@@ -459,8 +456,8 @@ public class Excels {
     }
 
     @SuppressWarnings("unchecked")
-    @SneakyThrows
-    private <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t) {
+    private static <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t)
+            throws Exception {
         Field field = columnDefinition.getModelField();
         field.setAccessible(true);
         Object fieldValue = field.get(t);

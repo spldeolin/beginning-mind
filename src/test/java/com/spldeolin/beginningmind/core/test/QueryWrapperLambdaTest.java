@@ -10,7 +10,6 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.service.UserService;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -26,7 +25,6 @@ public class QueryWrapperLambdaTest {
     private UserService userService;
 
     @Test
-    @SneakyThrows
     public void t() {
         // WHERE is_deleted=false AND mobile > ?
         LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();

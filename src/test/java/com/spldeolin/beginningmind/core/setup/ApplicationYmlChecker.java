@@ -12,7 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
 import com.spldeolin.beginningmind.core.CoreProperties;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -44,7 +43,6 @@ public class ApplicationYmlChecker {
     private CoreProperties coreProperties;
 
     @Test
-    @SneakyThrows
     public void t() {
         // spring.datasource
         log.info(dataSourceProperties);

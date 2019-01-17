@@ -10,7 +10,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.spldeolin.beginningmind.core.api.exception.BizException;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.service.UserService;
-import lombok.SneakyThrows;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -27,7 +26,6 @@ public class VersionTest {
     private UserService userService;
 
     @Test
-    @SneakyThrows
     public void t() {
         UserEntity user = userService.get(285221975101440L).orElseThrow(() -> new BizException("不存在或是已被删除"));
 
