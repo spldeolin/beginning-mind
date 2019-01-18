@@ -8,13 +8,11 @@ import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.util.SignContext;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/12/07
  */
 @Component
-@Log4j2
 public class PermissionChecker {
 
     @Autowired

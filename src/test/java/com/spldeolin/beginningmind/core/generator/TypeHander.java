@@ -1,12 +1,10 @@
 package com.spldeolin.beginningmind.core.generator;
 
 import com.spldeolin.beginningmind.core.generator.dto.ColumnDTO;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/11/14
  */
-@Log4j2
 public class TypeHander {
 
     public static String toJavaTypeName(ColumnDTO column) {

@@ -2,8 +2,6 @@ package com.spldeolin.beginningmind.core.constant;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
 /**
  * 控制器通用返回值的结果码
@@ -20,11 +18,10 @@ import lombok.ToString;
  * @author Deolin
  */
 @AllArgsConstructor
-@ToString
 public enum ResultCode {
 
     // 成功，预想的结果
-    OK(200, null),
+    OK(200, ""),
 
     // 前后端交互错误
     BAD_REQEUST(400, "交互错误"),
@@ -42,11 +39,9 @@ public enum ResultCode {
     SERVICE_ERROR(1001, "业务异常");
 
     @Getter
-    @Setter
     private Integer code;
 
     @Getter
-    @Setter
     private String defaultMessage;
 
 }

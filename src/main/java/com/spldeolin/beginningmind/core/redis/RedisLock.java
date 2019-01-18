@@ -5,7 +5,6 @@ import org.springframework.stereotype.Component;
 import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.sync.RedisCommands;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 基于Redis的分布式锁（不可重入）
@@ -13,7 +12,6 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin 2018/09/27
  */
 @Component
-@Log4j2
 public class RedisLock {
 
     @Autowired

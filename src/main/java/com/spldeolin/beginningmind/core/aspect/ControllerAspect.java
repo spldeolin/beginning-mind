@@ -17,7 +17,6 @@ import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.util.WebContext;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 控制层切面
@@ -30,7 +29,6 @@ import lombok.extern.log4j.Log4j2;
  */
 @Component
 @Aspect
-@Log4j2
 public class ControllerAspect {
 
     /**

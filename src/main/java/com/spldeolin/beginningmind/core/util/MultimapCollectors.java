@@ -9,7 +9,6 @@ import java.util.stream.Collector;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Multimap;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * 将List转化为Guava Multimap
@@ -18,7 +17,6 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2019/01/01
  */
-@Log4j2
 public class MultimapCollectors<T, K, V> implements Collector<T, Multimap<K, V>, Multimap<K, V>> {
 
     private final Function<T, K> keyGetter;

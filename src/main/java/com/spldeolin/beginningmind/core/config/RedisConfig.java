@@ -11,7 +11,6 @@ import com.spldeolin.beginningmind.core.redis.ProtostuffSerializer;
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * RedisTemplate和Redis分布式锁的配置
@@ -19,7 +18,6 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin 2018/07/16
  */
 @Configuration
-@Log4j2
 public class RedisConfig {
 
     @Autowired

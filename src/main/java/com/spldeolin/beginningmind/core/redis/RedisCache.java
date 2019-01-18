@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.core.util.Times;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Redis缓存 管理
@@ -22,7 +21,6 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin 2018/08/10
  */
 @Component
-@Log4j2
 public class RedisCache {
 
     @Autowired

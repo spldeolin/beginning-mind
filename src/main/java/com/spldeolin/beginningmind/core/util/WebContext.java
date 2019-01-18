@@ -4,7 +4,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * Web请求的上下文
@@ -15,7 +14,6 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2018/12/01
  */
-@Log4j2
 public class WebContext {
 
     private static final ThreadLocal<RequestTrackDTO> REQUEST_TRACK = new ThreadLocal<>();

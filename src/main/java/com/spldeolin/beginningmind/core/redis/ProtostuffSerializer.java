@@ -6,12 +6,10 @@ import com.dyuproject.protostuff.LinkedBuffer;
 import com.dyuproject.protostuff.ProtostuffIOUtil;
 import com.dyuproject.protostuff.Schema;
 import com.dyuproject.protostuff.runtime.RuntimeSchema;
-import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/07/29
  */
-@Log4j2
 public class ProtostuffSerializer implements RedisSerializer<Object> {
 
     private boolean isEmpty(byte[] data) {
