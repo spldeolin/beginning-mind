@@ -155,7 +155,8 @@ public class Cadeau {
         return TableColumnDTO.builder()
                 .name((String) tableInfo.get("TABLE_NAME"))
                 .comment((String) tableInfo.get("TABLE_COMMENT"))
-                .columns(Lists.newArrayList()).build();
+                .columns(Lists.newArrayList())
+                .build();
     }
 
     private static StringBuilder appendColumnInfoSql(String tableName) {
@@ -234,24 +235,26 @@ public class Cadeau {
     }
 
     private static EntityFtl createEntityFtl(TableColumnDTO tableColumnDTO) {
-        EntityFtl entityFtl = new EntityFtl();
-        entityFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        entityFtl.setEntityCnsName(tableColumnDTO.getComment());
-        entityFtl.setAuthor(AUTHOR);
         String tableName = tableColumnDTO.getName();
-        entityFtl.setTableName(tableName);
-        entityFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableName));
+        EntityFtl entityFtl = EntityFtl.builder()
+                .packageReference(BASE_PACKAGE_REFERENCE)
+                .entityCnsName(tableColumnDTO.getComment())
+                .author(AUTHOR)
+                .tableName(tableName)
+                .entityName(StringCaseUtils.snakeToUpperCamel(tableName))
+                .build();
 
         List<EntityFtl.Property> properties = Lists.newArrayList();
         for (ColumnDTO columnDTO : tableColumnDTO.getColumns()) {
-            EntityFtl.Property property = new EntityFtl.Property();
-            property.setFieldCnsName(columnDTO.getComment());
             String columnName = columnDTO.getName();
-            property.setIsDeleteFlag(DELETE_FLAG_COLUMN_NAME.equals(columnName));
-            property.setIsVersion(VERSION_COLUMN_NAME.equals(columnName));
-            property.setColumnName(columnName);
-            property.setFieldType(TypeHander.toJavaTypeName(columnDTO));
-            property.setFieldName(StringCaseUtils.snakeToLowerCamel(columnName));
+            EntityFtl.Property property = EntityFtl.Property.builder()
+                    .fieldCnsName(columnDTO.getComment())
+                    .isDeleteFlag(DELETE_FLAG_COLUMN_NAME.equals(columnName))
+                    .isVersion(VERSION_COLUMN_NAME.equals(columnName))
+                    .columnName(columnName)
+                    .fieldType(TypeHander.toJavaTypeName(columnDTO))
+                    .fieldName(StringCaseUtils.snakeToLowerCamel(columnName))
+                    .build();
             properties.add(property);
         }
         entityFtl.setProperties(properties);
@@ -273,20 +276,20 @@ public class Cadeau {
     }
 
     private static MapperJavaFtl createMapperJavaFtl(TableColumnDTO tableColumnDTO) {
-        MapperJavaFtl mapperJavaFtl = new MapperJavaFtl();
-        mapperJavaFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        mapperJavaFtl.setEntityCnsName(tableColumnDTO.getComment());
-        mapperJavaFtl.setAuthor(AUTHOR);
         String tableName = tableColumnDTO.getName();
-        mapperJavaFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableName));
-        return mapperJavaFtl;
+        return MapperJavaFtl.builder()
+                .packageReference(BASE_PACKAGE_REFERENCE)
+                .entityCnsName(tableColumnDTO.getComment())
+                .author(AUTHOR)
+                .entityName(StringCaseUtils.snakeToUpperCamel(tableName))
+                .build();
     }
 
     private static MapperXmlFtl createMapperXmlFtl(TableColumnDTO tableColumnDTO) {
-        MapperXmlFtl mapperXmlFtl = new MapperXmlFtl();
-        mapperXmlFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        mapperXmlFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()));
-        return mapperXmlFtl;
+        return MapperXmlFtl.builder()
+                .packageReference(BASE_PACKAGE_REFERENCE)
+                .entityName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()))
+                .build();
     }
 
     private static void generateService(String entityName, TableColumnDTO tableColumnDTO) {
@@ -302,12 +305,12 @@ public class Cadeau {
     }
 
     private static ServiceFtl createServiceFtl(TableColumnDTO tableColumnDTO) {
-        ServiceFtl serviceFtl = new ServiceFtl();
-        serviceFtl.setPackageReference(BASE_PACKAGE_REFERENCE);
-        serviceFtl.setEntityName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()));
-        serviceFtl.setEntityCnsName(tableColumnDTO.getComment());
-        serviceFtl.setAuthor(AUTHOR);
-        return serviceFtl;
+        return ServiceFtl.builder()
+                .packageReference(BASE_PACKAGE_REFERENCE)
+                .entityName(StringCaseUtils.snakeToUpperCamel(tableColumnDTO.getName()))
+                .entityCnsName(tableColumnDTO.getComment())
+                .author(AUTHOR)
+                .build();
     }
 
 }
