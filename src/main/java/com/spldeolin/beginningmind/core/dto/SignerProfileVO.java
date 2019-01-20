@@ -2,12 +2,14 @@ package com.spldeolin.beginningmind.core.dto;
 
 import java.io.Serializable;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * @author Deolin 2018/05/28
  */
 @Data
+@AllArgsConstructor
 public class SignerProfileVO implements Serializable {
 
     private String userName;
@@ -16,8 +18,4 @@ public class SignerProfileVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public SignerProfileVO(String userName, List<Long> permissionIds) {
-        this.userName = userName;
-        this.permissionIds = permissionIds;
-    }
 }

@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.aspect.dto;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -9,6 +10,7 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
+@AllArgsConstructor
 public class Invalid implements Serializable {
 
     private String name;
@@ -18,11 +20,5 @@ public class Invalid implements Serializable {
     private String cause;
 
     private static final long serialVersionUID = 1L;
-
-    public Invalid(String name, Object value, String cause) {
-        this.name = name;
-        this.value = value;
-        this.cause = cause;
-    }
 
 }

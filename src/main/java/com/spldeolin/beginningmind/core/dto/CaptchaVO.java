@@ -1,12 +1,14 @@
 package com.spldeolin.beginningmind.core.dto;
 
 import java.io.Serializable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
  * @author Deolin 2018/05/28
  */
 @Data
+@AllArgsConstructor
 public class CaptchaVO implements Serializable {
 
     private String image;
@@ -15,8 +17,4 @@ public class CaptchaVO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    public CaptchaVO(String image, String token) {
-        this.image = image;
-        this.token = token;
-    }
 }
