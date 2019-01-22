@@ -8,9 +8,7 @@
 ########################
 
 server:
-
   port: 占位符
-
   contextPath: 占位符
 
 spring:
@@ -57,8 +55,7 @@ spring:
     uri: 占位符
 
 logging:
-
-  config: #未被覆盖时使用默认log4j2.yml
+  config: # 未被覆盖时使用默认log4j2.yml
 
 management:
   server:
@@ -72,17 +69,19 @@ management:
     health.show-details: always
 
 mybatis-plus:
-
   mapper-locations: classpath:mapper/*.xml
-
   type-aliases-package: com.spldeolin.beginningmind.core.entity
-
   global-config:
     banner: false
     db-config:
       id-type: INPUT
       logic-delete-value: true
       logic-not-delete-value: false
+
+swagger:
+  base-package: com.spldeolin
+  base-path: /**
+  exclude-path: /error, /actuator/**
 
 core:
 
@@ -121,9 +120,7 @@ core:
 ########################
 
 server:
-
   port: 2333
-
   contextPath: /
 
 spring:
@@ -149,16 +146,10 @@ spring:
     username: admin
     password: admin
 
-logging:
-
-  config: # 不指定，使用缺省的src/main/resources/log4j2.yml
-
 core:
-
   snowFlake:
     datacenterId: 1
     machineId: 1
-
   enableSecurity: false
 
 ---
@@ -170,9 +161,7 @@ core:
 ########################
 
 server:
-
   port: 8080
-
   contextPath: /
 
 spring:
@@ -199,15 +188,12 @@ spring:
     password: admin
 
 logging:
-
   config: classpath:log4j2/log4j2-test.yml
 
 core:
-
   snowFlake:
     datacenterId: 1
     machineId: 1
-
   enableSecurity: false
 
 ---
@@ -219,9 +205,7 @@ core:
 ########################
 
 server:
-
   port: # TODO 生产环境 端口号
-
   contextPath: /
 
 spring:
@@ -248,13 +232,13 @@ spring:
     password: # TODO 生产环境 RabbitMQ连接
 
 logging:
-
   config: classpath:log4j2/log4j2-prod.yml
 
-core:
+swagger:
+  exclude-path: /** # 不显示一切API
 
+core:
   snowFlake:
     datacenterId: # TODO 生产环境 雪花算法数据中心ID
     machineId: # TODO 生产环境 雪花算法机器ID
-
   enableSecurity: true

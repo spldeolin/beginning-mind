@@ -8,8 +8,8 @@
     <version>0.0.1</version>
 
     <!--
-        WEB： Spring Boot 2
-        日志： Log4j 2
+        WEB：Spring WebMvc
+        日志：Log4j 2
         Servlet容器：Undertow
         持久层：Mybatis、Mybatis Plus
         DB连接池：HikariCP
@@ -17,6 +17,7 @@
         消息：RabbitMQ
         JSON：Jackson
         序列化：ProtoStuff
+        文档：Swagger
     -->
 
     <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
@@ -44,6 +45,9 @@
 
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
         <mybatis-plus.version>3.0.7.1</mybatis-plus.version>
+
+        <!-- https://mvnrepository.com/artifact/com.spring4all/swagger-spring-boot-starter -->
+        <swagger.version>1.8.0.RELEASE</swagger.version>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
         <commons-lang3.version>3.8.1</commons-lang3.version>
@@ -218,6 +222,12 @@
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>${mybatis-plus.version}</version>
+        </dependency>
+        <!-- swagger -->
+        <dependency>
+            <groupId>com.spring4all</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+            <version>${swagger.version}</version>
         </dependency>
         <!-- commons lang3 -->
         <dependency>
