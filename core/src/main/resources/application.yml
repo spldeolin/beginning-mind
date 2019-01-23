@@ -9,22 +9,22 @@
 
 server:
   port: 占位符
-  contextPath: 占位符
+  context-path: 占位符
 
 spring:
 
   profiles.active: ${profile}
 
   datasource:
-    driverClassName: com.mysql.cj.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     url: 占位符
     username: 占位符
     password: 占位符
-    initialSize: 2
+    initial-size: 2
     minIdle: 2
-    maxActive: 30
-    validationQuery: select 'x'
-    testOnBorrow: true
+    max-active: 30
+    validation-query: select 'x'
+    test-on-borrow: true
 
   redis:
     host: 占位符
@@ -32,10 +32,10 @@ spring:
     password: 占位符
     timeout: 2000 #2sec
     pool:
-      maxActive: 8
-      maxWait: -1
-      maxIdle: 8
-      minIdle: 0
+      max-active: 8
+      max-wait: -1
+      max-idle: 8
+      min-idle: 0
 
   jmx:
     enable: false
@@ -45,11 +45,11 @@ spring:
     port: 占位符
     username: 占位符
     password: 占位符
-    publisherConfirms: true # 发送确认
-    publisherReturns: true # 发送失败退回
+    publisher-confirms: true # 发送确认
+    publisher-returns: true # 发送失败退回
     listener:
       simple:
-        acknowledgeMode: manual # ACK
+        acknowledge-mode: manual # ACK
 
   data.mongodb:
     uri: 占位符
@@ -84,31 +84,31 @@ swagger:
 
 core:
 
-  taskExecutor:
-    coreSize: 5
-    maximumSize: 10
-    queueCapacity: 20
-    keepAliveSeconds: 60
+  task-executor:
+    core-size: 5
+    maximum-size: 10
+    queue-capacity: 20
+    keep-alive-seconds: 60
 
-  snowFlake:
-    datacenterId: 占位符
-    machineId: 占位符
+  snow-flake:
+    datacenter-id: 占位符
+    machine-id: 占位符
 
   email:
-    serverHost: smtp.163.com
-    serverPort: 25
-    addresserName: # TODO E-Mail
-    addresserEmail: # TODO E-Mail
-    addresserAuthCode: # TODO E-Mail
+    server-host: smtp.163.com
+    server-port: 25
+    addresser-name: # TODO E-Mail
+    addresser-email: # TODO E-Mail
+    addresser-auth-code: # TODO E-Mail
 
   oss:
-    buckeName: beginning-mind
-    endPoint: oss-cn-hangzhou.aliyuncs.com
-    accessKeyId: # TODO 阿里云OSS
-    accessKeySecret: # TODO 阿里云OSS
-    fileHost: image
+    bucke-name: beginning-mind
+    end-point: oss-cn-hangzhou.aliyuncs.com
+    access-key-id: # TODO 阿里云OSS
+    access-key-secret: # TODO 阿里云OSS
+    file-host: image
 
-  enableSecurity: 占位符
+  enable-security: 占位符
 
 ---
 
@@ -120,7 +120,7 @@ core:
 
 server:
   port: 2333
-  contextPath: /
+  context-path: /
 
 spring:
 
@@ -146,10 +146,10 @@ spring:
     password: admin
 
 core:
-  snowFlake:
-    datacenterId: 1
-    machineId: 1
-  enableSecurity: false
+  snow-flake:
+    datacenter-id: 1
+    machine-id: 1
+  enable-security: false
 
 ---
 
@@ -161,7 +161,7 @@ core:
 
 server:
   port: 8080
-  contextPath: /
+  context-path: /
 
 spring:
 
@@ -190,10 +190,10 @@ logging:
   config: classpath:log4j2/log4j2-test.yml
 
 core:
-  snowFlake:
-    datacenterId: 1
-    machineId: 1
-  enableSecurity: false
+  snow-flake:
+    datacenter-id: 1
+    machine-id: 1
+  enable-security: false
 
 ---
 
@@ -205,7 +205,7 @@ core:
 
 server:
   port: # TODO 生产环境 端口号
-  contextPath: /
+  context-path: /
 
 spring:
 
@@ -237,7 +237,7 @@ swagger:
   exclude-path: /** # 不显示一切API
 
 core:
-  snowFlake:
-    datacenterId: # TODO 生产环境 雪花算法数据中心ID
-    machineId: # TODO 生产环境 雪花算法机器ID
-  enableSecurity: true
+  snow-flake:
+    datacenter-id: # TODO 生产环境 雪花算法数据中心ID
+    machine-id: # TODO 生产环境 雪花算法机器ID
+  enable-security: true
