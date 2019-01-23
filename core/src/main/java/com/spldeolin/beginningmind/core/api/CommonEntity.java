@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.core.api;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -17,7 +18,7 @@ public abstract class CommonEntity implements Serializable {
     /**
      * ID
      */
-    @TableField("id")
+    @TableId
     private Long id;
 
     /**

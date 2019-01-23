@@ -3,6 +3,7 @@ package com.spldeolin.beginningmind.launch.test.generator;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
+import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -14,7 +15,9 @@ import org.apache.commons.dbutils.QueryRunner;
 import org.apache.commons.dbutils.handlers.MapListHandler;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.google.common.collect.Lists;
+import com.spldeolin.beginningmind.core.api.CommonEntity;
 import com.spldeolin.beginningmind.core.util.Times;
 import com.spldeolin.beginningmind.launch.test.generator.dto.ColumnDTO;
 import com.spldeolin.beginningmind.launch.test.generator.dto.EntityFtl;
@@ -183,8 +186,29 @@ public class Cadeau {
                     .length((Long) columnInfo.get("CHARACTER_MAXIMUM_LENGTH"))
                     .isTinyint1Unsigned("tinyint(1) unsigned".equals(columnInfo.get("COLUMN_TYPE")))
                     .build();
+            if (isCommonEntityField(column)) {
+                continue;
+            }
             tableColumnDTO.getColumns().add(column);
         }
+    }
+
+    private static boolean isCommonEntityField(ColumnDTO column) {
+        for (Field field : CommonEntity.class.getDeclaredFields()) {
+            String columnName = getColumnName(field);
+            if (columnName.equals(column.getName())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static String getColumnName(Field field) {
+        TableField tableField = field.getAnnotation(TableField.class);
+        if (tableField == null) {
+            return field.getName();
+        }
+        return tableField.value();
     }
 
     private static String formatFreemarker(String freemarkerFileName, Object ftl) {
