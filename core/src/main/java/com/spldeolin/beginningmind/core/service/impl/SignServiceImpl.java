@@ -15,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
-import com.spldeolin.beginningmind.core.api.BizException;
+import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.dto.CaptchaVO;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;

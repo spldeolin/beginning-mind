@@ -1,6 +1,6 @@
 package ${basePackageReference}.${moduleName}.service;
 
-import ${basePackageReference}.core.api.CommonService;
+import ${basePackageReference}.core.common.*;
 import ${basePackageReference}.${moduleName}.entity.${entityName}Entity;
 
 /**

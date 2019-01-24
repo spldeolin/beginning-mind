@@ -1,7 +1,7 @@
 package ${basePackageReference}.${moduleName}.service.impl;
 
 import org.springframework.stereotype.Service;
-import ${basePackageReference}.core.api.CommonServiceImpl;
+import ${basePackageReference}.core.common.*;
 import ${basePackageReference}.${moduleName}.entity.${entityName}Entity;
 import ${basePackageReference}.${moduleName}.service.${entityName}Service;
 

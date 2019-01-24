@@ -17,7 +17,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.api.CommonEntity;
+import com.spldeolin.beginningmind.core.common.CommonEntity;
 import com.spldeolin.beginningmind.core.util.Times;
 import com.spldeolin.beginningmind.launch.test.generator.dto.ColumnDTO;
 import com.spldeolin.beginningmind.launch.test.generator.dto.EntityFtl;

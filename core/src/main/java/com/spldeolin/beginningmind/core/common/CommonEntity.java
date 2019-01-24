@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.api;
+package com.spldeolin.beginningmind.core.common;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;

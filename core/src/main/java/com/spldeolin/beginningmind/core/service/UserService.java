@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.core.service;
 
 import java.util.List;
 import java.util.Optional;
-import com.spldeolin.beginningmind.core.api.CommonService;
+import com.spldeolin.beginningmind.core.common.CommonService;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 
 /**

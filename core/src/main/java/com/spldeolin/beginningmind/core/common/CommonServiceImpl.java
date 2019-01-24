@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.api;
+package com.spldeolin.beginningmind.core.common;
 
 import java.lang.reflect.ParameterizedType;
 import java.util.Collection;

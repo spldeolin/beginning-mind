@@ -28,7 +28,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.api.BizException;
+import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.util.Times;
 import com.spldeolin.beginningmind.core.util.excel.ExcelContext.ColumnDefinition;
 import lombok.extern.log4j.Log4j2;

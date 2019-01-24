@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.api.BizException;
+import com.spldeolin.beginningmind.core.common.BizException;
 import lombok.extern.log4j.Log4j2;
 
 /**

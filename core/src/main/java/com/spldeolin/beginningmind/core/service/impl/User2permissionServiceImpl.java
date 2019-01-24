@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.core.api.CommonServiceImpl;
+import com.spldeolin.beginningmind.core.common.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.core.service.User2permissionService;
 

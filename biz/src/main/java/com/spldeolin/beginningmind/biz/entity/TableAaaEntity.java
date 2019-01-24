@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.biz.entity;
 
 import java.time.*;
 import com.baomidou.mybatisplus.annotation.*;
-import com.spldeolin.beginningmind.core.api.CommonEntity;
+import com.spldeolin.beginningmind.core.common.CommonEntity;
 import lombok.*;
 
 /**

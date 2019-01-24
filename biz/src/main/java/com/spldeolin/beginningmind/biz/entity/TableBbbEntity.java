@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.biz.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.spldeolin.beginningmind.core.api.CommonEntity;
+import com.spldeolin.beginningmind.core.common.CommonEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

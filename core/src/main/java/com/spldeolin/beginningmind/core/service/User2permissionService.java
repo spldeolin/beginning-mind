@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
 
-import com.spldeolin.beginningmind.core.api.CommonService;
+import com.spldeolin.beginningmind.core.common.CommonService;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 
 /**

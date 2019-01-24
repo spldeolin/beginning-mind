@@ -2,7 +2,7 @@ package ${basePackageReference}.${moduleName}.entity;
 
 import java.time.*;
 import com.baomidou.mybatisplus.annotation.*;
-import ${basePackageReference}.core.api.CommonEntity;
+import ${basePackageReference}.core.common.*;
 import lombok.*;
 
 /**

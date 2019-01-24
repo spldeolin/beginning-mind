@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.Map;
 import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
-import com.spldeolin.beginningmind.core.api.BizException;
+import com.spldeolin.beginningmind.core.common.BizException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.FormBody;
 import okhttp3.MediaType;

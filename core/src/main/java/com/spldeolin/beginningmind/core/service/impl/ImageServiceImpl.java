@@ -13,7 +13,7 @@ import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSClientBuilder;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.CoreProperties.OssProp;
-import com.spldeolin.beginningmind.core.api.BizException;
+import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.service.ImageService;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;

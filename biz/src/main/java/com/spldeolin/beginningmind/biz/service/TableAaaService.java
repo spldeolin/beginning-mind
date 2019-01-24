@@ -1,6 +1,6 @@
 package com.spldeolin.beginningmind.biz.service;
 
-import com.spldeolin.beginningmind.core.api.CommonService;
+import com.spldeolin.beginningmind.core.common.CommonService;
 import com.spldeolin.beginningmind.biz.entity.TableAaaEntity;
 
 /**
