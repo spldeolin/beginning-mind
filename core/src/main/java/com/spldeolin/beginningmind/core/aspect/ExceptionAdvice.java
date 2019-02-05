@@ -31,14 +31,14 @@ import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 控制层增强：异常处理
+ * 控制层Advice切面：异常处理
  *
  * @author Deolin
  * @see ResultCode
  */
 @RestControllerAdvice
 @Log4j2
-public class ExceptionAdvance {
+public class ExceptionAdvice {
 
     /**
      * 400 请求动词错误
