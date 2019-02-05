@@ -86,7 +86,7 @@
 		<commons-dbutils.version>1.7</commons-dbutils.version>
 
 		<!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
-		<oss.version>3.4.0</oss.version>
+		<oss.version>3.4.1</oss.version>
 	</properties>
 
 	<dependencies>
