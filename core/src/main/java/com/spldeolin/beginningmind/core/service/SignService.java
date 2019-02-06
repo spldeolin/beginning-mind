@@ -28,14 +28,4 @@ public interface SignService {
      */
     void signOut();
 
-    /**
-     * 指定用户是否登录中
-     */
-    Boolean isSigning(Long userId);
-
-    /**
-     * 将指定用户踢下线
-     */
-    void kill(Long userId);
-
 }

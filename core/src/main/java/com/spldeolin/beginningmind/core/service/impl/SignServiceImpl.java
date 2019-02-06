@@ -42,8 +42,6 @@ public class SignServiceImpl implements SignService {
 
     public static final String SIGNER_SESSION_KEY = "signer";
 
-    public static final String SIGN_STATUS_BY_USER_ID = "signStatusByUserId:";
-
     @Autowired
     private UserService userService;
 
@@ -101,9 +99,6 @@ public class SignServiceImpl implements SignService {
 
         Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO);
 
-        // 登录状态（用户信息+会话ID）存入Redis
-        redisTemplate.opsForHash().put(SIGN_STATUS_BY_USER_ID + user.getId(), sessionId, currentSignerDTO);
-
         // profile
         return new SignerProfileVO(user.getName(), permissionIds);
     }
@@ -113,26 +108,7 @@ public class SignServiceImpl implements SignService {
      */
     @Override
     public void signOut() {
-        Long userId = SignContext.userId();
-        String sessionId = WebContext.getSession().getId();
         Sessions.remove(SIGNER_SESSION_KEY);
-        redisTemplate.opsForHash().delete(SIGN_STATUS_BY_USER_ID + userId, sessionId);
-    }
-
-    /**
-     * 指定用户是否登录中
-     */
-    @Override
-    public Boolean isSigning(Long userId) {
-        return redisTemplate.opsForHash().entries(SIGN_STATUS_BY_USER_ID + userId).size() > 0;
-    }
-
-    /**
-     * 将指定用户踢下线
-     */
-    @Override
-    public void kill(Long userId) {
-        redisTemplate.delete(SIGN_STATUS_BY_USER_ID + userId);
     }
 
     private UserEntity signCheck(SignInput input) {

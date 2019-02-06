@@ -14,7 +14,6 @@ import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.security.ActuatorTokenChecker;
-import com.spldeolin.beginningmind.core.security.KilledChecker;
 import com.spldeolin.beginningmind.core.security.PermissionChecker;
 import com.spldeolin.beginningmind.core.security.SignedChecker;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
@@ -44,9 +43,6 @@ public class SecurityFilter extends OncePerRequestFilter {
     private ActuatorTokenChecker checkActuatorTokenHandler;
 
     @Autowired
-    private KilledChecker checkKilledHandler;
-
-    @Autowired
     private SignedChecker checkSignedHandler;
 
     @Autowired
@@ -62,8 +58,6 @@ public class SecurityFilter extends OncePerRequestFilter {
             try {
                 // actuator token是否正确
                 checkActuatorTokenHandler.ensureTokenCorrect(request);
-                // 是否被请离
-                checkKilledHandler.ensureNotKilled(request);
                 // 是否未登录
                 checkSignedHandler.ensureSigned(request);
                 // 是否未授权

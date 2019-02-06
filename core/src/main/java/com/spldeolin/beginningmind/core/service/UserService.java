@@ -56,16 +56,6 @@ public interface UserService extends CommonService<UserEntity> {
     Optional<UserEntity> searchOneByPrincipal(String principal);
 
     /**
-     * 获取指定用户的在线情况
-     */
-    Boolean isAccountSigning(Long userId);
-
-    /**
-     * 将指定用户踢下线
-     */
-    void killSigner(Long userId);
-
-    /**
      * 启用/禁用用户
      */
     void banPick(Long userId);

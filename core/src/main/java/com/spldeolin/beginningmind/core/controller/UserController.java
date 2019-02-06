@@ -85,20 +85,4 @@ public class UserController {
         return userService.deleteEX(ids);
     }
 
-    /**
-     * 指定用户是否登录中
-     */
-    @GetMapping("/isSigning")
-    Boolean isSign(@RequestParam Long userId) {
-        return signService.isSigning(userId);
-    }
-
-    /**
-     * 将指定用户踢下线
-     */
-    @PostMapping("/kill")
-    void kill(@RequestParam Long userId) {
-        signService.kill(userId);
-    }
-
 }
