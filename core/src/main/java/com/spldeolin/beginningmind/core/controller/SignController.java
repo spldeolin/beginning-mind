@@ -6,7 +6,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.spldeolin.beginningmind.core.annotation.RestMapping;
 import com.spldeolin.beginningmind.core.dto.CaptchaVO;
 import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
@@ -18,7 +18,7 @@ import com.spldeolin.beginningmind.core.service.SignService;
  *
  * @author Deolin 2018/05/26
  */
-@RestController
+@RestMapping("sign")
 @Validated
 public class SignController {
 
@@ -28,7 +28,7 @@ public class SignController {
     /**
      * 获取验证码
      */
-    @GetMapping("/sign/captcha")
+    @GetMapping("/captcha")
     CaptchaVO captcha() {
         return signService.captcha();
     }
@@ -36,7 +36,7 @@ public class SignController {
     /**
      * 登录
      */
-    @PostMapping("/sign/in")
+    @PostMapping("/in")
     SignerProfileVO signIn(@RequestBody @Valid SignInput input) {
         return signService.signIn(input);
     }
@@ -44,7 +44,7 @@ public class SignController {
     /**
      * 登出
      */
-    @PostMapping("/sign/out")
+    @PostMapping("/out")
     void signOut() {
         signService.signOut();
     }
@@ -52,7 +52,7 @@ public class SignController {
     /**
      * 当前调用者是否登录中
      */
-    @GetMapping("/sign/isSigning")
+    @GetMapping("/isSigning")
     Boolean isSigning() {
         return SignContext.isSigning();
     }

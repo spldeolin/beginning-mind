@@ -4,10 +4,9 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import com.spldeolin.beginningmind.core.annotation.RestMapping;
 import com.spldeolin.beginningmind.core.service.ImageService;
 
 /**
@@ -15,8 +14,7 @@ import com.spldeolin.beginningmind.core.service.ImageService;
  *
  * @author Deolin 2018/05/28
  */
-@RestController
-@RequestMapping("/image")
+@RestMapping("/image")
 @Validated
 public class ImageController {
 
