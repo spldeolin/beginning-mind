@@ -7,8 +7,9 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.spldeolin.beginningmind.core.annotation.RestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.input.UserInput;
 import com.spldeolin.beginningmind.core.service.SignService;
@@ -19,7 +20,8 @@ import com.spldeolin.beginningmind.core.service.UserService;
  *
  * @author Deolin 2018/8/4
  */
-@RestMapping("/user")
+@RestController
+@RequestMapping("/user")
 @Validated
 public class UserController {
 

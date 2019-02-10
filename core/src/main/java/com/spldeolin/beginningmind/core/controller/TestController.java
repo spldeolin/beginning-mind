@@ -9,14 +9,17 @@ import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.core.annotation.RestMapping;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
+import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess;
+import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.WebContext;
@@ -25,7 +28,8 @@ import lombok.extern.log4j.Log4j2;
 /**
  * @author Deolin 2018/11/16
  */
-@RestMapping("/test")
+@RestController
+@RequestMapping("/test")
 @Log4j2
 public class TestController {
 
@@ -89,6 +93,7 @@ public class TestController {
     }
 
     @PostMapping("/requestTrackReport")
+    @SecurityAccess(AccessMode.SIGN)
     Map<Integer, Object> requestTrackReport(@RequestBody User2permissionEntity user2permission) {
         log.info(user2permission);
         Map<Integer, Object> result = Maps.newHashMap();
