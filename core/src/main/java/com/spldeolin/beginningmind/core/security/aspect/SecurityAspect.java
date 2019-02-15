@@ -28,7 +28,7 @@ public class SecurityAspect {
      */
     @Pointcut("execution(* com.spldeolin.beginningmind..*.*(..))"
             + "&& @within(org.springframework.web.bind.annotation.RestController)"
-            + "&& @annotation(com.spldeolin.beginningmind.core.security.annotation.Access)")
+            + "&& @annotation(com.spldeolin.beginningmind.core.security.annotation.SecurityAccess)")
     public void access() {
     }
 

@@ -127,17 +127,17 @@ spring:
   profiles: dev
 
   datasource:
-    url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true
-    username: guest
-    password: guest_gUe5t
+    url: jdbc:mysql://127.0.0.1:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true
+    username: root
+    password: root_r0oT
 
   redis:
-    host: 192.168.2.2
+    host: 127.0.0.1
     port: 6379
-    password: guest
+    password: root_r0oT
 
   data.mongodb:
-    uri: mongodb://guest:guest@192.168.2.2:27017/beginning_mind_dev
+    uri: mongodb://127.0.0.1:27017/beginning_mind_dev
 
   rabbitmq:
     host: 192.168.2.2
