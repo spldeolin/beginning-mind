@@ -5,22 +5,24 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.apache.ibatis.exceptions.TooManyResultsException;
+import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.transaction.annotation.Transactional;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 
 /**
  * @author Deolin
  */
-public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceImpl<BaseMapper<E>, E> implements
-        CommonService<E> {
+public abstract class CommonServiceImpl<E extends CommonEntity> implements CommonService<E> {
+
+    private static final Integer maxBatchSize = 1000;
 
     @Autowired
     private BaseMapper<E> baseMapper;
@@ -34,11 +36,6 @@ public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceI
     }
 
     @Override
-    protected Class<E> currentModelClass() {
-        return entityClass;
-    }
-
-    @Override
     public void create(E entity) {
         baseMapper.insert(entity);
     }
@@ -49,7 +46,18 @@ public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceI
             throw new IllegalArgumentException("entities长度不应为0");
         }
 
-        super.saveBatch(entities);
+        String sqlStatement = sqlStatement(SqlMethod.INSERT_ONE);
+        try (SqlSession batchSqlSession = sqlSessionBatch()) {
+            int i = 0;
+            for (E anEntityList : entities) {
+                batchSqlSession.insert(sqlStatement, anEntityList);
+                if (i >= 1 && i % maxBatchSize == 0) {
+                    batchSqlSession.flushStatements();
+                }
+                i++;
+            }
+            batchSqlSession.flushStatements();
+        }
     }
 
     @Override
@@ -72,7 +80,6 @@ public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceI
         return updated;
     }
 
-    @Transactional(rollbackFor = Exception.class)
     @Override
     public boolean delete(Long id) {
         boolean deleted = baseMapper.deleteById(id) != 0;
@@ -84,7 +91,7 @@ public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceI
         if (ids.size() == 0) {
             throw new IllegalArgumentException("ids长度不应为0");
         }
-        boolean deleted = super.removeByIds(ids);
+        boolean deleted = baseMapper.deleteBatchIds(ids) != 0;
         return deleted;
     }
 
@@ -153,6 +160,18 @@ public abstract class CommonServiceImpl<E extends CommonEntity> extends ServiceI
             throw new TooManyResultsException("满足条件的资源不止一个");
         }
         return Optional.of(entities.iterator().next());
+    }
+
+    protected Class<E> currentModelClass() {
+        return entityClass;
+    }
+
+    protected String sqlStatement(SqlMethod sqlMethod) {
+        return SqlHelper.table(currentModelClass()).getSqlStatement(sqlMethod.getMethod());
+    }
+
+    protected SqlSession sqlSessionBatch() {
+        return SqlHelper.sqlSessionBatch(currentModelClass());
     }
 
 }

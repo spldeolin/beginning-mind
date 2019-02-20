@@ -101,8 +101,7 @@ public class CommonServiceTest {
 
     @Test
     public void deleteBatch() {
-        List<Long> ids = Lists
-                .newArrayList(400214724841472L, 367534452903936L, 367534452903937L, 367534457098240L, 367534457098241L);
+        List<Long> ids = Lists.newArrayList(36286656290099200L, 36286656566923264L, 36286656571117568L);
         userService.delete(ids);
     }
 
