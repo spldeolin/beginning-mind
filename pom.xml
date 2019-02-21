@@ -26,7 +26,7 @@
 		<java.version>1.8</java.version>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
-		<spring-session.version>2.1.3.RELEASE</spring-session.version>
+		<spring-session.version>2.1.4.RELEASE</spring-session.version>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-nosql -->
 		<log4j2-nosql.version>2.9.1</log4j2-nosql.version>
