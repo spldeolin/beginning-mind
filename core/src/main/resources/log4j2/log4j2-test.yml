@@ -4,32 +4,13 @@
 ##                    ##
 ########################
 
-Properties:
-  Property:
-    - name: server
-      value: unknown
-
 Appenders:
 
-  # 控制台 appender
-  Console:
-    name: console
-    target: SYSTEM_OUT
-    PatternLayout:
-      charset: utf-8
-      pattern: "%d{yyyy-MM-dd HH:mm:ss.SSS} %p [%t][%c:%L]%X{insignia}%X - %m%n"
-
-  # mongo appender
-  NoSQL:
-    name: mongo
-    bufferSize: 10
-    MongoDb:
-      server: 192.168.2.2
-      port: 27017
-      username: guest
-      password: guest
-      databaseName: beginning_mind_test
-      collectionName: log_${sys:server}
+  Gelf:
+    name: logstash
+    host: # TODO 测试环境 Logstash
+    port: # TODO 测试环境 Logstash
+    includeFullMdc: true
 
 Loggers:
 
@@ -38,7 +19,7 @@ Loggers:
     includeLocation: true
     AppenderRef:
       - ref: console
-      - ref: mongo
+      - ref: logstash
 
   AsyncLogger:
     name: com.spldeolin
@@ -47,4 +28,4 @@ Loggers:
     includeLocation: true
     AppenderRef:
       - ref: console
-      - ref: mongo
+      - ref: logstash

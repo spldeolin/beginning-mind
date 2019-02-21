@@ -28,8 +28,8 @@
 		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
 		<spring-session.version>2.1.4.RELEASE</spring-session.version>
 
-		<!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-nosql -->
-		<log4j2-nosql.version>2.9.1</log4j2-nosql.version>
+		<!-- https://mvnrepository.com/artifact/biz.paluch.logging/logstash-gelf -->
+		<logstash-gelf.version>1.13.0</logstash-gelf.version>
 
 		<!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
 		<disruptor.version>3.4.2</disruptor.version>
@@ -137,11 +137,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
-		<!-- springboot mongo -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-mongodb</artifactId>
-		</dependency>
 		<!-- springboot rabbitmq -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -184,16 +179,11 @@
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-jul</artifactId>
 		</dependency>
-		<!-- log4j2 nosql -->
+		<!-- logstash -->
 		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-nosql</artifactId>
-			<version>${log4j2-nosql.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.logging.log4j</groupId>
-			<artifactId>log4j-core</artifactId>
-			<version>${log4j2-nosql.version}</version><!-- core模块的版本需要降至与nosql模块一致 -->
+			<groupId>biz.paluch.logging</groupId>
+			<artifactId>logstash-gelf</artifactId>
+			<version>${logstash-gelf.version}</version>
 		</dependency>
 		<!-- disruptor -->
 		<dependency>

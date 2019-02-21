@@ -4,37 +4,28 @@
 ##                    ##
 ########################
 
-Properties:
-  Property:
-    - name: server
-      value: unknown
-
 Appenders:
 
-  # mongo appender
-  NoSQL:
-    name: mongo
-    bufferSize: 10
-    MongoDb:
-      server: # TODO 生产环境 Mongo
-      port: # TODO 生产环境 Mongo
-      username: # TODO 生产环境 Mongo
-      password: # TODO 生产环境 Mongo
-      databaseName: # TODO 生产环境 Mongo
-      collectionName: log_${sys:server}
+  Gelf:
+    name: logstash
+    host: # TODO 测试环境 Logstash
+    port: # TODO 测试环境 Logstash
+    includeFullMdc: true
 
 Loggers:
 
   AsyncRoot:
-    level: warn # 非com.spldeolin开头类的过滤级别
-    includeLocation: false # “Extracting location is an expensive operation (it can make logging 5 - 20 times slower).”
+    level: info # 非com.spldeolin开头类的过滤级别
+    includeLocation: true
     AppenderRef:
-      - ref: mongo
+      - ref: console
+      - ref: logstash
 
   AsyncLogger:
     name: com.spldeolin
     additivity: false
-    level: info # com.spldeolin开头类的过滤级别
-    includeLocation: false
+    level: debug # com.spldeolin开头类的过滤级别
+    includeLocation: true
     AppenderRef:
-      - ref: mongo
+      - ref: console
+      - ref: logstash

@@ -3,10 +3,7 @@ package com.spldeolin.beginningmind.core.filter.async;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
@@ -22,37 +19,17 @@ import lombok.extern.log4j.Log4j2;
 public class RequestTrackAsyncHandler {
 
     @Autowired
-    private Environment environment;
-
-    @Autowired
     private UserService userService;
-
-    @Autowired
-    private MongoTemplate mongoTemplate;
-
-    private String server;
-
-    public RequestTrackAsyncHandler() {
-        server = System.getProperty("server");
-        if (StringUtils.isBlank(server)) {
-            server = "unknown";
-        }
-    }
 
     @Async
     public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {
         analysizRequestTrack(track, request);
-        saveTrackToMongo(track);
+        saveTrackAsLog(track);
     }
 
     private void saveTrackAsLog(RequestTrackDTO track) {
         log.info("rq-" + track.getInsignia() + System.getProperty("line.separator") + track);
     }
-
-    private void saveTrackToMongo(RequestTrackDTO track) {
-        mongoTemplate.save(track, "rt_" + server);
-    }
-
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
         track.setHttpMethod(request.getMethod());
 

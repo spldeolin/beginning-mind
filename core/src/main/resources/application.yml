@@ -51,9 +51,6 @@ spring:
       simple:
         acknowledge-mode: manual # ACK
 
-  data.mongodb:
-    uri: 占位符
-
 logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
@@ -136,9 +133,6 @@ spring:
     port: 6379
     password: root_r0oT
 
-  data.mongodb:
-    uri: mongodb://127.0.0.1:27017/beginning_mind_dev
-
   rabbitmq:
     host: 192.168.2.2
     port: 5672
@@ -177,9 +171,6 @@ spring:
     port: 6379
     password: guest
 
-  data.mongodb:
-    uri: mongodb://guest:guest@192.168.2.2:27017/beginning_mind_test
-
   rabbitmq:
     host: 192.168.2.2
     port: 5672
@@ -212,23 +203,20 @@ spring:
   profiles: prod
 
   datasource:
-    url: # TODO 生产环境 MySQL连接
-    username: # TODO 生产环境 MySQL连接
-    password: # TODO 生产环境 MySQL连接
+    url: # TODO 生产环境 MySQL
+    username: # TODO 生产环境 MySQL
+    password: # TODO 生产环境 MySQL
 
   redis:
-    host: # TODO 生产环境 Redis连接
-    port: # TODO 生产环境 Redis连接
-    password: # TODO 生产环境 Redis连接
-
-  data.mongodb:
-    uri: # TODO 生产环境 Mongo
+    host: # TODO 生产环境 Redis
+    port: # TODO 生产环境 Redis
+    password: # TODO 生产环境 Redis
 
   rabbitmq:
-    host: # TODO 生产环境 RabbitMQ连接
-    port: # TODO 生产环境 RabbitMQ连接
-    username: # TODO 生产环境 RabbitMQ连接
-    password: # TODO 生产环境 RabbitMQ连接
+    host: # TODO 生产环境 RabbitMQ
+    port: # TODO 生产环境 RabbitMQ
+    username: # TODO 生产环境 RabbitMQ
+    password: # TODO 生产环境 RabbitMQ
 
 logging:
   config: classpath:log4j2/log4j2-prod.yml
