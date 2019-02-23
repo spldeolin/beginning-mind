@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.security.aspect;
+package com.spldeolin.beginningmind.core.aspect;
 
 import java.lang.reflect.Method;
 import org.aspectj.lang.JoinPoint;

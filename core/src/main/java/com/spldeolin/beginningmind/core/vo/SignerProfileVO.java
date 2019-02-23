@@ -1,6 +1,7 @@
-package com.spldeolin.beginningmind.core.dto;
+package com.spldeolin.beginningmind.core.vo;
 
 import java.io.Serializable;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,11 +10,11 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class CaptchaVO implements Serializable {
+public class SignerProfileVO implements Serializable {
 
-    private String image;
+    private String userName;
 
-    private String token;
+    private List<Long> permissionIds;
 
     private static final long serialVersionUID = 1L;
 

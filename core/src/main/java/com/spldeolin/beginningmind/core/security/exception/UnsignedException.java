@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.security.exception;
 
 /**
- * 代表未登录者请求需要登录的请求时的异常，由UrlForwardToExceptionController抛出，由统一异常处理捕获
+ * 代表未登录时请求要求登录态的请求
  *
  * @author Deolin 2018/05/18
  */

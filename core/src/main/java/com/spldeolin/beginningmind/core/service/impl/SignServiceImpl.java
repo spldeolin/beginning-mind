@@ -16,14 +16,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.dto.CaptchaVO;
-import com.spldeolin.beginningmind.core.dto.SignerProfileVO;
+import com.spldeolin.beginningmind.core.vo.CaptchaVO;
+import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
-import com.spldeolin.beginningmind.core.security.exception.PasswordIncorretException;
-import com.spldeolin.beginningmind.core.security.exception.UserNotExistException;
 import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SignService;
@@ -129,32 +127,28 @@ public class SignServiceImpl implements SignService {
         }
 
         // 用户名密码校验
-        UserEntity user;
-        try {
-            user = tryGetUser(input.getPrincipal());
-            checkPassword(user, input.getPassword());
-        } catch (UserNotExistException | PasswordIncorretException e) {
-            throw new BizException("用户不存在或是密码错误");
-        }
+        UserEntity user = tryGetUser(input.getPrincipal());
+        checkPassword(user, input.getPassword());
+
         return user;
     }
 
-    private UserEntity tryGetUser(String principal) throws UserNotExistException {
+    private UserEntity tryGetUser(String principal) {
         Optional<UserEntity> userOpt = userService.searchOneByPrincipal(principal);
         if (userOpt.isPresent()) {
             return userOpt.get();
         } else {
             log.info("用户不存在 {}", principal);
-            throw new UserNotExistException();
+            throw new BizException("用户不存在或是密码错误");
         }
     }
 
-    private void checkPassword(UserEntity user, String inputPassword) throws PasswordIncorretException {
+    private void checkPassword(UserEntity user, String inputPassword) {
         String salt = user.getSalt();
         String inputPasswordEx = DigestUtils.sha512Hex(inputPassword);
         if (!DigestUtils.sha512Hex(inputPasswordEx + salt).equals(user.getPassword())) {
-            log.info("用户密码错误 {} {}", user.getId(), inputPassword);
-            throw new PasswordIncorretException();
+            log.info("用户的密码错误 {} {}", user.getId(), inputPassword);
+            throw new BizException("用户不存在或是密码错误");
         }
     }
 
