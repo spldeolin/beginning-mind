@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.spring;
+package com.spldeolin.beginningmind.core.mvc;
 
 import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
