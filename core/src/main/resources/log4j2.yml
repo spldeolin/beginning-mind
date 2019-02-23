@@ -15,11 +15,11 @@ Appenders:
       pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia} - %m%n"
 
   # Logstash
-  Gelf:
-    name: logstash
-    host: 127.0.0.1
-    port: 4560
-    includeFullMdc: true
+#  Gelf:
+#    name: logstash
+#    host: 127.0.0.1
+#    port: 4560
+#    includeFullMdc: true
 
 Loggers:
 
@@ -28,7 +28,7 @@ Loggers:
     includeLocation: true
     AppenderRef:
       - ref: console
-      - ref: logstash
+#      - ref: logstash
 
   AsyncLogger:
     name: com.spldeolin
@@ -37,4 +37,4 @@ Loggers:
     includeLocation: true
     AppenderRef:
       - ref: console
-      - ref: logstash
+#      - ref: logstash

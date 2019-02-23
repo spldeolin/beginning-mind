@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import com.spldeolin.beginningmind.core.security.exception.ActuatorTokenIncorrectException;
+import com.spldeolin.beginningmind.core.security.exception.TokenIncorrectException;
 import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.core.security.holder.TokenHolder;
 
@@ -30,10 +30,10 @@ public class TokenChecker {
         String mappingPath = request.getRequestURI();
         String token = tokenHolder.getToken(mappingMethod, mappingPath);
         if (token == null) {
-            throw new ActuatorTokenIncorrectException("没有为请求设置token值 " + mappingMethod + " " + mappingPath);
+            throw new TokenIncorrectException("没有为请求设置token值 " + mappingMethod + " " + mappingPath);
         }
         if (!token.equals(reqToken)) {
-            throw new ActuatorTokenIncorrectException("TOKEN不正确");
+            throw new TokenIncorrectException("TOKEN不正确");
         }
     }
 
