@@ -45,21 +45,21 @@ public class Cadeau {
 
     private static final String MODULE_NAME = "biz";
 
-    private static final String PROJECT_PATH = "C:\\development\\projects-repo\\deolin-projects\\beginning-mind";
+    private static final String PROJECT_PATH = "/Users/deolin/Documents/project-repo/beginning-mind";
 
     private static final String DELETE_FLAG_COLUMN_NAME = "is_deleted";
 
     private static final String VERSION_COLUMN_NAME = "version";
 
-    private static final String JDBC_IP = "192.168.2.2";
+    private static final String JDBC_IP = "127.0.0.1";
 
     private static final Integer JDBC_PORT = 3306;
 
     private static final String JDBC_DATABASE = "beginning_mind";
 
-    private static final String JDBC_USERNAME = "guest";
+    private static final String JDBC_USERNAME = "root";
 
-    private static final String JDBC_PASSWORD = "guest_gUe5t";
+    private static final String JDBC_PASSWORD = "root_r0oT";
 
     public static void main(String[] args) {
         generateByScanner();

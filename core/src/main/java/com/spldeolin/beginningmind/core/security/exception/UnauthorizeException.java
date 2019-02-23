@@ -5,7 +5,7 @@ package com.spldeolin.beginningmind.core.security.exception;
  *
  * @author Deolin 2018/05/18
  */
-public class UnauthorizeException extends Exception {
+public class UnauthorizeException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 

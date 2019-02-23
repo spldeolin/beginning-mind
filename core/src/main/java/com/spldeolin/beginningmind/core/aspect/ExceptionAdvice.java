@@ -150,7 +150,7 @@ public class ExceptionAdvice {
     }
 
     /**
-     * 401 未登录（包括已被请离）
+     * 401 未登录
      */
     @ExceptionHandler(UnsignedException.class)
     public RequestResult handleUnsignException(UnsignedException e) {

@@ -6,9 +6,14 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.spldeolin.beginningmind.core.security.PermissionChecker;
+import com.spldeolin.beginningmind.core.security.SignedChecker;
+import com.spldeolin.beginningmind.core.security.TokenChecker;
 import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess.AccessMode;
+import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -18,6 +23,15 @@ import lombok.extern.log4j.Log4j2;
 @Aspect
 @Log4j2
 public class SecurityAspect {
+
+    @Autowired
+    private SignedChecker signedChecker;
+
+    @Autowired
+    private PermissionChecker permissionChecker;
+
+    @Autowired
+    private TokenChecker tokenChecker;
 
     /**
      * 包名以com.spldeolin.beginningmind.开头的，
@@ -39,13 +53,17 @@ public class SecurityAspect {
         AccessMode mode = securityAccess.value();
         switch (mode) {
             case SIGN:
-                // TODO 登录
+                // 登录
+                signedChecker.ensureSigned();
                 break;
             case SIGN_AND_AUTH:
-                // TODO 鉴权
+                // 登录 与 鉴权
+                signedChecker.ensureSigned();
+                permissionChecker.ensurePermission(WebContext.getRequest());
                 break;
             case TOKEN:
-                // TODO TOKEN
+                // TOKEN
+                tokenChecker.ensureTokenCorrect(WebContext.getRequest(), requestMethod);
                 break;
         }
     }

@@ -2,9 +2,7 @@ package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -65,21 +63,6 @@ public class TestController {
         return Sessions.get("one-cookie");
     }
 
-    @Autowired
-    @Qualifier("anonUrlsPrefix")
-    private Set<String> anonUrlsPrefix;
-
-
-    @Autowired
-    @Qualifier("authUrls")
-    private Set<String> authUrls;
-
-    @GetMapping("/qualifier")
-    Object qualifier() {
-        log.info(authUrls);
-        return anonUrlsPrefix;
-    }
-
     @PostMapping("/post")
     String post(@RequestBody UserEntity user) {
         return "SUCEESS" + user;
@@ -93,7 +76,7 @@ public class TestController {
     }
 
     @PostMapping("/requestTrackReport")
-    @SecurityAccess(AccessMode.SIGN)
+    @SecurityAccess(AccessMode.TOKEN)
     Map<Integer, Object> requestTrackReport(@RequestBody User2permissionEntity user2permission) {
         log.info(user2permission);
         Map<Integer, Object> result = Maps.newHashMap();

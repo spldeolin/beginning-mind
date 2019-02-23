@@ -29,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class ReadContentFilter extends OncePerRequestFilter {
 
-    public static final int ORDER = 1 + SecurityFilter.ORDER;
+    public static final int ORDER = 1 + LogMdcFilter.ORDER;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

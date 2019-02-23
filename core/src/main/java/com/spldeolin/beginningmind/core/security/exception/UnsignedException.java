@@ -5,7 +5,7 @@ package com.spldeolin.beginningmind.core.security.exception;
  *
  * @author Deolin 2018/05/18
  */
-public class UnsignedException extends Exception {
+public class UnsignedException extends RuntimeException {
 
     private static final long serialVersionUID = 1L;
 
