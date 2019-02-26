@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
@@ -27,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(ReadContentFilter.ORDER)
 @Component
 @Log4j2
-public class ReadContentFilter extends OncePerRequestFilter {
+public class ReadContentFilter extends IngoreSwaggerApiFilter {
 
     public static final int ORDER = 1 + LogMdcFilter.ORDER;
 
