@@ -37,6 +37,10 @@ spring:
       max-idle: 8
       min-idle: 0
 
+  data.elasticsearch:
+    cluster-name: elasticsearch_deolin
+    cluster-nodes: 127.0.0.1:9300
+
   jmx:
     enable: false
 
