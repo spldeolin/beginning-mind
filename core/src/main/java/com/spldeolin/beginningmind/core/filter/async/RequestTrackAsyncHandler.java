@@ -4,6 +4,9 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.IndexQuery;
+import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
@@ -21,15 +24,26 @@ public class RequestTrackAsyncHandler {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ElasticsearchTemplate elasticsearchTemplate;
+
     @Async
     public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {
         analysizRequestTrack(track, request);
-        saveTrackAsLog(track);
+        saveTrackToEs(track);
     }
 
-    private void saveTrackAsLog(RequestTrackDTO track) {
-        log.info("rq-" + track.getInsignia() + System.getProperty("line.separator") + track);
+    private void saveTrackToEs(RequestTrackDTO track) {
+        IndexQuery indexQuery = new IndexQueryBuilder().withObject(track).build();
+
+        try {
+            elasticsearchTemplate.index(indexQuery);
+            log.info("Saving request track succeed. [{}]", track.getInsignia());
+        } catch (Exception e) {
+            log.warn("Saving request track failed. [{}]", track.toString());
+        }
     }
+
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
         track.setHttpMethod(request.getMethod());
 

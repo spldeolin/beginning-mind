@@ -5,12 +5,11 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.annotation.Transient;
+import org.springframework.data.elasticsearch.annotations.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
-import com.spldeolin.beginningmind.core.util.Times;
 import lombok.Data;
 
 /**
@@ -19,11 +18,8 @@ import lombok.Data;
  * @author Deolin 2018/11/15
  */
 @Data
+@Document(indexName = "beginning-mind", type = "request-track")
 public class RequestTrackDTO implements Serializable {
-
-    private static final String br = System.getProperty("line.separator");
-
-    private static final String sp = "    ";
 
     /**
      * 请求标识
@@ -131,42 +127,6 @@ public class RequestTrackDTO implements Serializable {
         requestedAt = LocalDateTime.now();
         stopwatch = Stopwatch.createStarted();
         mapperCalls = Lists.newLinkedList();
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder(128);
-        result.append("RequestTrackDTO {").append(br);
-        result.append(sp).append("insignia = ").append(insignia).append(br);
-        result.append(sp).append("requestedAt = ").append(Times.toString(requestedAt, "yyyy-MM-dd HH:mm:ss.SSS"))
-                .append(br);
-        result.append(sp).append("httpMethod = ").append(httpMethod).append(br);
-        result.append(sp).append("url = ").append(url).append(br);
-        result.append(sp).append("requestContent = ").append(Jsons.compress(requestContent)).append(br);
-        result.append(sp).append("responseContent = ").append(responseContent).append(br);
-        result.append(sp).append("fullName = ").append(fullName).append(br);
-        result.append(sp).append("elapsed = ").append(elapsed).append(br);
-        appendMapperCalls(result, mapperCalls);
-        result.append(sp).append("userId = ").append(userId).append(br);
-        result.append(sp).append("userName = ").append(userName).append(br);
-        result.append(sp).append("userMobile = ").append(userMobile).append(br);
-        result.append(sp).append("ip = ").append(ip).append(br);
-        result.append(sp).append("sessionId = ").append(sessionId).append(br);
-        result.append("}");
-
-        return result.toString();
-    }
-
-    private void appendMapperCalls(StringBuilder sb, List<MappedCallDTO> mapperCalls) {
-        sb.append(sp).append("mapperCalls = ").append(br);
-        String sp2 = sp + sp;
-        String sp3 = sp2 + sp;
-        for (MappedCallDTO dto : mapperCalls) {
-            sb.append(sp2).append("{").append(br);
-            sb.append(sp3).append("target = ").append(dto.getTarget()).append(br);
-            sb.append(sp3).append("elapsed = ").append(dto.getElapsed()).append(br);
-            sb.append(sp2).append("}").append(br);
-        }
     }
 
 }
