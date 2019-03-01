@@ -8,6 +8,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.security.PermissionChecker;
 import com.spldeolin.beginningmind.core.security.SignedChecker;
 import com.spldeolin.beginningmind.core.security.TokenChecker;
@@ -33,6 +34,9 @@ public class SecurityAspect {
     @Autowired
     private TokenChecker tokenChecker;
 
+    @Autowired
+    private CoreProperties coreProperties;
+
     /**
      * 包名以com.spldeolin.beginningmind.开头的，
      *
@@ -48,6 +52,10 @@ public class SecurityAspect {
 
     @Before("access()")
     public void ensureAccess(JoinPoint joinPoint) {
+        if (!coreProperties.getEnableSecurity()) {
+            return;
+        }
+
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         SecurityAccess securityAccess = requestMethod.getAnnotation(SecurityAccess.class);
         AccessMode mode = securityAccess.value();
