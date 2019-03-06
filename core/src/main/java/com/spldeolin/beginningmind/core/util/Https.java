@@ -30,8 +30,8 @@ import okhttp3.ResponseBody;
 @Log4j2
 public class Https {
 
-    private static final String DISGUISED_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
-            + " (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36";
+    private static final String DISGUISED_USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_3) AppleWebKit/"
+            + "537.36 (KHTML, like Gecko) Chrome/72.0.3626.119 Safari/537.36";
 
     private static OkHttpClient client = new OkHttpClient();
 
