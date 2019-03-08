@@ -1,9 +1,13 @@
 package com.spldeolin.beginningmind.biz.entity;
 
-import java.time.*;
-import com.baomidou.mybatisplus.annotation.*;
+import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableLogic;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.Version;
 import com.spldeolin.beginningmind.core.common.CommonEntity;
-import lombok.*;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * @author Deolin 2019-01-23
