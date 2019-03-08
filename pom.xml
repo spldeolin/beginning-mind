@@ -47,7 +47,7 @@
 		<commons-lang3.version>3.8.1</commons-lang3.version>
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-		<guava.version>27.0.1-jre</guava.version>
+		<guava.version>27.1-jre</guava.version>
 
 		<!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
 		<okhttp.version>3.13.1</okhttp.version>
@@ -86,7 +86,7 @@
 		<commons-dbutils.version>1.7</commons-dbutils.version>
 
 		<!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
-		<oss.version>3.4.1</oss.version>
+		<oss.version>3.4.2</oss.version>
 	</properties>
 
 	<dependencies>
