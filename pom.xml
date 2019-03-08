@@ -153,7 +153,7 @@
 			<artifactId>spring-session-data-redis</artifactId>
 			<version>${spring-session.version}</version>
 		</dependency>
-		<!-- jackson datatype (guava, yaml) -->
+		<!-- jackson datatype (guava, yaml, csv) -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-guava</artifactId>
