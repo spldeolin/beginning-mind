@@ -41,7 +41,6 @@ public class RequestTrackDTO implements Serializable {
      */
     private String url;
 
-
     /**
      * HTTP协议 request content
      */
@@ -51,6 +50,16 @@ public class RequestTrackDTO implements Serializable {
      * HTTP协议 response content
      */
     private String responseContent;
+
+    /**
+     * HTTP协议 User-Agent
+     */
+    private String userAgent;
+
+    /**
+     * HTTP协议 Referer
+     */
+    private String Referer;
 
     /**
      * 处理本请求的控制层请求方法的全限定名

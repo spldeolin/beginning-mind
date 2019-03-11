@@ -49,6 +49,10 @@ public class RequestTrackAsyncHandler {
 
         track.setUrl(getFullUrlFromRequest(request));
 
+        track.setUserAgent(request.getHeader("User-Agent"));
+
+        track.setReferer(request.getHeader("Referer"));
+
         track.setElapsed(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 
         Long signedUserId = track.getUserId();
