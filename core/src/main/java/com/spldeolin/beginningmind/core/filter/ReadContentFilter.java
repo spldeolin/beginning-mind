@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.util.Jsons;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -50,8 +51,8 @@ public class ReadContentFilter extends IngoreSwaggerApiFilter {
 
     private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
             ContentCachingResponseWrapper wrappedResponse) {
-        String requestContent = null;
-        String responseContent = null;
+        String requestContent = "";
+        String responseContent = "";
         try {
             requestContent = new String(wrappedRequest.getContentAsByteArray(), wrappedRequest.getCharacterEncoding());
         } catch (UnsupportedEncodingException e) {
@@ -64,7 +65,7 @@ public class ReadContentFilter extends IngoreSwaggerApiFilter {
         } catch (IOException e) {
             log.error("读取responseContent失败", e);
         }
-        track.setRequestContent(requestContent);
-        track.setResponseContent(responseContent);
+        track.setRequestContent(Jsons.compress(requestContent));
+        track.setResponseContent(Jsons.compress(responseContent));
     }
 }
