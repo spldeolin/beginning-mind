@@ -1,19 +1,21 @@
 /*
-Navicat MySQL Data Transfer
+ Navicat Premium Data Transfer
 
-Source Server         : vagrant
-Source Server Version : 50621
-Source Host           : 192.168.2.2:3306
-Source Database       : beginning_mind
+ Source Server         : localhost
+ Source Server Type    : MySQL
+ Source Server Version : 80015
+ Source Host           : 127.0.0.1:3306
+ Source Schema         : beginning_mind
 
-Target Server Type    : MYSQL
-Target Server Version : 50621
-File Encoding         : 65001
+ Target Server Type    : MySQL
+ Target Server Version : 80015
+ File Encoding         : 65001
 
-Date: 2018-12-07 15:59:07
+ Date: 18/03/2019 09:13:07
 */
 
-SET FOREIGN_KEY_CHECKS=0;
+SET NAMES utf8mb4;
+SET FOREIGN_KEY_CHECKS = 0;
 
 -- ----------------------------
 -- Table structure for __template
@@ -31,13 +33,15 @@ CREATE TABLE `__template` (
 -- ----------------------------
 -- Records of __template
 -- ----------------------------
-INSERT INTO `__template` VALUES ('1', '2018-11-12 13:24:43', '2018-11-26 07:20:50', '1', '1');
+BEGIN;
+INSERT INTO `__template` VALUES (1, '2018-11-12 13:24:43', '2018-11-26 07:20:50', 1, 1);
+COMMIT;
 
 -- ----------------------------
--- Table structure for generator_demo
+-- Table structure for biz_demo
 -- ----------------------------
-DROP TABLE IF EXISTS `generator_demo`;
-CREATE TABLE `generator_demo` (
+DROP TABLE IF EXISTS `biz_demo`;
+CREATE TABLE `biz_demo` (
   `id` bigint(20) unsigned NOT NULL COMMENT 'ID',
   `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '通用字段 插入时间',
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '通用字段 更新时间',
@@ -60,7 +64,7 @@ CREATE TABLE `generator_demo` (
   `salt` char(32) NOT NULL DEFAULT '' COMMENT '盐',
   `enable_sign` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '能否登录',
   `wechat_openid` varchar(255) DEFAULT NULL,
-  `wechat_nickname` varchar(255) CHARACTER SET utf8mb4 NOT NULL DEFAULT '',
+  `wechat_nickname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL DEFAULT '',
   `is_permitted_update_parking_weekly_1` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否允许修改停车周报的第1栏',
   `is_permitted_update_parking_weekly_2` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否允许修改停车周报的第2栏',
   `is_permitted_update_parking_weekly_3` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否允许修改停车周报的第3栏',
@@ -75,14 +79,29 @@ CREATE TABLE `generator_demo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='                   ';
 
 -- ----------------------------
--- Records of generator_demo
+-- Records of biz_demo
 -- ----------------------------
-INSERT INTO `generator_demo` VALUES ('1147388605632512', '2018-11-15 17:24:41', '2018-11-15 17:24:41', '0', '1', '', 'asdf啊地方', '', '', '', '0', '', '0', '0', '', '', null, '0', '', '', '0', null, '', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `generator_demo` VALUES ('1147489021464576', '2018-11-15 17:25:05', '2018-11-15 17:25:05', '0', '1', '', '', '', '', '', '0', '', '0', '0', '', '', null, '0', '', '', '0', null, '1 asdf啊地方', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `generator_demo` VALUES ('1147489197625344', '2018-11-15 17:25:05', '2018-11-15 17:25:05', '0', '1', '', '', '', '', '', '0', '', '0', '0', '', '', null, '0', '', '', '0', null, '2 asdf啊地方', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `generator_demo` VALUES ('1147489197625345', '2018-11-15 17:25:05', '2018-11-15 17:25:05', '0', '1', '', '', '', '', '', '0', '', '0', '0', '', '', null, '0', '', '', '0', null, '3 asdf啊地方', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `generator_demo` VALUES ('1147489201819648', '2018-11-15 17:25:05', '2018-11-15 17:31:10', '0', '1', '', '名称', '', '', '', '0', '', '0', '0', '', '', null, '0', '', '', '0', null, '4 asdf啊地方', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-INSERT INTO `generator_demo` VALUES ('1147489206013952', '2018-11-15 17:25:05', '2018-11-15 17:25:05', '0', '1', '', '', '', '', '', '0', '', '0', '0', '', '', null, '0', '', '', '0', null, '5 asdf啊地方', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
+BEGIN;
+INSERT INTO `biz_demo` VALUES (1147388605632512, '2018-11-15 17:24:41', '2018-11-15 17:24:41', 0, 1, '', 'asdf啊地方', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `biz_demo` VALUES (1147489021464576, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '1 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `biz_demo` VALUES (1147489197625344, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '2 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `biz_demo` VALUES (1147489197625345, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '3 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `biz_demo` VALUES (1147489201819648, '2018-11-15 17:25:05', '2018-11-15 17:31:10', 0, 1, '', '名称', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '4 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+INSERT INTO `biz_demo` VALUES (1147489206013952, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '5 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+COMMIT;
+
+-- ----------------------------
+-- Table structure for core_property
+-- ----------------------------
+DROP TABLE IF EXISTS `core_property`;
+CREATE TABLE `core_property` (
+  `id` bigint(20) unsigned NOT NULL COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '通用字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '通用字段 更新时间',
+  `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '通用字段 是否被删除',
+  `version` int(11) NOT NULL DEFAULT '1' COMMENT '通用字段 数据版本',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for permission
@@ -103,8 +122,27 @@ CREATE TABLE `permission` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='权限';
 
 -- ----------------------------
--- Records of permission
+-- Table structure for security_access_token
 -- ----------------------------
+DROP TABLE IF EXISTS `security_access_token`;
+CREATE TABLE `security_access_token` (
+  `id` bigint(20) unsigned NOT NULL COMMENT 'ID',
+  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '通用字段 插入时间',
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '通用字段 更新时间',
+  `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '通用字段 是否被删除',
+  `version` int(11) NOT NULL DEFAULT '1' COMMENT '通用字段 数据版本',
+  `mapping_method` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '映射方法（HTTP方法，e.g.: POST）',
+  `mapping_path` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '映射路由（控制器路由+方法路由，e.g.: /user/create）',
+  `token` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT 'TOKEN（30位随机大小写字母+数字）',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='代表声明了@SecurityAccess(AccessMode.TOKEN)的请求方法的token值';
+
+-- ----------------------------
+-- Records of security_access_token
+-- ----------------------------
+BEGIN;
+INSERT INTO `security_access_token` VALUES (1, '2019-02-23 13:10:00', '2019-02-23 13:10:41', 0, 1, 'post', '/test/requestTrackReport', 'ss');
+COMMIT;
 
 -- ----------------------------
 -- Table structure for user
@@ -129,21 +167,28 @@ CREATE TABLE `user` (
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', '1970-01-01 00:00:00', '2018-11-19 10:16:41', '0', '1', '', 'adam', 'admin', '', '660afa204c78e8bdebc5323e7ff9168aec159e12ce56250b6c77c220fd20d8e89a6aa382de171135a0b7aeaa28d9a0c2ca5658b5ad12fc42ad4fec6568aa0db2', 'w!-Fz?bbdWQ>[VZNu9{&jG\'Ort0s/i\"C', '1');
-INSERT INTO `user` VALUES ('2', '2018-08-07 08:33:52', '2018-11-19 10:16:43', '0', '1', '', '1', '', '', '', '', '0');
-INSERT INTO `user` VALUES ('3', '2018-08-07 08:34:34', '2018-11-19 10:16:43', '0', '1', '', '1', '', '', '', '', '0');
-INSERT INTO `user` VALUES ('285221975101440', '2018-11-13 08:20:56', '2018-11-19 10:16:43', '0', '2', '', '乐观锁', '1', '', '', '', '0');
-INSERT INTO `user` VALUES ('287884624138240', '2018-11-13 08:31:34', '2018-11-19 10:16:43', '0', '1', '', '汉字', '1', '', '', '', '0');
-INSERT INTO `user` VALUES ('288782687539200', '2018-11-13 08:35:08', '2018-11-19 10:16:43', '0', '1', '', '汉字', '1', '', '', '', '0');
-INSERT INTO `user` VALUES ('289120698109952', '2018-11-13 08:36:29', '2018-11-19 10:16:43', '0', '1', '', '汉字', '1', '1', '', '', '0');
-INSERT INTO `user` VALUES ('290956356227072', '2018-11-13 08:43:46', '2018-11-19 10:16:43', '0', '1', '', '汉字', '1', '2', '', '', '0');
-INSERT INTO `user` VALUES ('303135042179072', '2018-11-13 09:32:10', '2018-11-19 10:16:43', '0', '1', '', '汉字', '1', '2', '', '', '0');
-INSERT INTO `user` VALUES ('400214552875008', '2018-11-13 15:57:56', '2018-11-19 10:32:09', '0', '1', '', 'a1a@a', '0', '', '', '', '0');
-INSERT INTO `user` VALUES ('400214720647168', '2018-11-13 15:57:56', '2018-11-26 07:28:40', '1', '1', '', '批量1', '1111', '', '', '', '0');
-INSERT INTO `user` VALUES ('400214720647169', '2018-11-13 15:57:56', '2018-11-19 10:32:38', '0', '1', '', '批量2', '2', 'aa@a', '', '', '0');
-INSERT INTO `user` VALUES ('400214724841472', '2018-11-13 15:57:56', '2018-11-26 07:33:13', '1', '1', '', '批量3', '3', '', '', '', '0');
-INSERT INTO `user` VALUES ('400214724841473', '2018-11-13 15:57:56', '2018-11-19 10:16:43', '0', '1', '', '批量4', '4', '', '', '', '0');
-INSERT INTO `user` VALUES ('8999000162308096', '2018-12-07 09:26:26', '2018-12-07 01:26:26', '0', '1', null, '汉字', '1', null, null, null, null);
+BEGIN;
+INSERT INTO `user` VALUES (1, '1970-01-01 00:00:00', '2018-11-19 10:16:41', 0, 1, '', 'adam', 'admin', '', '660afa204c78e8bdebc5323e7ff9168aec159e12ce56250b6c77c220fd20d8e89a6aa382de171135a0b7aeaa28d9a0c2ca5658b5ad12fc42ad4fec6568aa0db2', 'w!-Fz?bbdWQ>[VZNu9{&jG\'Ort0s/i\"C', 1);
+INSERT INTO `user` VALUES (2, '2018-08-07 08:33:52', '2018-11-19 10:16:43', 0, 1, '', '1', '', '', '', '', 0);
+INSERT INTO `user` VALUES (3, '2018-08-07 08:34:34', '2018-11-19 10:16:43', 0, 1, '', '1', '', '', '', '', 0);
+INSERT INTO `user` VALUES (285221975101440, '2018-11-13 08:20:56', '2018-11-19 10:16:43', 0, 2, '', '乐观锁', '1', '', '', '', 0);
+INSERT INTO `user` VALUES (287884624138240, '2018-11-13 08:31:34', '2018-11-19 10:16:43', 0, 1, '', '汉字', '1', '', '', '', 0);
+INSERT INTO `user` VALUES (288782687539200, '2018-11-13 08:35:08', '2018-11-19 10:16:43', 0, 1, '', '汉字', '1', '', '', '', 0);
+INSERT INTO `user` VALUES (289120698109952, '2018-11-13 08:36:29', '2018-11-19 10:16:43', 0, 1, '', '汉字', '1', '1', '', '', 0);
+INSERT INTO `user` VALUES (290956356227072, '2018-11-13 08:43:46', '2018-11-19 10:16:43', 0, 1, '', '汉字', '1', '2', '', '', 0);
+INSERT INTO `user` VALUES (303135042179072, '2018-11-13 09:32:10', '2018-11-19 10:16:43', 0, 1, '', '汉字', '1', '2', '', '', 0);
+INSERT INTO `user` VALUES (400214552875008, '2018-11-13 15:57:56', '2018-11-19 10:32:09', 0, 1, '', 'a1a@a', '0', '', '', '', 0);
+INSERT INTO `user` VALUES (400214720647168, '2018-11-13 15:57:56', '2018-11-26 07:28:40', 1, 1, '', '批量1', '1111', '', '', '', 0);
+INSERT INTO `user` VALUES (400214720647169, '2018-11-13 15:57:56', '2018-11-19 10:32:38', 0, 1, '', '批量2', '2', 'aa@a', '', '', 0);
+INSERT INTO `user` VALUES (400214724841472, '2018-11-13 15:57:56', '2018-11-26 07:33:13', 1, 1, '', '批量3', '3', '', '', '', 0);
+INSERT INTO `user` VALUES (400214724841473, '2018-11-13 15:57:56', '2018-11-19 10:16:43', 0, 1, '', '批量4', '4', '', '', '', 0);
+INSERT INTO `user` VALUES (8999000162308096, '2018-12-07 09:26:26', '2018-12-07 01:26:26', 0, 1, NULL, '汉字', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (36286656290099200, '2019-02-20 16:37:50', '2019-02-20 16:39:57', 1, 1, NULL, '批量0', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (36286656566923264, '2019-02-20 16:37:50', '2019-02-20 16:39:57', 1, 1, NULL, '批量1', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (36286656571117568, '2019-02-20 16:37:50', '2019-02-20 16:39:57', 1, 1, NULL, '批量2', '2', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (36286656575311872, '2019-02-20 16:37:50', '2019-02-20 16:37:50', 0, 1, NULL, '批量3', '3', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (36286656579506176, '2019-02-20 16:37:50', '2019-02-20 16:37:50', 0, 1, NULL, '批量4', '4', NULL, NULL, NULL, NULL);
+COMMIT;
 
 -- ----------------------------
 -- Table structure for user2permission
@@ -160,6 +205,4 @@ CREATE TABLE `user2permission` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT COMMENT='用户与权限的关联关系';
 
--- ----------------------------
--- Records of user2permission
--- ----------------------------
+SET FOREIGN_KEY_CHECKS = 1;
