@@ -9,9 +9,14 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>core</module><!-- 核心模块，所有业务模块都应该依赖core模块 -->
-		<module>biz</module><!-- 业务模块（示例），业务代码都位于这个模块 -->
-		<module>launch</module><!-- 启动模块，内部的Startup类是整个系统的启动类。启动模块应该依赖其他所有模块，起到组合所有模块的作用 -->
+		<!-- 核心模块，所有业务模块都应该依赖core模块 -->
+		<module>core</module>
+		<!-- 安全模块，提供基于的登录用户及其权限的访问控制 -->
+		<module>security</module>
+		<!-- 启动模块，Startup类是整个系统的启动类。启动模块应该依赖其他所有模块，起到加载所有模块的作用 -->
+		<module>launch</module>
+		<!-- 业务模块，业务代码都位于这个模块 -->
+		<module>biz</module>
 	</modules>
 
 	<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
