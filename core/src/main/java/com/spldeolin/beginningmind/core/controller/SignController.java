@@ -52,7 +52,7 @@ public class SignController {
     }
 
     /**
-     * 当前调用者是否登录中
+     * 当前是否登录中
      */
     @GetMapping("/isSigning")
     Boolean isSigning() {
