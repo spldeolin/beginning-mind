@@ -81,6 +81,11 @@ public abstract class CommonServiceImpl<E extends CommonEntity> implements Commo
     }
 
     @Override
+    public int update(E entity, Wrapper<E> query) {
+        return baseMapper.update(entity, query);
+    }
+
+    @Override
     public boolean delete(Long id) {
         boolean deleted = baseMapper.deleteById(id) != 0;
         return deleted;

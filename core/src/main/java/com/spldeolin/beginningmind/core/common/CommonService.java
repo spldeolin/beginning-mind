@@ -60,6 +60,15 @@ public interface CommonService<E extends CommonEntity> {
     boolean update(E entity);
 
     /**
+     * 批量更新实体
+     *
+     * @param entity 存放所有需要更新的值
+     * @param query 条件对象
+     * @return 成功更新的条目数
+     */
+    int update(E entity, Wrapper<E> query);
+
+    /**
      * 删除一个实体，本方法不校验实体是否存在
      *
      * @param id 待删除实体的ID

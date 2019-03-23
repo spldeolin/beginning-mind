@@ -2,12 +2,14 @@ package com.spldeolin.beginningmind.launch.test;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
@@ -92,6 +94,17 @@ public class CommonServiceTest {
         user.setId(0L);
         user.setName("阿斯顿");
         log.info(userService.update(user)); // id对应数据不存在时返回false
+    }
+
+    @Test
+    public void updateBatch() throws Exception {
+        UserEntity set = new UserEntity();
+        set.setSerialNumber(RandomStringUtils.randomAlphabetic(2));
+
+        LambdaQueryWrapper<UserEntity> where = new LambdaQueryWrapper<>();
+        where.like(UserEntity::getName, "批量");
+
+        userService.update(set, where);
     }
 
     @Test
