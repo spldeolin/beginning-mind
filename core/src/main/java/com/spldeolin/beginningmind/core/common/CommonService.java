@@ -60,7 +60,7 @@ public interface CommonService<E extends CommonEntity> {
     boolean update(E entity);
 
     /**
-     * 批量更新实体
+     * 更新多个实体
      *
      * @param entity 存放所有需要更新的值
      * @param query 条件对象
