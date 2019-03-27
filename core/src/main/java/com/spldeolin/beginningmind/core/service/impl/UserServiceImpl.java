@@ -1,13 +1,9 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.session.FindByIndexNameSessionRepository;
-import org.springframework.session.Session;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.spldeolin.beginningmind.core.common.BizException;
@@ -28,12 +24,6 @@ public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements Us
 
     @Autowired
     private PermissionService permissionService;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Autowired
-    private FindByIndexNameSessionRepository<? extends Session> finder;
 
     @Autowired
     private SnowFlakeService snowFlakeService;
@@ -73,9 +63,6 @@ public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements Us
         if (!isExist(id)) {
             throw new BizException("用户不存在或是已被删除");
         }
-        if (getSignerSession(id).isPresent()) {
-            throw new BizException("用户登录中，等待用户退出或是将用户请离后再次操作");
-        }
         checkOccupationForUpdating(user);
 
         if (!super.update(user)) {
@@ -88,9 +75,6 @@ public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements Us
         if (!isExist(id)) {
             throw new BizException("用户不存在或是已被删除");
         }
-        if (getSignerSession(id).isPresent()) {
-            throw new BizException("用户登录中，等待用户退出或是将用户请离后再次操作");
-        }
         super.delete(id);
     }
 
@@ -99,11 +83,6 @@ public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements Us
         List<UserEntity> exist = super.list(ids);
         if (exist.size() < ids.size()) {
             throw new BizException("部分用户不存在或是已被删除");
-        }
-        for (Long id : ids) {
-            if (getSignerSession(id).isPresent()) {
-                throw new BizException("部分用户登录中，无法删除");
-            }
         }
         super.delete(ids);
         return "操作成功";
@@ -126,20 +105,6 @@ public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements Us
         user.setEnableSign(!user.getEnableSign());
 
         super.update(user);
-    }
-
-    /**
-     * 根据登录时存的PRINCIPAL_NAME_INDEX_NAME的值，通过Spring Session提供的API找到登录者的会话， 会话不存在则代表未登录
-     */
-    private Optional<Session> getSignerSession(Long userId) {
-        Collection<? extends Session> signerSessions = this.finder.findByIndexNameAndIndexValue(
-                FindByIndexNameSessionRepository.PRINCIPAL_NAME_INDEX_NAME, userId.toString()).values();
-        // 只可能找到一个，或找不到
-        if (signerSessions.size() > 0) {
-            return Optional.ofNullable(signerSessions.toArray(new Session[0])[0]);
-        } else {
-            return Optional.empty();
-        }
     }
 
     /**
