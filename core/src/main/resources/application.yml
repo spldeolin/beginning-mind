@@ -64,7 +64,7 @@ logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
 mybatis-plus:
-  mapper-locations: classpath:mapper/*.xml
+  mapper-locations: classpath*:mapper/*.xml
   global-config:
     banner: false
     db-config:
