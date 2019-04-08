@@ -29,7 +29,7 @@
 		<java.version>1.8</java.version>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
-		<spring-session.version>2.1.4.RELEASE</spring-session.version>
+		<spring-session.version>2.1.5.RELEASE</spring-session.version>
 
 		<!-- https://mvnrepository.com/artifact/biz.paluch.logging/logstash-gelf -->
 		<logstash-gelf.version>1.13.0</logstash-gelf.version>
@@ -38,7 +38,7 @@
 		<disruptor.version>3.4.2</disruptor.version>
 
 		<!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-		<mybatis.version>2.0.0</mybatis.version>
+		<mybatis.version>2.0.1</mybatis.version>
 
 		<!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
 		<mybatis-plus.version>3.1.0</mybatis-plus.version>
