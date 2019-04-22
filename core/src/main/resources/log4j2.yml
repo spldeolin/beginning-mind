@@ -14,27 +14,38 @@ Appenders:
       charset: utf-8
       pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia} - %m%n"
 
-  # Logstash
-#  Gelf:
-#    name: logstash
-#    host: 127.0.0.1
-#    port: 4560
-#    includeFullMdc: true
+  # log文件
+  RollingFile:
+    - name: file
+      fileName: logs/beginning-mind.log
+      filePattern: "logs/${date:yyyy-MM}/beginning-mind-%d{yyyy-MM-dd}.log.gz"
+      append: true
+      PatternLayout:
+        charset: utf-8
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %p [%t][%c{1.}:%L]%X{insignia} - %m%n"
+      Policies:
+        TimeBasedTriggeringPolicy:
+          modulate: true
+          interval: 1
+        SizeBasedTriggeringPolicy:
+          size: "128 MB"
+      DefaultRolloverStrategy:
+        max: 1000
 
 Loggers:
 
   AsyncRoot:
-    level: info # 非com.spldeolin开头类的过滤级别
+    level: info # 非com.spldeolin的类只打印info及以上级别
     includeLocation: true
     AppenderRef:
       - ref: console
-#      - ref: logstash
+      - ref: file
 
   AsyncLogger:
     name: com.spldeolin
     additivity: false
-    level: debug # com.spldeolin开头类的过滤级别
+    level: debug # com.spldeolin的类只打印debug及以上级别
     includeLocation: true
     AppenderRef:
       - ref: console
-#      - ref: logstash
+      - ref: file
