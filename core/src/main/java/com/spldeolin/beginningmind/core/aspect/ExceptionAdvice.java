@@ -45,8 +45,8 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RequestResult handle(HttpRequestMethodNotSupportedException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST,
-                "请求动词不受支持，当前为[" + e.getMethod() + "]，正确为" + Arrays.toString(e.getSupportedMethods()));
+        log.error("请求动词不受支持，当前为[" + e.getMethod() + "]，正确为" + Arrays.toString(e.getSupportedMethods()));
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -60,7 +60,8 @@ public class ExceptionAdvice {
             message += "当前为[" + e.getContentType().toString().replace(";charset=UTF-8", "") + "]，";
         }
         message += "正确为[application/json]。";
-        return RequestResult.failure(ResultCode.BAD_REQEUST, message);
+        log.error(message);
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -73,7 +74,8 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public RequestResult handle(MissingServletRequestParameterException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST, "缺少请求参数" + e.getParameterName());
+        log.error("缺少请求参数" + e.getParameterName());
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -81,7 +83,8 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public RequestResult handle(MethodArgumentTypeMismatchException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST, e.getName() + "类型错误");
+        log.error(e.getName() + "类型错误");
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -106,7 +109,8 @@ public class ExceptionAdvice {
             Invalid invalid = new Invalid(paramNames[paramIndex], paramValues[paramIndex], cv.getMessage());
             invalids.add(invalid);
         }
-        return RequestResult.failure(ResultCode.BAD_REQEUST, invalids, "数据校验未通过");
+        log.error(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -115,7 +119,8 @@ public class ExceptionAdvice {
     @ExceptionHandler(BindException.class)
     public RequestResult handle(BindException e) {
         List<Invalid> invalids = buildInvalids(e.getBindingResult());
-        return RequestResult.failure(ResultCode.BAD_REQEUST, invalids, "数据校验未通过");
+        log.error(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -129,7 +134,8 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult httpMessageNotReadable() {
-        return RequestResult.failure(ResultCode.BAD_REQEUST, "请求Body不可读。可能是JSON格式错误，或JSON不存在，或类型错误");
+        log.error("请求Body不可读。可能是JSON格式错误，或JSON不存在，或类型错误");
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -138,7 +144,8 @@ public class ExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
         List<Invalid> invalids = buildInvalids(e.getBindingResult());
-        return RequestResult.failure(ResultCode.BAD_REQEUST, invalids, "数据校验未通过");
+        log.error(invalids);
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -146,7 +153,8 @@ public class ExceptionAdvice {
      */
     @ExceptionHandler(ExtraInvalidException.class)
     public RequestResult handle(ExtraInvalidException e) {
-        return RequestResult.failure(ResultCode.BAD_REQEUST, e.getInvalids(), "数据校验未通过");
+        log.error(e.getInvalids());
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
@@ -185,7 +193,7 @@ public class ExceptionAdvice {
 
         String insignia = track.getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR, "内部错误");
+        return RequestResult.failure(ResultCode.INTERNAL_ERROR);
     }
 
     private List<Invalid> buildInvalids(BindingResult bindingResult) {

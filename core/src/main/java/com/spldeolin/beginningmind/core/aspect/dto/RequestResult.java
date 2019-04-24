@@ -59,10 +59,4 @@ public class RequestResult implements Serializable {
         return instance;
     }
 
-    public static RequestResult failure(ResultCode code, Object data, String message) {
-        RequestResult instance = failure(code, message);
-        instance.setData(data);
-        return instance;
-    }
-
 }
