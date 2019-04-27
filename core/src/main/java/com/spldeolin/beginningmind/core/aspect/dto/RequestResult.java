@@ -49,7 +49,7 @@ public class RequestResult implements Serializable {
     }
 
     public static RequestResult failure(ResultCode code) {
-        return failure(code, code.getDefaultMessage());
+        return failure(code, null);
     }
 
     public static RequestResult failure(ResultCode code, String message) {
