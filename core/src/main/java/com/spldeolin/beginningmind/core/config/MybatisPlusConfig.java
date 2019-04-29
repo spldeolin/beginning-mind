@@ -36,14 +36,6 @@ public class MybatisPlusConfig {
     }
 
     /**
-     * 逻辑删除
-     */
-    @Bean
-    public LogicSqlInjector logicSqlInjector() {
-        return new LogicSqlInjector();
-    }
-
-    /**
      * 分页
      */
     @Bean
