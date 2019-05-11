@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.controller;
 
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.core.service.UserService;
+import com.spldeolin.beginningmind.core.util.RequestTrackRunnable;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
@@ -127,5 +129,26 @@ public class TestController {
 
         return result;
     }
+
+    @GetMapping("/asyncMdc")
+    Object asyncMdc() {
+        log.info("sync");
+        log.info("sync");
+        log.info("sync");
+        log.info("sync");
+
+        Executors.newFixedThreadPool(1).submit(new RequestTrackRunnable(() -> {
+            try {
+                Thread.sleep(10_000);
+            } catch (InterruptedException ignored) {
+            }
+            log.info("async");
+        }));
+
+        log.info("sync");
+
+        return "SUCCESS";
+    }
+
 
 }

@@ -14,7 +14,7 @@ import lombok.extern.log4j.Log4j2;
 @Component
 public class TimeTask {
 
-    @Scheduled(fixedDelay = 5000)
+    //    @Scheduled(fixedDelay = 5000)
     public void report() {
         ThreadContext.put("async", "[TT-" + StringRandomUtils.generateLegibleEnNum(3) + "]");
 
