@@ -47,7 +47,7 @@
 		<swagger.version>1.9.0.RELEASE</swagger.version>
 
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-		<commons-lang3.version>3.8.1</commons-lang3.version>
+		<commons-lang3.version>3.9</commons-lang3.version>
 
 		<!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
 		<guava.version>27.1-jre</guava.version>
@@ -65,7 +65,7 @@
 		<commons-io.version>2.6</commons-io.version>
 
 		<!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-		<commons-codec.version>1.11</commons-codec.version>
+		<commons-codec.version>1.12</commons-codec.version>
 
 		<!-- https://mvnrepository.com/artifact/com.google.zxing/javase -->
 		<zxing.version>3.3.3</zxing.version>
