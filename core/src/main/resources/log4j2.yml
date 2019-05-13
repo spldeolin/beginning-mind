@@ -22,7 +22,7 @@ Appenders:
       append: true
       PatternLayout:
         charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss} %p [%t][%c:%L]%X{insignia}%X{async} - %m%n"
+        pattern: "%d{yyyy-MM-dd HH:mm:ss} %p [%t][%c:%L]%X{insignia} - %m%n"
       Policies:
         TimeBasedTriggeringPolicy:
           modulate: true
