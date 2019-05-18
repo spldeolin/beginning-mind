@@ -29,7 +29,7 @@
 		<java.version>1.8</java.version>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
-		<spring-session.version>2.1.5.RELEASE</spring-session.version>
+        <spring-session.version>2.1.6.RELEASE</spring-session.version>
 
 		<!-- https://mvnrepository.com/artifact/biz.paluch.logging/logstash-gelf -->
 		<logstash-gelf.version>1.13.0</logstash-gelf.version>

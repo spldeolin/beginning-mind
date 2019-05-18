@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.redis.RedisCache;
 import lombok.extern.log4j.Log4j2;
 
@@ -28,8 +27,8 @@ public class RedisChecker {
     public void t() {
         redisCache.set("one-cookie", "曲奇", 100, TimeUnit.SECONDS);
 
-        UserEntity user = redisCache.get("one-cookie");
-        log.info(user);
+        String v = redisCache.get("one-cookie");
+        log.info(v);
 
         redisCache.delete("one-cookie"); //break point
 
