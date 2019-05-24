@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.dao;
+package com.spldeolin.beginningmind.core.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;

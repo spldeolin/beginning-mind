@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.biz.dao;
+package com.spldeolin.beginningmind.biz.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.spldeolin.beginningmind.biz.entity.BizDemoEntity;

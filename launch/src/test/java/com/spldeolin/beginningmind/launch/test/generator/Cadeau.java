@@ -297,7 +297,7 @@ public class Cadeau {
         MapperJavaFtl mapperJavaFtl = createMapperJavaFtl(tableColumnDTO);
         String fileContent = formatFreemarker("mapper-java.ftl", mapperJavaFtl);
         // Mapper.java 输出文件
-        writeJavaFileToPackage("dao", entityName + "Mapper", fileContent);
+        writeJavaFileToPackage("mapper", entityName + "Mapper", fileContent);
         // Mapper.xml Freemarker
         MapperXmlFtl mapperXmlFtl = createMapperXmlFtl(tableColumnDTO);
         fileContent = formatFreemarker("mapper-xml.ftl", mapperXmlFtl);

@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.common.CommonServiceImpl;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.dao.UserMapper;
+import com.spldeolin.beginningmind.core.mapper.UserMapper;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;

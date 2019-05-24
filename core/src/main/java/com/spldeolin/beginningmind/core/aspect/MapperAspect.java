@@ -27,10 +27,10 @@ public class MapperAspect {
      * Spring可扫描的，BaseMapper的所有派生类
      */
     @Pointcut("this(com.baomidou.mybatisplus.core.mapper.BaseMapper)")
-    public void daoMapper() {
+    public void mapper() {
     }
 
-    @Around("daoMapper()")
+    @Around("mapper()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
         Object[] parameterValues = point.getArgs();
 
