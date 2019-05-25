@@ -11,6 +11,7 @@ import com.spldeolin.beginningmind.core.service.SecurityAccessTokenService;
  * @author Deolin 2019-02-23
  */
 @Service
-public class SecurityAccessTokenServiceImpl extends CommonServiceImpl<SecurityAccessTokenEntity> implements SecurityAccessTokenService {
+public class SecurityAccessTokenServiceImpl extends CommonDaoImpl<SecurityAccessTokenEntity> implements
+        SecurityAccessTokenService {
 
 }

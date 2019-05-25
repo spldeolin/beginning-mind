@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.common.CommonServiceImpl;
+import com.spldeolin.beginningmind.core.common.CommonDaoImpl;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
 import com.spldeolin.beginningmind.core.mapper.UserMapper;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
@@ -20,7 +20,7 @@ import com.spldeolin.beginningmind.core.util.StringRandomUtils;
  * @author Deolin 2018/11/12
  */
 @Service
-public class UserServiceImpl extends CommonServiceImpl<UserEntity> implements UserService {
+public class UserServiceImpl extends CommonDaoImpl<UserEntity> implements UserService {
 
     @Autowired
     private PermissionService permissionService;

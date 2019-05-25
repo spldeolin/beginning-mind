@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.core.service;
 
 import java.util.List;
 import java.util.Optional;
-import com.spldeolin.beginningmind.core.common.CommonService;
+import com.spldeolin.beginningmind.core.common.CommonDao;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 
 /**
@@ -10,7 +10,7 @@ import com.spldeolin.beginningmind.core.entity.UserEntity;
  *
  * @author Deolin 2018/11/12
  */
-public interface UserService extends CommonService<UserEntity> {
+public interface UserService extends CommonDao<UserEntity> {
 
     /**
      * 创建一个“用户” （附带业务校验）

@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
 import java.util.List;
-import com.spldeolin.beginningmind.core.common.CommonService;
+import com.spldeolin.beginningmind.core.common.CommonDao;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 
 /**
@@ -9,7 +9,7 @@ import com.spldeolin.beginningmind.core.entity.PermissionEntity;
  *
  * @author Deolin 2018/11/15
  */
-public interface PermissionService extends CommonService<PermissionEntity> {
+public interface PermissionService extends CommonDao<PermissionEntity> {
 
     List<PermissionEntity> listGrantedPermission(Long userId);
 

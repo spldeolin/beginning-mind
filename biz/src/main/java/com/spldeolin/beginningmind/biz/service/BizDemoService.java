@@ -6,6 +6,6 @@ import com.spldeolin.beginningmind.biz.entity.BizDemoEntity;
 /**
  * @author Deolin 2019-03-18
  */
-public interface BizDemoService extends CommonService<BizDemoEntity> {
+public interface BizDemoService extends CommonDao<BizDemoEntity> {
 
 }

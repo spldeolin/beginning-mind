@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.service;
 
 
-import com.spldeolin.beginningmind.core.common.CommonService;
+import com.spldeolin.beginningmind.core.common.CommonDao;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 
 /**
@@ -9,6 +9,6 @@ import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
  *
  * @author Deolin 2018/12/07
  */
-public interface User2permissionService extends CommonService<User2permissionEntity> {
+public interface User2permissionService extends CommonDao<User2permissionEntity> {
 
 }

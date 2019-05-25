@@ -5,7 +5,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.common.CommonServiceImpl;
+import com.spldeolin.beginningmind.core.common.CommonDaoImpl;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.core.service.PermissionService;
@@ -17,7 +17,7 @@ import com.spldeolin.beginningmind.core.service.User2permissionService;
  * @author Deolin 2018/11/15
  */
 @Service
-public class PermissionServiceImpl extends CommonServiceImpl<PermissionEntity> implements PermissionService {
+public class PermissionServiceImpl extends CommonDaoImpl<PermissionEntity> implements PermissionService {
 
     @Autowired
     private User2permissionService user2permissionService;

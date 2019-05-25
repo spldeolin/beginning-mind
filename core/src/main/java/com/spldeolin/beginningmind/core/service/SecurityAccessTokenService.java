@@ -8,6 +8,6 @@ import com.spldeolin.beginningmind.core.entity.SecurityAccessTokenEntity;
  *
  * @author Deolin 2019-02-23
  */
-public interface SecurityAccessTokenService extends CommonService<SecurityAccessTokenEntity> {
+public interface SecurityAccessTokenService extends CommonDao<SecurityAccessTokenEntity> {
 
 }

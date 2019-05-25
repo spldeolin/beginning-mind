@@ -10,9 +10,11 @@ import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 
 /**
+ * 数据访问层的通用接口
+ *
  * @author Deolin
  */
-public interface CommonService<E extends CommonEntity> {
+public interface CommonDao<E extends CommonEntity> {
 
     /**
      * 创建一个实体

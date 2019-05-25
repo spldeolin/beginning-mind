@@ -9,6 +9,6 @@ import com.spldeolin.beginningmind.biz.service.BizDemoService;
  * @author Deolin 2019-03-18
  */
 @Service
-public class BizDemoServiceImpl extends CommonServiceImpl<BizDemoEntity> implements BizDemoService {
+public class BizDemoServiceImpl extends CommonDaoImpl<BizDemoEntity> implements BizDemoService {
 
 }

@@ -18,9 +18,11 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 
 /**
+ * 数据访问层的通用抽象类
+ *
  * @author Deolin
  */
-public abstract class CommonServiceImpl<E extends CommonEntity> implements CommonService<E> {
+public abstract class CommonDaoImpl<E extends CommonEntity> implements CommonDao<E> {
 
     private static final Integer maxBatchSize = 1000;
 
@@ -30,7 +32,7 @@ public abstract class CommonServiceImpl<E extends CommonEntity> implements Commo
     private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
-    public CommonServiceImpl() {
+    public CommonDaoImpl() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         entityClass = (Class<E>) pt.getActualTypeArguments()[0];
     }
