@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
@@ -27,7 +26,6 @@ public class RequestTrackAsyncHandler {
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
 
-    @Async
     public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {
         analysizRequestTrack(track, request);
         saveTrackToEs(track);

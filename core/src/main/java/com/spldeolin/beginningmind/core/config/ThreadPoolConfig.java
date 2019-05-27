@@ -5,19 +5,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
-import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import com.spldeolin.beginningmind.core.CoreProperties;
 import com.spldeolin.beginningmind.core.CoreProperties.TaskExecutorProp;
 
 /**
- * 启用异步注解 @Async
+ * 全局线程池配置
  *
  * @author Deolin 2018/07/30
  */
-@EnableAsync
 @Configuration
-public class AsyncConfig {
+public class ThreadPoolConfig {
 
     @Autowired
     private CoreProperties coreProperties;

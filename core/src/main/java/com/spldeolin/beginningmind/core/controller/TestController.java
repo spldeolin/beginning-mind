@@ -20,7 +20,7 @@ import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.core.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.core.service.UserService;
-import com.spldeolin.beginningmind.core.util.RequestTrackRunnable;
+import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
@@ -137,7 +137,7 @@ public class TestController {
         log.info("sync");
         log.info("sync");
 
-        Executors.newFixedThreadPool(1).submit(new RequestTrackRunnable(() -> {
+        Executors.newFixedThreadPool(1).submit(new MdcRunnable(() -> {
             try {
                 Thread.sleep(10_000);
             } catch (InterruptedException ignored) {

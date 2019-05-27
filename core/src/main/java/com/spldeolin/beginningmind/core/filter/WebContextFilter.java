@@ -7,9 +7,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.filter.async.RequestTrackAsyncHandler;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -35,6 +37,9 @@ public class WebContextFilter extends IngoreSwaggerApiFilter {
     @Autowired
     private RequestTrackAsyncHandler requestTrackAsyncHandler;
 
+    @Autowired
+    private TaskExecutor taskExecutor;
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
@@ -53,7 +58,8 @@ public class WebContextFilter extends IngoreSwaggerApiFilter {
         filterChain.doFilter(request, response);
 
         // 补全并保存RequestTrackDTO对象（异步）
-        requestTrackAsyncHandler.asyncCompleteAndSave(track, request);
+        taskExecutor.execute(new MdcRunnable(()
+                -> requestTrackAsyncHandler.asyncCompleteAndSave(track, request)));
 
         // 清空ThreadLocal
         WebContext.removeRequestTrack();

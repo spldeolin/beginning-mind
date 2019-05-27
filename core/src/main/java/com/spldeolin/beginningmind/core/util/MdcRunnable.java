@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
  *
  * @author Deolin 2019-05-11
  */
-public class RequestTrackRunnable implements Runnable {
+public class MdcRunnable implements Runnable {
 
     private final Runnable task;
 
@@ -24,7 +24,7 @@ public class RequestTrackRunnable implements Runnable {
 
     private static final String LOG_MDC_INSIGNIA = "insignia";
 
-    public RequestTrackRunnable(Runnable task) {
+    public MdcRunnable(Runnable task) {
         this.task = task;
 
         RequestTrackDTO track = WebContext.getRequestTrack();
