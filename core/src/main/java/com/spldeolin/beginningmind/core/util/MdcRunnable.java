@@ -36,7 +36,7 @@ public class MdcRunnable implements Runnable {
 
     @Override
     public void run() {
-        ThreadContext.put(LOG_MDC_INSIGNIA, "[" + insignia + "]");
+        ThreadContext.put(LOG_MDC_INSIGNIA, "[" + insignia + "_]");
 
         task.run();
 
