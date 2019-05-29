@@ -31,12 +31,6 @@
 		<!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
         <spring-session.version>2.1.6.RELEASE</spring-session.version>
 
-		<!-- https://mvnrepository.com/artifact/biz.paluch.logging/logstash-gelf -->
-		<logstash-gelf.version>1.13.0</logstash-gelf.version>
-
-		<!-- https://mvnrepository.com/artifact/com.lmax/disruptor -->
-		<disruptor.version>3.4.2</disruptor.version>
-
 		<!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
 		<mybatis.version>2.0.1</mybatis.version>
 
@@ -135,21 +129,6 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
-		<!--
-            Spring Boot 从2.1.4升级到2.1.5时，启动会报错
-            NoClassDefFoundError: org/springframework/security/web/authentication/RememberMeServices
-            根据https://github.com/spring-projects/spring-boot/issues/16871，需要排除一个依赖
-        -->
-		<dependency>
-			<groupId>org.springframework.security</groupId>
-			<artifactId>spring-security-web</artifactId>
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework.security</groupId>
-					<artifactId>spring-security-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
 		<!-- springboot redis -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -196,18 +175,6 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-jul</artifactId>
-		</dependency>
-		<!-- logstash -->
-		<dependency>
-			<groupId>biz.paluch.logging</groupId>
-			<artifactId>logstash-gelf</artifactId>
-			<version>${logstash-gelf.version}</version>
-		</dependency>
-		<!-- disruptor -->
-		<dependency>
-			<groupId>com.lmax</groupId>
-			<artifactId>disruptor</artifactId>
-			<version>${disruptor.version}</version>
 		</dependency>
 		<!-- mybatis -->
 		<dependency>
@@ -322,6 +289,25 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+
+		<!--
+            Spring Boot 从2.1.4升级到2.1.5时，启动会报错
+            NoClassDefFoundError: org/springframework/security/web/authentication/RememberMeServices
+            根据https://github.com/spring-projects/spring-boot/issues/16871，需要排除一个依赖
+
+			也许后续的版本就不需要这样修复方案了
+        -->
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 	</dependencies>
 

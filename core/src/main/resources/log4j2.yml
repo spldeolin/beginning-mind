@@ -34,14 +34,14 @@ Appenders:
 
 Loggers:
 
-  AsyncRoot:
+  Root:
     level: info # 非com.spldeolin的类只打印info及以上级别
     includeLocation: true
     AppenderRef:
       - ref: console
       - ref: file
 
-  AsyncLogger:
+  Logger:
     name: com.spldeolin
     additivity: false
     level: debug # com.spldeolin的类只打印debug及以上级别
