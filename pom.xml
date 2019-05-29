@@ -135,10 +135,20 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-aop</artifactId>
 		</dependency>
-        <!-- springboot security -->
+		<!--
+            Spring Boot 从2.1.4升级到2.1.5时，启动会报错
+            NoClassDefFoundError: org/springframework/security/web/authentication/RememberMeServices
+            根据https://github.com/spring-projects/spring-boot/issues/16871，需要排除一个依赖
+        -->
 		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-security</artifactId>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-web</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.security</groupId>
+					<artifactId>spring-security-core</artifactId>
+				</exclusion>
+			</exclusions>
 		</dependency>
 		<!-- springboot redis -->
 		<dependency>

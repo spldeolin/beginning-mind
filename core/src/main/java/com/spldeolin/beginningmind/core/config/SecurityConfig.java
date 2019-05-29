@@ -3,8 +3,6 @@ package com.spldeolin.beginningmind.core.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import com.spldeolin.beginningmind.core.security.holder.TokenHolder;
 import com.spldeolin.beginningmind.core.service.SecurityAccessTokenService;
 
@@ -19,7 +17,7 @@ import com.spldeolin.beginningmind.core.service.SecurityAccessTokenService;
  * @author Deolin 2018/12/02
  */
 @Configuration
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+public class SecurityConfig {
 
     @Autowired
     private SecurityAccessTokenService securityAccessTokenService;
@@ -31,8 +29,4 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return tokenHolder;
     }
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
-    }
 }
