@@ -24,7 +24,7 @@ public class BizTestController {
     @GetMapping
     List<BizDemoEntity> ln17() {
         System.out.println(System.getProperty("java.io.tmpdir"));
-        return bizDemoService.listAll();
+        return bizDemoService.all();
     }
 
 }

@@ -39,7 +39,7 @@ public class UserController {
      */
     @PostMapping("/create")
     Long create(@RequestBody @Valid UserInput userInput) {
-        return userService.createEX(userInput.toEntity());
+        return userService.createUser(userInput.toEntity());
     }
 
     /**
@@ -50,7 +50,7 @@ public class UserController {
      */
     @GetMapping("/get")
     UserEntity get(@RequestParam Long id) {
-        return userService.getEX(id);
+        return userService.getUser(id);
     }
 
     /**
@@ -61,7 +61,7 @@ public class UserController {
      */
     @PostMapping("/update")
     void update(@RequestParam Long id, @RequestBody @Valid UserInput userInput) {
-        userService.updateEX(userInput.toEntity(id));
+        userService.updateUser(userInput.toEntity(id));
     }
 
     /**
@@ -71,7 +71,7 @@ public class UserController {
      */
     @PostMapping("/delete")
     void delete(@RequestParam Long id) {
-        userService.deleteEX(id);
+        userService.deleteUser(id);
     }
 
     /**
@@ -82,7 +82,7 @@ public class UserController {
      */
     @PostMapping("/batchDelete")
     String delete(@RequestBody List<Long> ids) {
-        return userService.deleteEX(ids);
+        return userService.deleteUsers(ids);
     }
 
 }

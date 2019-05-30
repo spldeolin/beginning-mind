@@ -1,9 +1,9 @@
 package com.spldeolin.beginningmind.core.service;
 
 import org.springframework.stereotype.Service;
+import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.vo.CaptchaVO;
 import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
-import com.spldeolin.beginningmind.core.input.SignInput;
 
 /**
  * 登录

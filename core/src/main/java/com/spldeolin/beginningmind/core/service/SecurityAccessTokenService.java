@@ -1,6 +1,6 @@
 package com.spldeolin.beginningmind.core.service;
 
-import com.spldeolin.beginningmind.core.common.*;
+import java.util.List;
 import com.spldeolin.beginningmind.core.entity.SecurityAccessTokenEntity;
 
 /**
@@ -8,6 +8,8 @@ import com.spldeolin.beginningmind.core.entity.SecurityAccessTokenEntity;
  *
  * @author Deolin 2019-02-23
  */
-public interface SecurityAccessTokenService extends CommonDao<SecurityAccessTokenEntity> {
+public interface SecurityAccessTokenService {
+
+    List<SecurityAccessTokenEntity> listAll();
 
 }

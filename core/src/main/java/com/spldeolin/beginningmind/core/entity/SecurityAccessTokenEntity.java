@@ -1,9 +1,10 @@
 package com.spldeolin.beginningmind.core.entity;
 
-import java.time.*;
-import com.baomidou.mybatisplus.annotation.*;
-import com.spldeolin.beginningmind.core.common.*;
-import lombok.*;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableName;
+import com.spldeolin.beginningmind.core.common.CommonEntity;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 代表声明了@SecurityAccess(AccessMode.TOKEN)的请求方法的token值

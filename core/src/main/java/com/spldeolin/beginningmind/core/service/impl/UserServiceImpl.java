@@ -1,17 +1,14 @@
 package com.spldeolin.beginningmind.core.service.impl;
 
 import java.util.List;
-import java.util.Optional;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.common.CommonDaoImpl;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.mapper.UserMapper;
+import com.spldeolin.beginningmind.core.dao.PermissionDao;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;
 import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
@@ -20,19 +17,19 @@ import com.spldeolin.beginningmind.core.util.StringRandomUtils;
  * @author Deolin 2018/11/12
  */
 @Service
-public class UserServiceImpl extends CommonDaoImpl<UserEntity> implements UserService {
-
-    @Autowired
-    private PermissionService permissionService;
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private SnowFlakeService snowFlakeService;
 
     @Autowired
-    private UserMapper userMapper;
+    private PermissionDao permissionDao;
+
+    @Autowired
+    private UserDao userDao;
 
     @Override
-    public Long createEX(UserEntity user) {
+    public Long createUser(UserEntity user) {
         checkOccupationForCreating(user);
 
         // 盐、密码
@@ -47,79 +44,68 @@ public class UserServiceImpl extends CommonDaoImpl<UserEntity> implements UserSe
         // 编号
         user.setSerialNumber(String.valueOf(snowFlakeService.nextId()));
 
-        super.create(user);
+        userDao.create(user);
         return user.getId();
     }
 
     @Override
-    public UserEntity getEX(Long id) {
-        return super.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
+    public UserEntity getUser(Long id) {
+        return userDao.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
     }
 
     @Override
-    public void updateEX(UserEntity user) {
+    public void updateUser(UserEntity user) {
         Long id = user.getId();
 
-        if (!isExist(id)) {
+        if (!userDao.isExist(id)) {
             throw new BizException("用户不存在或是已被删除");
         }
         checkOccupationForUpdating(user);
 
-        if (!super.update(user)) {
+        if (!userDao.update(user)) {
             throw new BizException("用户数据过时");
         }
     }
 
     @Override
-    public void deleteEX(Long id) {
-        if (!isExist(id)) {
+    public void deleteUser(Long id) {
+        if (!userDao.isExist(id)) {
             throw new BizException("用户不存在或是已被删除");
         }
-        super.delete(id);
+        userDao.delete(id);
     }
 
     @Override
-    public String deleteEX(List<Long> ids) {
-        List<UserEntity> exist = super.list(ids);
+    public String deleteUsers(List<Long> ids) {
+        List<UserEntity> exist = userDao.list(ids);
         if (exist.size() < ids.size()) {
             throw new BizException("部分用户不存在或是已被删除");
         }
-        super.delete(ids);
+        userDao.delete(ids);
         return "操作成功";
     }
 
     @Override
-    public Optional<UserEntity> searchOneByPrincipal(String principal) {
-        QueryWrapper<UserEntity> query = new QueryWrapper<>();
-        query.or().eq("name", principal).or().eq("mobile", principal).or().eq("email", principal);
-        List<UserEntity> users = super.searchBatch(query);
-        if (users.size() == 0) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(users.get(0));
-    }
-
-    @Override
     public void banPick(Long userId) {
-        UserEntity user = get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
+        UserEntity user = userDao.get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
         user.setEnableSign(!user.getEnableSign());
 
-        super.update(user);
+        userDao.update(user);
     }
 
     /**
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForCreating(UserEntity user) {
-        if (searchOne(UserEntity::getName, user.getName()).isPresent()) {
+        if (userDao.isExistByName(user.getName())) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
-        if (mobile != null && searchOne(UserEntity::getMobile, mobile).isPresent()) {
+        if (mobile != null && userDao.isExistByMobile(user.getMobile())) {
             throw new BizException("手机号已被占用");
         }
         String email = user.getEmail();
-        if (email != null && searchOne(UserEntity::getEmail, email).isPresent()) {
+        if (email != null && userDao.isExistByEmail(user.getEmail())) {
             throw new BizException("E-Mail已被占用");
         }
     }
@@ -130,20 +116,18 @@ public class UserServiceImpl extends CommonDaoImpl<UserEntity> implements UserSe
     private void checkOccupationForUpdating(UserEntity user) {
         Long id = user.getId();
         String username = user.getName();
-        if (!id.equals(searchOne(UserEntity::getName, username).orElse(new UserEntity()).getId())) {
+        String mobile = user.getMobile();
+        String email = user.getEmail();
+        if (userDao.isExistByNameNeId(username, id)) {
             throw new BizException("用户名已被占用");
         }
-        String mobile = user.getMobile();
-        if (mobile != null) {
-            if (!id.equals(searchOne(UserEntity::getMobile, mobile).orElse(new UserEntity()).getId())) {
-                throw new BizException("手机号已被占用");
-            }
+
+        if (mobile != null && userDao.isExistByMobileNeId(mobile, id)) {
+            throw new BizException("手机号已被占用");
         }
-        String email = user.getEmail();
-        if (email != null) {
-            if (!id.equals(searchOne(UserEntity::getEmail, email).orElse(new UserEntity()).getId())) {
-                throw new BizException("E-Mail已被占用");
-            }
+
+        if (email != null && userDao.isExistByEmailNeId(email, id)) {
+            throw new BizException("E-Mail已被占用");
         }
     }
 

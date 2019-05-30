@@ -10,25 +10,22 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.google.common.collect.Lists;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import com.spldeolin.beginningmind.core.service.UserService;
-import com.spldeolin.beginningmind.core.util.Times;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/11/12
  */
-
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
 @Log4j2
-public class CommonServiceTest {
+public class CommonDaoTest {
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Test
     public void create() {
@@ -36,7 +33,7 @@ public class CommonServiceTest {
         user.setInsertedAt(LocalDateTime.of(2000, 11, 12, 13, 14, 15)); // CommonFieldFillHandler填充时将会覆盖这个值
         user.setName("汉字");
         user.setMobile("1");
-        userService.create(user);
+        userDao.create(user);
 
         log.info(user.getId());
         log.info("结束");
@@ -52,28 +49,28 @@ public class CommonServiceTest {
             user.setMobile(String.valueOf(i));
             users.add(user);
         }
-        userService.create(users);
+        userDao.create(users);
 
         users.forEach(user -> log.info(user.getId()));
     }
 
     @Test
     public void get() {
-        log.info(userService.get(0L));
-        log.info(userService.get(309844791922689L));
+        log.info(userDao.get(0L));
+        log.info(userDao.get(309844791922689L));
     }
 
     @Test
     public void list() {
-        userService.list(Lists.newArrayList(309844787728385L, 303270472060928L, 0L, 290956356227072L))
+        userDao.list(Lists.newArrayList(309844787728385L, 303270472060928L, 0L, 290956356227072L))
                 .forEach(log::info);
 
-        log.info(userService.list(Lists.newArrayList(9L, 10L, 0L, 11L)).size());
+        log.info(userDao.list(Lists.newArrayList(9L, 10L, 0L, 11L)).size());
     }
 
     @Test
     public void listAll() {
-        userService.listAll().forEach(log::info);
+        userDao.listAll().forEach(log::info);
     }
 
     @Test
@@ -81,19 +78,19 @@ public class CommonServiceTest {
         UserEntity user = new UserEntity();
         user.setId(290956356227072L);
         try {
-            userService.update(user);  // 只有id不为null时baseMapper会抛出BadSqlGrammarException异常
+            userDao.update(user);  // 只有id不为null时baseMapper会抛出BadSqlGrammarException异常
         } catch (Exception e) {
             log.error("", e);
         }
 
         user = new UserEntity();
         user.setName("阿斯顿");
-        log.info(userService.update(user)); // id为null时返回false
+        log.info(userDao.update(user)); // id为null时返回false
 
         user = new UserEntity();
         user.setId(0L);
         user.setName("阿斯顿");
-        log.info(userService.update(user)); // id对应数据不存在时返回false
+        log.info(userDao.update(user)); // id对应数据不存在时返回false
     }
 
     @Test
@@ -104,18 +101,18 @@ public class CommonServiceTest {
         LambdaQueryWrapper<UserEntity> where = new LambdaQueryWrapper<>();
         where.like(UserEntity::getName, "批量");
 
-        userService.update(set, where);
+//        userDao.update(set, where);
     }
 
     @Test
     public void delete() {
-        userService.delete(400214720647168L);
+        userDao.delete(400214720647168L);
     }
 
     @Test
     public void deleteBatch() {
         List<Long> ids = Lists.newArrayList(36286656290099200L, 36286656566923264L, 36286656571117568L);
-        userService.delete(ids);
+        userDao.delete(ids);
     }
 
     @Test
@@ -123,39 +120,39 @@ public class CommonServiceTest {
         UserEntity user = new UserEntity();
         user.setName("汉字");
         user.setEmail("1");
-        log.info(userService.searchOne(user));
+//        log.info(userDao.searchOne(user));
     }
 
     @Test
     public void searchOne2() {
-        log.info(userService.searchOne(UserEntity::getEmail, "1"));
+//        log.info(userDao.searchOne(UserEntity::getEmail, "1"));
     }
 
     @Test
     public void searchBatch() {
         UserEntity user = new UserEntity();
         user.setName("汉字");
-        userService.searchBatch(user).forEach(log::info);
+//        userDao.searchBatch(user).forEach(log::info);
     }
 
     @Test
     public void searchBatch2() {
-        userService.searchBatch(UserEntity::getEmail, "2").forEach(log::info);
+//        userDao.searchBatch(UserEntity::getEmail, "2").forEach(log::info);
     }
 
     @Test
     public void queryWrapper() {
-        userService
-                .searchBatch(
-                        new QueryWrapper<UserEntity>().lt("inserted_at", Times.toLocalDateTime("2018-11-13 08:35:08")))
-                .forEach(log::info);
+//        userDao
+//                .searchBatch(
+//                        new QueryWrapper<UserEntity>().lt("inserted_at", Times.toLocalDateTime("2018-11-13 08:35:08")))
+//                .forEach(log::info);
     }
 
     @Test
     public void count() {
         UserEntity user = new UserEntity();
         user.setName("汉字");
-        log.info(userService.count(user));
+        log.info(userDao.count(user));
     }
 
 }

@@ -13,7 +13,7 @@ import com.spldeolin.beginningmind.core.entity.UserEntity;
  */
 public interface UserMapper extends BaseMapper<UserEntity> {
 
-//    @Select("select * from user where is_deleted = false and mobile = #{mobile}")
+    //    @Select("select * from user where is_deleted = false and mobile = #{mobile}")
     IPage<UserEntity> searchAsPageByMobile(Page<UserEntity> param, @Param("mobile") String mobile);
 
 }

@@ -8,8 +8,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,18 +25,18 @@ import lombok.extern.log4j.Log4j2;
 public class PasswordInit {
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Test
     public void initOne() {
-        UserEntity user = userService.get(1L).orElseThrow(() -> new RuntimeException("用户不存在"));
+        UserEntity user = userDao.get(1L).orElseThrow(() -> new RuntimeException("用户不存在"));
 
         String salt = StringRandomUtils.generateVisibleAscii(32);
         String password = DigestUtils.sha512Hex(CoupledConstant.DEFAULT_PASSWORD_EX + salt);
         user.setSalt(salt);
         user.setPassword(password);
 
-        log.info(userService.update(user));
+        log.info(userDao.update(user));
     }
 
 }

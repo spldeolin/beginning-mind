@@ -9,8 +9,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.spldeolin.beginningmind.core.mapper.UserMapper;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
+import com.spldeolin.beginningmind.core.mapper.UserMapper;
 import com.spldeolin.beginningmind.core.util.Jsons;
 import lombok.extern.log4j.Log4j2;
 

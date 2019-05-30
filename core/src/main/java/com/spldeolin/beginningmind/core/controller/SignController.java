@@ -8,11 +8,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.vo.CaptchaVO;
-import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 import com.spldeolin.beginningmind.core.input.SignInput;
 import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.SignService;
+import com.spldeolin.beginningmind.core.vo.CaptchaVO;
+import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 
 /**
  * 登录、登出、登录状态等

@@ -16,8 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.vo.CaptchaVO;
-import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.input.SignInput;
@@ -25,10 +24,11 @@ import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 import com.spldeolin.beginningmind.core.service.SignService;
-import com.spldeolin.beginningmind.core.service.UserService;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import com.spldeolin.beginningmind.core.util.StringRandomUtils;
 import com.spldeolin.beginningmind.core.util.WebContext;
+import com.spldeolin.beginningmind.core.vo.CaptchaVO;
+import com.spldeolin.beginningmind.core.vo.SignerProfileVO;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -41,7 +41,7 @@ public class SignServiceImpl implements SignService {
     public static final String SIGNER_SESSION_KEY = "signer";
 
     @Autowired
-    private UserService userService;
+    private UserDao userDao;
 
     @Autowired
     private PermissionService permissionService;
@@ -134,7 +134,7 @@ public class SignServiceImpl implements SignService {
     }
 
     private UserEntity tryGetUser(String principal) {
-        Optional<UserEntity> userOpt = userService.searchOneByPrincipal(principal);
+        Optional<UserEntity> userOpt = userDao.searchFirstByNameOrMobileOrEmail(principal);
         if (userOpt.isPresent()) {
             return userOpt.get();
         } else {

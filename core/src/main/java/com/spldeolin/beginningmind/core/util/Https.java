@@ -44,7 +44,6 @@ public class Https {
             Response response = doRequest(request);
             String responseBody = ensureJsonAndGetBody(response);
 
-
             Map<String, Map<String, List<String>>> responseBodyMap = Jsons.toObject(responseBody, Map.class);
             Map<String, List<String>> browserMap = responseBodyMap.get("browsers");
 
