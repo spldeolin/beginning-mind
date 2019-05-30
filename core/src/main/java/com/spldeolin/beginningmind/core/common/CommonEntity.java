@@ -10,6 +10,10 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
+ * Entity通用属性
+ *
+ * entity类必须一律继承这个类
+ *
  * @author Deolin 2019-01-14
  */
 @Data

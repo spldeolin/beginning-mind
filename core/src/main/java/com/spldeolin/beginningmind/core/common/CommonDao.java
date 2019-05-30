@@ -8,7 +8,6 @@ import org.apache.ibatis.exceptions.TooManyResultsException;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
@@ -18,6 +17,8 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 
 /**
  * 数据访问层的通用抽象类
+ *
+ * dao层必须一律继承这个类
  *
  * @author Deolin
  */
@@ -152,18 +153,6 @@ public abstract class CommonDao<E extends CommonEntity> {
     }
 
     /**
-     * 查询实体是否存在
-     *
-     * @param id 实体的ID
-     * @return TRUE：存在，FALSE：不存在
-     */
-    public boolean isExist(Long id) {
-        LambdaQueryWrapper<E> query = new LambdaQueryWrapper<>();
-        query.eq(E::getId, id);
-        return baseMapper.selectCount(query) > 0;
-    }
-
-    /**
      * 更新多个实体
      *
      * @param entity 存放所有需要更新的值
@@ -179,8 +168,8 @@ public abstract class CommonDao<E extends CommonEntity> {
      *
      * @param query 条件对象
      * @return 满足条件的实体
-     * @throws TooManyResultsException 满足条件的实体不止一个时（e.g.: Expected one result (or null) to be returned by selectOne(),
-     * but found: 2 ）
+     * @throws TooManyResultsException 满足条件的实体不止一个时
+     * （e.g.: Expected one result (or null) to be returned by selectOne(), but found: 2 ）
      */
     protected Optional<E> searchOne(Wrapper<E> query) throws TooManyResultsException {
         return batchToOne(searchBatch(query));

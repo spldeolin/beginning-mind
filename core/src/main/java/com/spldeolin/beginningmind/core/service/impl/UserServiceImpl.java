@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
     public void updateUser(UserEntity user) {
         Long id = user.getId();
 
-        if (!userDao.isExist(id)) {
+        if (!userDao.get(id).isPresent()) {
             throw new BizException("用户不存在或是已被删除");
         }
         checkOccupationForUpdating(user);
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(Long id) {
-        if (!userDao.isExist(id)) {
+        if (!userDao.get(id).isPresent()) {
             throw new BizException("用户不存在或是已被删除");
         }
         userDao.delete(id);
