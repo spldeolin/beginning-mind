@@ -109,6 +109,9 @@ public abstract class CommonDao<E extends CommonEntity> {
      * @return TRUE：更新成功，FALSE：更新失败（实体不存在或是乐观锁）
      */
     public boolean update(E entity) {
+        if (entity.getId() == null) {
+            throw new IllegalArgumentException("id属性不能为null");
+        }
         boolean updated = baseMapper.updateById(entity) != 0;
         return updated;
     }

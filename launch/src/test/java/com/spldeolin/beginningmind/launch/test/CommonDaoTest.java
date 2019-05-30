@@ -2,14 +2,12 @@ package com.spldeolin.beginningmind.launch.test;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
@@ -57,12 +55,12 @@ public class CommonDaoTest {
     @Test
     public void get() {
         log.info(userDao.get(0L));
-        log.info(userDao.get(309844791922689L));
+        log.info(userDao.get(72172181794197504L));
     }
 
     @Test
     public void list() {
-        userDao.list(Lists.newArrayList(309844787728385L, 303270472060928L, 0L, 290956356227072L))
+        userDao.list(Lists.newArrayList(400214720647168L, 36286656579506176L, 0L, 72172181840334848L))
                 .forEach(log::info);
 
         log.info(userDao.list(Lists.newArrayList(9L, 10L, 0L, 11L)).size());
@@ -94,17 +92,6 @@ public class CommonDaoTest {
     }
 
     @Test
-    public void updateBatch() throws Exception {
-        UserEntity set = new UserEntity();
-        set.setSerialNumber(RandomStringUtils.randomAlphabetic(2));
-
-        LambdaQueryWrapper<UserEntity> where = new LambdaQueryWrapper<>();
-        where.like(UserEntity::getName, "批量");
-
-//        userDao.update(set, where);
-    }
-
-    @Test
     public void delete() {
         userDao.delete(400214720647168L);
     }
@@ -113,39 +100,6 @@ public class CommonDaoTest {
     public void deleteBatch() {
         List<Long> ids = Lists.newArrayList(36286656290099200L, 36286656566923264L, 36286656571117568L);
         userDao.delete(ids);
-    }
-
-    @Test
-    public void searchOne() {
-        UserEntity user = new UserEntity();
-        user.setName("汉字");
-        user.setEmail("1");
-//        log.info(userDao.searchOne(user));
-    }
-
-    @Test
-    public void searchOne2() {
-//        log.info(userDao.searchOne(UserEntity::getEmail, "1"));
-    }
-
-    @Test
-    public void searchBatch() {
-        UserEntity user = new UserEntity();
-        user.setName("汉字");
-//        userDao.searchBatch(user).forEach(log::info);
-    }
-
-    @Test
-    public void searchBatch2() {
-//        userDao.searchBatch(UserEntity::getEmail, "2").forEach(log::info);
-    }
-
-    @Test
-    public void queryWrapper() {
-//        userDao
-//                .searchBatch(
-//                        new QueryWrapper<UserEntity>().lt("inserted_at", Times.toLocalDateTime("2018-11-13 08:35:08")))
-//                .forEach(log::info);
     }
 
     @Test
