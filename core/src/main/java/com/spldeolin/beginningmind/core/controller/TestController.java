@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.dao.UserDao;
+import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.Sessions;
@@ -25,7 +25,7 @@ import lombok.extern.log4j.Log4j2;
 public class TestController {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepo userRepo;
 
     @GetMapping("/a")
     Object ln17() {
@@ -34,7 +34,7 @@ public class TestController {
 
     @PostMapping("/s")
     List<UserEntity> ln23(UserEntity user) {
-        return userDao.listAll();
+        return userRepo.listAll();
     }
 
     @Autowired
@@ -65,7 +65,7 @@ public class TestController {
 //    IPage<UserEntity> page(Page page) {
 //        LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
 //        query.le(UserEntity::getMobile, "999");
-//        return userDao.page(page, query);
+//        return userRepo.page(page, query);
 //    }
 //
 //    @PostMapping("/requestTrackReport")
@@ -76,47 +76,47 @@ public class TestController {
 //
 //        LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
 //        query.gt(UserEntity::getMobile, 4);
-//        result.put(1, userDao.searchBatch(query));
+//        result.put(1, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.ge(UserEntity::getMobile, 3);
-//        result.put(1, userDao.searchBatch(query));
+//        result.put(1, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.lt(UserEntity::getMobile, 2);
-//        result.put(2, userDao.searchBatch(query));
+//        result.put(2, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.le(UserEntity::getMobile, "999");
-//        result.put(3, userDao.searchBatch(query));
+//        result.put(3, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.eq(UserEntity::getEnableSign, false);
-//        result.put(4, userDao.searchBatch(query));
+//        result.put(4, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.in(UserEntity::getPassword, Lists.newArrayList("abc_111", "12312_de", "")).eq(UserEntity::getName, "汉字");
-//        result.put(5, userDao.searchBatch(query));
+//        result.put(5, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.ne(UserEntity::getName, "随意").or().eq(UserEntity::getName, "随意");
-//        result.put(6, userDao.searchBatch(query));
+//        result.put(6, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.orderByDesc(UserEntity::getId); // 暂时无法消除这个警告
-//        result.put(7, userDao.searchBatch(query));
+//        result.put(7, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.select(UserEntity::getId, UserEntity::getName);
-//        result.put(8, userDao.searchBatch(query));
+//        result.put(8, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.like(UserEntity::getName, "a");
-//        result.put(9, userDao.searchBatch(query));
+//        result.put(9, userRepo.searchBatch(query));
 //
 //        query = new LambdaQueryWrapper<>();
 //        query.likeRight(UserEntity::getName, "D");
-//        result.put(10, userDao.searchBatch(query));
+//        result.put(10, userRepo.searchBatch(query));
 //
 //        return result;
 //    }

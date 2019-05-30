@@ -8,7 +8,7 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.dao.UserDao;
+import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import lombok.extern.log4j.Log4j2;
@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j2;
 public class RequestTrackAsyncHandler {
 
     @Autowired
-    private UserDao userDao;
+    private UserRepo userRepo;
 
     @Autowired
     private ElasticsearchTemplate elasticsearchTemplate;
@@ -55,7 +55,7 @@ public class RequestTrackAsyncHandler {
 
         Long signedUserId = track.getUserId();
         if (signedUserId != null) {
-            UserEntity user = userDao.get(track.getUserId()).orElseThrow(() -> new RuntimeException("不存在或是已被删除"));
+            UserEntity user = userRepo.get(track.getUserId()).orElseThrow(() -> new RuntimeException("不存在或是已被删除"));
             track.setUserName(user.getName());
             track.setUserMobile(user.getMobile());
         }

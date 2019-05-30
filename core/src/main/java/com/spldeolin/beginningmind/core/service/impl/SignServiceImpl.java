@@ -16,7 +16,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.dao.UserDao;
+import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.input.SignInput;
@@ -41,7 +41,7 @@ public class SignServiceImpl implements SignService {
     public static final String SIGNER_SESSION_KEY = "signer";
 
     @Autowired
-    private UserDao userDao;
+    private UserRepo userRepo;
 
     @Autowired
     private PermissionService permissionService;
@@ -134,7 +134,7 @@ public class SignServiceImpl implements SignService {
     }
 
     private UserEntity tryGetUser(String principal) {
-        Optional<UserEntity> userOpt = userDao.searchFirstByNameOrMobileOrEmail(principal);
+        Optional<UserEntity> userOpt = userRepo.searchFirstByNameOrMobileOrEmail(principal);
         if (userOpt.isPresent()) {
             return userOpt.get();
         } else {

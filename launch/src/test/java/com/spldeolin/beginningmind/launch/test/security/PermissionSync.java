@@ -14,7 +14,7 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.spldeolin.beginningmind.core.dao.PermissionDao;
+import com.spldeolin.beginningmind.core.repository.PermissionRepo;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import lombok.extern.log4j.Log4j2;
 
@@ -33,7 +33,7 @@ public class PermissionSync {
     private RequestMappingHandlerMapping handlerMapping;
 
     @Autowired
-    private PermissionDao permissionDao;
+    private PermissionRepo permissionRepo;
 
     @Test
     public void sync() {
@@ -51,7 +51,7 @@ public class PermissionSync {
         }
 
         // 在数据库中保存的既存权限
-        Set<PermissionEntity> persistentPermissions = Sets.newHashSet(permissionDao.listAll());
+        Set<PermissionEntity> persistentPermissions = Sets.newHashSet(permissionRepo.listAll());
 
         // 待删除权限、待创建权限
         List<Long> toDeleteIds = Lists.newArrayList();
@@ -78,10 +78,10 @@ public class PermissionSync {
 
         // 删除、插入操作
         if (toDeleteIds.size() > 0) {
-            permissionDao.delete(toDeleteIds);
+            permissionRepo.delete(toDeleteIds);
         }
         if (toCreatePermissions.size() > 0) {
-            permissionDao.create(toCreatePermissions);
+            permissionRepo.create(toCreatePermissions);
         }
     }
 

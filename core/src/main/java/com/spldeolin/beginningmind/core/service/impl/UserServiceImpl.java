@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.constant.CoupledConstant;
-import com.spldeolin.beginningmind.core.dao.PermissionDao;
-import com.spldeolin.beginningmind.core.dao.UserDao;
+import com.spldeolin.beginningmind.core.repository.PermissionRepo;
+import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;
 import com.spldeolin.beginningmind.core.service.UserService;
@@ -23,10 +23,10 @@ public class UserServiceImpl implements UserService {
     private SnowFlakeService snowFlakeService;
 
     @Autowired
-    private PermissionDao permissionDao;
+    private PermissionRepo permissionRepo;
 
     @Autowired
-    private UserDao userDao;
+    private UserRepo userRepo;
 
     @Override
     public Long createUser(UserEntity user) {
@@ -44,68 +44,68 @@ public class UserServiceImpl implements UserService {
         // 编号
         user.setSerialNumber(String.valueOf(snowFlakeService.nextId()));
 
-        userDao.create(user);
+        userRepo.create(user);
         return user.getId();
     }
 
     @Override
     public UserEntity getUser(Long id) {
-        return userDao.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
+        return userRepo.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
     }
 
     @Override
     public void updateUser(UserEntity user) {
         Long id = user.getId();
 
-        if (!userDao.get(id).isPresent()) {
+        if (!userRepo.get(id).isPresent()) {
             throw new BizException("用户不存在或是已被删除");
         }
         checkOccupationForUpdating(user);
 
-        if (!userDao.update(user)) {
+        if (!userRepo.update(user)) {
             throw new BizException("用户数据过时");
         }
     }
 
     @Override
     public void deleteUser(Long id) {
-        if (!userDao.get(id).isPresent()) {
+        if (!userRepo.get(id).isPresent()) {
             throw new BizException("用户不存在或是已被删除");
         }
-        userDao.delete(id);
+        userRepo.delete(id);
     }
 
     @Override
     public String deleteUsers(List<Long> ids) {
-        List<UserEntity> exist = userDao.list(ids);
+        List<UserEntity> exist = userRepo.list(ids);
         if (exist.size() < ids.size()) {
             throw new BizException("部分用户不存在或是已被删除");
         }
-        userDao.delete(ids);
+        userRepo.delete(ids);
         return "操作成功";
     }
 
     @Override
     public void banPick(Long userId) {
-        UserEntity user = userDao.get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
+        UserEntity user = userRepo.get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
         user.setEnableSign(!user.getEnableSign());
 
-        userDao.update(user);
+        userRepo.update(user);
     }
 
     /**
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForCreating(UserEntity user) {
-        if (userDao.isExistByName(user.getName())) {
+        if (userRepo.isExistByName(user.getName())) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
-        if (mobile != null && userDao.isExistByMobile(user.getMobile())) {
+        if (mobile != null && userRepo.isExistByMobile(user.getMobile())) {
             throw new BizException("手机号已被占用");
         }
         String email = user.getEmail();
-        if (email != null && userDao.isExistByEmail(user.getEmail())) {
+        if (email != null && userRepo.isExistByEmail(user.getEmail())) {
             throw new BizException("E-Mail已被占用");
         }
     }
@@ -118,15 +118,15 @@ public class UserServiceImpl implements UserService {
         String username = user.getName();
         String mobile = user.getMobile();
         String email = user.getEmail();
-        if (userDao.isExistByNameNeId(username, id)) {
+        if (userRepo.isExistByNameNeId(username, id)) {
             throw new BizException("用户名已被占用");
         }
 
-        if (mobile != null && userDao.isExistByMobileNeId(mobile, id)) {
+        if (mobile != null && userRepo.isExistByMobileNeId(mobile, id)) {
             throw new BizException("手机号已被占用");
         }
 
-        if (email != null && userDao.isExistByEmailNeId(email, id)) {
+        if (email != null && userRepo.isExistByEmailNeId(email, id)) {
             throw new BizException("E-Mail已被占用");
         }
     }
