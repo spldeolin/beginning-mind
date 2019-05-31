@@ -22,7 +22,7 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
  *
  * @author Deolin
  */
-public abstract class CommonRepository<E extends CommonEntity> {
+public abstract class CommonRepo<E extends CommonEntity> {
 
     private static final Integer MAX_BATCH_SIZE = 1000;
 
@@ -32,7 +32,7 @@ public abstract class CommonRepository<E extends CommonEntity> {
     private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
-    public CommonRepository() {
+    public CommonRepo() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         entityClass = (Class<E>) pt.getActualTypeArguments()[0];
     }

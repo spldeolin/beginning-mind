@@ -4,14 +4,14 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.spldeolin.beginningmind.core.common.CommonRepository;
+import com.spldeolin.beginningmind.core.common.CommonRepo;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 
 /**
  * @author Deolin 2019-05-30
  */
 @Component
-public class UserRepo extends CommonRepository<UserEntity> {
+public class UserRepo extends CommonRepo<UserEntity> {
 
     public Optional<UserEntity> searchFirstByNameOrMobileOrEmail(String nameOrMobileOrEmail) {
         LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
