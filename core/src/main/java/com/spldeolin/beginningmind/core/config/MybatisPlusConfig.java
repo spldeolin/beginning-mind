@@ -62,17 +62,24 @@ public class MybatisPlusConfig {
         public void insertFill(MetaObject metaObject) {
             // 使用雪花算法生成ID
             this.setFieldValByName("id", snowFlakeService.nextId(), metaObject);
+
             // 使用当前时间
             LocalDateTime now = LocalDateTime.now();
-            this.setFieldValByName("insertedAt", now, metaObject);
-            this.setFieldValByName("updatedAt", now, metaObject);
+            if (this.getFieldValByName("insertedAt", metaObject) == null) {
+                this.setFieldValByName("insertedAt", now, metaObject);
+            }
+            if (this.getFieldValByName("updatedAt", metaObject) == null) {
+                this.setFieldValByName("updatedAt", now, metaObject);
+            }
         }
 
         @Override
         public void updateFill(MetaObject metaObject) {
             // 使用当前时间
             LocalDateTime now = LocalDateTime.now();
-            this.setFieldValByName("updatedAt", now, metaObject);
+            if (this.getFieldValByName("updatedAt", metaObject) == null) {
+                this.setFieldValByName("updatedAt", LocalDateTime.now(), metaObject);
+            }
         }
 
     }
