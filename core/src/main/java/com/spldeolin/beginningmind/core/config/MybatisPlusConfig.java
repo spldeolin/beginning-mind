@@ -78,7 +78,7 @@ public class MybatisPlusConfig {
             // 使用当前时间
             LocalDateTime now = LocalDateTime.now();
             if (this.getFieldValByName("updatedAt", metaObject) == null) {
-                this.setFieldValByName("updatedAt", LocalDateTime.now(), metaObject);
+                this.setFieldValByName("updatedAt", now, metaObject);
             }
         }
 
