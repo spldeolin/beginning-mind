@@ -76,12 +76,6 @@
         <!-- https://mvnrepository.com/artifact/com.github.penggle/kaptcha -->
         <kaptcha.version>2.3.2</kaptcha.version>
 
-        <!-- https://mvnrepository.com/artifact/org.freemarker/freemarker -->
-        <freemarker.version>2.3.28</freemarker.version>
-
-        <!-- https://mvnrepository.com/artifact/commons-dbutils/commons-dbutils -->
-        <commons-dbutils.version>1.7</commons-dbutils.version>
-
         <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
         <oss.version>3.4.2</oss.version>
     </properties>

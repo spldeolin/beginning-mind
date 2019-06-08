@@ -1,19 +1,20 @@
 # coding=utf-8
 
 mapping = {
-    'varchar':'String',
-    'char':'String',
-    'text':'String',
-    'bigint':'Long',
-    'date':'LocalDate',
-    'time':'LocalTime',
-    'datetime':'LocalDateTime',
-    'timestamp':'LocalDateTime',
-    'int':'Integer',
-    'decimal':'BigDecimal',
-    'double':'Double',
-    'tinyint':'Byte'
+    'varchar': 'String',
+    'char': 'String',
+    'text': 'String',
+    'bigint': 'Long',
+    'date': 'LocalDate',
+    'time': 'LocalTime',
+    'datetime': 'LocalDateTime',
+    'timestamp': 'LocalDateTime',
+    'int': 'Integer',
+    'decimal': 'BigDecimal',
+    'double': 'Double',
+    'tinyint': 'Byte'
 }
+
 
 def to_java_type_name(jdbc_type_name, is_tiny_int_1_unsigned):
     if 'text' in jdbc_type_name:
@@ -26,6 +27,7 @@ def to_java_type_name(jdbc_type_name, is_tiny_int_1_unsigned):
             return mapping[jdbc_type_name]
         else:
             raise Exception('出现了未考虑到的类型 [{}]，需要迭代type_handler.py'.format(jdbc_type_name))
+
 
 if __name__ == '__main__':
     print(to_java_type_name('tinyint', False))
