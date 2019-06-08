@@ -20,24 +20,26 @@ public class ProtostuffSerializer implements RedisSerializer<Object> {
 
     private final ProtoWrapper wrapper;
 
-    private final LinkedBuffer buffer;
+    private BufferContext buffer;
 
     public ProtostuffSerializer() {
-        this.wrapper = new ProtoWrapper();
-        this.schema = RuntimeSchema.getSchema(ProtoWrapper.class);
-        this.buffer = LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE);
+        wrapper = new ProtoWrapper();
+        schema = RuntimeSchema.getSchema(ProtoWrapper.class);
+        buffer = new BufferContext();
     }
 
     @Override
     public byte[] serialize(Object t) throws SerializationException {
+        buffer.set(LinkedBuffer.allocate(LinkedBuffer.DEFAULT_BUFFER_SIZE));
         if (t == null) {
             return new byte[0];
         }
         wrapper.data = t;
         try {
-            return ProtostuffIOUtil.toByteArray(wrapper, schema, buffer);
+            return ProtostuffIOUtil.toByteArray(wrapper, schema, buffer.get());
         } finally {
-            buffer.clear();
+            buffer.get().clear();
+            buffer.remove();
         }
     }
 
@@ -55,6 +57,24 @@ public class ProtostuffSerializer implements RedisSerializer<Object> {
     private static class ProtoWrapper {
 
         public Object data;
+
+    }
+
+    private static class BufferContext {
+
+        private final ThreadLocal<LinkedBuffer> linkedBufferThreadLocal = new ThreadLocal<>();
+
+        void set(LinkedBuffer linkedBuffer) {
+            linkedBufferThreadLocal.set(linkedBuffer);
+        }
+
+        LinkedBuffer get() {
+            return linkedBufferThreadLocal.get();
+        }
+
+        void remove() {
+            linkedBufferThreadLocal.remove();
+        }
 
     }
 
