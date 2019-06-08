@@ -14,24 +14,6 @@ Appenders:
       charset: utf-8
       pattern: "%d{HH:mm:ss} %p [%c{1}:%L]%X{insignia}%X{async} - %m%n"
 
-  # log文件
-  RollingFile:
-    - name: file
-      fileName: logs/beginning-mind.log
-      filePattern: "logs/${date:yyyy-MM}/beginning-mind-%d{yyyy-MM-dd}.log.gz"
-      append: true
-      PatternLayout:
-        charset: utf-8
-        pattern: "%d{yyyy-MM-dd HH:mm:ss} %p [%t][%c:%L]%X{insignia} - %m%n"
-      Policies:
-        TimeBasedTriggeringPolicy:
-          modulate: true
-          interval: 1
-        SizeBasedTriggeringPolicy:
-          size: "128 MB"
-      DefaultRolloverStrategy:
-        max: 1000
-
 Loggers:
 
   Root:
