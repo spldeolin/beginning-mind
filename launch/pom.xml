@@ -29,20 +29,6 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- freemarker -->
-        <dependency>
-            <groupId>org.freemarker</groupId>
-            <artifactId>freemarker</artifactId>
-            <version>${freemarker.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <!-- commons dbutils -->
-        <dependency>
-            <groupId>commons-dbutils</groupId>
-            <artifactId>commons-dbutils</artifactId>
-            <version>${commons-dbutils.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 
     <build>
