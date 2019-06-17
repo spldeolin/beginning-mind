@@ -21,7 +21,6 @@ Loggers:
     includeLocation: true
     AppenderRef:
       - ref: console
-      - ref: file
 
   Logger:
     name: com.spldeolin
@@ -30,4 +29,3 @@ Loggers:
     includeLocation: true
     AppenderRef:
       - ref: console
-      - ref: file
