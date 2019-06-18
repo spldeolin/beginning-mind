@@ -168,8 +168,8 @@ public abstract class CommonRepo<E extends CommonEntity> {
      *
      * @param query 条件对象
      * @return 满足条件的实体
-     * @throws TooManyResultsException 满足条件的实体不止一个时
-     * （e.g.: Expected one result (or null) to be returned by selectOne(), but found: 2 ）
+     * @throws TooManyResultsException 满足条件的实体不止一个时 （e.g.: Expected one result (or null) to be returned by selectOne(),
+     * but found: 2 ）
      */
     protected Optional<E> searchOne(Wrapper<E> query) throws TooManyResultsException {
         return batchToOne(searchBatch(query));

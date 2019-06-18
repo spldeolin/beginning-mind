@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
+import com.spldeolin.beginningmind.core.repository.UserRepo;
 import lombok.extern.log4j.Log4j2;
 
 /**

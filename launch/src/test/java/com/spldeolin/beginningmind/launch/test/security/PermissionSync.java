@@ -14,8 +14,8 @@ import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
-import com.spldeolin.beginningmind.core.repository.PermissionRepo;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
+import com.spldeolin.beginningmind.core.repository.PermissionRepo;
 import lombok.extern.log4j.Log4j2;
 
 /**

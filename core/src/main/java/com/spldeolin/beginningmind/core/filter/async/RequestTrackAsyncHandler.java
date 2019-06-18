@@ -8,9 +8,9 @@ import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.core.query.IndexQuery;
 import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.repository.UserRepo;
 import lombok.extern.log4j.Log4j2;
 
 /**

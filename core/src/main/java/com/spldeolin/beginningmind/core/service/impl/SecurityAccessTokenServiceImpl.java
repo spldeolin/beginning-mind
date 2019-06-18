@@ -3,8 +3,8 @@ package com.spldeolin.beginningmind.core.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.core.repository.SecurityAccessTokenRepo;
 import com.spldeolin.beginningmind.core.entity.SecurityAccessTokenEntity;
+import com.spldeolin.beginningmind.core.repository.SecurityAccessTokenRepo;
 import com.spldeolin.beginningmind.core.service.SecurityAccessTokenService;
 
 /**
