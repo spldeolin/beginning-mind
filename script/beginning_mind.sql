@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : localhost
+ Source Server         : 本地
  Source Server Type    : MySQL
- Source Server Version : 80015
+ Source Server Version : 80016
  Source Host           : 127.0.0.1:3306
  Source Schema         : beginning_mind
 
  Target Server Type    : MySQL
- Target Server Version : 80015
+ Target Server Version : 80016
  File Encoding         : 65001
 
- Date: 18/03/2019 09:13:07
+ Date: 18/06/2019 14:39:58
 */
 
 SET NAMES utf8mb4;
@@ -76,12 +76,13 @@ CREATE TABLE `biz_demo` (
   `is_permitted_update_development_monthly_1` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否允许修改物业开发月报的第1栏',
   `is_permitted_update_development_monthly_2` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '是否允许修改物业开发月报的第2栏',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='                   ';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务示例';
 
 -- ----------------------------
 -- Records of biz_demo
 -- ----------------------------
 BEGIN;
+INSERT INTO `biz_demo` VALUES (2, '2019-04-12 16:35:18', '2019-04-12 16:35:18', 0, 1, '', 'a', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `biz_demo` VALUES (1147388605632512, '2018-11-15 17:24:41', '2018-11-15 17:24:41', 0, 1, '', 'asdf啊地方', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `biz_demo` VALUES (1147489021464576, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '1 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `biz_demo` VALUES (1147489197625344, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '2 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
@@ -89,19 +90,6 @@ INSERT INTO `biz_demo` VALUES (1147489197625345, '2018-11-15 17:25:05', '2018-11
 INSERT INTO `biz_demo` VALUES (1147489201819648, '2018-11-15 17:25:05', '2018-11-15 17:31:10', 0, 1, '', '名称', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '4 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 INSERT INTO `biz_demo` VALUES (1147489206013952, '2018-11-15 17:25:05', '2018-11-15 17:25:05', 0, 1, '', '', '', '', '', 0, '', 0, 0, '', '', NULL, 0, '', '', 0, NULL, '5 asdf啊地方', 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 COMMIT;
-
--- ----------------------------
--- Table structure for core_property
--- ----------------------------
-DROP TABLE IF EXISTS `core_property`;
-CREATE TABLE `core_property` (
-  `id` bigint(20) unsigned NOT NULL COMMENT 'ID',
-  `inserted_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '通用字段 插入时间',
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '通用字段 更新时间',
-  `is_deleted` tinyint(1) unsigned NOT NULL DEFAULT '0' COMMENT '通用字段 是否被删除',
-  `version` int(11) NOT NULL DEFAULT '1' COMMENT '通用字段 数据版本',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for permission
@@ -141,7 +129,7 @@ CREATE TABLE `security_access_token` (
 -- Records of security_access_token
 -- ----------------------------
 BEGIN;
-INSERT INTO `security_access_token` VALUES (1, '2019-02-23 13:10:00', '2019-02-23 13:10:41', 0, 1, 'post', '/test/requestTrackReport', 'ss');
+INSERT INTO `security_access_token` VALUES (1, '2019-02-23 13:10:00', '2019-05-29 15:02:51', 0, 1, 'post', '/test/requestTrackReport', 'ss');
 COMMIT;
 
 -- ----------------------------
@@ -188,6 +176,12 @@ INSERT INTO `user` VALUES (36286656566923264, '2019-02-20 16:37:50', '2019-02-20
 INSERT INTO `user` VALUES (36286656571117568, '2019-02-20 16:37:50', '2019-02-20 16:39:57', 1, 1, NULL, '批量2', '2', NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (36286656575311872, '2019-02-20 16:37:50', '2019-02-20 16:37:50', 0, 1, NULL, '批量3', '3', NULL, NULL, NULL, NULL);
 INSERT INTO `user` VALUES (36286656579506176, '2019-02-20 16:37:50', '2019-02-20 16:37:50', 0, 1, NULL, '批量4', '4', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (72171958074216448, '2019-05-30 17:13:13', '2019-05-30 17:13:12', 0, 1, NULL, '汉字', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (72172181794197504, '2019-05-30 17:14:06', '2019-05-30 17:14:06', 0, 1, NULL, '批量0', '0', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (72172181831946240, '2019-05-30 17:14:06', '2019-05-30 17:14:06', 0, 1, NULL, '批量1', '1', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (72172181836140544, '2019-05-30 17:14:06', '2019-05-30 17:14:06', 0, 1, NULL, '批量2', '2', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (72172181840334848, '2019-05-30 17:14:06', '2019-05-30 17:14:06', 0, 1, NULL, '批量3', '3', NULL, NULL, NULL, NULL);
+INSERT INTO `user` VALUES (72172181848723456, '2019-05-30 17:14:06', '2019-05-30 17:14:06', 0, 1, NULL, '批量4', '4', NULL, NULL, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
