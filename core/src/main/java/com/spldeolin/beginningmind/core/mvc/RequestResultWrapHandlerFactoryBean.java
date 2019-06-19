@@ -23,6 +23,9 @@ public class RequestResultWrapHandlerFactoryBean implements InitializingBean {
         List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
         if (returnValueHandlers == null) {
             returnValueHandlers = Lists.newArrayList();
+        } else {
+            // 原returnValueHandlers的类型是不可变的List
+            returnValueHandlers = Lists.newArrayList(returnValueHandlers);
         }
         decorateHandlers(returnValueHandlers);
         adapter.setReturnValueHandlers(returnValueHandlers);
