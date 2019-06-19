@@ -29,11 +29,7 @@ public class WebContext {
     }
 
     public static RequestTrackDTO getRequestTrack() {
-        RequestTrackDTO track = REQUEST_TRACK.get();
-        if (track == null) {
-            return null;
-        }
-        return track;
+        return REQUEST_TRACK.get();
     }
 
     public static void removeRequestTrack() {
