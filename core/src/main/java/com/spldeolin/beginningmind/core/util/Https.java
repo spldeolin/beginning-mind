@@ -8,6 +8,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import org.apache.commons.lang3.RandomUtils;
 import org.springframework.http.HttpStatus;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.common.BizException;
 import lombok.extern.log4j.Log4j2;
@@ -96,7 +97,7 @@ public class Https {
             Request request = buildGetRequest(url);
 
             Response response = doRequest(request);
-            if (!Nulls.toEmpty(response.header("Content-Type")).startsWith("image/")) {
+            if (!Strings.nullToEmpty(response.header("Content-Type")).startsWith("image/")) {
                 throw new RuntimeException("请求结果不是图片");
             }
 
@@ -204,7 +205,7 @@ public class Https {
      * 确保response的body为JSON，并返回body的String形式
      */
     private static String ensureJsonAndGetBody(Response response) throws IOException {
-        if (!Nulls.toEmpty(response.header("Content-Type")).startsWith("application/json")) {
+        if (!Strings.nullToEmpty(response.header("Content-Type")).startsWith("application/json")) {
             throw new RuntimeException("请求结果不是JSON");
         }
         ResponseBody body = response.body();

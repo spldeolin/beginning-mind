@@ -8,7 +8,6 @@ import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.util.Nulls;
 
 /**
  * @author Deolin
@@ -21,8 +20,10 @@ public class RequestResultWrapHandlerFactoryBean implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() {
-        List<HandlerMethodReturnValueHandler> returnValueHandlers = Lists
-                .newArrayList(Nulls.toEmpty(adapter.getReturnValueHandlers()));
+        List<HandlerMethodReturnValueHandler> returnValueHandlers = adapter.getReturnValueHandlers();
+        if (returnValueHandlers == null) {
+            returnValueHandlers = Lists.newArrayList();
+        }
         decorateHandlers(returnValueHandlers);
         adapter.setReturnValueHandlers(returnValueHandlers);
     }
