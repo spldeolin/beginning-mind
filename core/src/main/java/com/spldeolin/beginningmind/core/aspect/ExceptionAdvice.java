@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Set;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
+import org.hibernate.validator.internal.engine.path.NodeImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -88,7 +89,8 @@ public class ExceptionAdvice {
     }
 
     /**
-     * 400 RequestParam参数没有通过注解校验（控制器声明@Validated时）
+     * 400 @RequestParam参数没有通过注解校验（控制器声明@Validated时）
+     *    或者 @RequestBody List泛型 没有通过注解校验
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
@@ -98,15 +100,13 @@ public class ExceptionAdvice {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
 
-        String[] paramNames = track.getParameterNames();
-        Object[] paramValues = track.getParameterValues();
         List<Invalid> invalids = new ArrayList<>();
         for (ConstraintViolation<?> cv : cvs) {
             // 参数路径
             PathImpl pathImpl = (PathImpl) cv.getPropertyPath();
             // 参数下标
-            int paramIndex = pathImpl.getLeafNode().getParameterIndex();
-            Invalid invalid = new Invalid(paramNames[paramIndex], paramValues[paramIndex], cv.getMessage());
+            NodeImpl dto = pathImpl.getLeafNode();
+            Invalid invalid = new Invalid(dto.getName(), dto.getValue(), cv.getMessage());
             invalids.add(invalid);
         }
         log.warn(invalids);
