@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.core.controller;
 import java.util.List;
 import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.MessageSource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,7 +12,6 @@ import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.repository.UserRepo;
 import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.Sessions;
-import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -35,14 +33,6 @@ public class TestController {
     @PostMapping("/s")
     List<UserEntity> ln23(UserEntity user) {
         return userRepo.listAll();
-    }
-
-    @Autowired
-    private MessageSource messageSource;
-
-    @GetMapping("/i18n")
-    Object i18n() {
-        return messageSource.getMessage("hello", new String[]{"Deolin"}, WebContext.getRequest().getLocale());
     }
 
     @GetMapping("/setSes")
