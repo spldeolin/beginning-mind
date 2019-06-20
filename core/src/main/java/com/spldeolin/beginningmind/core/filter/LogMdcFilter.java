@@ -9,6 +9,7 @@ import org.apache.logging.log4j.ThreadContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -21,12 +22,10 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2018/12/06
  */
-@Order(LogMdcFilter.ORDER)
+@Order(FilterOrderConstant.LOG_MDC_FILTER_ORDER)
 @Component
 @Log4j2
 public class LogMdcFilter extends IngoreSwaggerApiFilter {
-
-    public static final int ORDER = 1 + WebContextFilter.ORDER;
 
     /**
      * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同

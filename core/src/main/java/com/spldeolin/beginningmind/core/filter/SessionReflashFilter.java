@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.config.SessionConfig;
+import com.spldeolin.beginningmind.core.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -20,19 +21,17 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2018/12/06
  */
-@Order(SessionReflashFilter.ORDER)
+@Order(FilterOrderConstant.SESSION_REFLASH_FILTER_ORDER)
 @Component
 @Log4j2
 public class SessionReflashFilter extends IngoreSwaggerApiFilter {
-
-    public static final int ORDER = 1 + ReadContentFilter.ORDER;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         filterChain.doFilter(request, response);
 
-        // 刷新全局会话的失效时间
+        // 刷新全局会话的失效时间  56569288
         reflashGlobalSession();
     }
 

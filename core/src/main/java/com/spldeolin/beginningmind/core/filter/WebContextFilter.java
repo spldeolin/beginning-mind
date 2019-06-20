@@ -11,6 +11,7 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.core.filter.async.RequestTrackAsyncHandler;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.core.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
@@ -24,15 +25,10 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin 2018/12/06
  */
-@Order(WebContextFilter.ORDER)
+@Order(FilterOrderConstant.WEB_CONTEXT_FILTER_ORDER)
 @Component
 @Log4j2
 public class WebContextFilter extends IngoreSwaggerApiFilter {
-
-    /**
-     * 最外层过滤器Order数字
-     */
-    public static final int ORDER = 1;
 
     @Autowired
     private RequestTrackAsyncHandler requestTrackAsyncHandler;
