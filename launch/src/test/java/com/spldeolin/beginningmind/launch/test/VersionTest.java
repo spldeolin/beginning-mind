@@ -9,7 +9,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import com.spldeolin.beginningmind.core.repository.UserRepo;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -22,17 +22,17 @@ import lombok.extern.log4j.Log4j2;
 public class VersionTest {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDao userDao;
 
     @Test
     public void t() {
-        UserEntity user = userRepo.get(285221975101440L).orElseThrow(() -> new BizException("不存在或是已被删除"));
+        UserEntity user = userDao.get(285221975101440L).orElseThrow(() -> new BizException("不存在或是已被删除"));
 
         user.setUpdatedAt(LocalDateTime.of(1844, 1, 1, 2, 3, 4));
         user.setName("乐观锁2");
         user.setVersion(1);
 
-        userRepo.update(user);
+        userDao.update(user);
 
         log.info("结束");
     }

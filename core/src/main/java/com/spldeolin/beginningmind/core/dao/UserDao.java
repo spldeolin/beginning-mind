@@ -1,17 +1,17 @@
-package com.spldeolin.beginningmind.core.repository;
+package com.spldeolin.beginningmind.core.dao;
 
 import java.util.List;
 import java.util.Optional;
 import org.springframework.stereotype.Component;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.spldeolin.beginningmind.core.common.CommonRepo;
+import com.spldeolin.beginningmind.core.common.CommonDao;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 
 /**
  * @author Deolin 2019-05-30
  */
 @Component
-public class UserRepo extends CommonRepo<UserEntity> {
+public class UserDao extends CommonDao<UserEntity> {
 
     public Optional<UserEntity> searchFirstByNameOrMobileOrEmail(String nameOrMobileOrEmail) {
         LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();

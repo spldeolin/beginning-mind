@@ -1,8 +1,8 @@
-package com.spldeolin.beginningmind.biz.repository;
+package com.spldeolin.beginningmind.biz.dao;
 
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.biz.entity.BizDemoEntity;
-import com.spldeolin.beginningmind.core.common.CommonRepo;
+import com.spldeolin.beginningmind.core.common.CommonDao;
 
 /**
  * 业务示例
@@ -10,6 +10,6 @@ import com.spldeolin.beginningmind.core.common.CommonRepo;
  * @author Deolin 2019-06-08
  */
 @Component
-public class BizDemoRepo extends CommonRepo<BizDemoEntity> {
+public class BizDemoDao extends CommonDao<BizDemoEntity> {
 
 }

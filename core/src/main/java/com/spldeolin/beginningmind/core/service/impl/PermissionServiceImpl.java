@@ -5,8 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
-import com.spldeolin.beginningmind.core.repository.PermissionRepo;
-import com.spldeolin.beginningmind.core.repository.User2permissionRepo;
+import com.spldeolin.beginningmind.core.dao.PermissionDao;
+import com.spldeolin.beginningmind.core.dao.User2permissionDao;
 import com.spldeolin.beginningmind.core.service.PermissionService;
 
 /**
@@ -18,17 +18,17 @@ import com.spldeolin.beginningmind.core.service.PermissionService;
 public class PermissionServiceImpl implements PermissionService {
 
     @Autowired
-    private PermissionRepo permissionRepo;
+    private PermissionDao permissionDao;
 
     @Autowired
-    private User2permissionRepo user2permissionRepo;
+    private User2permissionDao user2permissionDao;
 
     @Override
     public List<PermissionEntity> listGrantedPermission(Long userId) {
-        List<Long> permissionIds = user2permissionRepo.searchPermissionIdByUserId(userId);
+        List<Long> permissionIds = user2permissionDao.searchPermissionIdByUserId(userId);
 
         if (permissionIds.size() > 0) {
-            return permissionRepo.list(permissionIds);
+            return permissionDao.list(permissionIds);
         } else {
             return Lists.newArrayList();
         }

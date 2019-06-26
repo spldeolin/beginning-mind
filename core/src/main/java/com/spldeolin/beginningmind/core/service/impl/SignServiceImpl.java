@@ -19,7 +19,7 @@ import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.entity.PermissionEntity;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.input.SignInput;
-import com.spldeolin.beginningmind.core.repository.UserRepo;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.core.security.util.SignContext;
 import com.spldeolin.beginningmind.core.service.PermissionService;
@@ -41,7 +41,7 @@ public class SignServiceImpl implements SignService {
     public static final String SIGNER_SESSION_KEY = "signer";
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDao userDao;
 
     @Autowired
     private PermissionService permissionService;
@@ -134,7 +134,7 @@ public class SignServiceImpl implements SignService {
     }
 
     private UserEntity tryGetUser(String principal) {
-        Optional<UserEntity> userOpt = userRepo.searchFirstByNameOrMobileOrEmail(principal);
+        Optional<UserEntity> userOpt = userDao.searchFirstByNameOrMobileOrEmail(principal);
         if (userOpt.isPresent()) {
             return userOpt.get();
         } else {

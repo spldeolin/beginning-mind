@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.core.entity.UserEntity;
-import com.spldeolin.beginningmind.core.repository.UserRepo;
+import com.spldeolin.beginningmind.core.dao.UserDao;
 import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
@@ -23,7 +23,7 @@ import lombok.extern.log4j.Log4j2;
 public class TestController {
 
     @Autowired
-    private UserRepo userRepo;
+    private UserDao userDao;
 
     @GetMapping("/a")
     Object ln17() {
@@ -32,7 +32,7 @@ public class TestController {
 
     @PostMapping("/s")
     List<UserEntity> ln23(UserEntity user) {
-        return userRepo.listAll();
+        return userDao.listAll();
     }
 
     @GetMapping("/setSes")

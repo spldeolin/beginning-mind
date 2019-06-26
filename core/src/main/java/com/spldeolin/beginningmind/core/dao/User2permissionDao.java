@@ -1,17 +1,17 @@
-package com.spldeolin.beginningmind.core.repository;
+package com.spldeolin.beginningmind.core.dao;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.spldeolin.beginningmind.core.common.CommonRepo;
+import com.spldeolin.beginningmind.core.common.CommonDao;
 import com.spldeolin.beginningmind.core.entity.User2permissionEntity;
 
 /**
  * @author Deolin 2019-05-30
  */
 @Component
-public class User2permissionRepo extends CommonRepo<User2permissionEntity> {
+public class User2permissionDao extends CommonDao<User2permissionEntity> {
 
     public List<Long> searchPermissionIdByUserId(Long userId) {
         LambdaQueryWrapper<User2permissionEntity> query = new LambdaQueryWrapper<>();

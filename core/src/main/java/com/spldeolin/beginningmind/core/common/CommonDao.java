@@ -18,11 +18,11 @@ import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 /**
  * 数据访问层的通用抽象类
  *
- * repository层必须一律继承这个类
+ * dao层所有类必须继承这个类
  *
  * @author Deolin
  */
-public abstract class CommonRepo<E extends CommonEntity> {
+public abstract class CommonDao<E extends CommonEntity> {
 
     private static final Integer MAX_BATCH_SIZE = 1000;
 
@@ -32,7 +32,7 @@ public abstract class CommonRepo<E extends CommonEntity> {
     private Class<E> entityClass;
 
     @SuppressWarnings("unchecked")
-    public CommonRepo() {
+    public CommonDao() {
         ParameterizedType pt = (ParameterizedType) this.getClass().getGenericSuperclass();
         entityClass = (Class<E>) pt.getActualTypeArguments()[0];
     }
