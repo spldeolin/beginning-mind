@@ -26,21 +26,35 @@ public abstract class CommonEntity implements Serializable {
     private Long id;
 
     /**
-     * 通用字段 插入时间
+     * 插入时间
      */
     @TableField("inserted_at")
     @JsonIgnore
     private LocalDateTime insertedAt;
 
     /**
-     * 通用字段 更新时间
+     * 插入数据时所处请求的insignia
+     */
+    @TableField("inserted_insignia")
+    @JsonIgnore
+    private String insertedInsignia;
+
+    /**
+     * 最近一次更新时间
      */
     @TableField("updated_at")
     @JsonIgnore
     private LocalDateTime updatedAt;
 
     /**
-     * 通用字段 是否被删除
+     * 最近一次更新数据时所处请求的insignia
+     */
+    @TableField("updated_insignia")
+    @JsonIgnore
+    private String updatedInsignia;
+
+    /**
+     * 是否被删除
      */
     @TableLogic
     @TableField("is_deleted")
@@ -48,7 +62,7 @@ public abstract class CommonEntity implements Serializable {
     private Boolean isDeleted;
 
     /**
-     * 通用字段 数据版本
+     * 数据版本
      */
     @Version
     private Integer version;
