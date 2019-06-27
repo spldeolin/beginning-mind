@@ -2,11 +2,11 @@ package com.spldeolin.beginningmind.core.common;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.Version;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 /**
@@ -28,29 +28,25 @@ public abstract class CommonEntity implements Serializable {
     /**
      * 插入时间
      */
-    @TableField("inserted_at")
-    @JsonIgnore
+    @TableField(value = "inserted_at", fill = FieldFill.INSERT)
     private LocalDateTime insertedAt;
 
     /**
      * 插入数据时所处请求的insignia
      */
-    @TableField("inserted_insignia")
-    @JsonIgnore
+    @TableField(value = "inserted_insignia", fill = FieldFill.INSERT)
     private String insertedInsignia;
 
     /**
      * 最近一次更新时间
      */
-    @TableField("updated_at")
-    @JsonIgnore
+    @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
 
     /**
      * 最近一次更新数据时所处请求的insignia
      */
-    @TableField("updated_insignia")
-    @JsonIgnore
+    @TableField(value = "updated_insignia", fill = FieldFill.INSERT_UPDATE)
     private String updatedInsignia;
 
     /**
@@ -58,7 +54,6 @@ public abstract class CommonEntity implements Serializable {
      */
     @TableLogic
     @TableField("is_deleted")
-    @JsonIgnore
     private Boolean isDeleted;
 
     /**

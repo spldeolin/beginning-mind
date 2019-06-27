@@ -10,7 +10,9 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.core.service.SnowFlakeService;
+import com.spldeolin.beginningmind.core.util.WebContext;
 
 /**
  * Mybatis Plus配置
@@ -71,6 +73,10 @@ public class MybatisPlusConfig {
             if (this.getFieldValByName("updatedAt", metaObject) == null) {
                 this.setFieldValByName("updatedAt", now, metaObject);
             }
+
+            String insignia = nullToEmpty(WebContext.getRequestTrack());
+            this.setFieldValByName("insertedInsignia", insignia, metaObject);
+            this.setFieldValByName("updatedInsignia", insignia, metaObject);
         }
 
         @Override
@@ -80,6 +86,16 @@ public class MybatisPlusConfig {
             if (this.getFieldValByName("updatedAt", metaObject) == null) {
                 this.setFieldValByName("updatedAt", now, metaObject);
             }
+
+            String insignia = nullToEmpty(WebContext.getRequestTrack());
+            this.setFieldValByName("updatedInsignia", insignia, metaObject);
+        }
+
+        private String nullToEmpty(RequestTrackDTO dto) {
+            if (dto == null) {
+                return "";
+            }
+            return dto.getInsignia();
         }
 
     }

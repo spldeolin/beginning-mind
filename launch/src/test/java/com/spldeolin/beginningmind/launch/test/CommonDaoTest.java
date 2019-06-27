@@ -43,7 +43,7 @@ public class CommonDaoTest {
         for (int i = 0; i < 5; i++) {
             UserEntity user = new UserEntity();
             user.setInsertedAt(LocalDateTime.of(2000, 11, 12, 13, 14, 15));
-            user.setName("批量" + i);
+            user.setName("批量AAAA" + i);
             user.setMobile(String.valueOf(i));
             users.add(user);
         }
@@ -74,7 +74,7 @@ public class CommonDaoTest {
     @Test
     public void update() {
         UserEntity user = new UserEntity();
-        user.setId(290956356227072L);
+        user.setId(81964400944222208L);
         try {
             userDao.update(user);  // 只有id不为null时baseMapper会抛出BadSqlGrammarException异常
         } catch (Exception e) {
