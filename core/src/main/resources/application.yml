@@ -49,17 +49,6 @@ spring:
   jmx:
     enable: false
 
-  rabbitmq:
-    host: 占位符
-    port: 占位符
-    username: 占位符
-    password: 占位符
-    publisher-confirms: true # 发送确认
-    publisher-returns: true # 发送失败退回
-    listener:
-      simple:
-        acknowledge-mode: manual # ACK
-
 logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
@@ -135,12 +124,6 @@ spring:
     cluster-name: elasticsearch
     cluster-nodes: 127.0.0.1:9300
 
-  rabbitmq:
-    host: 192.168.2.2
-    port: 5672
-    username: admin
-    password: admin
-
 core:
   snow-flake:
     datacenter-id: 1
@@ -176,12 +159,6 @@ spring:
   data.elasticsearch:
     cluster-name: elasticsearch
     cluster-nodes: 192.168.2.2:9300
-
-  rabbitmq:
-    host: 192.168.2.2
-    port: 5672
-    username: admin
-    password: admin
 
 logging:
   config: classpath:log4j2/log4j2-test.yml
@@ -221,12 +198,6 @@ spring:
   data.elasticsearch:
     cluster-name: # TODO 生产环境 ES
     cluster-nodes: # TODO 生产环境 ES
-
-  rabbitmq:
-    host: # TODO 生产环境 RabbitMQ
-    port: # TODO 生产环境 RabbitMQ
-    username: # TODO 生产环境 RabbitMQ
-    password: # TODO 生产环境 RabbitMQ
 
 logging:
   config: classpath:log4j2/log4j2-prod.yml
