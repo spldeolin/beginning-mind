@@ -32,7 +32,7 @@
         <spring-session.version>2.1.7.RELEASE</spring-session.version>
 
         <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-        <mybatis.version>2.0.1</mybatis.version>
+        <mybatis.version>2.1.0</mybatis.version>
 
         <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
         <mybatis-plus.version>3.1.2</mybatis-plus.version>
