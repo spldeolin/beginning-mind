@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.doc;
+package com.spldeolin.beginningmind.core.doc.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -6,6 +6,7 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.spldeolin.beginningmind.core.doc.JavaSourceHolder;
 import com.thoughtworks.qdox.model.JavaClass;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.swagger.web.SwaggerApiListingReader;

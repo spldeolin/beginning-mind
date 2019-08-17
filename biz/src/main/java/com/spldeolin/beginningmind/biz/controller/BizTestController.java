@@ -8,22 +8,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.biz.entity.BizDemoEntity;
 import com.spldeolin.beginningmind.biz.service.BizDemoService;
-import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 /**
+ *
+ * 测试啊啊啊啊啊啊啊
+ *
+ *
+ * 啊啊<b>啊</b>啊啊
+ *
+ *
+ * 阿斯顿发啊
+ * <pre>
+ *     你a
+ * </pre>
+ *
  * @author Deolin 2019-01-23
  */
-
 @RestController
 @RequestMapping(path = "/bizTest")
 @Validated
-@Api(description = "")
 public class BizTestController {
 
     @Autowired
     private BizDemoService bizDemoService;
 
     @GetMapping
+    @ApiOperation("A")
     List<BizDemoEntity> ln17() {
         System.out.println(System.getProperty("java.io.tmpdir"));
         return bizDemoService.all();
