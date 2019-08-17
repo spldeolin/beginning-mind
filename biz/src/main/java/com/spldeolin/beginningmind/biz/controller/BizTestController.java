@@ -8,14 +8,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.biz.entity.BizDemoEntity;
 import com.spldeolin.beginningmind.biz.service.BizDemoService;
+import io.swagger.annotations.Api;
 
 /**
  * @author Deolin 2019-01-23
  */
 
 @RestController
-@RequestMapping("/bizTest")
+@RequestMapping(path = "/bizTest")
 @Validated
+@Api(description = "")
 public class BizTestController {
 
     @Autowired
