@@ -11,6 +11,8 @@ import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.swagger.web.SwaggerApiListingReader;
 
 /**
+ * 增强Springfox提取@Api#description的功能，重写为利用qdox提取Javadoc
+ *
  * @author Deolin 2019-08-17
  * @see SwaggerApiListingReader#apply(ApiListingContext)
  */
