@@ -4,12 +4,14 @@ import java.util.List;
 import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.dao.UserDao;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.util.MdcRunnable;
 import com.spldeolin.beginningmind.core.util.Sessions;
 import lombok.extern.log4j.Log4j2;
@@ -25,8 +27,8 @@ public class TestController {
     @Autowired
     private UserDao userDao;
 
-    @GetMapping("/a")
-    Object ln17() {
+    @GetMapping("/a/{b}")
+    Object ln17(@RequestParam String a, @PathVariable String b) {
         return Integer.valueOf("a");
     }
 

@@ -95,7 +95,11 @@ public class JavaSourceHolder {
     }
 
     public String getMethodComment(String methodFullyQualifiedName, List<String> parameterTypeFullQulifiedNames) {
-        return methodComments.get(methodFullyQualifiedName, parameterTypeFullQulifiedNames);
+        String comment = methodComments.get(methodFullyQualifiedName, parameterTypeFullQulifiedNames);
+        if (StringUtils.isBlank(comment)) {
+            return "未命名";
+        }
+        return comment;
     }
 
     public String getFieldComment(String fieldFullyQualifiedName) {
