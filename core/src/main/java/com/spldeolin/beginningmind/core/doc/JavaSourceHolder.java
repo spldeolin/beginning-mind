@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import javax.annotation.PostConstruct;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Lists;
@@ -35,6 +36,8 @@ public class JavaSourceHolder {
      * 方法的全限定名：方法每个参数的类型的全限定名：方法注释
      */
     private final Table<String, List<String>, String> methodComments = HashBasedTable.create();
+
+    private final Map<String, JavaField> fields = Maps.newHashMap();
 
     private final Map<String, String> fieldComments = Maps.newHashMap();
 
@@ -70,7 +73,7 @@ public class JavaSourceHolder {
                         methodComments.put(methodFqName, parameterFqNames, comment);
                     }
 
-                    // extract field comment
+                    // extract field and field comment
                     for (JavaField javaField : javaClass.getFields()) {
                         String fieldFqName = fqName + "." + javaField.getName();
                         String comment = "";
@@ -78,6 +81,7 @@ public class JavaSourceHolder {
                             comment = javaField.getComment();
                         }
                         fieldComments.put(fieldFqName, comment);
+                        fields.put(fieldFqName, javaField);
                     }
                 }
             } catch (IOException e) {
@@ -107,6 +111,12 @@ public class JavaSourceHolder {
         }
 
         throw new IllegalArgumentException(fieldName + "不是" + pojoFullyQualifiedName + "中的Field");
+    }
+
+    public boolean isFieldNotNullOrNotEmptyOrNotBlank(String fieldFullyQualifiedName) {
+        return fields.get(fieldFullyQualifiedName).getAnnotations().stream().anyMatch(one -> StringUtils
+                .equalsAny(one.getType().getFullyQualifiedName(), "javax.validation.constraints.NotBlank",
+                        "javax.validation.constraints.NotEmpty", "javax.validation.constraints.NotNull"));
     }
 
 }

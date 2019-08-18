@@ -43,6 +43,11 @@ public class ApiModelPropertyPropertyBuilderAspect {
 
             // 保持原有顺序
             context.getBuilder().position(srcHolder.getFiledIndexOfPojo(pojoFqName, field.getName()));
+
+            // @NotNull、@NotEmpty、@NotBlank全部当作required
+            if (field.getType().equals(String.class)) {
+                context.getBuilder().required(srcHolder.isFieldNotNullOrNotEmptyOrNotBlank(fqName));
+            }
         });
 
     }
