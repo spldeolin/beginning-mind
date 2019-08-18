@@ -14,6 +14,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Table;
 import com.thoughtworks.qdox.JavaProjectBuilder;
 import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaSource;
 import com.thoughtworks.qdox.model.JavaType;
@@ -33,7 +34,9 @@ public class JavaSourceHolder {
     /**
      * 方法的全限定名：方法每个参数的类型的全限定名：方法注释
      */
-    private final Table<String, List<String>, String> methodCommentMap = HashBasedTable.create();
+    private final Table<String, List<String>, String> methodComments = HashBasedTable.create();
+
+    private final Map<String, String> fieldComments = Maps.newHashMap();
 
     private final JavaProjectBuilder builder = new JavaProjectBuilder();
 
@@ -64,7 +67,17 @@ public class JavaSourceHolder {
                         if (javaMethod.getComment() != null) {
                             comment = javaMethod.getComment();
                         }
-                        methodCommentMap.put(methodFqName, parameterFqNames, comment);
+                        methodComments.put(methodFqName, parameterFqNames, comment);
+                    }
+
+                    // extract field comment
+                    for (JavaField javaField : javaClass.getFields()) {
+                        String fieldFqName = fqName + "." + javaField.getName();
+                        String comment = "";
+                        if (javaField.getComment() != null) {
+                            comment = javaField.getComment();
+                        }
+                        fieldComments.put(fieldFqName, comment);
                     }
                 }
             } catch (IOException e) {
@@ -78,7 +91,7 @@ public class JavaSourceHolder {
     }
 
     public String getMethodComment(String methodFullyQualifiedName, List<String> parameterTypeFullQulifiedNames) {
-        return methodCommentMap.get(methodFullyQualifiedName, parameterTypeFullQulifiedNames);
+        return methodComments.get(methodFullyQualifiedName, parameterTypeFullQulifiedNames);
     }
 
 }
