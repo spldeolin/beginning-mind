@@ -1,14 +1,12 @@
 package com.spldeolin.beginningmind.core.doc.aspect;
 
 import java.lang.reflect.Field;
-import java.util.Objects;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ReflectionUtils;
 import com.spldeolin.beginningmind.core.doc.JavaSourceHolder;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder;
@@ -39,16 +37,14 @@ public class ApiModelPropertyPropertyBuilderAspect {
 
         context.getBeanPropertyDefinition().toJavaUtil().ifPresent(one -> {
             Field field = one.getField().getAnnotated();
-            String fqName = field.getDeclaringClass().getName() + "." + field.getName();
+            String pojoFqName = field.getDeclaringClass().getName();
+            String fqName = pojoFqName + "." + field.getName();
             context.getBuilder().description(srcHolder.getFieldComment(fqName));
-        });
-    }
 
-    @SuppressWarnings("unchecked")
-    private <T> T getFieldValue(Class<?> targetType, Object target, String fieldName) {
-        Field field = Objects.requireNonNull(ReflectionUtils.findField(targetType, fieldName));
-        field.setAccessible(true);
-        return (T) ReflectionUtils.getField(field, target);
+            // 保持原有顺序
+            context.getBuilder().position(srcHolder.getFiledIndexOfPojo(pojoFqName, field.getName()));
+        });
+
     }
 
 }

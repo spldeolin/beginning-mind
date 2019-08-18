@@ -36,7 +36,7 @@ public class SwaggerApiListingReaderAspect {
         point.proceed(point.getArgs());
 
         api.getResourceGroup().getControllerClass().toJavaUtil().ifPresent(one -> {
-            JavaClass javaClass = srcHolder.getSource(one.getName());
+            JavaClass javaClass = srcHolder.getJava(one.getName());
             api.apiListingBuilder().description(javaClass.getComment());
         });
     }

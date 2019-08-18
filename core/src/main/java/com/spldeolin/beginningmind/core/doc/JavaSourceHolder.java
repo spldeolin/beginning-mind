@@ -86,7 +86,7 @@ public class JavaSourceHolder {
         }
     }
 
-    public JavaClass getSource(String fullyQualifiedName) {
+    public JavaClass getJava(String fullyQualifiedName) {
         return classSources.get(fullyQualifiedName);
     }
 
@@ -96,6 +96,17 @@ public class JavaSourceHolder {
 
     public String getFieldComment(String fieldFullyQualifiedName) {
         return fieldComments.get(fieldFullyQualifiedName);
+    }
+
+    public int getFiledIndexOfPojo(String pojoFullyQualifiedName, String fieldName) {
+        List<JavaField> fields = classSources.get(pojoFullyQualifiedName).getFields();
+        for (int i = 0; i < fields.size(); i++) {
+            if (fields.get(i).getName().equals(fieldName)) {
+                return i;
+            }
+        }
+
+        throw new IllegalArgumentException(fieldName + "不是" + pojoFullyQualifiedName + "中的Field");
     }
 
 }
