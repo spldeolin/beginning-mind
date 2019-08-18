@@ -94,4 +94,8 @@ public class JavaSourceHolder {
         return methodComments.get(methodFullyQualifiedName, parameterTypeFullQulifiedNames);
     }
 
+    public String getFieldComment(String fieldFullyQualifiedName) {
+        return fieldComments.get(fieldFullyQualifiedName);
+    }
+
 }
