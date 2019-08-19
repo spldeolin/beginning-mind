@@ -15,16 +15,15 @@ import org.springframework.web.method.HandlerMethod;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.doc.JavaSourceHolder;
 import springfox.documentation.RequestHandler;
-import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
-import springfox.documentation.swagger.web.SwaggerApiListingReader;
+import springfox.documentation.swagger.readers.operation.OperationSummaryReader;
 
 /**
- * 增强Springfox提取@Api#description的功能，重写为利用qdox提取Javadoc
+ * 增强Springfox提取@ApiOperation#value的功能，重写为利用qdox提取Javadoc
  *
  * @author Deolin 2019-08-17
- * @see SwaggerApiListingReader#apply(ApiListingContext)
+ * @see OperationSummaryReader#apply(springfox.documentation.spi.service.contexts.OperationContext)
  */
 @Aspect
 @Component

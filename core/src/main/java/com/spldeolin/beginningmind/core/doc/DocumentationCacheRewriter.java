@@ -11,6 +11,8 @@ import springfox.documentation.service.Documentation;
 import springfox.documentation.spring.web.DocumentationCache;
 
 /**
+ * 重写DocumentationCache中的部分属性值
+ *
  * @author Deolin 2019-08-16
  */
 @Component
@@ -25,7 +27,7 @@ public class DocumentationCacheRewriter implements ApplicationListener<Applicati
         for (Documentation doc : documentationCache.all().values()) {
             for (Entry<String, ApiListing> apiEachGroup : doc.getApiListings().entries()) {
                 apiEachGroup.getValue().getApis().forEach(api -> api.getOperations().forEach(operation -> {
-                    operation.getResponseMessages().clear();
+                    operation.getResponseMessages().removeIf(one -> one.getCode() != 200);
                 }));
             }
         }

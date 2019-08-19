@@ -22,6 +22,8 @@ import com.thoughtworks.qdox.model.JavaType;
 import lombok.extern.log4j.Log4j2;
 
 /**
+ * 基于qdox，解析并读取Java注释
+ *
  * @author Deolin 2019-08-17
  */
 @Component
@@ -30,24 +32,27 @@ public class JavaSourceHolder {
 
     private final Map<String, JavaClass> classSources = Maps.newHashMap();
 
-    private final Map<String, JavaClass> controllerSources = Maps.newHashMap();
-
     /**
      * 方法的全限定名：方法每个参数的类型的全限定名：方法注释
      */
     private final Table<String, List<String>, String> methodComments = HashBasedTable.create();
 
+    /**
+     * field的全限定名：field
+     */
     private final Map<String, JavaField> fields = Maps.newHashMap();
 
+    /**
+     * field的全限定名：field主注释
+     */
     private final Map<String, String> fieldComments = Maps.newHashMap();
 
-    private final JavaProjectBuilder builder = new JavaProjectBuilder();
-
-    private static final String projectPath = "/Users/deolin/Documents/project-repo/beginning-mind";
+    private static final String PROJECT_PATH = "/Users/deolin/Documents/project-repo/beginning-mind";
 
     @PostConstruct
     public void init() {
-        Iterator<File> javaFiles = FileUtils.iterateFiles(new File(projectPath), new String[]{"java"}, true);
+        JavaProjectBuilder builder = new JavaProjectBuilder();
+        Iterator<File> javaFiles = FileUtils.iterateFiles(new File(PROJECT_PATH), new String[]{"java"}, true);
         while (javaFiles.hasNext()) {
             try {
                 File javaFile = javaFiles.next();
@@ -55,9 +60,6 @@ public class JavaSourceHolder {
                 for (JavaClass javaClass : src.getClasses()) {
                     String fqName = javaClass.getFullyQualifiedName();
                     classSources.put(fqName, javaClass);
-                    if (JavaClassVisitor.isController(javaClass)) {
-                        controllerSources.put(fqName, javaClass);
-                    }
 
                     // extract method comment
                     for (JavaMethod javaMethod : javaClass.getMethods()) {
@@ -113,7 +115,6 @@ public class JavaSourceHolder {
                 return i;
             }
         }
-
         throw new IllegalArgumentException(fieldName + "不是" + pojoFullyQualifiedName + "中的Field");
     }
 

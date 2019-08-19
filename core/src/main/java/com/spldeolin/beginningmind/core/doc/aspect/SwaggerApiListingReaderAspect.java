@@ -24,8 +24,8 @@ public class SwaggerApiListingReaderAspect {
     @Autowired
     private JavaSourceHolder srcHolder;
 
-    @Pointcut("execution(* springfox.documentation.swagger.web.SwaggerApiListingReader.apply(springfox.documentation"
-            + ".spi.service.contexts.ApiListingContext))")
+    @Pointcut("execution(* springfox.documentation.swagger.web.SwaggerApiListingReader.apply"
+            + "(springfox.documentation.spi.service.contexts.ApiListingContext))")
     public void apply() {
     }
 

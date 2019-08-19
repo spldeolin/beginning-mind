@@ -12,7 +12,7 @@ import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder;
 
 /**
- * 增强Springfox提取@ApiModelPropertyn的功能，重写为利用qdox提取Javadoc
+ * 增强Springfox提取@ApiModelProperty的功能，重写为利用qdox提取Javadoc
  *
  * @author Deolin 2019-08-18
  * @see ApiModelPropertyPropertyBuilder#apply(springfox.documentation.spi.schema.contexts.ModelPropertyContext)
