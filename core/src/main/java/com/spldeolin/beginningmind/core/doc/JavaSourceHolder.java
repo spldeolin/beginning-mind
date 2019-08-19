@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.doc;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -86,7 +85,7 @@ public class JavaSourceHolder {
                         fields.put(fieldFqName, javaField);
                     }
                 }
-            } catch (IOException e) {
+            } catch (Exception e) {
                 log.info(e);
             }
         }
