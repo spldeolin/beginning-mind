@@ -161,7 +161,8 @@ public class Jsons {
      * 将JSON转化为对象列表，支持自定义ObjectMapper
      */
     public static <T> List<T> toListOfObjects(String json, Class<T> clazz, ObjectMapper om) {
-        JavaType javaType = defaultObjectMapper.getTypeFactory().constructParametricType(List.class, clazz);
+        // ObjectMapper.TypeFactory没有线程隔离，所以需要new一个默认ObjectMapper
+        JavaType javaType = newDefaultObjectMapper().getTypeFactory().constructParametricType(List.class, clazz);
         try {
             return om.readValue(json, javaType);
         } catch (IOException e) {
