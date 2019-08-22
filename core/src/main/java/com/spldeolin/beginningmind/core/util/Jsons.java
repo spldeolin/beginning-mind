@@ -59,7 +59,7 @@ public class Jsons {
         return om;
     }
 
-    private static SimpleModule timeModule() {
+    public static SimpleModule timeModule() {
         SimpleModule javaTimeModule = new JavaTimeModule();
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");

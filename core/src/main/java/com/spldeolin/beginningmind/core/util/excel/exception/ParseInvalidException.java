@@ -1,6 +1,7 @@
-package com.spldeolin.beginningmind.core.util.excel;
+package com.spldeolin.beginningmind.core.util.excel.exception;
 
 import java.util.List;
+import com.spldeolin.beginningmind.core.util.excel.entity.ParseInvalid;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

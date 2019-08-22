@@ -30,13 +30,23 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.util.Times;
-import com.spldeolin.beginningmind.core.util.excel.ExcelContext.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
+import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
+import com.spldeolin.beginningmind.core.util.excel.entity.ParseInvalid;
+import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
+import com.spldeolin.beginningmind.core.util.excel.exception.ParseInvalidException;
+import com.spldeolin.beginningmind.core.util.excel.formatter.Formatter;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * Excel读写工具类
  *
- * （除非有合并单元格或是自定义单元格样式的需求，否则不建议导出为Excel，建议导出为CSV）
+ * 调用readExcel将Excel读取成List of Objects，
+ * 调用writeExcel将List of Objects生成成Excel文件
+ *
+ * 注意泛型类需要声明ExcelColumn和ExcelSheet
  *
  * @author Deolin 2018/07/07
  */
@@ -137,7 +147,7 @@ public class Excels {
                 continue;
             }
             ExcelContext.ColumnDefinition columnDefinition = new ExcelContext.ColumnDefinition();
-            columnDefinition.setFirstColumnName(columnAnno.firstColumnName());
+            columnDefinition.setFirstColumnName(columnAnno.columnTitle());
             columnDefinition.setModelField(field);
             Class<? extends Formatter> formatter = columnAnno.formatter();
             if (formatter != Formatter.class) {

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util.excel;
+package com.spldeolin.beginningmind.core.util.excel.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
