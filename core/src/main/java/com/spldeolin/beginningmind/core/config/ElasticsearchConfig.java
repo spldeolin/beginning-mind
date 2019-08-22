@@ -27,12 +27,12 @@ public class ElasticsearchConfig {
 
         @Override
         public String mapToString(Object object) throws IOException {
-            return Jsons.defaultObjectMapper.writeValueAsString(object);
+            return Jsons.newDefaultObjectMapper().writeValueAsString(object);
         }
 
         @Override
         public <T> T mapToObject(String source, Class<T> clazz) throws IOException {
-            return Jsons.defaultObjectMapper.readValue(source, clazz);
+            return Jsons.newDefaultObjectMapper().readValue(source, clazz);
         }
 
     }

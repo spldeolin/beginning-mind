@@ -15,7 +15,7 @@ public class JacksonConfig {
 
     @Bean
     public ObjectMapper objectMapper() {
-        return Jsons.defaultObjectMapper;
+        return Jsons.newDefaultObjectMapper();
     }
 
 }

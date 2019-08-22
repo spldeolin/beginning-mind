@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.core.common.CommonEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,6 +20,7 @@ public class UserEntity extends CommonEntity {
     /**
      * 用户编号
      */
+    @JsonProperty("sdfsdf士大夫")
     @TableField("serial_number")
     private String serialNumber;
 

@@ -38,24 +38,29 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Jsons {
 
-    public static final ObjectMapper defaultObjectMapper;
+    private static final ObjectMapper defaultObjectMapper;
 
     static {
-        defaultObjectMapper = new ObjectMapper();
-
-        // 模组（guava collection、jsr310、Long转String）
-        defaultObjectMapper.registerModule(new GuavaModule());
-        defaultObjectMapper.registerModule(longToStringModulel());
-        defaultObjectMapper.registerModule(timeModule());
-
-        // json -> object时，忽略json中不认识的属性名
-        defaultObjectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        // 时区
-        defaultObjectMapper.setTimeZone(TimeZone.getDefault());
+        defaultObjectMapper = newDefaultObjectMapper();
     }
 
-    public static SimpleModule timeModule() {
+    public static ObjectMapper newDefaultObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+
+        // 模组（guava collection、jsr310、Long转String）
+        om.registerModule(new GuavaModule());
+        om.registerModule(longToStringModule());
+        om.registerModule(timeModule());
+
+        // json -> object时，忽略json中不认识的属性名
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        // 时区
+        om.setTimeZone(TimeZone.getDefault());
+        return om;
+    }
+
+    private static SimpleModule timeModule() {
         SimpleModule javaTimeModule = new JavaTimeModule();
         DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
@@ -69,7 +74,7 @@ public class Jsons {
         return javaTimeModule;
     }
 
-    private static SimpleModule longToStringModulel() {
+    private static SimpleModule longToStringModule() {
         SimpleModule simpleModule = new SimpleModule();
         simpleModule.addSerializer(BigInteger.class, ToStringSerializer.instance);
         simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
@@ -109,7 +114,7 @@ public class Jsons {
     }
 
     /**
-     * 将对象转化为JSON，采用默认SNAKE-CASE转化方式
+     * 将对象转化为JSON
      */
     public static String toJson(Object object) {
         return toJson(object, defaultObjectMapper);
@@ -128,7 +133,7 @@ public class Jsons {
     }
 
     /**
-     * 将JSON转化为对象，采用默认SNAKE-CASE转化方式
+     * 将JSON转化为对象
      */
     public static <T> T toObject(String json, Class<T> clazz) {
         return toObject(json, clazz, defaultObjectMapper);
