@@ -6,9 +6,11 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.TimeZone;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -26,9 +28,8 @@ import lombok.extern.log4j.Log4j2;
 /**
  * JSON工具类
  * <pre>
- * 支持JSON与对象间的互相转换，支持取得JSON结构中的具体的值。
- * p.s.: 本工具类不建议使用Java Collection中的类作为toObject()的返回值类型，
- * 如果仅仅需要临时取某个属性，推荐使用getValue()。
+ * 支持JSON 与对象间、与对象列表间 的互相转换。
+ * p.s.: 本工具类所有public方法都是 OR-ELSE-THROW 的
  * </pre>
  *
  * @author Deolin
@@ -147,6 +148,27 @@ public class Jsons {
             log.error("转化对象失败", e);
             throw new BizException("转化对象失败");
         }
+    }
+
+    /**
+     * 将JSON转化为对象列表
+     */
+    public static <T> List<T> toListOfObjects(String json, Class<T> clazz) {
+        return toListOfObjects(json, clazz, defaultObjectMapper);
+    }
+
+    /**
+     * 将JSON转化为对象列表，支持自定义ObjectMapper
+     */
+    public static <T> List<T> toListOfObjects(String json, Class<T> clazz, ObjectMapper om) {
+        JavaType javaType = defaultObjectMapper.getTypeFactory().constructParametricType(List.class, clazz);
+        try {
+            return om.readValue(json, javaType);
+        } catch (IOException e) {
+            log.error("转化对象列表失败", e);
+            throw new BizException("转化对象失败");
+        }
+
     }
 
 }
