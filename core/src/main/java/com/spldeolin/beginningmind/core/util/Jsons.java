@@ -7,10 +7,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.TimeZone;
-import org.apache.commons.lang3.math.NumberUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
@@ -149,58 +147,6 @@ public class Jsons {
             log.error("转化对象失败", e);
             throw new BizException("转化对象失败");
         }
-    }
-
-    /**
-     * 读取JSON中的某一个值
-     * <pre>
-     * 这个方法返回的是String格式。
-     * 建议使用这个方法来方便地取得目标值，而不是转化为临时的Map对象后通过map.get("key")取得。
-     * 例如，想要从下面的JSON从取到第二个user的id，可以调用
-     * Jsons.getValue(Integer.class, json, "users", "1", "user_id");
-     *
-     * {
-     *      "organization_id": "112",
-     *      "users": [
-     *          {
-     *              "user_id": "1",
-     *              "name": "Light Deolin"
-     *          },
-     *          {
-     *              "user_id": "2",
-     *              "name": "Dark Deolin"
-     *          }
-     *      ]
-     *  }
-     * </pre>
-     *
-     * @param json 目标JSON
-     * @param nodeKeys 抵达目标节点所有的节点key或数组下标
-     * @return 目标值
-     */
-    public static String getValue(String json, String... nodeKeys) {
-        JsonNode node;
-        try {
-            node = defaultObjectMapper.readTree(json);
-        } catch (Exception e) {
-            log.error("读取JSON失败", e);
-            throw new BizException("读取JSON失败");
-        }
-
-        for (String nodeKey : nodeKeys) {
-            if (node == null) {
-                return null;
-            }
-            if (NumberUtils.isCreatable(nodeKey)) {
-                node = node.get(Integer.parseInt(nodeKey));
-            } else {
-                node = node.get(nodeKey);
-            }
-        }
-        if (node == null) {
-            return null;
-        }
-        return node.asText();
     }
 
 }
