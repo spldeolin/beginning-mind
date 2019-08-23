@@ -23,7 +23,7 @@ import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
 import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelReadException;
-import com.spldeolin.beginningmind.core.util.excel.exception.UnsupportConverterException;
+import com.spldeolin.beginningmind.core.util.excel.exception.UnknowDefaultTypeException;
 import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
 import com.spldeolin.beginningmind.core.util.excel.formatter.DefalutConverterFactory;
 
@@ -227,7 +227,7 @@ public class ExcelReader {
                         if (cellContent.endsWith(".0")) {
                             cellContent = cellContent.substring(0, cellContent.length() - 2);
                         }
-                        formatter = DefalutConverterFactory.dispatch(field.getType());
+                        formatter = DefalutConverterFactory.produceConverter(field.getType());
                     }
                     fieldValue = formatter.read(cellContent);
                 }
@@ -236,7 +236,7 @@ public class ExcelReader {
             } catch (IllegalAccessException e) {
                 // field.set() throws
                 throw new RuntimeException("impossible unless bug");
-            } catch (UnsupportConverterException e) {
+            } catch (UnknowDefaultTypeException e) {
                 e.setFieldType(field.getType().getSimpleName());
                 e.setFieldName(clazz.getName() + "." + field.getName());
                 throw e;

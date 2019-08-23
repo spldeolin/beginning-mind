@@ -4,7 +4,7 @@ package com.spldeolin.beginningmind.core.util.excel.formatter;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
-import com.spldeolin.beginningmind.core.util.excel.exception.UnsupportConverterException;
+import com.spldeolin.beginningmind.core.util.excel.exception.UnknowDefaultTypeException;
 
 /**
  * Excels默认转换器工厂
@@ -13,7 +13,7 @@ import com.spldeolin.beginningmind.core.util.excel.exception.UnsupportConverterE
  */
 public class DefalutConverterFactory {
 
-    public static <T> Converter<?> dispatch(Class<T> type) throws UnsupportConverterException {
+    public static <T> Converter<?> produceConverter(Class<T> type) throws UnknowDefaultTypeException {
         if (type == String.class) {
             return new DefaultStringConverter();
 
@@ -42,7 +42,7 @@ public class DefalutConverterFactory {
             return new DefaultJavaUtilDateConverter();
 
         } else {
-            throw new UnsupportConverterException();
+            throw new UnknowDefaultTypeException();
         }
     }
 

@@ -10,16 +10,16 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UnsupportConverterException extends RuntimeException {
+public class UnknowDefaultTypeException extends RuntimeException {
 
     private String fieldType;
 
     private String fieldName;
 
-    public UnsupportConverterException() {
+    public UnknowDefaultTypeException() {
     }
 
-    public UnsupportConverterException(String message) {
+    public UnknowDefaultTypeException(String message) {
         super(message);
     }
 
