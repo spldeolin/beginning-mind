@@ -16,7 +16,7 @@ public @interface ExcelColumn {
     /**
      * 列标题
      */
-    String columnTitle() default "";
+    String columnTitle();
 
     /**
      * 格式化策略
