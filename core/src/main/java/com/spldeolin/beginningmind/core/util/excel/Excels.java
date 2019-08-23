@@ -6,16 +6,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
-import java.math.BigDecimal;
 import java.text.DecimalFormat;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -29,26 +25,36 @@ import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.util.Times;
-import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext;
-import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
-import com.spldeolin.beginningmind.core.util.excel.entity.ParseInvalid;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
+import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
-import com.spldeolin.beginningmind.core.util.excel.exception.ParseInvalidException;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Formatter;
+import com.spldeolin.beginningmind.core.util.excel.exception.ExcelReadException;
+import com.spldeolin.beginningmind.core.util.excel.exception.UnsupportConverterException;
+import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
+import com.spldeolin.beginningmind.core.util.excel.formatter.DefalutConverterFactory;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * Excel读写工具类
  *
- * 调用readExcel将Excel读取成List of Objects，
- * 调用writeExcel将List of Objects生成成Excel文件
- *
- * 注意泛型类需要声明ExcelColumn和ExcelSheet
+ * 用法：
+ * 1. 定义一个POJO，声明@ExcelSheet
+ * 2. 根据需要在POJO内定义field，并为每个field声明@ExcelColumn
+ * 3. 对于复杂类型的field，建议指定自定义Converter以提供类型转换策略，如java.util.Date、BigDecimal等；
+ * 对于简单类型的field，则不需要，如String、Integer、Long等
+ * 4. 调用readExcel将Excel读取成List of Objects，所有单元格内的内容会被当作是文本处理
+ * 5. 调用writeExcel将List of Objects生成成Excel文件，所有单元格的内容将会是文本
+ * 6. 如果读取失败，将会抛出ParseInvalidException，捕获并解析这个异常对象可以获取出错的行列
  *
  * @author Deolin 2018/07/07
+ * @see ExcelSheet
+ * @see ExcelColumn
+ * @see Converter
+ * @see ExcelReadException
  */
 @Log4j2
 public class Excels {
@@ -56,7 +62,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ParseInvalidException {
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ExcelReadException {
         ExcelContext excelContext = new ExcelContext();
         try {
             analyzeMultipartFile(excelContext, multipartFile);
@@ -72,7 +78,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ParseInvalidException {
+    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ExcelReadException {
         ExcelContext excelContext = new ExcelContext();
         try {
             analyzeFile(excelContext, file);
@@ -88,7 +94,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    private static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ParseInvalidException {
+    private static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ExcelReadException {
         try {
             analyzeModel(excelContext, clazz);
             Workbook workbook = openWorkbook(excelContext);
@@ -96,18 +102,18 @@ public class Excels {
             analyzeModelFields(excelContext, clazz);
             analyzeColumns(excelContext, sheet);
             List<T> result = Lists.newArrayList();
-            List<ParseInvalid> parseInvalids = Lists.newArrayList();
+            List<Invalid> parseInvalids = Lists.newArrayList();
             for (Row row : listValidRows(excelContext, sheet)) {
                 if (row != null) {
                     try {
-                        result.add(parseRow(clazz, excelContext.getColumnDefinitions(), row));
-                    } catch (ParseInvalidException e) {
+                        result.add(readRow(clazz, excelContext.getColumnDefinitions(), row));
+                    } catch (ExcelReadException e) {
                         parseInvalids.addAll(e.getParseInvalids());
                     }
                 }
             }
             if (parseInvalids.size() > 0) {
-                throw new ParseInvalidException(parseInvalids);
+                throw new ExcelReadException(parseInvalids);
             }
             return result;
         } catch (IOException e) {
@@ -123,8 +129,8 @@ public class Excels {
         excelContext.setFileInputStream(FileUtils.openInputStream(file));
     }
 
-    private static void analyzeMultipartFile(ExcelContext excelContext,
-            MultipartFile multipartFile) throws IOException {
+    private static void analyzeMultipartFile(ExcelContext excelContext, MultipartFile multipartFile)
+            throws IOException {
         String filename = multipartFile.getOriginalFilename();
         excelContext.setFileExtension(FilenameUtils.getExtension(filename));
         excelContext.setFileInputStream(multipartFile.getInputStream());
@@ -136,7 +142,7 @@ public class Excels {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
         }
         excelContext.setSheetName(sheetAnno.sheetName());
-        excelContext.setRowOffSet(sheetAnno.startingRowNumber());
+        excelContext.setRowOffSet(sheetAnno.firstDataRowNo());
     }
 
     private static <T> void analyzeModelFields(ExcelContext excelContext, Class<T> clazz) {
@@ -149,8 +155,8 @@ public class Excels {
             ExcelContext.ColumnDefinition columnDefinition = new ExcelContext.ColumnDefinition();
             columnDefinition.setFirstColumnName(columnAnno.columnTitle());
             columnDefinition.setModelField(field);
-            Class<? extends Formatter> formatter = columnAnno.formatter();
-            if (formatter != Formatter.class) {
+            Class<? extends Converter> formatter = columnAnno.converter();
+            if (formatter != Converter.class) {
                 columnDefinition.setFormatter(new ObjenesisStd(true).newInstance(formatter));
             }
             columnDefinition.setDefaultValue(columnAnno.defaultValue());
@@ -224,8 +230,8 @@ public class Excels {
         }
         for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
             Row row = sheet.getRow(rownum);
-            List<Integer> cellNumbers = excelContext.getColumnDefinitions().stream().map(
-                    ExcelContext.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
+            List<Integer> cellNumbers = excelContext.getColumnDefinitions().stream()
+                    .map(ExcelContext.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
             if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
                 rows.add(row);
             }
@@ -258,10 +264,10 @@ public class Excels {
         return StringUtils.isAllBlank(contents.toArray(new String[0]));
     }
 
-    private static <T> T parseRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions,
-            Row row) throws ParseInvalidException {
+    private static <T> T readRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions, Row row)
+            throws ExcelReadException {
         T t = new ObjenesisStd(true).newInstance(clazz);
-        List<ParseInvalid> parseInvalids = Lists.newArrayList();
+        List<Invalid> parseInvalids = Lists.newArrayList();
         for (ExcelContext.ColumnDefinition columnDefinition : columnDefinitions) {
             Integer columnNumber = columnDefinition.getColumnNumber();
             if (columnNumber == null) {
@@ -281,59 +287,38 @@ public class Excels {
                     cellContent = cell.toString().trim();
                 }
             }
-            Formatter formatter = columnDefinition.getFormatter();
-            boolean assignedFormatter = formatter != null && formatter.getClass() != Formatter.class;
+            Converter formatter = columnDefinition.getFormatter();
+            boolean assignedFormatter = formatter != null && formatter.getClass() != Converter.class;
             Field field = columnDefinition.getModelField();
             Object fieldValue = null;
             try {
                 if (StringUtils.isNotEmpty(cellContent)) {
+                    // 没有指定formatter，尝试用缺省方式指定常用formatter
                     if (!assignedFormatter) {
-                        // 没有指定formatter，尝试用缺省方式指定常用formatter
-                        Class fieldType = field.getType();
                         // 以.0结尾则删除最后两位
                         if (cellContent.endsWith(".0")) {
                             cellContent = cellContent.substring(0, cellContent.length() - 2);
                         }
-                        if (fieldType == String.class) {
-                            fieldValue = cellContent;
-                        } else if (fieldType == Integer.class) {
-                            fieldValue = NumberUtils.createInteger(cellContent);
-                        } else if (fieldType == Long.class) {
-                            fieldValue = NumberUtils.createLong(cellContent);
-                        } else if (fieldType == Float.class) {
-                            fieldValue = NumberUtils.createFloat(cellContent);
-                        } else if (fieldType == Double.class) {
-                            fieldValue = NumberUtils.createDouble(cellContent);
-                        } else if (fieldType == BigDecimal.class) {
-                            fieldValue = NumberUtils.createBigDecimal(cellContent);
-                        } else if (fieldType == Boolean.class) {
-                            fieldValue = BooleanUtils.toBoolean(cellContent);
-                        } else if (fieldType == LocalDateTime.class) {
-                            fieldValue = LocalDateTime.parse(cellContent, Times.DEFAULT_DATE_TIME_FORMATTER);
-                        } else {
-                            throw new RuntimeException("工具类Excels未为 [" + fieldType.getSimpleName() + field.getName() +
-                                    "]提供缺省转换策略，请在@ExcelColumn中指定具体formatter");
-                        }
-                    } else {
-                        // 指定了formatter
-                        fieldValue = formatter.parse(cellContent);
+                        formatter = DefalutConverterFactory.dispatch(field.getType());
                     }
+                    fieldValue = formatter.read(cellContent);
                 }
                 field.setAccessible(true);
                 field.set(t, fieldValue);
             } catch (IllegalAccessException e) {
-                throw new RuntimeException(e);
-            } catch (Exception e) {
-                ParseInvalid parseInvalid = new ParseInvalid(columnDefinition.getColumnLetter(), row.getRowNum() + 1,
-                        "数据格式非法");
-                if (assignedFormatter) {
-                    parseInvalid.setCause(e.getMessage());
-                }
-                parseInvalids.add(parseInvalid);
+                // field.set() throws
+                throw new RuntimeException("impossible unless bug");
+            } catch (UnsupportConverterException e) {
+                e.setFieldType(field.getType().getSimpleName());
+                e.setFieldName(clazz.getName() + "." + field.getName());
+                throw e;
+            } catch (ConverterReadException e) {
+                Invalid invalid = new Invalid(columnDefinition.getColumnLetter(), row.getRowNum() + 1, "数据格式非法");
+                parseInvalids.add(invalid);
             }
         }
         if (parseInvalids.size() > 0) {
-            throw new ParseInvalidException(parseInvalids);
+            throw new ExcelReadException(parseInvalids);
         }
         return t;
     }
@@ -466,8 +451,7 @@ public class Excels {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t)
-            throws Exception {
+    private static <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t) throws Exception {
         Field field = columnDefinition.getModelField();
         field.setAccessible(true);
         Object fieldValue = field.get(t);
@@ -475,12 +459,12 @@ public class Excels {
             return columnDefinition.getDefaultValue();
         }
 
-        Formatter formatter = columnDefinition.getFormatter();
+        Converter formatter = columnDefinition.getFormatter();
         if (formatter == null) {
             return fieldValue.toString();
         }
 
-        return formatter.format(fieldValue);
+        return formatter.write(fieldValue);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.core.util.excel.exception;
 
 import java.util.List;
-import com.spldeolin.beginningmind.core.util.excel.entity.ParseInvalid;
+import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -12,13 +12,13 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ParseInvalidException extends Exception {
+public class ExcelReadException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
-    private List<ParseInvalid> parseInvalids;
+    private List<Invalid> parseInvalids;
 
-    public ParseInvalidException(List<ParseInvalid> parseInvalids) {
+    public ExcelReadException(List<Invalid> parseInvalids) {
         super();
         this.parseInvalids = parseInvalids;
     }

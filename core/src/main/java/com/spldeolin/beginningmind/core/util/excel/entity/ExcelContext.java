@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.core.util.excel.entity;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.util.List;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Formatter;
+import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
 import lombok.Data;
 
 /**
@@ -41,7 +41,7 @@ public class ExcelContext {
 
         private Field modelField;
 
-        private Formatter formatter;
+        private Converter formatter;
 
         private String defaultValue;
 

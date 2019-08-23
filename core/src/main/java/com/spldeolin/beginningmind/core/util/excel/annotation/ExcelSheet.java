@@ -18,8 +18,9 @@ public @interface ExcelSheet {
     String sheetName() default "Sheet1";
 
     /**
-     * 从第几行开始读取（Excel显示的“行号”，从2开始）（1是标题行，指定1则没有意义）
+     * 指从第几行开始是数据内容
+     * Excel的行号是从1开始开始的，1是标题行，所以指定小于1的值没有意义
      */
-    int startingRowNumber() default 2;
+    int firstDataRowNo() default 2;
 
 }
