@@ -1,45 +1,37 @@
 package com.spldeolin.beginningmind.core.util.excel.entity;
 
+import java.util.List;
+
 /**
  * @author Deolin 2019-08-25
  */
 public class ExcelDefinitionContext {
 
-    private static final ThreadLocal<SheetDefinition> sheetDefinitionThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<SheetDefinition> sheetDefinition = new ThreadLocal<>();
 
-    private static final ThreadLocal<ColumnDefinition> columnDefinitionThreadLocal = new ThreadLocal<>();
+    private static final ThreadLocal<List<ColumnDefinition>> columnDefinitions = new ThreadLocal<>();
+
+
+    public static void newSheetDefinition() {
+        SheetDefinition sheetDefinition = new SheetDefinition();
+        ExcelDefinitionContext.sheetDefinition.set(sheetDefinition);
+    }
 
     public static SheetDefinition getSheetDefinition() {
-        return sheetDefinitionThreadLocal.get();
+        return sheetDefinition.get();
     }
 
-    public static ColumnDefinition getColumnDefinition() {
-        return columnDefinitionThreadLocal.get();
+    public static void setColumnDefinition(List<ColumnDefinition> columnDefinition) {
+        columnDefinitions.set(columnDefinition);
     }
 
-    public static void setSheetDefinition(SheetDefinition sheetDefinition) {
-        sheetDefinitionThreadLocal.set(sheetDefinition);
-    }
-
-    public static void setColumnDefinition(ColumnDefinition columnDefinition) {
-        columnDefinitionThreadLocal.set(columnDefinition);
-    }
-
-    public static SheetDefinition newSheetDefinition() {
-        SheetDefinition result = new SheetDefinition();
-        setSheetDefinition(result);
-        return result;
-    }
-
-    public static ColumnDefinition newColumnDefinition() {
-        ColumnDefinition result = new ColumnDefinition();
-        setColumnDefinition(result);
-        return result;
+    public static List<ColumnDefinition> getColumnDefinitions() {
+        return columnDefinitions.get();
     }
 
     public static void clearAll() {
-        sheetDefinitionThreadLocal.remove();
-        columnDefinitionThreadLocal.remove();
+        sheetDefinition.remove();
+        columnDefinitions.remove();
     }
 
 }

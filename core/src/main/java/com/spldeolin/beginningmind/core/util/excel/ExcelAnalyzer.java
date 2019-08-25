@@ -46,7 +46,6 @@ public class ExcelAnalyzer {
     }
 
     static <T> void analyzeModelFields(Class<T> clazz) {
-        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         List<ColumnDefinition> columnDefinitions = Lists.newArrayList();
         for (Field field : clazz.getDeclaredFields()) {
             ExcelColumn columnAnno = field.getAnnotation(ExcelColumn.class);
@@ -66,7 +65,7 @@ public class ExcelAnalyzer {
         if (columnDefinitions.size() == 0) {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]中不存在@ExcelColumn字段");
         }
-        sheetDefinition.setColumnDefinitions(columnDefinitions);
+        ExcelDefinitionContext.setColumnDefinition(columnDefinitions);
     }
 
 }

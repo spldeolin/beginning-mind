@@ -94,10 +94,9 @@ public class ExcelWriter {
     }
 
     private static void writeFirstRow(Sheet sheet) {
-        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         Row titleRow = sheet.createRow(0);
 
-        List<ColumnDefinition> columns = sheetDefinition.getColumnDefinitions();
+        List<ColumnDefinition> columns = ExcelDefinitionContext.getColumnDefinitions();
         for (int i = 0; i < columns.size(); i++) {
             ColumnDefinition column = columns.get(i);
             int cellNumber = i;
@@ -110,13 +109,12 @@ public class ExcelWriter {
 
     private static <T> void writeRows(CellStyle cellStyle, Sheet sheet, List<T> list)
             throws Exception {
-        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         for (int j = 0; j < list.size(); j++) {
             T t = list.get(j);
             int rowIndex = j + 1;
             Row titleRow = sheet.createRow(rowIndex);
 
-            List<ColumnDefinition> columns = sheetDefinition.getColumnDefinitions();
+            List<ColumnDefinition> columns = ExcelDefinitionContext.getColumnDefinitions();
             for (int i = 0; i < columns.size(); i++) {
                 ColumnDefinition column = columns.get(i);
                 int cellNumber = i;

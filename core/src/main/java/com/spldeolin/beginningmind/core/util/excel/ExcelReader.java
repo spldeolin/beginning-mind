@@ -86,7 +86,7 @@ public class ExcelReader {
             for (Row row : listValidRows(sheet)) {
                 if (row != null) {
                     try {
-                        result.add(readRow(clazz, sheetDefinition.getColumnDefinitions(), row));
+                        result.add(readRow(clazz, row));
                     } catch (ExcelCellContentInvalidException e) {
                         parseInvalids.addAll(e.getParseInvalids());
                     }
@@ -105,7 +105,7 @@ public class ExcelReader {
 
     private static void analyzeColumns(Sheet sheet) {
         SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
-        for (ColumnDefinition columnDefinition : sheetDefinition.getColumnDefinitions()) {
+        for (ColumnDefinition columnDefinition : ExcelDefinitionContext.getColumnDefinitions()) {
             String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName(),
                     sheetDefinition.getDataRowStartNo());
             if (columnLetter != null) {
@@ -173,7 +173,7 @@ public class ExcelReader {
         }
         for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
             Row row = sheet.getRow(rownum);
-            List<Integer> cellNumbers = sheetDefinition.getColumnDefinitions().stream()
+            List<Integer> cellNumbers = ExcelDefinitionContext.getColumnDefinitions().stream()
                     .map(ColumnDefinition::getColumnNumber).collect(Collectors.toList());
             if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
                 rows.add(row);
@@ -206,11 +206,10 @@ public class ExcelReader {
         return StringUtils.isAllBlank(contents.toArray(new String[0]));
     }
 
-    private static <T> T readRow(Class<T> clazz, List<ColumnDefinition> columnDefinitions, Row row)
-            throws ExcelCellContentInvalidException {
+    private static <T> T readRow(Class<T> clazz, Row row) throws ExcelCellContentInvalidException {
         T t = new ObjenesisStd(true).newInstance(clazz);
         List<Invalid> parseInvalids = Lists.newArrayList();
-        for (ColumnDefinition columnDefinition : columnDefinitions) {
+        for (ColumnDefinition columnDefinition : ExcelDefinitionContext.getColumnDefinitions()) {
             Integer columnNumber = columnDefinition.getColumnNumber();
             if (columnNumber == null) {
                 continue;

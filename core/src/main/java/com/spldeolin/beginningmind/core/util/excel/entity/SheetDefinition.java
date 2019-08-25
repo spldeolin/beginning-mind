@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.core.util.excel.entity;
 
 import java.io.InputStream;
-import java.util.List;
 import lombok.Data;
 
 /**
@@ -12,8 +11,14 @@ import lombok.Data;
 @Data
 public class SheetDefinition {
 
+    /**
+     * sheet所在Excel文件的拓展名
+     */
     private String fileExtension;
 
+    /**
+     * sheet所在Excel文件
+     */
     private InputStream fileInputStream;
 
     /**
@@ -22,14 +27,9 @@ public class SheetDefinition {
     private String sheetName;
 
     /**
-     * 从第几行开始
+     * 这个Sheet中，数据行从第几行开始
      */
     private Integer dataRowStartNo;
-
-    /**
-     * 列定义
-     */
-    private List<ColumnDefinition> columnDefinitions;
 
 }
 
