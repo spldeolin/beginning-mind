@@ -18,8 +18,9 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext;
+import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
+import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelCellContentInvalidException;
@@ -37,7 +38,7 @@ public class ExcelReader {
      */
     public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        ExcelContext excelContext = new ExcelContext();
+        SheetDefinition excelContext = new SheetDefinition();
         try {
             ExcelAnalyzer.analyzeMultipartFile(excelContext, multipartFile);
 
@@ -54,7 +55,7 @@ public class ExcelReader {
      */
     public static <T> List<T> readExcel(File file, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        ExcelContext excelContext = new ExcelContext();
+        SheetDefinition excelContext = new SheetDefinition();
         try {
             ExcelAnalyzer.analyzeFile(excelContext, file);
 
@@ -69,7 +70,7 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    private static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz)
+    private static <T> List<T> readExcel(SheetDefinition excelContext, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         try {
             ExcelAnalyzer.analyzeModel(excelContext, clazz);
@@ -99,8 +100,8 @@ public class ExcelReader {
         }
     }
 
-    private static <T> void analyzeColumns(ExcelContext excelContext, Sheet sheet) {
-        for (ExcelContext.ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
+    private static void analyzeColumns(SheetDefinition excelContext, Sheet sheet) {
+        for (ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
             String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName(),
                     excelContext.getDataRowStartNo());
             if (columnLetter != null) {
@@ -131,7 +132,7 @@ public class ExcelReader {
         return result;
     }
 
-    private static Workbook openWorkbook(ExcelContext excelContext) throws IOException, ExcelAnalyzeException {
+    private static Workbook openWorkbook(SheetDefinition excelContext) throws IOException, ExcelAnalyzeException {
         Workbook workBook;
         String fileExtension = excelContext.getFileExtension();
         InputStream inputStream = excelContext.getFileInputStream();
@@ -145,7 +146,7 @@ public class ExcelReader {
         return workBook;
     }
 
-    private static Sheet openSheet(ExcelContext excelContext, Workbook workbook) throws ExcelAnalyzeException {
+    private static Sheet openSheet(SheetDefinition excelContext, Workbook workbook) throws ExcelAnalyzeException {
         if (workbook.getNumberOfSheets() == 0) {
             throw new ExcelAnalyzeException("工作簿中不存在工作表");
         }
@@ -156,7 +157,7 @@ public class ExcelReader {
         return sheet;
     }
 
-    private static List<Row> listValidRows(ExcelContext excelContext, Sheet sheet) throws ExcelAnalyzeException {
+    private static List<Row> listValidRows(SheetDefinition excelContext, Sheet sheet) throws ExcelAnalyzeException {
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
         int offsetRowNum = excelContext.getDataRowStartNo() - 1;
@@ -166,7 +167,7 @@ public class ExcelReader {
         for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
             Row row = sheet.getRow(rownum);
             List<Integer> cellNumbers = excelContext.getColumnDefinitions().stream()
-                    .map(ExcelContext.ColumnDefinition::getColumnNumber).collect(Collectors.toList());
+                    .map(ColumnDefinition::getColumnNumber).collect(Collectors.toList());
             if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
                 rows.add(row);
             }
@@ -198,11 +199,11 @@ public class ExcelReader {
         return StringUtils.isAllBlank(contents.toArray(new String[0]));
     }
 
-    private static <T> T readRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions, Row row)
+    private static <T> T readRow(Class<T> clazz, List<ColumnDefinition> columnDefinitions, Row row)
             throws ExcelCellContentInvalidException {
         T t = new ObjenesisStd(true).newInstance(clazz);
         List<Invalid> parseInvalids = Lists.newArrayList();
-        for (ExcelContext.ColumnDefinition columnDefinition : columnDefinitions) {
+        for (ColumnDefinition columnDefinition : columnDefinitions) {
             Integer columnNumber = columnDefinition.getColumnNumber();
             if (columnNumber == null) {
                 continue;
@@ -257,7 +258,7 @@ public class ExcelReader {
         return t;
     }
 
-    private static void close(ExcelContext excelContext) {
+    private static void close(SheetDefinition excelContext) {
         InputStream inputStream = excelContext.getFileInputStream();
         if (inputStream != null) {
             try {

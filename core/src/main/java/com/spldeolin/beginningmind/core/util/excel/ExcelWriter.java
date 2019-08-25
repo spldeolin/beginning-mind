@@ -16,8 +16,8 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.spldeolin.beginningmind.core.common.BizException;
-import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext;
-import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelWriteException;
 import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
 
@@ -31,7 +31,7 @@ public class ExcelWriter {
      */
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ensureFileExist(file);
-        ExcelContext excelContext = new ExcelContext();
+        SheetDefinition excelContext = new SheetDefinition();
         try (OutputStream os = new FileOutputStream(file)) {
             ExcelAnalyzer.analyzeFile(excelContext, file);
             ExcelAnalyzer.analyzeModel(excelContext, clazz);
@@ -74,7 +74,7 @@ public class ExcelWriter {
         }
     }
 
-    private static Workbook newWorkbook(ExcelContext excelContext) {
+    private static Workbook newWorkbook(SheetDefinition excelContext) {
         String fileExtension = excelContext.getFileExtension();
         if ("xlsx".equals(fileExtension)) {
             return new XSSFWorkbook();
@@ -85,11 +85,11 @@ public class ExcelWriter {
         }
     }
 
-    private static Sheet newSheet(ExcelContext excelContext, Workbook workbook) {
+    private static Sheet newSheet(SheetDefinition excelContext, Workbook workbook) {
         return workbook.createSheet(excelContext.getSheetName());
     }
 
-    private static void writeFirstRow(ExcelContext excelContext, Sheet sheet) {
+    private static void writeFirstRow(SheetDefinition excelContext, Sheet sheet) {
         Row titleRow = sheet.createRow(0);
 
         List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
@@ -103,7 +103,7 @@ public class ExcelWriter {
         }
     }
 
-    private static <T> void writeRows(ExcelContext excelContext, CellStyle cellStyle, Sheet sheet, List<T> list)
+    private static <T> void writeRows(SheetDefinition excelContext, CellStyle cellStyle, Sheet sheet, List<T> list)
             throws Exception {
         for (int j = 0; j < list.size(); j++) {
             T t = list.get(j);
@@ -124,7 +124,7 @@ public class ExcelWriter {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> String formatCellValue(ExcelContext.ColumnDefinition columnDefinition, T t) throws Exception {
+    private static <T> String formatCellValue(ColumnDefinition columnDefinition, T t) throws Exception {
         Field field = columnDefinition.getModelField();
         field.setAccessible(true);
         Object fieldValue = field.get(t);
@@ -140,7 +140,7 @@ public class ExcelWriter {
         return formatter.write(fieldValue);
     }
 
-    private static void close(ExcelContext excelContext) {
+    private static void close(SheetDefinition excelContext) {
         InputStream inputStream = excelContext.getFileInputStream();
         if (inputStream != null) {
             try {
