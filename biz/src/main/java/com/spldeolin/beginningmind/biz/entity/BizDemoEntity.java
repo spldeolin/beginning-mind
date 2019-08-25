@@ -1,6 +1,8 @@
 package com.spldeolin.beginningmind.biz.entity;
 
 import java.time.LocalDate;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.spldeolin.beginningmind.core.common.CommonEntity;
@@ -21,12 +23,14 @@ public class BizDemoEntity extends CommonEntity {
      * 工号
      */
     @TableField("user_number")
+    @NotNull
     private String userNumber;
 
     /**
      * 名字
      */
     @TableField("name")
+    @Size(max = 6)
     private String name;
 
     /**
@@ -111,7 +115,7 @@ public class BizDemoEntity extends CommonEntity {
      * 能否登录
      */
     @TableField("enable_sign")
-    private Byte enableSign;
+    private Boolean enableSign;
 
     @TableField("wechat_openid")
     private String wechatOpenid;

@@ -12,6 +12,7 @@ import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
 
@@ -20,28 +21,32 @@ import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
  */
 public class ExcelAnalyzer {
 
-    static void analyzeFile(SheetDefinition excelContext, File file) throws IOException {
+    static void analyzeFile(File file) throws IOException {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         String filename = file.getName();
-        excelContext.setFileExtension(FilenameUtils.getExtension(filename));
-        excelContext.setFileInputStream(FileUtils.openInputStream(file));
+        sheetDefinition.setFileExtension(FilenameUtils.getExtension(filename));
+        sheetDefinition.setFileInputStream(FileUtils.openInputStream(file));
     }
 
-    static void analyzeMultipartFile(SheetDefinition excelContext, MultipartFile multipartFile) throws IOException {
+    static void analyzeMultipartFile(MultipartFile multipartFile) throws IOException {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         String filename = multipartFile.getOriginalFilename();
-        excelContext.setFileExtension(FilenameUtils.getExtension(filename));
-        excelContext.setFileInputStream(multipartFile.getInputStream());
+        sheetDefinition.setFileExtension(FilenameUtils.getExtension(filename));
+        sheetDefinition.setFileInputStream(multipartFile.getInputStream());
     }
 
-    static <T> void analyzeModel(SheetDefinition excelContext, Class<T> clazz) {
+    static <T> void analyzeModel(Class<T> clazz) {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         ExcelSheet sheetAnno = clazz.getAnnotation(ExcelSheet.class);
         if (sheetAnno == null) {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
         }
-        excelContext.setSheetName(sheetAnno.sheetName());
-        excelContext.setDataRowStartNo(sheetAnno.titleRowStartNo() + 1);
+        sheetDefinition.setSheetName(sheetAnno.sheetName());
+        sheetDefinition.setDataRowStartNo(sheetAnno.titleRowStartNo() + 1);
     }
 
-    static <T> void analyzeModelFields(SheetDefinition excelContext, Class<T> clazz) {
+    static <T> void analyzeModelFields(Class<T> clazz) {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         List<ColumnDefinition> columnDefinitions = Lists.newArrayList();
         for (Field field : clazz.getDeclaredFields()) {
             ExcelColumn columnAnno = field.getAnnotation(ExcelColumn.class);
@@ -61,7 +66,7 @@ public class ExcelAnalyzer {
         if (columnDefinitions.size() == 0) {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]中不存在@ExcelColumn字段");
         }
-        excelContext.setColumnDefinitions(columnDefinitions);
+        sheetDefinition.setColumnDefinitions(columnDefinitions);
     }
 
 }

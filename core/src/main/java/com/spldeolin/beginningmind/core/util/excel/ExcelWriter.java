@@ -17,6 +17,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelWriteException;
 import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
@@ -31,20 +32,20 @@ public class ExcelWriter {
      */
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ensureFileExist(file);
-        SheetDefinition excelContext = new SheetDefinition();
         try (OutputStream os = new FileOutputStream(file)) {
-            ExcelAnalyzer.analyzeFile(excelContext, file);
-            ExcelAnalyzer.analyzeModel(excelContext, clazz);
-            ExcelAnalyzer.analyzeModelFields(excelContext, clazz);
+            ExcelDefinitionContext.newSheetDefinition();
+            ExcelAnalyzer.analyzeFile(file);
+            ExcelAnalyzer.analyzeModel(clazz);
+            ExcelAnalyzer.analyzeModelFields(clazz);
 
             // 创建工作簿
-            Workbook workbook = newWorkbook(excelContext);
+            Workbook workbook = newWorkbook();
 
             // 创建工作表
-            Sheet sheet = newSheet(excelContext, workbook);
+            Sheet sheet = newSheet(workbook);
 
             // 写入第一行（第一行展示列名）
-            writeFirstRow(excelContext, sheet);
+            writeFirstRow(sheet);
 
             // 单元格格式（文本） 这是干嘛的？
             CellStyle cellStyle = workbook.createCellStyle();
@@ -52,13 +53,14 @@ public class ExcelWriter {
             cellStyle.setDataFormat(dataFormat.getFormat("@"));
 
             // 写入第N行（下面的行展示数据）
-            writeRows(excelContext, cellStyle, sheet, list);
+            writeRows(cellStyle, sheet, list);
 
             workbook.write(os);
         } catch (Exception e) {
             throw new ExcelWriteException(e);
         } finally {
-            close(excelContext);
+            close();
+            ExcelDefinitionContext.clearAll();
         }
     }
 
@@ -74,8 +76,9 @@ public class ExcelWriter {
         }
     }
 
-    private static Workbook newWorkbook(SheetDefinition excelContext) {
-        String fileExtension = excelContext.getFileExtension();
+    private static Workbook newWorkbook() {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
+        String fileExtension = sheetDefinition.getFileExtension();
         if ("xlsx".equals(fileExtension)) {
             return new XSSFWorkbook();
         } else if ("xls".equals(fileExtension)) {
@@ -85,14 +88,16 @@ public class ExcelWriter {
         }
     }
 
-    private static Sheet newSheet(SheetDefinition excelContext, Workbook workbook) {
-        return workbook.createSheet(excelContext.getSheetName());
+    private static Sheet newSheet(Workbook workbook) {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
+        return workbook.createSheet(sheetDefinition.getSheetName());
     }
 
-    private static void writeFirstRow(SheetDefinition excelContext, Sheet sheet) {
+    private static void writeFirstRow(Sheet sheet) {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         Row titleRow = sheet.createRow(0);
 
-        List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
+        List<ColumnDefinition> columns = sheetDefinition.getColumnDefinitions();
         for (int i = 0; i < columns.size(); i++) {
             ColumnDefinition column = columns.get(i);
             int cellNumber = i;
@@ -103,14 +108,15 @@ public class ExcelWriter {
         }
     }
 
-    private static <T> void writeRows(SheetDefinition excelContext, CellStyle cellStyle, Sheet sheet, List<T> list)
+    private static <T> void writeRows(CellStyle cellStyle, Sheet sheet, List<T> list)
             throws Exception {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         for (int j = 0; j < list.size(); j++) {
             T t = list.get(j);
             int rowIndex = j + 1;
             Row titleRow = sheet.createRow(rowIndex);
 
-            List<ColumnDefinition> columns = excelContext.getColumnDefinitions();
+            List<ColumnDefinition> columns = sheetDefinition.getColumnDefinitions();
             for (int i = 0; i < columns.size(); i++) {
                 ColumnDefinition column = columns.get(i);
                 int cellNumber = i;
@@ -140,8 +146,9 @@ public class ExcelWriter {
         return formatter.write(fieldValue);
     }
 
-    private static void close(SheetDefinition excelContext) {
-        InputStream inputStream = excelContext.getFileInputStream();
+    private static void close() {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
+        InputStream inputStream = sheetDefinition.getFileInputStream();
         if (inputStream != null) {
             try {
                 inputStream.close();

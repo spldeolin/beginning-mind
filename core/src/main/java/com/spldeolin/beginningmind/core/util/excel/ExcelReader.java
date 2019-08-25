@@ -19,6 +19,7 @@ import org.springframework.objenesis.ObjenesisStd;
 import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
+import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
@@ -38,16 +39,17 @@ public class ExcelReader {
      */
     public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        SheetDefinition excelContext = new SheetDefinition();
         try {
-            ExcelAnalyzer.analyzeMultipartFile(excelContext, multipartFile);
-
-            return readExcel(excelContext, clazz);
+            ExcelDefinitionContext.newSheetDefinition();
+            ExcelAnalyzer.analyzeMultipartFile(multipartFile);
+            return readExcel(clazz);
         } catch (IOException e) {
             throw new RuntimeException("文件读写失败");
         } finally {
-            close(excelContext);
+            close();
+            ExcelDefinitionContext.clearAll();
         }
+
     }
 
     /**
@@ -55,35 +57,36 @@ public class ExcelReader {
      */
     public static <T> List<T> readExcel(File file, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        SheetDefinition excelContext = new SheetDefinition();
         try {
-            ExcelAnalyzer.analyzeFile(excelContext, file);
-
-            return readExcel(excelContext, clazz);
+            ExcelDefinitionContext.newSheetDefinition();
+            ExcelAnalyzer.analyzeFile(file);
+            return readExcel(clazz);
         } catch (IOException e) {
             throw new ExcelAnalyzeException("文件读写失败");
         } finally {
-            close(excelContext);
+            close();
+            ExcelDefinitionContext.clearAll();
         }
     }
 
     /**
      * 读取Excel
      */
-    private static <T> List<T> readExcel(SheetDefinition excelContext, Class<T> clazz)
+    private static <T> List<T> readExcel(Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         try {
-            ExcelAnalyzer.analyzeModel(excelContext, clazz);
-            Workbook workbook = openWorkbook(excelContext);
-            Sheet sheet = openSheet(excelContext, workbook);
-            ExcelAnalyzer.analyzeModelFields(excelContext, clazz);
-            analyzeColumns(excelContext, sheet);
+            ExcelAnalyzer.analyzeModel(clazz);
+            Workbook workbook = openWorkbook();
+            Sheet sheet = openSheet(workbook);
+            ExcelAnalyzer.analyzeModelFields(clazz);
+            analyzeColumns(sheet);
             List<T> result = Lists.newArrayList();
             List<Invalid> parseInvalids = Lists.newArrayList();
-            for (Row row : listValidRows(excelContext, sheet)) {
+            for (Row row : listValidRows(sheet)) {
                 if (row != null) {
                     try {
-                        result.add(readRow(clazz, excelContext.getColumnDefinitions(), row));
+                        result.add(readRow(clazz, sheetDefinition.getColumnDefinitions(), row));
                     } catch (ExcelCellContentInvalidException e) {
                         parseInvalids.addAll(e.getParseInvalids());
                     }
@@ -96,14 +99,15 @@ public class ExcelReader {
         } catch (IOException e) {
             throw new ExcelAnalyzeException("文件读写失败");
         } finally {
-            close(excelContext);
+            close();
         }
     }
 
-    private static void analyzeColumns(SheetDefinition excelContext, Sheet sheet) {
-        for (ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
+    private static void analyzeColumns(Sheet sheet) {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
+        for (ColumnDefinition columnDefinition : sheetDefinition.getColumnDefinitions()) {
             String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName(),
-                    excelContext.getDataRowStartNo());
+                    sheetDefinition.getDataRowStartNo());
             if (columnLetter != null) {
                 columnDefinition.setColumnLetter(columnLetter);
                 columnDefinition.setColumnNumber(letterToNumber(columnLetter));
@@ -132,10 +136,11 @@ public class ExcelReader {
         return result;
     }
 
-    private static Workbook openWorkbook(SheetDefinition excelContext) throws IOException, ExcelAnalyzeException {
+    private static Workbook openWorkbook() throws IOException, ExcelAnalyzeException {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         Workbook workBook;
-        String fileExtension = excelContext.getFileExtension();
-        InputStream inputStream = excelContext.getFileInputStream();
+        String fileExtension = sheetDefinition.getFileExtension();
+        InputStream inputStream = sheetDefinition.getFileInputStream();
         if ("xlsx".equals(fileExtension)) {
             workBook = new XSSFWorkbook(inputStream);
         } else if ("xls".equals(fileExtension)) {
@@ -146,27 +151,29 @@ public class ExcelReader {
         return workBook;
     }
 
-    private static Sheet openSheet(SheetDefinition excelContext, Workbook workbook) throws ExcelAnalyzeException {
+    private static Sheet openSheet(Workbook workbook) throws ExcelAnalyzeException {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         if (workbook.getNumberOfSheets() == 0) {
             throw new ExcelAnalyzeException("工作簿中不存在工作表");
         }
-        Sheet sheet = workbook.getSheet(excelContext.getSheetName());
+        Sheet sheet = workbook.getSheet(sheetDefinition.getSheetName());
         if (sheet == null) {
-            throw new ExcelAnalyzeException("工作表 [" + excelContext.getSheetName() + "]不存在");
+            throw new ExcelAnalyzeException("工作表 [" + sheetDefinition.getSheetName() + "]不存在");
         }
         return sheet;
     }
 
-    private static List<Row> listValidRows(SheetDefinition excelContext, Sheet sheet) throws ExcelAnalyzeException {
+    private static List<Row> listValidRows(Sheet sheet) throws ExcelAnalyzeException {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
-        int offsetRowNum = excelContext.getDataRowStartNo() - 1;
+        int offsetRowNum = sheetDefinition.getDataRowStartNo() - 1;
         if (offsetRowNum >= startRowNum) {
             startRowNum = offsetRowNum;
         }
         for (int rownum = startRowNum; rownum <= sheet.getLastRowNum(); rownum++) {
             Row row = sheet.getRow(rownum);
-            List<Integer> cellNumbers = excelContext.getColumnDefinitions().stream()
+            List<Integer> cellNumbers = sheetDefinition.getColumnDefinitions().stream()
                     .map(ColumnDefinition::getColumnNumber).collect(Collectors.toList());
             if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
                 rows.add(row);
@@ -258,8 +265,9 @@ public class ExcelReader {
         return t;
     }
 
-    private static void close(SheetDefinition excelContext) {
-        InputStream inputStream = excelContext.getFileInputStream();
+    private static void close() {
+        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
+        InputStream inputStream = sheetDefinition.getFileInputStream();
         if (inputStream != null) {
             try {
                 inputStream.close();
