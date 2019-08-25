@@ -21,7 +21,7 @@ import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
  */
 public class ExcelAnalyzer {
 
-    static void analyzeFile(File file) throws IOException {
+    static void analyzeFileForRead(File file) throws IOException {
         SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         String filename = file.getName();
         sheetDefinition.setFileExtension(FilenameUtils.getExtension(filename));

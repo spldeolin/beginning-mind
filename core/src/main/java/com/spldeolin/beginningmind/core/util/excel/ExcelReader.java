@@ -59,7 +59,7 @@ public class ExcelReader {
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         try {
             ExcelDefinitionContext.newSheetDefinition();
-            ExcelAnalyzer.analyzeFile(file);
+            ExcelAnalyzer.analyzeFileForRead(file);
             return readExcel(clazz);
         } catch (IOException e) {
             throw new RuntimeException("文件读写失败");

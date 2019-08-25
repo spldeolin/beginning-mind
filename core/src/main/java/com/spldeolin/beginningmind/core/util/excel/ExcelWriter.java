@@ -3,11 +3,11 @@ package com.spldeolin.beginningmind.core.util.excel;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import javax.servlet.http.HttpServletResponse;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.DataFormat;
@@ -15,7 +15,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
@@ -33,8 +32,26 @@ public class ExcelWriter {
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ensureFileExist(file);
         try (OutputStream os = new FileOutputStream(file)) {
+            writeExcel(os, clazz, list);
+        } catch (IOException e) {
+            throw new ExcelWriteException(e);
+        }
+    }
+
+    public static <T> void writeExcel(HttpServletResponse response, Class<T> clazz, List<T> list) {
+        try {
+            response.setContentType("application/vnd.ms-excel");
+            response.setHeader("Content-Disposition", "attachment; filename=" + "测试.xlsx");
+            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            ExcelWriter.writeExcel(response.getOutputStream(), clazz, list);
+        } catch (IOException e) {
+            throw new RuntimeException("文件读写失败");
+        }
+    }
+
+    private static <T> void writeExcel(OutputStream os, Class<T> clazz, List<T> list) throws IOException {
+        try {
             ExcelDefinitionContext.newSheetDefinition();
-            ExcelAnalyzer.analyzeFile(file);
             ExcelAnalyzer.analyzeModel(clazz);
             ExcelAnalyzer.analyzeModelFields(clazz);
 
@@ -56,10 +73,7 @@ public class ExcelWriter {
             writeDataRows(cellStyle, sheet, list);
 
             workbook.write(os);
-        } catch (Exception e) {
-            throw new ExcelWriteException(e);
         } finally {
-            close();
             ExcelDefinitionContext.clearAll();
         }
     }
@@ -77,15 +91,7 @@ public class ExcelWriter {
     }
 
     private static Workbook newWorkbook() {
-        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
-        String fileExtension = sheetDefinition.getFileExtension();
-        if ("xlsx".equals(fileExtension)) {
-            return new XSSFWorkbook();
-        } else if ("xls".equals(fileExtension)) {
-            return new HSSFWorkbook();
-        } else {
-            throw new BizException("文件拓展名不正确");
-        }
+        return new XSSFWorkbook();
     }
 
     private static Sheet newSheet(Workbook workbook) {
@@ -107,7 +113,7 @@ public class ExcelWriter {
         }
     }
 
-    private static <T> void writeDataRows(CellStyle cellStyle, Sheet sheet, List<T> list) throws Exception {
+    private static <T> void writeDataRows(CellStyle cellStyle, Sheet sheet, List<T> list) {
         for (int j = 0; j < list.size(); j++) {
             T t = list.get(j);
             int rowIndex = j + 1;
@@ -127,10 +133,16 @@ public class ExcelWriter {
     }
 
     @SuppressWarnings("unchecked")
-    private static <T> String formatCellValue(ColumnDefinition columnDefinition, T t) throws Exception {
+    private static <T> String formatCellValue(ColumnDefinition columnDefinition, T t) {
         Field field = columnDefinition.getModelField();
         field.setAccessible(true);
-        Object fieldValue = field.get(t);
+        Object fieldValue;
+        try {
+            fieldValue = field.get(t);
+        } catch (IllegalAccessException e) {
+            // field.get() throws
+            throw new RuntimeException("impossible unless bug");
+        }
         if (fieldValue == null) {
             return columnDefinition.getDefaultValue();
         }
@@ -143,15 +155,15 @@ public class ExcelWriter {
         return formatter.writeToCellContent(fieldValue);
     }
 
-    private static void close() {
-        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
-        InputStream inputStream = sheetDefinition.getFileInputStream();
-        if (inputStream != null) {
-            try {
-                inputStream.close();
-            } catch (IOException ignored) {
-            }
-        }
-    }
+//    private static void close() {
+//        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
+//        InputStream inputStream = sheetDefinition.getFileInputStream();
+//        if (inputStream != null) {
+//            try {
+//                inputStream.close();
+//            } catch (IOException ignored) {
+//            }
+//        }
+//    }
 
 }

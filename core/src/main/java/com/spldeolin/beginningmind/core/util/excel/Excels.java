@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.core.util.excel;
 
 import java.io.File;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
 import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
@@ -62,9 +63,14 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(File file, Class<T> clazz)
-            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        return ExcelReader.readExcel(file, clazz);
+    public static <T> List<T> readExcel(File file, Class<T> clazz) {
+        try {
+            return ExcelReader.readExcel(file, clazz);
+        } catch (ExcelCellContentInvalidException e) {
+            throw new BizException(report(e));
+        } catch (ExcelAnalyzeException e) {
+            throw new BizException(e.getCause());
+        }
     }
 
     /**
@@ -72,6 +78,13 @@ public class Excels {
      */
     public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ExcelWriter.writeExcel(file, clazz, list);
+    }
+
+    /**
+     * 生成Excel
+     */
+    public static <T> void writeExcel(HttpServletResponse response, Class<T> clazz, List<T> list) {
+        ExcelWriter.writeExcel(response, clazz, list);
     }
 
 }
