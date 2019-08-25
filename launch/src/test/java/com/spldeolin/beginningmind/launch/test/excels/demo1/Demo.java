@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.util.demo1;
+package com.spldeolin.beginningmind.launch.test.excels.demo1;
 
 import java.io.File;
 import java.util.List;
@@ -19,6 +19,10 @@ public class Demo {
                     "/Users/deolin/Documents/project-repo/beginning-mind/core/src/main/java/com/spldeolin"
                             + "/beginningmind/core/util/demo1/ready-to-read.xlsx"), DemoDTO.class);
             dtos.forEach(log::info);
+
+            Excels.writeExcel(new File("/Users/deolin/Documents/project-repo/beginning-mind/core/src/main/java/com"
+                    + "/spldeolin/beginningmind/core/util/demo1/aaa.xlsx"), DemoDTO.class, dtos);
+
         } catch (ExcelCellContentInvalidException e) {
             e.getParseInvalids().forEach(log::info);
         } catch (ExcelAnalyzeException e) {

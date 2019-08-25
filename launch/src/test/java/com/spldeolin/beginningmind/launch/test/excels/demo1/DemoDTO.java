@@ -1,7 +1,8 @@
-package com.spldeolin.beginningmind.core.util.demo1;
+package com.spldeolin.beginningmind.launch.test.excels.demo1;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
 import lombok.Builder;
@@ -23,7 +24,7 @@ public class DemoDTO {
     @ExcelColumn(columnTitle = "名称")
     private String name;
 
-    @ExcelColumn(columnTitle = "第一种时间（自定义转换器）")
+    @ExcelColumn(columnTitle = "第一种时间（自定义转换器）", cellConverter = CustomCellConverter.class)
     private Date time1;
 
     @ExcelColumn(columnTitle = "时间（缺省转换器）")
@@ -37,5 +38,8 @@ public class DemoDTO {
 
     @ExcelColumn(columnTitle = "数量")
     private Integer amount;
+
+    @ExcelColumn(columnTitle = "a")
+    private UserEntity a;
 
 }
