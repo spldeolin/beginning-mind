@@ -168,8 +168,7 @@ public class Https {
 
         try {
             Request request = new Request.Builder().url(url).post(form.build())
-                    .header("UserEntity-Agent", fakeUserAgent())
-                    .build();
+                    .header("UserEntity-Agent", fakeUserAgent()).build();
             Response response = doRequest(request);
 
             return ensureJsonAndGetBody(response);
@@ -183,10 +182,7 @@ public class Https {
      * 为GET请求，构造request对象
      */
     private static Request buildGetRequest(String url) {
-        return new Request.Builder()
-                .url(url)
-                .header("UserEntity-Agent", fakeUserAgent())
-                .build();
+        return new Request.Builder().url(url).header("UserEntity-Agent", fakeUserAgent()).build();
     }
 
     /**
@@ -194,11 +190,7 @@ public class Https {
      */
     private static Request buildJsonPostRequest(String url, String json) {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
-        return new Request.Builder()
-                .url(url)
-                .post(body)
-                .header("UserEntity-Agent", fakeUserAgent())
-                .build();
+        return new Request.Builder().url(url).post(body).header("UserEntity-Agent", fakeUserAgent()).build();
     }
 
     /**

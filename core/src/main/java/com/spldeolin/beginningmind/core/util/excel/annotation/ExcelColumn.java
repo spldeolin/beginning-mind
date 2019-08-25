@@ -27,6 +27,6 @@ public @interface ExcelColumn {
     /**
      * 如果单元格没有内容，则缺省为这个值
      */
-    String defaultValue() default "";
+    String defaultCellContentWhenEmpty() default "";
 
 }

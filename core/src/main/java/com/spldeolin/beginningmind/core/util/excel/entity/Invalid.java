@@ -19,4 +19,5 @@ public class Invalid {
         this.rowNumber = rowNumber;
         this.cause = cause;
     }
+
 }

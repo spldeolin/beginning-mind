@@ -16,11 +16,11 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import com.spldeolin.beginningmind.core.common.BizException;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelWriteException;
-import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 
 /**
  * @author Deolin 2019-08-23
@@ -45,7 +45,7 @@ public class ExcelWriter {
             Sheet sheet = newSheet(workbook);
 
             // 写入第一行（第一行展示列名）
-            writeFirstRow(sheet);
+            writeTitleRow(sheet);
 
             // 单元格格式（文本） 这是干嘛的？
             CellStyle cellStyle = workbook.createCellStyle();
@@ -53,7 +53,7 @@ public class ExcelWriter {
             cellStyle.setDataFormat(dataFormat.getFormat("@"));
 
             // 写入第N行（下面的行展示数据）
-            writeRows(cellStyle, sheet, list);
+            writeDataRows(cellStyle, sheet, list);
 
             workbook.write(os);
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class ExcelWriter {
         return workbook.createSheet(sheetDefinition.getSheetName());
     }
 
-    private static void writeFirstRow(Sheet sheet) {
+    private static void writeTitleRow(Sheet sheet) {
         Row titleRow = sheet.createRow(0);
 
         List<ColumnDefinition> columns = ExcelDefinitionContext.getColumnDefinitions();
@@ -107,8 +107,7 @@ public class ExcelWriter {
         }
     }
 
-    private static <T> void writeRows(CellStyle cellStyle, Sheet sheet, List<T> list)
-            throws Exception {
+    private static <T> void writeDataRows(CellStyle cellStyle, Sheet sheet, List<T> list) throws Exception {
         for (int j = 0; j < list.size(); j++) {
             T t = list.get(j);
             int rowIndex = j + 1;

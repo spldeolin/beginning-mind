@@ -76,8 +76,8 @@ public class QRCodes {
      */
     public static BufferedImage generateImage(String content) {
         try {
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, QRCODE_WIDTH,
-                    QRCODE_HEIGHT, HINTS);
+            BitMatrix bitMatrix = new MultiFormatWriter()
+                    .encode(content, BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, HINTS);
             return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             log.error("二维码生成失败", e);
@@ -93,8 +93,8 @@ public class QRCodes {
      */
     public static void generateOutput(String content, OutputStream stream) {
         try {
-            BitMatrix bitMatrix = new MultiFormatWriter().encode(content, BarcodeFormat.QR_CODE, QRCODE_WIDTH,
-                    QRCODE_HEIGHT, HINTS);
+            BitMatrix bitMatrix = new MultiFormatWriter()
+                    .encode(content, BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, HINTS);
             MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, stream);
         } catch (WriterException | IOException e) {
             log.error("二维码生成失败", e);

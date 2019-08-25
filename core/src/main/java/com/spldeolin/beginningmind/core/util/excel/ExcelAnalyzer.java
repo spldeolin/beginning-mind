@@ -11,10 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
-import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 
 /**
  * @author Deolin 2019-08-23
@@ -59,7 +59,7 @@ public class ExcelAnalyzer {
             if (formatter != CellConverter.class) {
                 columnDefinition.setFormatter(new ObjenesisStd(true).newInstance(formatter));
             }
-            columnDefinition.setDefaultValue(columnAnno.defaultValue());
+            columnDefinition.setDefaultValue(columnAnno.defaultCellContentWhenEmpty());
             columnDefinitions.add(columnDefinition);
         }
         if (columnDefinitions.size() == 0) {

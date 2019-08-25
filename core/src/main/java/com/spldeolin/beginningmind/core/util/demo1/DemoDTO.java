@@ -29,10 +29,10 @@ public class DemoDTO {
     @ExcelColumn(columnTitle = "时间（缺省转换器）")
     private Date time2;
 
-    @ExcelColumn(columnTitle = "旗", defaultValue = "true")
+    @ExcelColumn(columnTitle = "旗", defaultCellContentWhenEmpty = "true")
     private Boolean flag;
 
-    @ExcelColumn(columnTitle = "价格", defaultValue = "214.3")
+    @ExcelColumn(columnTitle = "价格", defaultCellContentWhenEmpty = "214.3")
     private BigDecimal price;
 
     @ExcelColumn(columnTitle = "数量")
