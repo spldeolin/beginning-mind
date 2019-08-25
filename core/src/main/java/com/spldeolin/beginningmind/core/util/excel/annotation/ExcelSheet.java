@@ -21,6 +21,6 @@ public @interface ExcelSheet {
      * 标题行的行号
      * Excel中，这个在这个行号内出现的有内容单元格，才会被认为是标题栏，所在的列才会被认为是有效列
      */
-    int columnTitleRowNo() default 1;
+    int titleRowStartNo() default 1;
 
 }

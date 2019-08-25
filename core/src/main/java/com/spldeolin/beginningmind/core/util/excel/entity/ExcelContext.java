@@ -26,7 +26,7 @@ public class ExcelContext {
     /**
      * 从第几行开始
      */
-    private Integer rowOffSet;
+    private Integer dataRowStartNo;
 
     private List<ColumnDefinition> columnDefinitions;
 

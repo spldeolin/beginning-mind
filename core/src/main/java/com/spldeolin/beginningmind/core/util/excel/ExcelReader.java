@@ -101,7 +101,8 @@ public class ExcelReader {
 
     private static <T> void analyzeColumns(ExcelContext excelContext, Sheet sheet) {
         for (ExcelContext.ColumnDefinition columnDefinition : excelContext.getColumnDefinitions()) {
-            String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName());
+            String columnLetter = findColumnLetterByFirstColumnName(sheet, columnDefinition.getFirstColumnName(),
+                    excelContext.getDataRowStartNo());
             if (columnLetter != null) {
                 columnDefinition.setColumnLetter(columnLetter);
                 columnDefinition.setColumnNumber(letterToNumber(columnLetter));
@@ -109,11 +110,14 @@ public class ExcelReader {
         }
     }
 
-    private static String findColumnLetterByFirstColumnName(Sheet sheet, String firstColumnName) {
+    private static String findColumnLetterByFirstColumnName(Sheet sheet, String firstColumnName,
+            Integer dataRowStartNo) {
         if (StringUtils.isBlank(firstColumnName)) {
             return null;
         }
-        Row row = sheet.getRow(0);
+
+        int titleRowStartNo = dataRowStartNo - 1;
+        Row row = sheet.getRow(titleRowStartNo - 1); // getRow需要减1
         if (row == null) {
             throw new RuntimeException("工作表[" + sheet.getSheetName() + "] 的首行不存在");
         }
@@ -155,7 +159,7 @@ public class ExcelReader {
     private static List<Row> listValidRows(ExcelContext excelContext, Sheet sheet) throws ExcelAnalyzeException {
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
-        int offsetRowNum = excelContext.getRowOffSet() - 1;
+        int offsetRowNum = excelContext.getDataRowStartNo() - 1;
         if (offsetRowNum >= startRowNum) {
             startRowNum = offsetRowNum;
         }
@@ -166,7 +170,6 @@ public class ExcelReader {
             if (row != null && !rowIsAllBlankInCellNumbers(row, cellNumbers)) {
                 rows.add(row);
             }
-
         }
         if (rows.size() == 0) {
             throw new ExcelAnalyzeException("工作表中没有内容");
@@ -208,7 +211,7 @@ public class ExcelReader {
             int cellIndex = columnNumber - 1;
             Cell cell = row.getCell(cellIndex);
             String cellContent;
-            if (cell == null) {
+            if (cell == null || StringUtils.isEmpty(cell.toString())) {
                 cellContent = columnDefinition.getDefaultValue();
             } else {
                 if (CellType.NUMERIC == cell.getCellType()) {
