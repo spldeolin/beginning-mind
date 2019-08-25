@@ -18,9 +18,9 @@ public @interface ExcelSheet {
     String sheetName() default "Sheet1";
 
     /**
-     * 指从第几行开始是数据内容
-     * Excel的行号是从1开始开始的，1是标题行，所以指定小于1的值没有意义
+     * 标题行的行号
+     * Excel中，这个在这个行号内出现的有内容单元格，才会被认为是标题栏，所在的列才会被认为是有效列
      */
-    int firstDataRowNo() default 2;
+    int columnTitleRowNo() default 1;
 
 }

@@ -38,7 +38,7 @@ public class ExcelAnalyzer {
             throw new RuntimeException("Model [" + clazz.getSimpleName() + "]未声明@ExcelSheet");
         }
         excelContext.setSheetName(sheetAnno.sheetName());
-        excelContext.setRowOffSet(sheetAnno.firstDataRowNo());
+        excelContext.setRowOffSet(sheetAnno.columnTitleRowNo() + 1);
     }
 
     static <T> void analyzeModelFields(ExcelContext excelContext, Class<T> clazz) {
