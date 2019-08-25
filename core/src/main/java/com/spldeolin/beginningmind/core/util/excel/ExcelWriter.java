@@ -20,7 +20,7 @@ import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelWriteException;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 
 /**
  * @author Deolin 2019-08-23
@@ -136,12 +136,12 @@ public class ExcelWriter {
             return columnDefinition.getDefaultValue();
         }
 
-        Converter formatter = columnDefinition.getFormatter();
+        CellConverter formatter = columnDefinition.getFormatter();
         if (formatter == null) {
             return fieldValue.toString();
         }
 
-        return formatter.write(fieldValue);
+        return formatter.writeToCellContent(fieldValue);
     }
 
     private static void close() {

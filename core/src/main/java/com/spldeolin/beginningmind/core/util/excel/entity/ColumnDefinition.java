@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.core.util.excel.entity;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 import lombok.Data;
 
 /**
@@ -21,7 +21,7 @@ public class ColumnDefinition implements Serializable {
 
     private Field modelField;
 
-    private Converter formatter;
+    private CellConverter formatter;
 
     private String defaultValue;
 

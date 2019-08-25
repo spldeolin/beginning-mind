@@ -7,7 +7,7 @@ import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelCellContentInvalidException;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -16,7 +16,7 @@ import lombok.extern.log4j.Log4j2;
  * 用法：
  * 1. 定义一个POJO，声明@ExcelSheet
  * 2. 根据需要在POJO内定义field，并为每个field声明@ExcelColumn
- * 3. 对于复杂类型的field，建议指定自定义Converter以提供类型转换策略，如java.util.Date、BigDecimal等；
+ * 3. 对于复杂类型的field，建议指定自定义CellConverter以提供类型转换策略，如java.util.Date、BigDecimal等；
  * 对于简单类型的field，则不需要，如String、Integer、Long等
  * 4. 调用readExcel将Excel读取成List of Objects，所有单元格内的内容会被当作是文本处理
  * 5. 调用writeExcel将List of Objects生成成Excel文件，所有单元格的内容将会是文本
@@ -25,7 +25,7 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin 2018/07/07
  * @see ExcelSheet
  * @see ExcelColumn
- * @see Converter
+ * @see CellConverter
  * @see ExcelCellContentInvalidException
  */
 @Log4j2

@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ConverterReadException extends Exception {
+public class CellConverterReadException extends Exception {
 
     private String fieldTypeName;
 
@@ -16,10 +16,10 @@ public class ConverterReadException extends Exception {
 
     private String cellContent;
 
-    public ConverterReadException() {
+    public CellConverterReadException() {
     }
 
-    public ConverterReadException(String message) {
+    public CellConverterReadException(String message) {
         super(message);
     }
 

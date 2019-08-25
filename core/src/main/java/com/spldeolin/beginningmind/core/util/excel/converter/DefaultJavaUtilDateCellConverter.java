@@ -1,14 +1,14 @@
-package com.spldeolin.beginningmind.core.util.excel.formatter;
+package com.spldeolin.beginningmind.core.util.excel.converter;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.annotation.Nonnull;
-import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
+import com.spldeolin.beginningmind.core.util.excel.exception.CellConverterReadException;
 
 /**
  * @author Deolin 2019-08-23
  */
-public class DefaultJavaUtilDateConverter implements Converter<Date> {
+public class DefaultJavaUtilDateCellConverter implements CellConverter<Date> {
 
     private static final ThreadLocal<SimpleDateFormat> sdf = new ThreadLocal<>();
 
@@ -17,16 +17,16 @@ public class DefaultJavaUtilDateConverter implements Converter<Date> {
     }
 
     @Override
-    public String write(@Nonnull Date obj) {
+    public String writeToCellContent(@Nonnull Date obj) {
         return sdf.get().format(obj);
     }
 
     @Override
-    public Date read(@Nonnull String string) throws ConverterReadException {
+    public Date readFromCellContent(@Nonnull String string) throws CellConverterReadException {
         try {
             return sdf.get().parse(string);
         } catch (Exception e) {
-            throw new ConverterReadException();
+            throw new CellConverterReadException();
         }
     }
 

@@ -22,12 +22,12 @@ import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
-import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
+import com.spldeolin.beginningmind.core.util.excel.exception.CellConverterReadException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelCellContentInvalidException;
-import com.spldeolin.beginningmind.core.util.excel.exception.UnknowDefaultTypeException;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
-import com.spldeolin.beginningmind.core.util.excel.formatter.DefalutConverterFactory;
+import com.spldeolin.beginningmind.core.util.excel.exception.DefaultCellConverterAbsentException;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
+import com.spldeolin.beginningmind.core.util.excel.converter.DefalutCellConverterFactory;
 
 /**
  * @author Deolin 2019-08-23
@@ -228,8 +228,8 @@ public class ExcelReader {
                     cellContent = cell.toString().trim();
                 }
             }
-            Converter formatter = columnDefinition.getFormatter();
-            boolean assignedFormatter = formatter != null && formatter.getClass() != Converter.class;
+            CellConverter formatter = columnDefinition.getFormatter();
+            boolean assignedFormatter = formatter != null && formatter.getClass() != CellConverter.class;
             Field field = columnDefinition.getModelField();
             Object fieldValue = null;
             try {
@@ -240,20 +240,20 @@ public class ExcelReader {
                         if (cellContent.endsWith(".0")) {
                             cellContent = cellContent.substring(0, cellContent.length() - 2);
                         }
-                        formatter = DefalutConverterFactory.produceConverter(field.getType());
+                        formatter = DefalutCellConverterFactory.produceConverter(field.getType());
                     }
-                    fieldValue = formatter.read(cellContent);
+                    fieldValue = formatter.readFromCellContent(cellContent);
                 }
                 field.setAccessible(true);
                 field.set(t, fieldValue);
             } catch (IllegalAccessException e) {
                 // field.set() throws
                 throw new RuntimeException("impossible unless bug");
-            } catch (UnknowDefaultTypeException e) {
+            } catch (DefaultCellConverterAbsentException e) {
                 e.setFieldType(field.getType().getSimpleName());
                 e.setFieldName(clazz.getName() + "." + field.getName());
                 throw e;
-            } catch (ConverterReadException e) {
+            } catch (CellConverterReadException e) {
                 Invalid invalid = new Invalid(columnDefinition.getColumnLetter(), row.getRowNum() + 1, "数据格式非法");
                 parseInvalids.add(invalid);
             }

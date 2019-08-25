@@ -4,22 +4,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 由于没有指定Converter并且没有缺省的Converter，导致Excels无法使用，应该字段自定义并指定一个Converter
+ * 缺省的单元格内容转换器不存在时，抛出一个一次。这是个BUG
  *
  * @author Deolin 2019-08-23
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UnknowDefaultTypeException extends RuntimeException {
+public class DefaultCellConverterAbsentException extends RuntimeException {
 
     private String fieldType;
 
     private String fieldName;
 
-    public UnknowDefaultTypeException() {
+    public DefaultCellConverterAbsentException() {
     }
 
-    public UnknowDefaultTypeException(String message) {
+    public DefaultCellConverterAbsentException(String message) {
         super(message);
     }
 

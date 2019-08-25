@@ -14,7 +14,7 @@ import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.entity.ColumnDefinition;
 import com.spldeolin.beginningmind.core.util.excel.entity.ExcelDefinitionContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.SheetDefinition;
-import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
+import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
 
 /**
  * @author Deolin 2019-08-23
@@ -55,8 +55,8 @@ public class ExcelAnalyzer {
             ColumnDefinition columnDefinition = new ColumnDefinition();
             columnDefinition.setFirstColumnName(columnAnno.columnTitle());
             columnDefinition.setModelField(field);
-            Class<? extends Converter> formatter = columnAnno.converter();
-            if (formatter != Converter.class) {
+            Class<? extends CellConverter> formatter = columnAnno.cellConverter();
+            if (formatter != CellConverter.class) {
                 columnDefinition.setFormatter(new ObjenesisStd(true).newInstance(formatter));
             }
             columnDefinition.setDefaultValue(columnAnno.defaultValue());
