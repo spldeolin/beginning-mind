@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.launch.test.excels.demo1;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
 import lombok.Builder;
@@ -39,7 +38,7 @@ public class DemoDTO {
     @ExcelColumn(columnTitle = "数量")
     private Integer amount;
 
-    @ExcelColumn(columnTitle = "a")
-    private UserEntity a;
+//    @ExcelColumn(columnTitle = "a")
+//    private UserEntity a;
 
 }
