@@ -37,7 +37,7 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
+    static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         try {
             ExcelDefinitionContext.newSheetDefinition();
@@ -55,14 +55,14 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(File file, Class<T> clazz)
+    static <T> List<T> readExcel(File file, Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         try {
             ExcelDefinitionContext.newSheetDefinition();
             ExcelAnalyzer.analyzeFile(file);
             return readExcel(clazz);
         } catch (IOException e) {
-            throw new ExcelAnalyzeException("文件读写失败");
+            throw new RuntimeException("文件读写失败");
         } finally {
             close();
             ExcelDefinitionContext.clearAll();
@@ -74,7 +74,6 @@ public class ExcelReader {
      */
     private static <T> List<T> readExcel(Class<T> clazz)
             throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         try {
             ExcelAnalyzer.analyzeModel(clazz);
             Workbook workbook = openWorkbook();
@@ -97,7 +96,7 @@ public class ExcelReader {
             }
             return result;
         } catch (IOException e) {
-            throw new ExcelAnalyzeException("文件读写失败");
+            throw new RuntimeException("文件读写失败");
         } finally {
             close();
         }
@@ -228,8 +227,8 @@ public class ExcelReader {
                     cellContent = cell.toString().trim();
                 }
             }
-            CellConverter formatter = columnDefinition.getFormatter();
-            boolean assignedFormatter = formatter != null && formatter.getClass() != CellConverter.class;
+            CellConverter cellConverter = columnDefinition.getFormatter();
+            boolean assignedFormatter = cellConverter != null && cellConverter.getClass() != CellConverter.class;
             Field field = columnDefinition.getModelField();
             Object fieldValue = null;
             try {
@@ -240,9 +239,9 @@ public class ExcelReader {
                         if (cellContent.endsWith(".0")) {
                             cellContent = cellContent.substring(0, cellContent.length() - 2);
                         }
-                        formatter = DefalutCellConverterFactory.produceConverter(field.getType());
+                        cellConverter = DefalutCellConverterFactory.produceConverter(field.getType());
                     }
-                    fieldValue = formatter.readFromCellContent(cellContent);
+                    fieldValue = cellConverter.readFromCellContent(cellContent);
                 }
                 field.setAccessible(true);
                 field.set(t, fieldValue);

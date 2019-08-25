@@ -3,9 +3,11 @@ package com.spldeolin.beginningmind.core.util.excel;
 import java.io.File;
 import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
+import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
 import com.spldeolin.beginningmind.core.util.excel.converter.CellConverter;
+import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelCellContentInvalidException;
 import lombok.extern.log4j.Log4j2;
@@ -34,9 +36,27 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
-            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
-        return ExcelReader.readExcel(multipartFile, clazz);
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
+        try {
+            return ExcelReader.readExcel(multipartFile, clazz);
+        } catch (ExcelCellContentInvalidException e) {
+            throw new BizException(report(e));
+        } catch (ExcelAnalyzeException e) {
+            throw new BizException(e.getCause());
+        }
+    }
+
+    private static String report(ExcelCellContentInvalidException e) {
+        StringBuilder sb = new StringBuilder(64);
+        for (Invalid invalid : e.getParseInvalids()) {
+            sb.append("单元格[");
+            sb.append(invalid.getColumnLetter());
+            sb.append(invalid.getRowNumber());
+            sb.append("]解析失败，原因：");
+            sb.append(invalid.getCause());
+            sb.append("。");
+        }
+        return sb.toString();
     }
 
     /**
