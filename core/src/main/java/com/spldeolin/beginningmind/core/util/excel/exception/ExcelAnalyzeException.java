@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.core.util.excel.exception;
 /**
  * @author Deolin 2018/07/07
  */
-public class ExcelAnalyzeException extends RuntimeException {
+public class ExcelAnalyzeException extends Exception {
 
     private static final long serialVersionUID = 1L;
 

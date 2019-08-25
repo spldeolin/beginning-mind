@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.web.multipart.MultipartFile;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.core.util.excel.annotation.ExcelSheet;
-import com.spldeolin.beginningmind.core.util.excel.exception.ExcelReadException;
+import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
+import com.spldeolin.beginningmind.core.util.excel.exception.ExcelCellContentInvalidException;
 import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
 import lombok.extern.log4j.Log4j2;
 
@@ -25,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
  * @see ExcelSheet
  * @see ExcelColumn
  * @see Converter
- * @see ExcelReadException
+ * @see ExcelCellContentInvalidException
  */
 @Log4j2
 public class Excels {
@@ -33,14 +34,16 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ExcelReadException {
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
+            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         return ExcelReader.readExcel(multipartFile, clazz);
     }
 
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ExcelReadException {
+    public static <T> List<T> readExcel(File file, Class<T> clazz)
+            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         return ExcelReader.readExcel(file, clazz);
     }
 

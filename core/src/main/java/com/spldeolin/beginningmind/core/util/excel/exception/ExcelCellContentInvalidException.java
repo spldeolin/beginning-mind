@@ -6,19 +6,19 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 额外校验未通过异常，由额外注解处理切面抛出
+ * 单元格数据格式非法
  *
  * @author Deolin
  */
 @Data
 @EqualsAndHashCode(callSuper = false)
-public class ExcelReadException extends Exception {
+public class ExcelCellContentInvalidException extends Exception {
 
     private static final long serialVersionUID = 1L;
 
     private List<Invalid> parseInvalids;
 
-    public ExcelReadException(List<Invalid> parseInvalids) {
+    public ExcelCellContentInvalidException(List<Invalid> parseInvalids) {
         super();
         this.parseInvalids = parseInvalids;
     }

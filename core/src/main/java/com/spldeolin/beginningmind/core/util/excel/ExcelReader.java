@@ -22,7 +22,7 @@ import com.spldeolin.beginningmind.core.util.excel.entity.ExcelContext;
 import com.spldeolin.beginningmind.core.util.excel.entity.Invalid;
 import com.spldeolin.beginningmind.core.util.excel.exception.ConverterReadException;
 import com.spldeolin.beginningmind.core.util.excel.exception.ExcelAnalyzeException;
-import com.spldeolin.beginningmind.core.util.excel.exception.ExcelReadException;
+import com.spldeolin.beginningmind.core.util.excel.exception.ExcelCellContentInvalidException;
 import com.spldeolin.beginningmind.core.util.excel.exception.UnknowDefaultTypeException;
 import com.spldeolin.beginningmind.core.util.excel.formatter.Converter;
 import com.spldeolin.beginningmind.core.util.excel.formatter.DefalutConverterFactory;
@@ -35,7 +35,8 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ExcelReadException {
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
+            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         ExcelContext excelContext = new ExcelContext();
         try {
             ExcelAnalyzer.analyzeMultipartFile(excelContext, multipartFile);
@@ -51,7 +52,8 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ExcelReadException {
+    public static <T> List<T> readExcel(File file, Class<T> clazz)
+            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         ExcelContext excelContext = new ExcelContext();
         try {
             ExcelAnalyzer.analyzeFile(excelContext, file);
@@ -67,7 +69,8 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    private static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz) throws ExcelReadException {
+    private static <T> List<T> readExcel(ExcelContext excelContext, Class<T> clazz)
+            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
         try {
             ExcelAnalyzer.analyzeModel(excelContext, clazz);
             Workbook workbook = openWorkbook(excelContext);
@@ -80,13 +83,13 @@ public class ExcelReader {
                 if (row != null) {
                     try {
                         result.add(readRow(clazz, excelContext.getColumnDefinitions(), row));
-                    } catch (ExcelReadException e) {
+                    } catch (ExcelCellContentInvalidException e) {
                         parseInvalids.addAll(e.getParseInvalids());
                     }
                 }
             }
             if (parseInvalids.size() > 0) {
-                throw new ExcelReadException(parseInvalids);
+                throw new ExcelCellContentInvalidException(parseInvalids);
             }
             return result;
         } catch (IOException e) {
@@ -124,7 +127,7 @@ public class ExcelReader {
         return result;
     }
 
-    private static Workbook openWorkbook(ExcelContext excelContext) throws IOException {
+    private static Workbook openWorkbook(ExcelContext excelContext) throws IOException, ExcelAnalyzeException {
         Workbook workBook;
         String fileExtension = excelContext.getFileExtension();
         InputStream inputStream = excelContext.getFileInputStream();
@@ -133,12 +136,12 @@ public class ExcelReader {
         } else if ("xls".equals(fileExtension)) {
             workBook = new HSSFWorkbook(inputStream);
         } else {
-            throw new ExcelAnalyzeException("文件拓展名不正确");
+            throw new ExcelAnalyzeException("文件拓展名非法");
         }
         return workBook;
     }
 
-    private static Sheet openSheet(ExcelContext excelContext, Workbook workbook) {
+    private static Sheet openSheet(ExcelContext excelContext, Workbook workbook) throws ExcelAnalyzeException {
         if (workbook.getNumberOfSheets() == 0) {
             throw new ExcelAnalyzeException("工作簿中不存在工作表");
         }
@@ -149,7 +152,7 @@ public class ExcelReader {
         return sheet;
     }
 
-    private static List<Row> listValidRows(ExcelContext excelContext, Sheet sheet) {
+    private static List<Row> listValidRows(ExcelContext excelContext, Sheet sheet) throws ExcelAnalyzeException {
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
         int offsetRowNum = excelContext.getRowOffSet() - 1;
@@ -193,7 +196,7 @@ public class ExcelReader {
     }
 
     private static <T> T readRow(Class<T> clazz, List<ExcelContext.ColumnDefinition> columnDefinitions, Row row)
-            throws ExcelReadException {
+            throws ExcelCellContentInvalidException {
         T t = new ObjenesisStd(true).newInstance(clazz);
         List<Invalid> parseInvalids = Lists.newArrayList();
         for (ExcelContext.ColumnDefinition columnDefinition : columnDefinitions) {
@@ -246,7 +249,7 @@ public class ExcelReader {
             }
         }
         if (parseInvalids.size() > 0) {
-            throw new ExcelReadException(parseInvalids);
+            throw new ExcelCellContentInvalidException(parseInvalids);
         }
         return t;
     }
