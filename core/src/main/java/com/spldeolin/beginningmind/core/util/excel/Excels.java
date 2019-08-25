@@ -83,8 +83,8 @@ public class Excels {
     /**
      * 生成Excel
      */
-    public static <T> void writeExcel(HttpServletResponse response, Class<T> clazz, List<T> list) {
-        ExcelWriter.writeExcel(response, clazz, list);
+    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
+        ExcelWriter.writeExcel(response, fileBaseName, clazz, list);
     }
 
 }

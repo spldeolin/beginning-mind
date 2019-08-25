@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,8 @@ import com.spldeolin.beginningmind.core.util.excel.exception.ExcelWriteException
  */
 public class ExcelWriter {
 
+    private static final String utf8 = StandardCharsets.UTF_8.name();
+
     /**
      * 生成Excel
      */
@@ -38,11 +41,12 @@ public class ExcelWriter {
         }
     }
 
-    public static <T> void writeExcel(HttpServletResponse response, Class<T> clazz, List<T> list) {
+    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
         try {
             response.setContentType("application/vnd.ms-excel");
-            response.setHeader("Content-Disposition", "attachment; filename=" + "测试.xlsx");
-            response.setCharacterEncoding(StandardCharsets.UTF_8.name());
+            response.setHeader("Content-Disposition",
+                    "attachment; filename=" + URLEncoder.encode(fileBaseName + ".xlsx", utf8));
+            response.setCharacterEncoding(utf8);
             ExcelWriter.writeExcel(response.getOutputStream(), clazz, list);
         } catch (IOException e) {
             throw new RuntimeException("文件读写失败");
