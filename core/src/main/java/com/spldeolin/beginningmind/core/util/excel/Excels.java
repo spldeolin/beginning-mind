@@ -37,7 +37,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
         try {
             return ExcelReader.readExcel(multipartFile, clazz);
         } catch (ExcelCellContentInvalidException e) {
@@ -50,7 +50,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    static <T> List<T> readExcel(File file, Class<T> clazz) {
+    public static <T> List<T> readExcel(File file, Class<T> clazz) {
         try {
             return ExcelReader.readExcel(file, clazz);
         } catch (ExcelCellContentInvalidException e) {
@@ -63,14 +63,14 @@ public class Excels {
     /**
      * 生成Excel
      */
-    static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
+    public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ExcelWriter.writeExcel(file, clazz, list);
     }
 
     /**
      * 生成Excel
      */
-    static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
+    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
         ExcelWriter.writeExcel(response, fileBaseName, clazz, list);
     }
 
