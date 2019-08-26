@@ -32,7 +32,7 @@ public class ExcelWriter {
     /**
      * 生成Excel
      */
-    public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
+    static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
         ensureFileExist(file);
         try (OutputStream os = new FileOutputStream(file)) {
             writeExcel(os, clazz, list);
@@ -41,7 +41,7 @@ public class ExcelWriter {
         }
     }
 
-    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
+    static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
         try {
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition",

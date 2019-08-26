@@ -37,7 +37,7 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
+    static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
         try {
             return ExcelReader.readExcel(multipartFile, clazz);
         } catch (ExcelCellContentInvalidException e) {
@@ -45,6 +45,33 @@ public class Excels {
         } catch (ExcelAnalyzeException e) {
             throw new BizException(e.getCause());
         }
+    }
+
+    /**
+     * 读取Excel
+     */
+    static <T> List<T> readExcel(File file, Class<T> clazz) {
+        try {
+            return ExcelReader.readExcel(file, clazz);
+        } catch (ExcelCellContentInvalidException e) {
+            throw new BizException(report(e));
+        } catch (ExcelAnalyzeException e) {
+            throw new BizException(e.getCause());
+        }
+    }
+
+    /**
+     * 生成Excel
+     */
+    static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
+        ExcelWriter.writeExcel(file, clazz, list);
+    }
+
+    /**
+     * 生成Excel
+     */
+    static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
+        ExcelWriter.writeExcel(response, fileBaseName, clazz, list);
     }
 
     private static String report(ExcelCellContentInvalidException e) {
@@ -58,33 +85,6 @@ public class Excels {
             sb.append("。");
         }
         return sb.toString();
-    }
-
-    /**
-     * 读取Excel
-     */
-    public static <T> List<T> readExcel(File file, Class<T> clazz) {
-        try {
-            return ExcelReader.readExcel(file, clazz);
-        } catch (ExcelCellContentInvalidException e) {
-            throw new BizException(report(e));
-        } catch (ExcelAnalyzeException e) {
-            throw new BizException(e.getCause());
-        }
-    }
-
-    /**
-     * 生成Excel
-     */
-    public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
-        ExcelWriter.writeExcel(file, clazz, list);
-    }
-
-    /**
-     * 生成Excel
-     */
-    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
-        ExcelWriter.writeExcel(response, fileBaseName, clazz, list);
     }
 
 }
