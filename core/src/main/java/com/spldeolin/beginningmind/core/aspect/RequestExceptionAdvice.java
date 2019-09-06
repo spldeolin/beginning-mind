@@ -43,7 +43,7 @@ public class RequestExceptionAdvice {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RequestResult handle(HttpRequestMethodNotSupportedException e) {
-        log.warn("请求动词不受支持，当前为[" + e.getMethod() + "]，正确为" + Arrays.toString(e.getSupportedMethods()));
+        log.warn("请求动词不受支持，当前为[{}] 正确为[{}]", e.getMessage(), Arrays.toString(e.getSupportedMethods()));
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
@@ -75,7 +75,7 @@ public class RequestExceptionAdvice {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public RequestResult handle(MissingServletRequestParameterException e) {
-        log.warn("缺少请求参数" + e.getParameterName());
+        log.warn("缺少请求参数[{}]", e.getParameterName());
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
@@ -84,7 +84,7 @@ public class RequestExceptionAdvice {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public RequestResult handle(MethodArgumentTypeMismatchException e) {
-        log.warn(e.getName() + "类型错误");
+        log.warn("类型错误[{}]", e.getName());
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
@@ -127,14 +127,14 @@ public class RequestExceptionAdvice {
      * 400 请求Body格式错误
      * <pre>
      * 以下情况时，会被捕获：
-     * alkdjfaldfjlalkajkdklf
-     * (空)
-     * {"userAge"="notNumberValue"}
+     * alkdjfaldfjlalkajkdklf               可能是因为Body不是合法的JSON格式
+     * (空)                                 JSON不存在
+     * {"userAge"="notNumberValue"}         JSON中字段类型错误
      * </pre>
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult httpMessageNotReadable() {
-        log.warn("请求Body不可读。可能是JSON格式错误，或JSON不存在，或类型错误");
+        log.warn("请求Body不可读");
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
