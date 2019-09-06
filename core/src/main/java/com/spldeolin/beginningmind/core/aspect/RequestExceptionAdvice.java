@@ -23,23 +23,20 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.core.common.BizException;
 import com.spldeolin.beginningmind.core.constant.ResultCode;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.security.exception.UnauthorizeException;
-import com.spldeolin.beginningmind.core.security.exception.UnsignedException;
 import com.spldeolin.beginningmind.core.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 控制层Advice切面：异常处理
+ * 控制层Advice切面：Http请求相关异常处理
  *
  * @author Deolin
  * @see ResultCode
  */
 @RestControllerAdvice
 @Log4j2
-public class ExceptionAdvice {
+public class RequestExceptionAdvice {
 
     /**
      * 400 请求动词错误
@@ -51,7 +48,10 @@ public class ExceptionAdvice {
     }
 
     /**
-     * 400 请求Content-Type错误 往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定。
+     * 400 请求Content-Type错误
+     * <pre>
+     * 往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
+     * </pre>
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult handle(HttpMediaTypeNotSupportedException e) {
@@ -90,7 +90,7 @@ public class ExceptionAdvice {
 
     /**
      * 400 @RequestParam参数没有通过注解校验（控制器声明@Validated时）
-     *    或者 @RequestBody List泛型 没有通过注解校验
+     * 或者 @RequestBody List泛型 没有通过注解校验
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
@@ -155,45 +155,6 @@ public class ExceptionAdvice {
     public RequestResult handle(ExtraInvalidException e) {
         log.warn(e.getInvalids());
         return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 401 未登录
-     */
-    @ExceptionHandler(UnsignedException.class)
-    public RequestResult handleUnsignException(UnsignedException e) {
-        return RequestResult.failure(ResultCode.UNSIGNED, e.getMessage());
-    }
-
-    /**
-     * 403 未授权
-     */
-    @ExceptionHandler(UnauthorizeException.class)
-    public RequestResult handleUnauthorizeException(UnauthorizeException e) {
-        return RequestResult.failure(ResultCode.FORBIDDEN, e.getMessage());
-    }
-
-    /**
-     * 1001 业务异常
-     */
-    @ExceptionHandler(BizException.class)
-    public RequestResult handle(BizException e) {
-        return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
-    }
-
-    /**
-     * 500 内部BUG
-     */
-    @ExceptionHandler(Throwable.class)
-    public RequestResult handle(Throwable e) {
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
-        }
-
-        String insignia = track.getInsignia();
-        log.warn("统一异常处理被击穿！标识：" + insignia, e);
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR);
     }
 
     private List<Invalid> buildInvalids(BindingResult bindingResult) {
