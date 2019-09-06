@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.core.controller;
 
+import java.util.List;
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
@@ -9,7 +10,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.common.base.MoreObjects;
@@ -19,7 +19,6 @@ import lombok.Data;
  * @author Deolin 2019-09-06
  */
 @RestController
-@RequestMapping("exceptionAdviceDemo")
 @Validated
 public class ExceptionAdviceDemoController {
 
@@ -33,7 +32,7 @@ public class ExceptionAdviceDemoController {
     }
 
     /**
-     * 请求体：{"id":1, "name":"汉字"}
+     * 请求体 {"id":1, "name":"汉字"}
      * 并不指定Content-Type=application/json请求这个handler时，
      * 会抛出HttpMediaTypeNotSupportedException
      */
@@ -44,12 +43,12 @@ public class ExceptionAdviceDemoController {
 
     /**
      * <pre>
-     * 用URL /exceptionAdviceDemo/parameterAbsent?id=1请求这个handler时，
+     * 用URL /parameterAbsent?id=1请求这个handler时，
      * 会抛出MissingServletRequestParameterException
      *
      * 用以下的URL请求这个handler时，
-     *  /exceptionAdviceDemo/parameterAbsent?id=1&name
-     *  /exceptionAdviceDemo/parameterAbsent?id=1&name=
+     *  /parameterAbsent?id=1&name
+     *  /parameterAbsent?id=1&name=
      * 不会抛出MissingServletRequestParameterException，但name确实会是null，
      * 所以自定义了额外的校验切面ControllerAspect#around，并抛出自定义异常ExtraInvalidException
      * </pre>
@@ -61,7 +60,7 @@ public class ExceptionAdviceDemoController {
     }
 
     /**
-     * 用URL /exceptionAdviceDemo/parameterTypeError?id=a&age=b请求这个handler时，
+     * 用URL /parameterTypeError?id=a&age=b请求这个handler时，
      * 会抛出MethodArgumentTypeMismatchException
      */
     @GetMapping("/parameterTypeError")
@@ -70,7 +69,7 @@ public class ExceptionAdviceDemoController {
     }
 
     /**
-     * 用URL /exceptionAdviceDemo/parameterInvalid?name=aaabbbc&age=-1请求这个handler时，
+     * 用URL /parameterInvalid?name=aaabbbc&age=-1请求这个handler时，
      * 会抛出ConstraintViolationException
      */
     @GetMapping("/parameterInvalid")
@@ -79,10 +78,19 @@ public class ExceptionAdviceDemoController {
     }
 
     /**
+     * 请求体 [ {"id":1, "name":"汉字汉字汉字a"}, {"id":null, "name":"bb"} ]
+     * 会抛出ConstraintViolationException
+     */
+    @PostMapping("/ListJsonBodyInvalid")
+    String ListJsonBodyInvalid(@RequestBody @Valid List<SimpleDTO> dtos) {
+        return "SUCCESS" + dtos;
+    }
+
+    /**
      * 用以下的URL请求这个handler时，会抛出BindException
-     * /exceptionAdviceDemo/multiParameterInvalid                       (absent)
-     * /exceptionAdviceDemo/multiParameterInvalid?id=a&name=aa          (type error)
-     * /exceptionAdviceDemo/multiParameterInvalid?id=1&name=aaaaaaaaa   (invalid)
+     * /multiParameterInvalid                       (absent)
+     * /multiParameterInvalid?id=a&name=aa          (type error)
+     * /multiParameterInvalid?id=1&name=aaaaaaaaa   (invalid)
      */
     @GetMapping("/multiParameterInvalid")
     String multiParameterInvalid(@Valid SimpleDTO simpleDTO) {
@@ -90,11 +98,20 @@ public class ExceptionAdviceDemoController {
     }
 
     /**
-     * 请求体：{"id":1..........."name":"汉字"}
+     * 请求体 {"id":1..........."name":"汉字"}
      * 会抛出HttpMessageNotReadableException
      */
     @PostMapping("/bodyNotReadable")
     String bodyNotReadable(@RequestBody SimpleDTO simpleDTO) {
+        return "SUCCESS" + simpleDTO;
+    }
+
+    /**
+     * 请求体 {"id":1, "name":"汉字汉字汉字a"}
+     * 会抛出MethodArgumentNotValidException
+     */
+    @PostMapping("bodyInvalid")
+    String bodyInvalid(@RequestBody @Valid SimpleDTO simpleDTO) {
         return "SUCCESS" + simpleDTO;
     }
 
