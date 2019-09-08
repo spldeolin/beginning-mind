@@ -3,14 +3,9 @@ package com.spldeolin.beginningmind.core.filter.async;
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
-import org.springframework.data.elasticsearch.core.query.IndexQuery;
-import org.springframework.data.elasticsearch.core.query.IndexQueryBuilder;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.entity.UserEntity;
 import com.spldeolin.beginningmind.core.filter.dto.RequestTrackDTO;
-import com.spldeolin.beginningmind.core.dao.UserDao;
+import com.spldeolin.beginningmind.core.util.Jsons;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -20,26 +15,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestTrackAsyncHandler {
 
-    @Autowired
-    private UserDao userDao;
-
-    @Autowired
-    private ElasticsearchTemplate elasticsearchTemplate;
-
     public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {
         analysizRequestTrack(track, request);
         saveTrackToEs(track);
     }
 
-    private void saveTrackToEs(RequestTrackDTO track) {
-        IndexQuery indexQuery = new IndexQueryBuilder().withObject(track).build();
-
-        try {
-            elasticsearchTemplate.index(indexQuery);
-            log.info("Saving request track succeed. [{}]", track.getInsignia());
-        } catch (Exception e) {
-            log.warn("Saving request track failed. [{}]", track.toString());
-        }
+    private void saveTrackToEs(RequestTrackDTO trackDTO) {
+        log.info(Jsons.beautify(trackDTO));
     }
 
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
@@ -53,16 +35,7 @@ public class RequestTrackAsyncHandler {
 
         track.setElapsed(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 
-        Long signedUserId = track.getUserId();
-        if (signedUserId != null) {
-            UserEntity user = userDao.get(track.getUserId()).orElseThrow(() -> new RuntimeException("不存在或是已被删除"));
-            track.setUserName(user.getName());
-            track.setUserMobile(user.getMobile());
-        }
-
         track.setIp(getIpFromRequest(request));
-
-        track.setSessionId(request.getSession().getId());
     }
 
     private String getFullUrlFromRequest(HttpServletRequest request) {

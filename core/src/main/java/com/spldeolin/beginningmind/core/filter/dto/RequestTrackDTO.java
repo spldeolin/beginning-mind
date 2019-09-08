@@ -5,7 +5,6 @@ import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.annotation.Transient;
-import org.springframework.data.elasticsearch.annotations.Document;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
@@ -18,7 +17,6 @@ import lombok.Data;
  * @author Deolin 2018/11/15
  */
 @Data
-@Document(indexName = "beginning-mind", type = "request-track")
 public class RequestTrackDTO implements Serializable {
 
     /**
@@ -59,10 +57,10 @@ public class RequestTrackDTO implements Serializable {
     /**
      * HTTP协议 Referer
      */
-    private String Referer;
+    private String referer;
 
     /**
-     * 处理本请求的控制层请求方法的全限定名
+     * 处理本请求的handler的全限定名
      */
     private String fullName;
 
@@ -79,27 +77,12 @@ public class RequestTrackDTO implements Serializable {
     /**
      * 登录者用户ID
      */
-    private Long userId;
-
-    /**
-     * 登录者用户名
-     */
-    private String userName;
-
-    /**
-     * 登录者用户手机
-     */
-    private String userMobile;
+    private Long signerId;
 
     /**
      * 请求者IP
      */
     private String ip;
-
-    /**
-     * 会话ID
-     */
-    private String sessionId;
 
     /**
      * 请求方法

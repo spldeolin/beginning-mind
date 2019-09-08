@@ -42,13 +42,6 @@ spring:
       max-idle: 8
       min-idle: 0
 
-  data.elasticsearch:
-    cluster-name: 占位符
-    cluster-nodes: 占位符
-
-  jmx:
-    enable: false
-
 logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
@@ -120,10 +113,6 @@ spring:
     port: 6379
     password: root_r0oT
 
-  data.elasticsearch:
-    cluster-name: elasticsearch
-    cluster-nodes: 127.0.0.1:9300
-
 core:
   snow-flake:
     datacenter-id: 1
@@ -155,10 +144,6 @@ spring:
     host: 192.168.2.2
     port: 6379
     password: guest
-
-  data.elasticsearch:
-    cluster-name: elasticsearch
-    cluster-nodes: 192.168.2.2:9300
 
 logging:
   config: classpath:log4j2/log4j2-test.yml
@@ -194,10 +179,6 @@ spring:
     host: # TODO 生产环境 Redis
     port: # TODO 生产环境 Redis
     password: # TODO 生产环境 Redis
-
-  data.elasticsearch:
-    cluster-name: # TODO 生产环境 ES
-    cluster-nodes: # TODO 生产环境 ES
 
 logging:
   config: classpath:log4j2/log4j2-prod.yml
