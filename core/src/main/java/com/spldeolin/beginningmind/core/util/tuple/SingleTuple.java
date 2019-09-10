@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
+ * 一元组
+ *
  * @author Deolin 2019-09-09
  */
 @AllArgsConstructor
