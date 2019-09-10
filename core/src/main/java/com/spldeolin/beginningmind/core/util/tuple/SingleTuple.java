@@ -12,6 +12,6 @@ import lombok.Getter;
 @Getter
 public class SingleTuple<A> {
 
-    private final A a;
+    private final A first;
 
 }

@@ -12,10 +12,10 @@ import lombok.Getter;
 @Getter
 public class TripleTuple<A, B, C> {
 
-    private final A a;
+    private final A first;
 
-    private final B b;
+    private final B second;
 
-    private final C c;
+    private final C third;
 
 }

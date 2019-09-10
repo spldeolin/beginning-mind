@@ -12,8 +12,8 @@ import lombok.Getter;
 @Getter
 public class DoubleTuple<A, B> {
 
-    private final A a;
+    private final A first;
 
-    private final B b;
+    private final B second;
 
 }
