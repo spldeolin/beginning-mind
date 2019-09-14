@@ -13,9 +13,9 @@ import com.spldeolin.beginningmind.core.util.excel.Excels;
  * @author Deolin 2019-08-25
  */
 @Controller
-@RequestMapping("/DownloadController")
+@RequestMapping("/download")
 @Validated
-public class DownloadControllerController {
+public class DownloadController {
 
     @GetMapping("/aa")
     void aa(HttpServletResponse response) {

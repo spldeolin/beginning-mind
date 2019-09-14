@@ -8,7 +8,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
  *
  * @author Deolin 2019-02-26
  */
-public abstract class IngoreSwaggerApiFilter extends OncePerRequestFilter {
+public abstract class IngoreSwaggerHandlerFilter extends OncePerRequestFilter {
 
     @Override
     protected boolean shouldNotFilter(HttpServletRequest request) {

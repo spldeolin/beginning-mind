@@ -28,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.WEB_CONTEXT_FILTER_ORDER)
 @Component
 @Log4j2
-public class WebContextFilter extends IngoreSwaggerApiFilter {
+public class WebContextFilter extends IngoreSwaggerHandlerFilter {
 
     @Autowired
     private RequestTrackAsyncHandler requestTrackAsyncHandler;
