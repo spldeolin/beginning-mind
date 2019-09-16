@@ -8,15 +8,16 @@ import lombok.Getter;
  * <pre>
  *   200 请求成功，返回预想结果
  *   400 请求方法交互失败
- *   401 没有认证
+ *   401 没有登录
  *   403 登录者没有权限
- *   404 HTTP404
- *   500 内部BUG
- *  1001 存在业务错误，无法返回预想结果（商品库存不足等）
+ *   404 404 Not Found
+ *   500 捕获到未考虑到的异常
+ *  1001 存在业务错误，无法返回预想结果（用户名被占用、库存不足 等）
  *  </pre>
  *
  * @author Deolin
  */
+@Getter
 @AllArgsConstructor
 public enum ResultCode {
 
@@ -32,16 +33,17 @@ public enum ResultCode {
     // 会话中没有该请求需要的权限
     FORBIDDEN(403, "权限不足"),
 
-    // 出现无法解决的异常
+    // 404 Not Found
+    NOT_FOUND(404, "Notfound"),
+
+    // 捕获到未考虑到的异常
     INTERNAL_ERROR(500, "内部错误"),
 
-    // 用户名被占用 等
+    // 用户名被占用、库存不足 等
     SERVICE_ERROR(1001, "业务异常");
 
-    @Getter
     private Integer code;
 
-    @Getter
     private String defaultMessage;
 
 }

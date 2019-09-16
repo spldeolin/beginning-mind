@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.SESSION_REFLASH_FILTER_ORDER)
 @Component
 @Log4j2
-public class SessionReflashFilter extends IngoreSwaggerHandlerFilter {
+public class SessionReflashFilter extends IngoreSwaggerFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

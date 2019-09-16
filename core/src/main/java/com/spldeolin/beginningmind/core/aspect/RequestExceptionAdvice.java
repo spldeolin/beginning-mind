@@ -20,6 +20,7 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.core.aspect.dto.Invalid;
 import com.spldeolin.beginningmind.core.aspect.dto.RequestResult;
 import com.spldeolin.beginningmind.core.aspect.exception.ExtraInvalidException;
@@ -37,6 +38,15 @@ import lombok.extern.log4j.Log4j2;
 @RestControllerAdvice
 @Log4j2
 public class RequestExceptionAdvice {
+
+    /**
+     * 404 Not Found
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public RequestResult handle(NoHandlerFoundException e) {
+        log.warn("找不到handler，[{} {}]", e.getHttpMethod(), e.getRequestURL());
+        return RequestResult.failure(ResultCode.NOT_FOUND);
+    }
 
     /**
      * 400 请求动词错误

@@ -25,7 +25,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.LOG_MDC_FILTER_ORDER)
 @Component
 @Log4j2
-public class LogMdcFilter extends IngoreSwaggerHandlerFilter {
+public class LogMdcFilter extends IngoreSwaggerFilter {
 
     /**
      * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同
