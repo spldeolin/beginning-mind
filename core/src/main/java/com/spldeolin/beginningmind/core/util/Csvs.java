@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.core.util;
 
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.Collection;
@@ -75,14 +76,17 @@ public class Csvs {
             String fileBaseName) {
         String csvContent = writeCsv(data, clazz);
 
+        response.setContentType("application/CSV;numberformat:@");
+        response.setCharacterEncoding(utf8);
+        response.setCharacterEncoding(utf8);
         try {
-            response.setContentType("application/CSV");
             response.setHeader("Content-Disposition",
                     "attachment; filename=" + URLEncoder.encode(fileBaseName + ".csv", utf8));
-            response.setCharacterEncoding(utf8);
-            response.getOutputStream().write(csvContent.getBytes(utf8));
+            OutputStream os = response.getOutputStream();
+            os.write(csvContent.getBytes(utf8));
+            os.flush();
         } catch (IOException e) {
-            throw new BizException("文件读写失败");
+            throw new BizException("下载失败");
         }
     }
 
