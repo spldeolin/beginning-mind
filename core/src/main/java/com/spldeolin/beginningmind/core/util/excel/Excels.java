@@ -63,15 +63,15 @@ public class Excels {
     /**
      * 生成Excel
      */
-    public static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
-        ExcelWriter.writeExcel(file, clazz, list);
+    public static <T> void writeExcel(File file, Class<T> clazz, List<T> data) {
+        ExcelWriter.writeExcel(file, clazz, data);
     }
 
     /**
      * 生成Excel
      */
-    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
-        ExcelWriter.writeExcel(response, fileBaseName, clazz, list);
+    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> data) {
+        ExcelWriter.writeExcel(response, fileBaseName, clazz, data);
     }
 
     private static String report(ExcelCellContentInvalidException e) {
