@@ -44,6 +44,9 @@ public class SwaggerApiListingReaderAspect {
 
         api.getResourceGroup().getControllerClass().toJavaUtil().ifPresent(one -> {
             JavaClass javaClass = javaClasses.get(one.getName());
+            if (javaClass == null) {
+                return;
+            }
             api.apiListingBuilder().description(" ");
             String comment = javaClass.getComment();
             if (StringUtils.isBlank(comment)) {

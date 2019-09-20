@@ -45,6 +45,9 @@ public class ApiModelPropertyPropertyBuilderAspect {
             Field field = one.getField().getAnnotated();
             String pojoQualifiedName = field.getDeclaringClass().getName();
             JavaClass pojo = javaClasses.get(pojoQualifiedName);
+            if (pojo == null) {
+                return;
+            }
             JavaField javaField = pojo.getFieldByName(field.getName());
             // 替换注释
             context.getBuilder().description(javaField.getComment());

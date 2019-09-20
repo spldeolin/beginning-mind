@@ -47,8 +47,9 @@ public class OperationSummaryReaderAspect {
     public void around(ProceedingJoinPoint point) throws Throwable {
         OperationContext context = (OperationContext) point.getArgs()[0];
 
+        point.proceed(point.getArgs());
+
         String summary = "";
-        String tagName = "";
         RequestMappingContext requestMappingContext = this
                 .getFieldValue(OperationContext.class, context, "requestContext");
         RequestHandler requestHandler = this
@@ -58,6 +59,9 @@ public class OperationSummaryReaderAspect {
         String methodName = handlerMethod.getMethod().getName();
         List<JavaMethod> nameMatchedMethods = Lists.newArrayList();
         JavaClass javaClass = javaClasses.get(classQualifiedName);
+        if (javaClass == null) {
+            return;
+        }
         for (JavaMethod method : javaClass.getMethods()) {
             if (method.getName().equals(methodName)) {
                 nameMatchedMethods.add(method);
@@ -80,9 +84,6 @@ public class OperationSummaryReaderAspect {
                 }
             }
         }
-
-        point.proceed(point.getArgs());
-
         context.operationBuilder().summary(summary);
     }
 
