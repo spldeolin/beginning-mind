@@ -1,12 +1,18 @@
 package com.spldeolin.beginningmind.core.doc.aspect;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+import java.util.Objects;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.doc.JavaSourceHolder;
+import org.springframework.util.ReflectionUtils;
+import com.spldeolin.beginningmind.core.config.JavaSourceConfig;
 import com.thoughtworks.qdox.model.JavaClass;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.swagger.web.SwaggerApiListingReader;
@@ -22,7 +28,8 @@ import springfox.documentation.swagger.web.SwaggerApiListingReader;
 public class SwaggerApiListingReaderAspect {
 
     @Autowired
-    private JavaSourceHolder srcHolder;
+    @Qualifier(JavaSourceConfig.JAVA_CLASSES)
+    private Map<String, JavaClass> javaClasses;
 
     @Pointcut("execution(* springfox.documentation.swagger.web.SwaggerApiListingReader.apply"
             + "(springfox.documentation.spi.service.contexts.ApiListingContext))")
@@ -36,9 +43,21 @@ public class SwaggerApiListingReaderAspect {
         point.proceed(point.getArgs());
 
         api.getResourceGroup().getControllerClass().toJavaUtil().ifPresent(one -> {
-            JavaClass javaClass = srcHolder.getJava(one.getName());
-            api.apiListingBuilder().description(javaClass.getComment());
+            JavaClass javaClass = javaClasses.get(one.getName());
+            api.apiListingBuilder().description(" ");
+            String comment = javaClass.getComment();
+            if (StringUtils.isBlank(comment)) {
+                comment = javaClass.getName();
+                api.apiListingBuilder().description(comment);
+            }
         });
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getFieldValue(Class<?> targetType, Object target, String fieldName) {
+        Field field = Objects.requireNonNull(ReflectionUtils.findField(targetType, fieldName));
+        field.setAccessible(true);
+        return (T) ReflectionUtils.getField(field, target);
     }
 
 }

@@ -1,13 +1,18 @@
 package com.spldeolin.beginningmind.core.doc.aspect;
 
 import java.lang.reflect.Field;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.doc.JavaSourceHolder;
+import com.spldeolin.beginningmind.core.config.JavaSourceConfig;
+import com.thoughtworks.qdox.model.JavaClass;
+import com.thoughtworks.qdox.model.JavaField;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder;
 
@@ -22,7 +27,8 @@ import springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder;
 public class ApiModelPropertyPropertyBuilderAspect {
 
     @Autowired
-    private JavaSourceHolder srcHolder;
+    @Qualifier(JavaSourceConfig.JAVA_CLASSES)
+    private Map<String, JavaClass> javaClasses;
 
     @Pointcut("execution(* springfox.documentation.swagger.schema.ApiModelPropertyPropertyBuilder.apply"
             + "(springfox.documentation.spi.schema.contexts.ModelPropertyContext))")
@@ -37,16 +43,24 @@ public class ApiModelPropertyPropertyBuilderAspect {
 
         context.getBeanPropertyDefinition().toJavaUtil().ifPresent(one -> {
             Field field = one.getField().getAnnotated();
-            String pojoFqName = field.getDeclaringClass().getName();
-            String fqName = pojoFqName + "." + field.getName();
-            context.getBuilder().description(srcHolder.getFieldComment(fqName));
+            String pojoQualifiedName = field.getDeclaringClass().getName();
+            JavaClass pojo = javaClasses.get(pojoQualifiedName);
+            JavaField javaField = pojo.getFieldByName(field.getName());
+            // 替换注释
+            context.getBuilder().description(javaField.getComment());
 
             // 保持原有顺序
-            context.getBuilder().position(srcHolder.getFiledIndexOfPojo(pojoFqName, field.getName()));
+            for (int i = 0; i < pojo.getFields().size(); i++) {
+                if (pojo.getFields().get(i).getName().equals(field.getName())) {
+                    context.getBuilder().position(i);
+                }
+            }
 
             // @NotNull、@NotEmpty、@NotBlank全部当作required
-            if (field.getType().equals(String.class)) {
-                context.getBuilder().required(srcHolder.isFieldNotNullOrNotEmptyOrNotBlank(fqName));
+            if (field.getType().equals(String.class) && javaField.getAnnotations().stream().anyMatch(anno -> StringUtils
+                    .equalsAny(anno.getType().getFullyQualifiedName(), "javax.validation.constraints.NotBlank",
+                            "javax.validation.constraints.NotEmpty", "javax.validation.constraints.NotNull"))) {
+                context.getBuilder().required(true);
             }
         });
 
