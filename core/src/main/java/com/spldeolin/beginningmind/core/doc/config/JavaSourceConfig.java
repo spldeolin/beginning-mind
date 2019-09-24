@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.core.config;
+package com.spldeolin.beginningmind.core.doc.config;
 
 import java.io.File;
 import java.util.Iterator;

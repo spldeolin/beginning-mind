@@ -10,7 +10,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.core.config.JavaSourceConfig;
+import com.spldeolin.beginningmind.core.doc.config.JavaSourceConfig;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaField;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;

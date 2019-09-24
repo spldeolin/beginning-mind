@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
-import com.spldeolin.beginningmind.core.config.JavaSourceConfig;
+import com.spldeolin.beginningmind.core.doc.config.JavaSourceConfig;
 import com.thoughtworks.qdox.model.JavaClass;
 import springfox.documentation.spi.service.contexts.ApiListingContext;
 import springfox.documentation.swagger.web.SwaggerApiListingReader;

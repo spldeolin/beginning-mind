@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.method.HandlerMethod;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.core.config.JavaSourceConfig;
+import com.spldeolin.beginningmind.core.doc.config.JavaSourceConfig;
 import com.thoughtworks.qdox.model.JavaClass;
 import com.thoughtworks.qdox.model.JavaMethod;
 import com.thoughtworks.qdox.model.JavaType;
