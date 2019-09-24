@@ -17,7 +17,6 @@
         <module>biz</module>
     </modules>
 
-    <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -27,60 +26,6 @@
 
     <properties>
         <java.version>1.8</java.version>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-data-redis -->
-        <spring-session.version>2.1.8.RELEASE</spring-session.version>
-
-        <!-- https://mvnrepository.com/artifact/org.mybatis.spring.boot/mybatis-spring-boot-starter -->
-        <mybatis.version>2.1.0</mybatis.version>
-
-        <!-- https://mvnrepository.com/artifact/com.baomidou/mybatis-plus-boot-starter -->
-        <mybatis-plus.version>3.2.0</mybatis-plus.version>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <commons-lang3.version>3.9</commons-lang3.version>
-
-        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
-        <guava.version>28.1-jre</guava.version>
-
-        <!-- https://mvnrepository.com/artifact/com.squareup.okhttp3/okhttp -->
-        <okhttp.version>4.2.0</okhttp.version>
-
-        <!-- https://mvnrepository.com/artifact/com.dyuproject.protostuff/protostuff-core -->
-        <protostuff.version>1.1.3</protostuff.version>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
-        <poi.version>4.1.0</poi.version>
-
-        <!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
-        <commons-io.version>2.6</commons-io.version>
-
-        <!-- https://mvnrepository.com/artifact/commons-codec/commons-codec -->
-        <commons-codec.version>1.12</commons-codec.version>
-
-        <!-- https://mvnrepository.com/artifact/com.google.zxing/javase -->
-        <zxing.version>3.4.0</zxing.version>
-
-        <!-- https://mvnrepository.com/artifact/org.simplejavamail/simple-java-mail -->
-        <simple-java-mail.version>5.3.0</simple-java-mail.version>
-
-        <!-- https://mvnrepository.com/artifact/com.belerweb/pinyin4j -->
-        <pinyin4j.version>2.5.1</pinyin4j.version>
-
-        <!-- https://mvnrepository.com/artifact/net.coobird/thumbnailator -->
-        <thumbnailator.version>0.4.8</thumbnailator.version>
-
-        <!-- https://mvnrepository.com/artifact/com.github.penggle/kaptcha -->
-        <kaptcha.version>2.3.2</kaptcha.version>
-
-        <!-- https://mvnrepository.com/artifact/com.aliyun.oss/aliyun-sdk-oss -->
-        <oss.version>3.6.0</oss.version>
-
-        <!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger2 -->
-        <springfox-swagger.version>2.9.2</springfox-swagger.version>
-
-        <!-- https://mvnrepository.com/artifact/com.thoughtworks.qdox/qdox -->
-        <qdox.version>2.0-M10</qdox.version>
     </properties>
 
     <dependencies>
@@ -135,7 +80,7 @@
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
-            <version>${spring-session.version}</version>
+            <version>2.1.8.RELEASE</version>
         </dependency>
         <!-- jackson datatype (guava, yaml, csv) -->
         <dependency>
@@ -167,108 +112,108 @@
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>${mybatis.version}</version>
+            <version>2.1.0</version>
         </dependency>
         <!-- mybatis plus -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>${mybatis-plus.version}</version>
+            <version>3.2.0</version>
         </dependency>
         <!-- springfox swagger -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox-swagger.version}</version>
+            <version>2.9.2</version>
         </dependency>
         <!-- qdox -->
         <dependency>
             <groupId>com.thoughtworks.qdox</groupId>
             <artifactId>qdox</artifactId>
-            <version>${qdox.version}</version>
+            <version>2.0-M10</version>
         </dependency>
         <!-- commons lang3 -->
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
+            <version>3.9</version>
         </dependency>
         <!-- guava -->
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
+            <version>28.1-jre</version>
         </dependency>
         <!-- okhttp -->
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>${okhttp.version}</version>
+            <version>4.2.0</version>
         </dependency>
         <!-- protostuff -->
         <dependency>
             <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-core</artifactId>
-            <version>${protostuff.version}</version>
+            <version>1.1.3</version>
         </dependency>
         <dependency>
             <groupId>com.dyuproject.protostuff</groupId>
             <artifactId>protostuff-runtime</artifactId>
-            <version>${protostuff.version}</version>
+            <version>1.1.3</version>
         </dependency>
         <!-- poi -->
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>${poi.version}</version>
+            <version>4.1.0</version>
         </dependency>
         <!-- commons io -->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${commons-io.version}</version>
+            <version>2.6</version>
         </dependency>
         <!-- commons codec -->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
+            <version>1.12</version>
         </dependency>
         <!-- zxing -->
         <dependency>
             <groupId>com.google.zxing</groupId>
             <artifactId>javase</artifactId>
-            <version>${zxing.version}</version>
+            <version>3.4.0</version>
         </dependency>
         <!-- simple java email -->
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
-            <version>${simple-java-mail.version}</version>
+            <version>5.3.0</version>
         </dependency>
         <!-- pinyin4j -->
         <dependency>
             <groupId>com.belerweb</groupId>
             <artifactId>pinyin4j</artifactId>
-            <version>${pinyin4j.version}</version>
+            <version>2.5.1</version>
         </dependency>
         <!-- thumbnailator -->
         <dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
-            <version>${thumbnailator.version}</version>
+            <version>0.4.8</version>
         </dependency>
         <!-- kaptcha -->
         <dependency>
             <groupId>com.github.penggle</groupId>
             <artifactId>kaptcha</artifactId>
-            <version>${kaptcha.version}</version>
+            <version>2.3.2</version>
         </dependency>
         <!-- oss -->
         <dependency>
             <groupId>com.aliyun.oss</groupId>
             <artifactId>aliyun-sdk-oss</artifactId>
-            <version>${oss.version}</version>
+            <version>3.6.0</version>
         </dependency>
 
         <!-- mysql -->
