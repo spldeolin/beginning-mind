@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.spldeolin.beginning-mind</groupId>
-    <artifactId>parent</artifactId>
+    <groupId>com.spldeolin</groupId>
+    <artifactId>beginning-mind</artifactId>
     <version>0.0.1</version>
-    <packaging>pom</packaging>
-
-    <modules>
-        <!-- 核心模块，所有业务模块都应该依赖core模块 -->
-        <module>core</module>
-        <!-- 启动模块，Startup类是整个系统的启动类。启动模块应该依赖其他所有模块，起到加载所有模块的作用 -->
-        <module>launch</module>
-        <!-- 业务模块，业务代码都位于这个模块 -->
-        <module>biz</module>
-    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -227,6 +217,12 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
+        </dependency>
+        <!-- springboot test -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 
