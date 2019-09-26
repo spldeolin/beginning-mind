@@ -84,14 +84,11 @@ public class ApiModelPropertyPropertyBuilderAspect {
                 example = Times.toString(LocalTime.now());
             }
             if (type == LocalDateTime.class) {
-                example = Times.toString(LocalTime.now());
+                example = Times.toString(LocalDateTime.now());
             }
             context.getBuilder().example(example);
         }
 
     }
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
 }

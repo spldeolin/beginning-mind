@@ -1,5 +1,9 @@
 package com.spldeolin.beginningmind.doc.config;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Date;
 import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +34,10 @@ public class SwaggerConfig {
                 .groupName("default") // /v2/api-docs?group=
                 .useDefaultResponseMessages(false) // "Responses"下只显示Code为200的情况
                 .globalOperationParameters(commonHeaders()) // 指定通用headers
+                .directModelSubstitute(LocalTime.class, String.class)
+                .directModelSubstitute(LocalDate.class, String.class)
+                .directModelSubstitute(LocalDateTime.class, String.class)
+                .directModelSubstitute(Date.class, String.class)
                 .select()
                 .paths(PathSelectors.ant("/**"))    // 请求url
                 .build();

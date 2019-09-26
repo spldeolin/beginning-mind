@@ -61,9 +61,9 @@ public class Jsons {
 
     public static SimpleModule timeModule() {
         SimpleModule javaTimeModule = new JavaTimeModule();
-        DateTimeFormatter date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        DateTimeFormatter time = DateTimeFormatter.ofPattern("HH:mm:ss");
-        DateTimeFormatter dateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter date = Times.DEFAULT_DATE_FORMATTER;
+        DateTimeFormatter time = Times.DEFAULT_TIME_FORMATTER;
+        DateTimeFormatter dateTime = Times.DEFAULT_DATE_TIME_FORMATTER;
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date))
                 .addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
                 .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
