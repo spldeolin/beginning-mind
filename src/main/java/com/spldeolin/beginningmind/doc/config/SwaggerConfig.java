@@ -27,13 +27,20 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfig {
 
-    // @formatter:off
     @Bean
     public Docket defaultDocket() {
+        return createDocket("default");
+    }
+
+    // @formatter:off
+    public Docket createDocket(String groupName) {
+        List<Parameter> headers = Lists.newArrayList(
+                new ParameterBuilder().name("token").description("登录态TOKEN").modelRef(new ModelRef("string"))
+                        .parameterType("header").required(false).build());
         return new Docket(DocumentationType.SWAGGER_2)
-                .groupName("default") // /v2/api-docs?group=
+                .groupName(groupName) // /v2/api-docs?group=
                 .useDefaultResponseMessages(false) // "Responses"下只显示Code为200的情况
-                .globalOperationParameters(commonHeaders()) // 指定通用headers
+                .globalOperationParameters(headers) // 指定通用headers
                 .directModelSubstitute(LocalTime.class, String.class)
                 .directModelSubstitute(LocalDate.class, String.class)
                 .directModelSubstitute(LocalDateTime.class, String.class)
@@ -43,11 +50,5 @@ public class SwaggerConfig {
                 .build();
     }
     // @formatter:on
-
-    private List<Parameter> commonHeaders() {
-        return Lists.newArrayList(
-                new ParameterBuilder().name("token").description("登录态TOKEN").modelRef(new ModelRef("string"))
-                        .parameterType("header").required(false).build());
-    }
 
 }

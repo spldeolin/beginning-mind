@@ -14,7 +14,6 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spldeolin.beginningmind.doc.config.JavaSourceConfig;
 import com.spldeolin.beginningmind.util.Times;
 import com.thoughtworks.qdox.model.JavaClass;
