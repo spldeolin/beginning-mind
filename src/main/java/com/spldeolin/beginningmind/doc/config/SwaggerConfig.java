@@ -47,7 +47,7 @@ public class SwaggerConfig {
                 .directModelSubstitute(LocalDateTime.class, String.class)
                 .directModelSubstitute(Date.class, String.class)
                 .select()
-                .paths(Predicates.not(PathSelectors.ant("/**")))    // 请求url
+                .paths(Predicates.not(PathSelectors.ant("/error")))    // 请求url
                 .build();
     }
     // @formatter:on
