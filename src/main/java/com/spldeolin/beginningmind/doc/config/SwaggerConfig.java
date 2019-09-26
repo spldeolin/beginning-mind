@@ -8,6 +8,7 @@ import java.util.List;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import com.google.common.base.Predicates;
 import com.google.common.collect.Lists;
 import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
@@ -46,7 +47,7 @@ public class SwaggerConfig {
                 .directModelSubstitute(LocalDateTime.class, String.class)
                 .directModelSubstitute(Date.class, String.class)
                 .select()
-                .paths(PathSelectors.ant("/**"))    // 请求url
+                .paths(Predicates.not(PathSelectors.ant("/**")))    // 请求url
                 .build();
     }
     // @formatter:on
