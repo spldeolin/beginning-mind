@@ -3,20 +3,24 @@ package com.spldeolin.beginningmind.controller;
 import java.util.Map;
 import java.util.concurrent.Executors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.spldeolin.beginningmind.constant.VipType;
 import com.spldeolin.beginningmind.dao.UserDao;
 import com.spldeolin.beginningmind.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.util.MdcRunnable;
+import com.spldeolin.beginningmind.valid.annotation.ValidEnumValue;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -24,6 +28,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @RestController
 @RequestMapping("/test")
+@Validated
 @Log4j2
 public class TestController {
 
@@ -103,5 +108,9 @@ public class TestController {
         return "SUCCESS";
     }
 
+    @GetMapping("/aaa")
+    String aaa(@RequestParam @ValidEnumValue(enumType = VipType.class) Integer a) {
+        return "SUCCESS" + a;
+    }
 
 }
