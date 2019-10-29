@@ -116,7 +116,7 @@ public class RequestExceptionAdvice {
             PathImpl pathImpl = (PathImpl) cv.getPropertyPath();
             // 参数下标
             NodeImpl dto = pathImpl.getLeafNode();
-            Invalid invalid = new Invalid(dto.getName(), dto.getValue(), cv.getMessage());
+            Invalid invalid = new Invalid(dto.getName(), cv.getInvalidValue(), cv.getMessage());
             invalids.add(invalid);
         }
         log.warn(invalids);
