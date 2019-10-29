@@ -9,11 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.entity.BizDemoEntity;
 import com.spldeolin.beginningmind.service.BizDemoService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 /**
- *
  * 测试啊啊啊啊啊啊啊
  *
  *
@@ -30,14 +27,12 @@ import io.swagger.annotations.ApiOperation;
 @RestController
 @RequestMapping(path = "/bizTest")
 @Validated
-@Api(tags = "aa是", value = "bb啊")
 public class BizTestController {
 
     @Autowired
     private BizDemoService bizDemoService;
 
     @GetMapping
-    @ApiOperation(value = "A")
     List<BizDemoEntity> ln17() {
         System.out.println(System.getProperty("java.io.tmpdir"));
         return bizDemoService.all();

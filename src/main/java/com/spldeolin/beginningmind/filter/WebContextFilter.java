@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.filter.async.RequestTrackAsyncHandler;
 import com.spldeolin.beginningmind.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
@@ -28,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.WEB_CONTEXT_FILTER_ORDER)
 @Component
 @Log4j2
-public class WebContextFilter extends IngoreSwaggerFilter {
+public class WebContextFilter extends OncePerRequestFilter {
 
     @Autowired
     private RequestTrackAsyncHandler requestTrackAsyncHandler;
@@ -54,8 +55,7 @@ public class WebContextFilter extends IngoreSwaggerFilter {
         filterChain.doFilter(request, response);
 
         // 补全并保存RequestTrackDTO对象（异步）
-        taskExecutor.execute(new MdcRunnable(()
-                -> requestTrackAsyncHandler.asyncCompleteAndSave(track, request)));
+        taskExecutor.execute(new MdcRunnable(() -> requestTrackAsyncHandler.asyncCompleteAndSave(track, request)));
 
         // 清空ThreadLocal
         WebContext.removeRequestTrack();

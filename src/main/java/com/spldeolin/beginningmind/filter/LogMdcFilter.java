@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.ThreadContext;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.WebContext;
@@ -25,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.LOG_MDC_FILTER_ORDER)
 @Component
 @Log4j2
-public class LogMdcFilter extends IngoreSwaggerFilter {
+public class LogMdcFilter extends OncePerRequestFilter {
 
     /**
      * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同

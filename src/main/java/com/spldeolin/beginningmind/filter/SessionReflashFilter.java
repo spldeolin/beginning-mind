@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import com.spldeolin.beginningmind.config.SessionConfig;
 import com.spldeolin.beginningmind.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.util.WebContext;
@@ -24,7 +25,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.SESSION_REFLASH_FILTER_ORDER)
 @Component
 @Log4j2
-public class SessionReflashFilter extends IngoreSwaggerFilter {
+public class SessionReflashFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)

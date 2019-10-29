@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.spldeolin.beginningmind.filter.constant.FilterOrderConstant;
@@ -28,7 +29,7 @@ import lombok.extern.log4j.Log4j2;
 @Order(FilterOrderConstant.READ_CONTENT_FILTER_ORDER)
 @Component
 @Log4j2
-public class ReadContentFilter extends IngoreSwaggerFilter {
+public class ReadContentFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -67,4 +68,5 @@ public class ReadContentFilter extends IngoreSwaggerFilter {
         track.setRequestContent(Jsons.compress(requestContent));
         track.setResponseContent(Jsons.compress(responseContent));
     }
+
 }
