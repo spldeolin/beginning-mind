@@ -110,12 +110,12 @@ spring:
   datasource:
     url: jdbc:mysql://127.0.0.1:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
-    password: root_r0oT
+    password: root
 
   redis:
     host: 127.0.0.1
     port: 6379
-    password: root_r0oT
+    password: root
 
 core:
   snow-flake:
