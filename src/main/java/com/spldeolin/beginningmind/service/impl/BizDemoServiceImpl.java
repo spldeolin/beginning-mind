@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.dao.BizDemoDao;
+import com.spldeolin.beginningmind.repository.BizDemoRepo;
 import com.spldeolin.beginningmind.entity.BizDemoEntity;
 import com.spldeolin.beginningmind.service.BizDemoService;
 
@@ -14,11 +14,11 @@ import com.spldeolin.beginningmind.service.BizDemoService;
 public class BizDemoServiceImpl implements BizDemoService {
 
     @Autowired
-    private BizDemoDao bizDemoDao;
+    private BizDemoRepo bizDemoRepo;
 
 
     @Override
     public List<BizDemoEntity> all() {
-        return bizDemoDao.listAll();
+        return bizDemoRepo.listAll();
     }
 }
