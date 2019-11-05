@@ -12,7 +12,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import com.spldeolin.beginningmind.valid.ValidityInterpretableEnum;
+import com.spldeolin.beginningmind.valid.ValidityInterpretable;
 import com.spldeolin.beginningmind.valid.validator.ValidEnumValueValidator;
 
 /**
@@ -36,6 +36,6 @@ public @interface ValidEnumValue {
 
     Class<? extends Payload>[] payload() default {};
 
-    Class<? extends ValidityInterpretableEnum> enumType();
+    Class<? extends ValidityInterpretable> enumType();
 
 }

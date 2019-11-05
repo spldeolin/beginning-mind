@@ -5,7 +5,7 @@ package com.spldeolin.beginningmind.valid;
  *
  * @author Deolin 2019-10-29
  */
-public interface ValidityInterpretableEnum {
+public interface ValidityInterpretable {
 
     /**
      * 判断value对该enum而言是否是有效的枚举值

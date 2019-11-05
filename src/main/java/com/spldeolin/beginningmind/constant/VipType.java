@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.constant;
 
 import java.util.Arrays;
-import com.spldeolin.beginningmind.valid.ValidityInterpretableEnum;
+import com.spldeolin.beginningmind.valid.ValidityInterpretable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @AllArgsConstructor
 @Getter
-public enum VipType implements ValidityInterpretableEnum {
+public enum VipType implements ValidityInterpretable {
 
     NORMAL(1), SUPER(2);
 
