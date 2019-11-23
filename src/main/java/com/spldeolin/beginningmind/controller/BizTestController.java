@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.controller;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +34,7 @@ public class BizTestController {
     private BizDemoService bizDemoService;
 
     @GetMapping
-    List<BizDemoEntity> ln17() {
+    Map<Long, BizDemoEntity> ln17() {
         System.out.println(System.getProperty("java.io.tmpdir"));
         return bizDemoService.all();
     }

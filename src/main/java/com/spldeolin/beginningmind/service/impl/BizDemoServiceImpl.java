@@ -1,10 +1,10 @@
 package com.spldeolin.beginningmind.service.impl;
 
-import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.repository.BizDemoRepo;
 import com.spldeolin.beginningmind.entity.BizDemoEntity;
+import com.spldeolin.beginningmind.mapper.BizDemoMapper;
 import com.spldeolin.beginningmind.service.BizDemoService;
 
 /**
@@ -14,11 +14,10 @@ import com.spldeolin.beginningmind.service.BizDemoService;
 public class BizDemoServiceImpl implements BizDemoService {
 
     @Autowired
-    private BizDemoRepo bizDemoRepo;
-
+    private BizDemoMapper bizDemoMapper;
 
     @Override
-    public List<BizDemoEntity> all() {
-        return bizDemoRepo.listAll();
+    public Map<Long, BizDemoEntity> all() {
+        return bizDemoMapper.listAllAsMap();
     }
 }

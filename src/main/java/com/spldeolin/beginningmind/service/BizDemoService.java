@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.List;
+import java.util.Map;
 import com.spldeolin.beginningmind.entity.BizDemoEntity;
 
 /**
@@ -8,6 +9,6 @@ import com.spldeolin.beginningmind.entity.BizDemoEntity;
  */
 public interface BizDemoService {
 
-    List<BizDemoEntity> all();
+    Map<Long, BizDemoEntity> all();
 
 }
