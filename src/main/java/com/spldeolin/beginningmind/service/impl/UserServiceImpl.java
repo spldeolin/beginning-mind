@@ -6,16 +6,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.common.BizException;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
-import com.spldeolin.beginningmind.mapper.PermissionMapper;
-import com.spldeolin.beginningmind.repository.UserRepo;
 import com.spldeolin.beginningmind.entity.UserEntity;
+import com.spldeolin.beginningmind.mapper.PermissionMapper;
+import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.service.UserService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * @author Deolin 2018/11/12
  */
+@Log4j2
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -26,7 +28,7 @@ public class UserServiceImpl implements UserService {
     private PermissionMapper permissionMapper;
 
     @Autowired
-    private UserRepo userRepo;
+    private UserMapper userMapper;
 
     @Override
     public Long createUser(UserEntity user) {
@@ -44,68 +46,62 @@ public class UserServiceImpl implements UserService {
         // 编号
         user.setSerialNumber(String.valueOf(snowFlakeService.nextId()));
 
-        userRepo.create(user);
+        userMapper.insert(user);
         return user.getId();
     }
 
     @Override
     public UserEntity getUser(Long id) {
-        return userRepo.get(id).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
+        UserEntity userEntity = userMapper.selectById(id);
+        if (userEntity == null) {
+            throw new BizException("用户不存在或是已被删除");
+        }
+        return userEntity;
     }
 
     @Override
     public void updateUser(UserEntity user) {
-        Long id = user.getId();
-
-        if (!userRepo.get(id).isPresent()) {
-            throw new BizException("用户不存在或是已被删除");
-        }
         checkOccupationForUpdating(user);
-
-        if (!userRepo.update(user)) {
-            throw new BizException("用户数据过时");
-        }
+        userMapper.updateById(user);
     }
 
     @Override
     public void deleteUser(Long id) {
-        if (!userRepo.get(id).isPresent()) {
-            throw new BizException("用户不存在或是已被删除");
-        }
-        userRepo.delete(id);
+        userMapper.deleteById(id);
     }
 
     @Override
     public String deleteUsers(List<Long> ids) {
-        List<UserEntity> exist = userRepo.list(ids);
-        if (exist.size() < ids.size()) {
-            throw new BizException("部分用户不存在或是已被删除");
-        }
-        userRepo.delete(ids);
+        userMapper.deleteBatchIds(ids);
         return "操作成功";
     }
 
     @Override
     public void banPick(Long userId) {
-        UserEntity user = userRepo.get(userId).orElseThrow(() -> new BizException("用户不存在或是已被删除"));
-        user.setEnableSign(!user.getEnableSign());
-
-        userRepo.update(user);
+        UserEntity user = userMapper.selectById(userId);
+        if (user != null) {
+            user.setEnableSign(!user.getEnableSign());
+            if (userMapper.updateById(user) == 0) {
+                log.warn("乐观锁冲突");
+            }
+        } else {
+            log.warn("user[{}]不存在或是已被删除", userId);
+        }
     }
 
     /**
      * 创建场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForCreating(UserEntity user) {
-        if (userRepo.isExistByName(user.getName())) {
+        if (userMapper.getIdByName(user.getName()).isPresent()) {
             throw new BizException("用户名已被占用");
         }
         String mobile = user.getMobile();
-        if (mobile != null && userRepo.isExistByMobile(user.getMobile())) {
+        if (mobile != null && userMapper.getIdByMobile(mobile).isPresent()) {
             throw new BizException("手机号已被占用");
         }
         String email = user.getEmail();
-        if (email != null && userRepo.isExistByEmail(user.getEmail())) {
+        if (email != null && userMapper.getIdByEmail(email).isPresent()) {
             throw new BizException("E-Mail已被占用");
         }
     }
@@ -114,21 +110,27 @@ public class UserServiceImpl implements UserService {
      * 更新场合下的用户名、手机号、E-Mail占用校验
      */
     private void checkOccupationForUpdating(UserEntity user) {
-        Long id = user.getId();
         String username = user.getName();
         String mobile = user.getMobile();
         String email = user.getEmail();
-        if (userRepo.isExistByNameNeId(username, id)) {
-            throw new BizException("用户名已被占用");
-        }
 
-        if (mobile != null && userRepo.isExistByMobileNeId(mobile, id)) {
-            throw new BizException("手机号已被占用");
-        }
+        userMapper.getIdByName(username).ifPresent(id -> {
+            if (!id.equals(user.getId())) {
+                throw new BizException("用户名已被占用");
+            }
+        });
 
-        if (email != null && userRepo.isExistByEmailNeId(email, id)) {
-            throw new BizException("E-Mail已被占用");
-        }
+        userMapper.getIdByMobile(mobile).ifPresent(id -> {
+            if (!id.equals(user.getId())) {
+                throw new BizException("手机号已被占用");
+            }
+        });
+
+        userMapper.getIdByEmail(email).ifPresent(id -> {
+            if (!id.equals(user.getId())) {
+                throw new BizException("E-Mail已被占用");
+            }
+        });
     }
 
 }

@@ -17,7 +17,6 @@ import com.spldeolin.beginningmind.constant.VipType;
 import com.spldeolin.beginningmind.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.mapper.UserMapper;
-import com.spldeolin.beginningmind.repository.UserRepo;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.util.MdcRunnable;
@@ -32,9 +31,6 @@ import lombok.extern.log4j.Log4j2;
 @Validated
 @Log4j2
 public class TestController {
-
-    @Autowired
-    private UserRepo userRepo;
 
     @Autowired
     private UserMapper userMapper;

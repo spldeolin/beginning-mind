@@ -16,11 +16,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.common.BizException;
-import com.spldeolin.beginningmind.mapper.UserMapper;
-import com.spldeolin.beginningmind.repository.UserRepo;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.input.SignInput;
+import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.security.util.SignContext;
 import com.spldeolin.beginningmind.service.PermissionService;
@@ -40,9 +39,6 @@ import lombok.extern.log4j.Log4j2;
 public class SignServiceImpl implements SignService {
 
     public static final String SIGNER_SESSION_KEY = "signer";
-
-    @Autowired
-    private UserRepo userRepo;
 
     @Autowired
     private UserMapper userMapper;

@@ -18,4 +18,28 @@
                   )
     </select>
 
+    <select id="getIdByName" resultType="java.lang.Long">
+        SELECT id
+        FROM user
+        WHERE
+              is_deleted = FALSE
+          AND name = #{name}
+    </select>
+
+    <select id="getIdByEmail" resultType="java.lang.Long">
+        SELECT id
+        FROM user
+        WHERE
+              is_deleted = FALSE
+          AND email = #{email}
+    </select>
+
+    <select id="getIdByMobile" resultType="java.lang.Long">
+        SELECT id
+        FROM user
+        WHERE
+              is_deleted = FALSE
+          AND mobile = #{mobile}
+    </select>
+
 </mapper>

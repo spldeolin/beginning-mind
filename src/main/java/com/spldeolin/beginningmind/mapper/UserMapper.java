@@ -19,4 +19,10 @@ public interface UserMapper extends BaseMapper<UserEntity> {
 
     List<UserEntity> listAsPageByMobile(Page<UserEntity> param, @Param("mobile") String mobile);
 
+    Optional<Long> getIdByName(String name);
+
+    Optional<Long> getIdByEmail(String email);
+
+    Optional<Long> getIdByMobile(String mobile);
+
 }
