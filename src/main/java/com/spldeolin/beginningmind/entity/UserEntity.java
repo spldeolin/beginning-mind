@@ -20,7 +20,6 @@ public class UserEntity extends CommonEntity {
     /**
      * 用户编号
      */
-    @JsonProperty("sdfsdf士大夫")
     @TableField("serial_number")
     private String serialNumber;
 

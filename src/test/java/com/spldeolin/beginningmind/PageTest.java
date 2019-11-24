@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind;
 
+import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +43,7 @@ public class PageTest {
     public void t42() {
         Page<UserEntity> pageParam = new Page<>(1, 2); // 当前页码，每页条数
 
-        IPage<UserEntity> pageResult = userMapper.searchAsPageByMobile(pageParam, "1");
+        List<UserEntity> pageResult = userMapper.listAsPageByMobile(pageParam, "1");
         log.info(Jsons.beautify(pageResult));
     }
 

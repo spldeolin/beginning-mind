@@ -14,23 +14,6 @@ import com.spldeolin.beginningmind.entity.UserEntity;
 @Component
 public class UserRepo extends CommonRepository<UserEntity> {
 
-    public List<UserEntity> searchBatch(Wrapper<UserEntity> query) {
-        return super.searchBatch(query);
-    }
-
-    public Optional<UserEntity> searchFirstByNameOrMobileOrEmail(String nameOrMobileOrEmail) {
-        LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
-        query.or().eq(UserEntity::getName, nameOrMobileOrEmail)
-                .or().eq(UserEntity::getMobile, nameOrMobileOrEmail)
-                .or().eq(UserEntity::getEmail, nameOrMobileOrEmail);
-        List<UserEntity> users = super.searchBatch(query);
-
-        if (users.size() == 0) {
-            return Optional.empty();
-        }
-        return Optional.ofNullable(users.get(0));
-    }
-
     public boolean isExistByName(String name) {
         UserEntity entity = new UserEntity();
         entity.setName(name);

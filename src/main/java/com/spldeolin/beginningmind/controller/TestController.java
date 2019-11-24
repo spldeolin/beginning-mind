@@ -14,9 +14,10 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.constant.VipType;
-import com.spldeolin.beginningmind.repository.UserRepo;
 import com.spldeolin.beginningmind.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
+import com.spldeolin.beginningmind.mapper.UserMapper;
+import com.spldeolin.beginningmind.repository.UserRepo;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.util.MdcRunnable;
@@ -35,6 +36,9 @@ public class TestController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private UserMapper userMapper;
+
     @PostMapping("/requestTrackReport")
     @SecurityAccess(AccessMode.TOKEN)
     Map<Integer, Object> requestTrackReport(@RequestBody User2permissionEntity user2permission) {
@@ -43,47 +47,47 @@ public class TestController {
 
         LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();
         query.gt(UserEntity::getMobile, 4);
-        result.put(1, userRepo.searchBatch(query));
+        result.put(1, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.ge(UserEntity::getMobile, 3);
-        result.put(1, userRepo.searchBatch(query));
+        result.put(1, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.lt(UserEntity::getMobile, 2);
-        result.put(2, userRepo.searchBatch(query));
+        result.put(2, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.le(UserEntity::getMobile, "999");
-        result.put(3, userRepo.searchBatch(query));
+        result.put(3, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.eq(UserEntity::getEnableSign, false);
-        result.put(4, userRepo.searchBatch(query));
+        result.put(4, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.in(UserEntity::getPassword, Lists.newArrayList("abc_111", "12312_de", "")).eq(UserEntity::getName, "汉字");
-        result.put(5, userRepo.searchBatch(query));
+        result.put(5, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.ne(UserEntity::getName, "随意").or().eq(UserEntity::getName, "随意");
-        result.put(6, userRepo.searchBatch(query));
+        result.put(6, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.orderByDesc(UserEntity::getId); // 暂时无法消除这个警告
-        result.put(7, userRepo.searchBatch(query));
+        result.put(7, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.select(UserEntity::getId, UserEntity::getName);
-        result.put(8, userRepo.searchBatch(query));
+        result.put(8, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.like(UserEntity::getName, "a");
-        result.put(9, userRepo.searchBatch(query));
+        result.put(9, userMapper.selectList(query));
 
         query = new LambdaQueryWrapper<>();
         query.likeRight(UserEntity::getName, "D");
-        result.put(10, userRepo.searchBatch(query));
+        result.put(10, userMapper.selectList(query));
 
         return result;
     }
