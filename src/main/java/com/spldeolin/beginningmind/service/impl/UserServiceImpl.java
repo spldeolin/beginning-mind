@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.common.BizException;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
-import com.spldeolin.beginningmind.repository.PermissionRepo;
+import com.spldeolin.beginningmind.mapper.PermissionMapper;
 import com.spldeolin.beginningmind.repository.UserRepo;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
@@ -23,7 +23,7 @@ public class UserServiceImpl implements UserService {
     private SnowFlakeService snowFlakeService;
 
     @Autowired
-    private PermissionRepo permissionRepo;
+    private PermissionMapper permissionMapper;
 
     @Autowired
     private UserRepo userRepo;
