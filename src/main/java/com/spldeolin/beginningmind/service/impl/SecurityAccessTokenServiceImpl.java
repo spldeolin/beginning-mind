@@ -3,8 +3,8 @@ package com.spldeolin.beginningmind.service.impl;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.repository.SecurityAccessTokenRepo;
 import com.spldeolin.beginningmind.entity.SecurityAccessTokenEntity;
+import com.spldeolin.beginningmind.mapper.SecurityAccessTokenMapper;
 import com.spldeolin.beginningmind.service.SecurityAccessTokenService;
 
 /**
@@ -16,11 +16,11 @@ import com.spldeolin.beginningmind.service.SecurityAccessTokenService;
 public class SecurityAccessTokenServiceImpl implements SecurityAccessTokenService {
 
     @Autowired
-    private SecurityAccessTokenRepo securityAccessTokenRepo;
+    private SecurityAccessTokenMapper securityAccessTokenMapper;
 
     @Override
     public List<SecurityAccessTokenEntity> listAll() {
-        return securityAccessTokenRepo.listAll();
+        return securityAccessTokenMapper.listAll();
     }
 
 }

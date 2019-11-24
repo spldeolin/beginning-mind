@@ -1,6 +1,10 @@
 package com.spldeolin.beginningmind.mapper;
 
+import java.util.List;
+import java.util.Map;
+import org.apache.ibatis.annotations.MapKey;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.spldeolin.beginningmind.entity.BizDemoEntity;
 import com.spldeolin.beginningmind.entity.SecurityAccessTokenEntity;
 
 /**
@@ -9,5 +13,7 @@ import com.spldeolin.beginningmind.entity.SecurityAccessTokenEntity;
  * @author Deolin 2019-02-23
  */
 public interface SecurityAccessTokenMapper extends BaseMapper<SecurityAccessTokenEntity> {
+
+    List<SecurityAccessTokenEntity> listAll();
 
 }
