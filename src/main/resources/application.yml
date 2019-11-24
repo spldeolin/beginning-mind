@@ -49,6 +49,10 @@ spring:
 logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
 mybatis-plus:
   mapper-locations: classpath*:mapper/*.xml
   global-config:
@@ -57,11 +61,6 @@ mybatis-plus:
       id-type: INPUT
       logic-delete-value: true
       logic-not-delete-value: false
-
-swagger:
-  base-package: com.spldeolin.beginningmind
-  base-path: /**
-  exclude-path: /error
 
 core:
 
@@ -186,9 +185,6 @@ spring:
 
 logging:
   config: classpath:log4j2/log4j2-prod.yml
-
-swagger:
-  exclude-path: /** # 不显示一切API
 
 core:
   snow-flake:

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.mapper.PermissionMapper;
-import com.spldeolin.beginningmind.repository.User2permissionRepo;
+import com.spldeolin.beginningmind.mapper.User2permissionMapper;
 import com.spldeolin.beginningmind.service.PermissionService;
 
 /**
@@ -21,11 +21,11 @@ public class PermissionServiceImpl implements PermissionService {
     private PermissionMapper permissionMapper;
 
     @Autowired
-    private User2permissionRepo user2permissionRepo;
+    private User2permissionMapper user2permissionMapper;
 
     @Override
     public List<PermissionEntity> listGrantedPermission(Long userId) {
-        List<Long> permissionIds = user2permissionRepo.searchPermissionIdByUserId(userId);
+        List<Long> permissionIds = user2permissionMapper.listPermissionsByUsers(userId);
 
         if (permissionIds.size() > 0) {
             return permissionMapper.selectBatchIds(permissionIds);

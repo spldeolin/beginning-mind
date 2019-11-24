@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spldeolin.beginningmind.mapper.User2permissionMapper">
+    <select id="listPermissionsByUsers" resultType="java.lang.Long">
+        SELECT
+            permission_id
+        FROM
+            user2permission
+        WHERE
+            is_deleted = FALSE
+        AND user_id = #{userId}
+    </select>
 </mapper>
