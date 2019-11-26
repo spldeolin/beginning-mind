@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.util.excel.entity;
 
-import java.io.Serializable;
 import java.lang.reflect.Field;
 import com.spldeolin.beginningmind.util.excel.converter.CellConverter;
 import lombok.Data;
@@ -11,7 +10,7 @@ import lombok.Data;
  * @author Deolin 2019-08-25
  */
 @Data
-public class ColumnDefinition implements Serializable {
+public class ColumnDefinition {
 
     private String firstColumnName;
 
@@ -24,7 +23,5 @@ public class ColumnDefinition implements Serializable {
     private CellConverter formatter;
 
     private String defaultValue;
-
-    private static final long serialVersionUID = 1L;
 
 }

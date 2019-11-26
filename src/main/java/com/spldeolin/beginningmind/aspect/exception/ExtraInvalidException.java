@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 @AllArgsConstructor
 public class ExtraInvalidException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 9205513211311847334L;
 
     private List<Invalid> invalids;
 

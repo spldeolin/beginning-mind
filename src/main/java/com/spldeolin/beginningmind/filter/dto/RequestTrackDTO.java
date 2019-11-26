@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.filter.dto;
 
-import java.io.Serializable;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,7 +16,7 @@ import lombok.Data;
  * @author Deolin 2018/11/15
  */
 @Data
-public class RequestTrackDTO implements Serializable {
+public class RequestTrackDTO {
 
     /**
      * 请求标识
@@ -111,8 +110,6 @@ public class RequestTrackDTO implements Serializable {
     @JsonIgnore
     @Transient
     private transient Stopwatch stopwatch;
-
-    private static final long serialVersionUID = 1L;
 
     public RequestTrackDTO() {
         insignia = StringRandomUtils.generateLegibleEnNum(6);

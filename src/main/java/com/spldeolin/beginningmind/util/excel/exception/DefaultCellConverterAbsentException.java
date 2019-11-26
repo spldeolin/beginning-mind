@@ -12,6 +12,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class DefaultCellConverterAbsentException extends RuntimeException {
 
+    private static final long serialVersionUID = 8483561201723149884L;
+
     private String fieldType;
 
     private String fieldName;
@@ -22,7 +24,5 @@ public class DefaultCellConverterAbsentException extends RuntimeException {
     public DefaultCellConverterAbsentException(String message) {
         super(message);
     }
-
-    private static final long serialVersionUID = 1L;
 
 }

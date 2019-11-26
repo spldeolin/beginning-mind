@@ -17,8 +17,8 @@ public class PermissionChecker {
 
         boolean isPermit = false;
         for (PermissionEntity permission : SignContext.current().getPermissions()) {
-            if (request.getMethod().equalsIgnoreCase(permission.getMappingMethod())
-                    && url.startsWith(permission.getMappingPath())) {
+            if (request.getMethod().equalsIgnoreCase(permission.getMappingMethod()) && url
+                    .startsWith(permission.getMappingPath())) {
                 isPermit = true;
             }
         }

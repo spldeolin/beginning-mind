@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.input;
 
-import java.io.Serializable;
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -8,7 +7,7 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
-public class SignInput implements Serializable {
+public class SignInput {
 
     /**
      * 用户输入的“用户名/手机/邮箱”
@@ -33,7 +32,5 @@ public class SignInput implements Serializable {
      */
     @NotBlank
     private String captchaToken;
-
-    private static final long serialVersionUID = 1L;
 
 }

@@ -27,7 +27,6 @@ public class {{entity_name}}Entity extends CommonEntity {
     @TableField("{{property.column_name}}")
     private {{property.field_type}} {{property.field_name}};
 {% endfor %}
-    private static final long serialVersionUID = 1L;
 
 }''')
 

@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.spldeolin.beginningmind.common.CommonEntity;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -58,7 +57,5 @@ public class UserEntity extends CommonEntity {
      */
     @TableField("enable_sign")
     private Boolean enableSign;
-
-    private static final long serialVersionUID = 1L;
 
 }

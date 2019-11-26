@@ -7,7 +7,7 @@ package com.spldeolin.beginningmind.security.exception;
  */
 public class TokenIncorrectException extends UnsignedException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -3233418934779695965L;
 
     public TokenIncorrectException(String message) {
         super(message);

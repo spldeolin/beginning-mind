@@ -7,7 +7,7 @@ package com.spldeolin.beginningmind.security.exception;
  */
 public class UnauthorizeException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -8308747388603010199L;
 
     public UnauthorizeException(String message) {
         super(message);

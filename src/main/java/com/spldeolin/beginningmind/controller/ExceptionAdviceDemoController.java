@@ -159,8 +159,6 @@ public class ExceptionAdviceDemoController {
             super(DEFAULT_MESSAGE);
         }
 
-        private static final long serialVersionUID = 1L;
-
     }
 
 }

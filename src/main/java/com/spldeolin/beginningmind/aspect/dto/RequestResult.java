@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.aspect.dto;
 
-import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
@@ -14,7 +13,7 @@ import lombok.Data;
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class RequestResult implements Serializable {
+public class RequestResult {
 
     private Integer code;
 
@@ -23,8 +22,6 @@ public class RequestResult implements Serializable {
     private String message;
 
     private String insignia;
-
-    private static final long serialVersionUID = 1L;
 
     private RequestResult() {
         setupCurrentInsignia();

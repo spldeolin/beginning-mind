@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.common;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -17,7 +16,7 @@ import lombok.Data;
  * @author Deolin 2019-01-14
  */
 @Data
-public abstract class CommonEntity implements Serializable {
+public abstract class CommonEntity {
 
     /**
      * ID
@@ -61,7 +60,5 @@ public abstract class CommonEntity implements Serializable {
      */
     @Version
     private Integer version;
-
-    private static final long serialVersionUID = 1L;
 
 }

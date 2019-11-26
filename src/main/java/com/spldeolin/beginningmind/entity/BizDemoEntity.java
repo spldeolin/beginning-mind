@@ -183,6 +183,4 @@ public class BizDemoEntity extends CommonEntity {
     @TableField("is_permitted_update_development_monthly_2")
     private Byte isPermittedUpdateDevelopmentMonthly2;
 
-    private static final long serialVersionUID = 1L;
-
 }

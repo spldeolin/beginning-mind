@@ -28,6 +28,4 @@ public class User2permissionEntity extends CommonEntity {
     @TableField("permission_id")
     private Long permissionId;
 
-    private static final long serialVersionUID = 1L;
-
 }

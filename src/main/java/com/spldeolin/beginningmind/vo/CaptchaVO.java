@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.vo;
 
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -9,12 +8,10 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class CaptchaVO implements Serializable {
+public class CaptchaVO {
 
     private String image;
 
     private String token;
-
-    private static final long serialVersionUID = 1L;
 
 }

@@ -34,6 +34,4 @@ public class SecurityAccessTokenEntity extends CommonEntity {
     @TableField("token")
     private String token;
 
-    private static final long serialVersionUID = 1L;
-
 }

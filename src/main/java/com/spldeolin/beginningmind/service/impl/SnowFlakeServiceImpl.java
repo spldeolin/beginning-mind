@@ -123,9 +123,7 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
         //数据中心部分
         //机器标识部分
         //序列号部分
-        return (currStmp - START_STMP) << TIMESTMP_LEFT
-                | datacenterId << DATACENTER_LEFT
-                | machineId << MACHINE_LEFT
+        return (currStmp - START_STMP) << TIMESTMP_LEFT | datacenterId << DATACENTER_LEFT | machineId << MACHINE_LEFT
                 | sequence;
     }
 

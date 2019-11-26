@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.input;
 
-import java.io.Serializable;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import lombok.Data;
 
@@ -10,7 +9,7 @@ import lombok.Data;
  * @author Deolin 2018/8/4
  */
 @Data
-public class UserInput implements Serializable {
+public class UserInput {
 
     /**
      * 通用字段 数据版本
@@ -36,8 +35,6 @@ public class UserInput implements Serializable {
      * E-mail
      */
     private String email;
-
-    private static final long serialVersionUID = 1L;
 
     public UserEntity toEntity(Long id) {
         UserEntity userEntity = toEntity();

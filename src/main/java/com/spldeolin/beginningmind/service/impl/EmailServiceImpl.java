@@ -23,19 +23,12 @@ public class EmailServiceImpl implements EmailService {
     public void sendEmail(List<String> emails, String subject, String content) {
         EmailProp prop = coreProperties.getEmail();
         EmailPopulatingBuilder builder = EmailBuilder.startingBlank()
-                .from(prop.getAddresserName(), prop.getAddresserEmail())
-                .withSubject(subject)
-                .withPlainText(content);
+                .from(prop.getAddresserName(), prop.getAddresserEmail()).withSubject(subject).withPlainText(content);
         for (String email : emails) {
             builder.to(email.split("@")[0], email);
         }
-        MailerBuilder.withSMTPServer(
-                prop.getServerHost(),
-                prop.getServerPort(),
-                prop.getAddresserEmail(),
-                prop.getAddresserAuthCode())
-                .buildMailer()
-                .sendMail(builder.buildEmail());
+        MailerBuilder.withSMTPServer(prop.getServerHost(), prop.getServerPort(), prop.getAddresserEmail(),
+                prop.getAddresserAuthCode()).buildMailer().sendMail(builder.buildEmail());
     }
 
 }

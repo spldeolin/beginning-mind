@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.aspect.dto;
 
-import java.io.Serializable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,14 +10,12 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Invalid implements Serializable {
+public class Invalid {
 
     private String name;
 
     private Object value;
 
     private String cause;
-
-    private static final long serialVersionUID = 1L;
 
 }

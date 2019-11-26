@@ -7,7 +7,7 @@ package com.spldeolin.beginningmind.security.exception;
  */
 public class UnsignedException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -9072128088272295451L;
 
     public UnsignedException(String message) {
         super(message);

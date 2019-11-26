@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.filter.dto;
 
-import java.io.Serializable;
 import lombok.Data;
 
 /**
@@ -9,7 +8,7 @@ import lombok.Data;
  * @author Deolin 2018/12/28
  */
 @Data
-public class MappedCallDTO implements Serializable {
+public class MappedCallDTO {
 
     /**
      * mapper接口名
@@ -20,8 +19,6 @@ public class MappedCallDTO implements Serializable {
      * 耗时
      */
     private Long elapsed;
-
-    private static final long serialVersionUID = 1L;
 
     public MappedCallDTO(String target, Long elapsed) {
         this.target = target;

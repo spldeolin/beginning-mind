@@ -45,8 +45,6 @@ public class PermissionEntity extends CommonEntity {
     @TableField("is_forbidden")
     private Boolean isForbidden;
 
-    private static final long serialVersionUID = 1L;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -56,8 +54,7 @@ public class PermissionEntity extends CommonEntity {
             return false;
         }
         PermissionEntity that = (PermissionEntity) o;
-        return Objects.equal(mappingMethod, that.mappingMethod) &&
-                Objects.equal(mappingPath, that.mappingPath);
+        return Objects.equal(mappingMethod, that.mappingMethod) && Objects.equal(mappingPath, that.mappingPath);
     }
 
     @Override
@@ -69,4 +66,5 @@ public class PermissionEntity extends CommonEntity {
         this.mappingMethod = mappingMethod;
         this.mappingPath = mappingPath;
     }
+
 }

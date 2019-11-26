@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.vo;
 
-import java.io.Serializable;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,12 +9,10 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class SignerProfileVO implements Serializable {
+public class SignerProfileVO {
 
     private String userName;
 
     private List<Long> permissionIds;
-
-    private static final long serialVersionUID = 1L;
 
 }

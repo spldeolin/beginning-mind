@@ -14,7 +14,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = false)
 public class ExcelCellContentInvalidException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 5289508701858765332L;
 
     private List<Invalid> parseInvalids;
 

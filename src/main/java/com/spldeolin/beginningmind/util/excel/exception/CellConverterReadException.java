@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 public class CellConverterReadException extends Exception {
 
+    private static final long serialVersionUID = 910574124672350016L;
+
     private String fieldTypeName;
 
     private String fieldName;
@@ -22,7 +24,5 @@ public class CellConverterReadException extends Exception {
     public CellConverterReadException(String message) {
         super(message);
     }
-
-    private static final long serialVersionUID = 1L;
 
 }

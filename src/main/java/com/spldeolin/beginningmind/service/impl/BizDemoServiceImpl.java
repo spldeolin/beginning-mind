@@ -20,4 +20,5 @@ public class BizDemoServiceImpl implements BizDemoService {
     public Map<Long, BizDemoEntity> all() {
         return bizDemoMapper.listAllAsMap();
     }
+
 }

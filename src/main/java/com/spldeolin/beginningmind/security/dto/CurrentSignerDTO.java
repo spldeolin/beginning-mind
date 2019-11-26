@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.security.dto;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
@@ -13,7 +12,7 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
-public class CurrentSignerDTO implements Serializable {
+public class CurrentSignerDTO {
 
     /**
      * 会话ID
@@ -34,7 +33,5 @@ public class CurrentSignerDTO implements Serializable {
      * 被授予的权限
      */
     private List<PermissionEntity> permissions;
-
-    private static final long serialVersionUID = 1L;
 
 }

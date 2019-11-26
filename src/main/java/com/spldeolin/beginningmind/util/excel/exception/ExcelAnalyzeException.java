@@ -5,7 +5,7 @@ package com.spldeolin.beginningmind.util.excel.exception;
  */
 public class ExcelAnalyzeException extends Exception {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -716093297851882792L;
 
     public ExcelAnalyzeException(String message) {
         super(message);

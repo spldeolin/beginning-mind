@@ -5,7 +5,7 @@ package com.spldeolin.beginningmind.common;
  */
 public class BizException extends RuntimeException {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = -4104806330438981374L;
 
     public BizException() {
     }

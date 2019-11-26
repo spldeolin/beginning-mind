@@ -102,8 +102,8 @@ public class ControllerAspect {
             List<Invalid> invalids) {
         if (((RequestParam) annotation).required()) {
             // 空对象
-            if (parameterValue == null ||
-                    (parameterValue instanceof String && ((String) parameterValue).length() == 0)) {
+            if (parameterValue == null || (parameterValue instanceof String
+                    && ((String) parameterValue).length() == 0)) {
                 invalids.add(new Invalid(parameterName, null, "不能为空"));
             }
         }
