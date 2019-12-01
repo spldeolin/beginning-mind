@@ -10,19 +10,20 @@ import io.protostuff.runtime.RuntimeSchema;
  */
 public class ProtostuffUtil {
 
+    private static final ThreadLocal<LinkedBuffer> buffer = ThreadLocal.withInitial(() -> LinkedBuffer.allocate(512));
+
     public <T> byte[] serialize(T t, Class<T> clazz) {
         if (t == null) {
             return new byte[0];
         }
 
         Schema<T> schema = RuntimeSchema.getSchema(clazz);
-        LinkedBuffer buffer = LinkedBuffer.allocate(512);
 
         final byte[] protostuff;
         try {
-            protostuff = ProtostuffIOUtil.toByteArray(t, schema, buffer);
+            protostuff = ProtostuffIOUtil.toByteArray(t, schema, buffer.get());
         } finally {
-            buffer.clear();
+            buffer.get().clear();
         }
         return protostuff;
     }
