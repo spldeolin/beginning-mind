@@ -3,16 +3,16 @@ package com.spldeolin.beginningmind.extension.advice;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.aspect.MethodCallValidatedAspect;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.extension.exception.MethodCallInvalidException;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * 控制层Advice切面：Throwable异常处理
+ * 控制层Advice切面：内部BUG
  *
  * @author Deolin
  * @see ResultCode
@@ -23,7 +23,9 @@ import lombok.extern.log4j.Log4j2;
 public class InternalErrorAdvice {
 
     /**
-     * @see MethodCallValidatedAspect#logError(org.aspectj.lang.JoinPoint, javax.validation.ConstraintViolationException)
+     * 500 未通过组件的参数校验
+     *
+     * @see MethodCallValidatedAspect 抛出方
      */
     @ExceptionHandler(MethodCallInvalidException.class)
     public RequestResult handleMethodCallInvalidException() {
@@ -31,7 +33,7 @@ public class InternalErrorAdvice {
     }
 
     /**
-     * 500 内部BUG
+     * 500 无法预料的异常
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
