@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.aspect;
+package com.spldeolin.beginningmind.extension.advice;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,11 +21,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import com.spldeolin.beginningmind.aspect.dto.Invalid;
-import com.spldeolin.beginningmind.aspect.dto.RequestResult;
-import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
+import com.spldeolin.beginningmind.extension.dto.Invalid;
+import com.spldeolin.beginningmind.extension.dto.RequestResult;
+import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.aspect;
+package com.spldeolin.beginningmind.extension.aspect;
 
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -6,8 +6,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.filter.dto.MappedCallDTO;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.MappedCallDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.WebContext;
 
 /**

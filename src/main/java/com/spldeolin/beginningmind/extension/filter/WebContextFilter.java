@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.filter;
+package com.spldeolin.beginningmind.extension.filter;
 
 import java.io.IOException;
 import javax.servlet.FilterChain;
@@ -10,9 +10,9 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.spldeolin.beginningmind.filter.async.RequestTrackAsyncHandler;
-import com.spldeolin.beginningmind.filter.constant.FilterOrderConstant;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.filter.async.RequestTrackAsyncHandler;
+import com.spldeolin.beginningmind.extension.filter.constant.FilterOrderConstant;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.MdcRunnable;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;

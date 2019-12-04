@@ -1,8 +1,7 @@
-package com.spldeolin.beginningmind.aspect.dto;
+package com.spldeolin.beginningmind.extension.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.Data;
 

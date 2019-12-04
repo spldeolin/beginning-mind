@@ -1,8 +1,8 @@
-package com.spldeolin.beginningmind.aspect;
+package com.spldeolin.beginningmind.extension.advice;
 
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.spldeolin.beginningmind.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;

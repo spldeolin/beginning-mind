@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.filter.constant;
+package com.spldeolin.beginningmind.extension.filter.constant;
 
 /**
  * 过滤器包下所有过滤器的顺序，数字越小越外层

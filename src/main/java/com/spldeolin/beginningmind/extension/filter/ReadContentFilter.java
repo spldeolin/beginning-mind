@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.filter;
+package com.spldeolin.beginningmind.extension.filter;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -11,8 +11,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.filter.constant.FilterOrderConstant;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.filter.constant.FilterOrderConstant;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.Jsons;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;

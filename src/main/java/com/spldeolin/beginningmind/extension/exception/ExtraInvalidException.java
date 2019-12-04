@@ -1,7 +1,7 @@
-package com.spldeolin.beginningmind.aspect.exception;
+package com.spldeolin.beginningmind.extension.exception;
 
 import java.util.List;
-import com.spldeolin.beginningmind.aspect.dto.Invalid;
+import com.spldeolin.beginningmind.extension.dto.Invalid;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

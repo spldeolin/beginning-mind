@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.filter.dto;
+package com.spldeolin.beginningmind.extension.dto;
 
 import lombok.Data;
 

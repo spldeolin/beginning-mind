@@ -1,11 +1,11 @@
-package com.spldeolin.beginningmind.aspect;
+package com.spldeolin.beginningmind.extension.advice;
 
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.spldeolin.beginningmind.aspect.dto.RequestResult;
+import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 

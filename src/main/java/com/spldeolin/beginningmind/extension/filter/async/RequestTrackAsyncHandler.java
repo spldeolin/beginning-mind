@@ -1,10 +1,10 @@
-package com.spldeolin.beginningmind.filter.async;
+package com.spldeolin.beginningmind.extension.filter.async;
 
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.Jsons;
 import lombok.extern.log4j.Log4j2;
 

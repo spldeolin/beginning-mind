@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.aspect;
+package com.spldeolin.beginningmind.extension.aspect;
 
 import org.apache.logging.log4j.ThreadContext;
 import org.aspectj.lang.ProceedingJoinPoint;

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.aspect;
+package com.spldeolin.beginningmind.extension.aspect;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
@@ -13,9 +13,9 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.spldeolin.beginningmind.aspect.dto.Invalid;
-import com.spldeolin.beginningmind.aspect.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.Invalid;
+import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 import com.spldeolin.beginningmind.util.WebContext;
 
 /**

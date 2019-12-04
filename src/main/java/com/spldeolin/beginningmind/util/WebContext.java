@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 
 /**
  * Web请求的上下文

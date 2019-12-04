@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.util;
 
 
 import org.apache.logging.log4j.ThreadContext;
-import com.spldeolin.beginningmind.filter.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
 
 /**
  * Runnable的装饰器

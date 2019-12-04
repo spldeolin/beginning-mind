@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.aspect.dto;
+package com.spldeolin.beginningmind.extension.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
