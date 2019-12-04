@@ -40,7 +40,9 @@ public class BizTestController {
 
     @GetMapping("/aa")
     Date aa() {
-
+        BizDemoEntity entity = new BizDemoEntity();
+//        entity.setUserNumber("1");
+        bizDemoService.doSomething(entity, 6L);
         return new Date();
     }
 

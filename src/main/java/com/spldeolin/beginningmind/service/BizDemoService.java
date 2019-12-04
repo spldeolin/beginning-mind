@@ -1,6 +1,9 @@
 package com.spldeolin.beginningmind.service;
 
 import java.util.Map;
+import javax.validation.Valid;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotNull;
 import com.spldeolin.beginningmind.entity.BizDemoEntity;
 
 /**
@@ -9,5 +12,7 @@ import com.spldeolin.beginningmind.entity.BizDemoEntity;
 public interface BizDemoService {
 
     Map<Long, BizDemoEntity> all();
+
+    void doSomething(@NotNull @Valid BizDemoEntity bizDemoEntity, @Max(6) Long id);
 
 }
