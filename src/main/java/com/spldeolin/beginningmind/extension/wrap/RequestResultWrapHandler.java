@@ -43,7 +43,7 @@ public class RequestResultWrapHandler implements HandlerMethodReturnValueHandler
 
     private boolean is404(Object returnValue) {
         if (returnValue instanceof LinkedHashMap) {
-            Object status = ((LinkedHashMap) returnValue).get("status");
+            Object status = ((LinkedHashMap<?, ?>) returnValue).get("status");
             return Objects.equals(status, HttpStatus.NOT_FOUND.value());
         }
         return false;
