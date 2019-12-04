@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.mvc;
+package com.spldeolin.beginningmind.extension.wrap;
 
 import java.util.List;
 import org.springframework.beans.factory.InitializingBean;
