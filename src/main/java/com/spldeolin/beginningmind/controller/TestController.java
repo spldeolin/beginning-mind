@@ -1,9 +1,10 @@
 package com.spldeolin.beginningmind.controller;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,7 @@ import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.util.MdcRunnable;
+import com.spldeolin.beginningmind.valid.annotation.ElementsNonNull;
 import com.spldeolin.beginningmind.valid.annotation.ValidEnumValue;
 import lombok.extern.log4j.Log4j2;
 
@@ -37,10 +39,9 @@ public class TestController {
     @Autowired
     private UserMapper userMapper;
 
-    @PostMapping("/aaaa")
-    Object aaaa(@RequestBody @Size(max = 2) List<Long> aaa) {
-
-        return null;
+    @PostMapping("/elementsNonNullDemo")
+    Collection<Long> elementsNonNullDemo(@RequestBody @NotNull @ElementsNonNull List<Long> aaa) {
+        return aaa;
     }
 
     @PostMapping("/requestTrackReport")
