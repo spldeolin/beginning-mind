@@ -26,7 +26,7 @@ import lombok.extern.log4j.Log4j2;
 public class MethodCallValidatedAspect {
 
     /**
-     * Spring可扫描的，声明了@Validated但未声明RestController和Controller注解的类， 中的所有方法
+     * 声明了@Validated但未声明RestController和Controller注解的类， 中的所有方法
      */
     @Pointcut("@within(org.springframework.validation.annotation.Validated)"
             + "&& !@within(org.springframework.web.bind.annotation.RestController)"

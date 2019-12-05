@@ -24,7 +24,7 @@ import com.spldeolin.beginningmind.util.WebContext;
 public class MapperAspect {
 
     /**
-     * Spring可扫描的，BaseMapper的所有派生类
+     * BaseMapper的所有派生类
      */
     @Pointcut("this(com.baomidou.mybatisplus.core.mapper.BaseMapper)")
     public void mapper() {

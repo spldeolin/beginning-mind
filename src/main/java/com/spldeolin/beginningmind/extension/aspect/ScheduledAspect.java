@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.util.StringRandomUtils;
 public class ScheduledAspect {
 
     /**
-     * Spring可扫描的，所有类的，声明了@Scheduled的方法
+     * 所有类的，声明了@Scheduled的方法
      */
     @Pointcut("@annotation(org.springframework.scheduling.annotation.Scheduled)")
     public void scheduledMethod() {
