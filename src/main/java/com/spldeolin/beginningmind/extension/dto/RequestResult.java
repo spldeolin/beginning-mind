@@ -27,9 +27,9 @@ public class RequestResult {
     }
 
     private void setupCurrentInsignia() {
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track != null) {
-            insignia = track.getInsignia();
+        RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack != null) {
+            insignia = requestTrack.getInsignia();
         }
     }
 

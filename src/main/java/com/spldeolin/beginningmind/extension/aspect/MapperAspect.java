@@ -7,7 +7,7 @@ import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.extension.dto.MappedCallDTO;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.util.WebContext;
 
 /**
@@ -42,9 +42,9 @@ public class MapperAspect {
         String methodName = ((MethodSignature) point.getSignature()).getMethod().getName();
         MappedCallDTO dto = new MappedCallDTO(className + "." + methodName, end - start);
 
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track != null) {
-            track.getMapperCalls().add(dto);
+        RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack != null) {
+            requestTrack.getMapperCalls().add(dto);
         }
 
         return result;

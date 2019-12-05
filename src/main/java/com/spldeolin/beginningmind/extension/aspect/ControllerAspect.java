@@ -14,7 +14,7 @@ import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.spldeolin.beginningmind.extension.dto.Invalid;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.util.WebContext;
 
@@ -41,39 +41,39 @@ public class ControllerAspect {
 
     @Around("controllerMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track == null) {
+        RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
 
         // 填入切点信息
-        fillJoinPointInfo(track, point);
+        fillJoinPointInfo(requestTrack, point);
 
         // 注解额外校验
-        List<Invalid> invalids = handleAnnotations(track);
+        List<Invalid> invalids = handleAnnotations(requestTrack);
         if (invalids.size() > 0) {
             throw new ExtraInvalidException(invalids);
         }
 
         // 执行切点
-        return point.proceed(track.getParameterValues());
+        return point.proceed(requestTrack.getParameterValues());
     }
 
-    private void fillJoinPointInfo(RequestTrackDTO track, JoinPoint joinPoint) {
+    private void fillJoinPointInfo(RequestTrack requestTrack, JoinPoint joinPoint) {
         Method requestMethod = ((MethodSignature) joinPoint.getSignature()).getMethod();
         String[] parameterNames = new LocalVariableTableParameterNameDiscoverer().getParameterNames(requestMethod);
         Object[] parameterValues = joinPoint.getArgs();
-        track.setFullName(joinPoint.getTarget().getClass().getName() + "#" + requestMethod.getName());
-        track.setMethod(requestMethod);
-        track.setParameterNames(parameterNames);
-        track.setParameterValues(parameterValues);
+        requestTrack.setFullName(joinPoint.getTarget().getClass().getName() + "#" + requestMethod.getName());
+        requestTrack.setMethod(requestMethod);
+        requestTrack.setParameterNames(parameterNames);
+        requestTrack.setParameterValues(parameterValues);
     }
 
-    private List<Invalid> handleAnnotations(RequestTrackDTO track) {
+    private List<Invalid> handleAnnotations(RequestTrack requestTrack) {
         List<Invalid> invalids = new ArrayList<>();
-        Annotation[][] annotationsEachParams = track.getMethod().getParameterAnnotations();
-        String[] parameterNames = track.getParameterNames();
-        Object[] parameterValues = track.getParameterValues();
+        Annotation[][] annotationsEachParams = requestTrack.getMethod().getParameterAnnotations();
+        String[] parameterNames = requestTrack.getParameterNames();
+        Object[] parameterValues = requestTrack.getParameterValues();
         for (int i = 0; i < annotationsEachParams.length; i++) {
             Annotation[] annotations = annotationsEachParams[i];
             String parameterName = parameterNames[i];

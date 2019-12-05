@@ -4,7 +4,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -14,27 +14,27 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestTrackAsyncHandler {
 
-    public void asyncCompleteAndSave(RequestTrackDTO track, HttpServletRequest request) {
-        analysizRequestTrack(track, request);
-        saveTrackToEs(track);
+    public void asyncCompleteAndSave(RequestTrack requestTrack, HttpServletRequest request) {
+        analysizRequestTrack(requestTrack, request);
+        saveTrackToEs(requestTrack);
     }
 
-    private void saveTrackToEs(RequestTrackDTO trackDTO) {
-        log.info(trackDTO);
+    private void saveTrackToEs(RequestTrack requestTrack) {
+        log.info(requestTrack);
     }
 
-    private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {
-        track.setHttpMethod(request.getMethod());
+    private void analysizRequestTrack(RequestTrack requestTrack, HttpServletRequest request) {
+        requestTrack.setHttpMethod(request.getMethod());
 
-        track.setUrl(getFullUrlFromRequest(request));
+        requestTrack.setUrl(getFullUrlFromRequest(request));
 
-        track.setUserAgent(request.getHeader("User-Agent"));
+        requestTrack.setUserAgent(request.getHeader("User-Agent"));
 
-        track.setReferer(request.getHeader("Referer"));
+        requestTrack.setReferer(request.getHeader("Referer"));
 
-        track.setElapsed(track.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
+        requestTrack.setElapsed(requestTrack.getStopwatch().elapsed(TimeUnit.MILLISECONDS));
 
-        track.setIp(getIpFromRequest(request));
+        requestTrack.setIp(getIpFromRequest(request));
     }
 
     private String getFullUrlFromRequest(HttpServletRequest request) {

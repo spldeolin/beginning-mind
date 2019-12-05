@@ -10,7 +10,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.util.WebContext;
 
@@ -91,7 +91,7 @@ public class MybatisPlusConfig {
             this.setFieldValByName("updatedInsignia", insignia, metaObject);
         }
 
-        private String nullToEmpty(RequestTrackDTO dto) {
+        private String nullToEmpty(RequestTrack dto) {
             if (dto == null) {
                 return "";
             }

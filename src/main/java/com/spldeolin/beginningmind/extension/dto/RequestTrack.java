@@ -16,7 +16,7 @@ import lombok.Data;
  * @author Deolin 2018/11/15
  */
 @Data
-public class RequestTrackDTO {
+public class RequestTrack {
 
     /**
      * 请求标识
@@ -111,7 +111,7 @@ public class RequestTrackDTO {
     @Transient
     private transient Stopwatch stopwatch;
 
-    public RequestTrackDTO() {
+    public RequestTrack() {
         insignia = StringRandomUtils.generateLegibleEnNum(6);
         requestedAt = LocalDateTime.now();
         stopwatch = Stopwatch.createStarted();

@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.util;
 
 
 import org.apache.logging.log4j.ThreadContext;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 
 /**
  * Runnable的装饰器
@@ -27,11 +27,11 @@ public class MdcRunnable implements Runnable {
     public MdcRunnable(Runnable task) {
         this.task = task;
 
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track == null) {
+        RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
-        insignia = track.getInsignia();
+        insignia = requestTrack.getInsignia();
     }
 
     @Override

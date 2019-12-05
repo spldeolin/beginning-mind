@@ -26,7 +26,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.Invalid;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
@@ -108,8 +108,8 @@ public class RequestExceptionAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track == null) {
+        RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
 

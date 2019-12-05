@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.extension.filter.constant.FilterOrderConstant;
 import com.spldeolin.beginningmind.util.Jsons;
 import com.spldeolin.beginningmind.util.WebContext;
@@ -34,8 +34,8 @@ public class ReadContentFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        RequestTrackDTO track = WebContext.getRequestTrack();
-        if (track == null) {
+        RequestTrack requestTrack = WebContext.getRequestTrack();
+        if (requestTrack == null) {
             throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
         }
 
@@ -46,10 +46,10 @@ public class ReadContentFilter extends OncePerRequestFilter {
         filterChain.doFilter(wrappedRequest, wrappedResponse);
 
         // 向RequestTrack填入request和response的content（同步）
-        fillContent(track, wrappedRequest, wrappedResponse);
+        fillContent(requestTrack, wrappedRequest, wrappedResponse);
     }
 
-    private void fillContent(RequestTrackDTO track, ContentCachingRequestWrapper wrappedRequest,
+    private void fillContent(RequestTrack requestTrack, ContentCachingRequestWrapper wrappedRequest,
             ContentCachingResponseWrapper wrappedResponse) {
         String requestContent = "";
         String responseContent = "";
@@ -65,8 +65,8 @@ public class ReadContentFilter extends OncePerRequestFilter {
         } catch (IOException e) {
             log.error("读取responseContent失败", e);
         }
-        track.setRequestContent(Jsons.compress(requestContent));
-        track.setResponseContent(Jsons.compress(responseContent));
+        requestTrack.setRequestContent(Jsons.compress(requestContent));
+        requestTrack.setResponseContent(Jsons.compress(responseContent));
     }
 
 }

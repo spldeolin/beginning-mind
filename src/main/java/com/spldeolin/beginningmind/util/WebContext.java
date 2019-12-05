@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.util;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 
 /**
  * Web请求的上下文
@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
  */
 public class WebContext {
 
-    private static final ThreadLocal<RequestTrackDTO> REQUEST_TRACK = new ThreadLocal<>();
+    private static final ThreadLocal<RequestTrack> REQUEST_TRACK = new ThreadLocal<>();
 
     private static final ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<>();
 
@@ -24,11 +24,11 @@ public class WebContext {
 
     private static final ThreadLocal<HttpSession> SESSION = new ThreadLocal<>();
 
-    public static void setRequestTrack(RequestTrackDTO track) {
-        REQUEST_TRACK.set(track);
+    public static void setRequestTrack(RequestTrack requestTrack) {
+        REQUEST_TRACK.set(requestTrack);
     }
 
-    public static RequestTrackDTO getRequestTrack() {
+    public static RequestTrack getRequestTrack() {
         return REQUEST_TRACK.get();
     }
 
