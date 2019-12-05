@@ -21,7 +21,7 @@ public class RequestTrackAsyncHandler {
     }
 
     private void saveTrackToEs(RequestTrackDTO trackDTO) {
-        log.info(Jsons.beautify(trackDTO));
+        log.info(trackDTO);
     }
 
     private void analysizRequestTrack(RequestTrackDTO track, HttpServletRequest request) {

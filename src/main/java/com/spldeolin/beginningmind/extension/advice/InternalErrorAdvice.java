@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.extension.advice;
 
-import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.spldeolin.beginningmind.constant.ResultCode;
@@ -18,7 +17,6 @@ import lombok.extern.log4j.Log4j2;
  * @see ResultCode
  */
 @RestControllerAdvice
-@Order
 @Log4j2
 public class InternalErrorAdvice {
 

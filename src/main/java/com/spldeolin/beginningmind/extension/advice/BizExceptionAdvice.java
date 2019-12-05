@@ -1,10 +1,12 @@
 package com.spldeolin.beginningmind.extension.advice;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.common.BizException;
 import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -14,6 +16,7 @@ import lombok.extern.log4j.Log4j2;
  * @see ResultCode
  */
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Log4j2
 public class BizExceptionAdvice {
 

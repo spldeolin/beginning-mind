@@ -8,6 +8,8 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import org.hibernate.validator.internal.engine.path.NodeImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindException;
@@ -21,11 +23,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.Invalid;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
-import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.RequestTrackDTO;
+import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -36,6 +38,7 @@ import lombok.extern.log4j.Log4j2;
  * @see ResultCode
  */
 @RestControllerAdvice
+@Order(Ordered.HIGHEST_PRECEDENCE)
 @Log4j2
 public class RequestExceptionAdvice {
 
