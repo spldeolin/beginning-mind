@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executors;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
@@ -23,7 +24,6 @@ import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
 import com.spldeolin.beginningmind.util.MdcRunnable;
-import com.spldeolin.beginningmind.valid.annotation.ElementsNonNull;
 import com.spldeolin.beginningmind.valid.annotation.ValidEnumValue;
 import lombok.extern.log4j.Log4j2;
 
@@ -40,7 +40,7 @@ public class TestController {
     private UserMapper userMapper;
 
     @PostMapping("/elementsNonNullDemo")
-    Collection<Long> elementsNonNullDemo(@RequestBody @NotNull @ElementsNonNull List<Long> aaa) {
+    Collection<Long> elementsNonNullDemo(@RequestBody @NotNull List<@NotNull @Max(11L) Long> aaa) {
         return aaa;
     }
 
