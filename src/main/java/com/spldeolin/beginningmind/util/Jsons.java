@@ -22,7 +22,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.spldeolin.beginningmind.common.BizException;
+import com.spldeolin.beginningmind.exception.BizException;
 import lombok.extern.log4j.Log4j2;
 
 /**

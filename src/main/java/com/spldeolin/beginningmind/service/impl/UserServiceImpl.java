@@ -4,7 +4,7 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.common.BizException;
+import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.mapper.PermissionMapper;

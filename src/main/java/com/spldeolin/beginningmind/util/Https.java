@@ -10,7 +10,7 @@ import org.apache.commons.lang3.RandomUtils;
 import org.springframework.http.HttpStatus;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.common.BizException;
+import com.spldeolin.beginningmind.exception.BizException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.FormBody;
 import okhttp3.MediaType;

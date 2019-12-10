@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.common.base.MoreObjects;
-import com.spldeolin.beginningmind.common.BizException;
+import com.spldeolin.beginningmind.exception.BizException;
 import lombok.Data;
 
 /**

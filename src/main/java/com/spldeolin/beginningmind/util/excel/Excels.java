@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
-import com.spldeolin.beginningmind.common.BizException;
+import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.util.excel.annotation.ExcelSheet;
 import com.spldeolin.beginningmind.util.excel.converter.CellConverter;

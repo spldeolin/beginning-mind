@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.entity;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.google.common.base.Objects;
-import com.spldeolin.beginningmind.common.CommonEntity;
 import lombok.Data;
 
 /**

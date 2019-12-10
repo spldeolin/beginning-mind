@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.common;
+package com.spldeolin.beginningmind.entity;
 
 import java.time.LocalDateTime;
 import com.baomidou.mybatisplus.annotation.FieldFill;

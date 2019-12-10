@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.common;
+package com.spldeolin.beginningmind.exception;
 
 /**
  * @author Deolin
