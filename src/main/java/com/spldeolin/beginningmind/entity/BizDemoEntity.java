@@ -22,14 +22,12 @@ public class BizDemoEntity extends CommonEntity {
      * 工号
      */
     @TableField("user_number")
-    @NotNull
     private String userNumber;
 
     /**
      * 名字
      */
     @TableField("name")
-    @Size(max = 6)
     private String name;
 
     /**
