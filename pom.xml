@@ -167,7 +167,7 @@
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
-            <version>6.0.1</version>
+            <version>6.0.3</version>
         </dependency>
         <!-- pinyin4j -->
         <dependency>
@@ -179,7 +179,7 @@
         <dependency>
             <groupId>net.coobird</groupId>
             <artifactId>thumbnailator</artifactId>
-            <version>0.4.8</version>
+            <version>0.4.9</version>
         </dependency>
         <!-- kaptcha -->
         <dependency>
