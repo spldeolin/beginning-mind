@@ -112,7 +112,7 @@ public class RequestTrack {
     private transient Stopwatch stopwatch;
 
     public RequestTrack() {
-        insignia = StringRandomUtils.generateLegibleEnNum(6);
+        insignia = StringRandomUtils.generateEasyReadAndSpeakChar(6);
         requestedAt = LocalDateTime.now();
         stopwatch = Stopwatch.createStarted();
         mapperCalls = Lists.newLinkedList();

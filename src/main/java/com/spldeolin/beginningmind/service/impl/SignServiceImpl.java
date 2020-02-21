@@ -54,7 +54,7 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public CaptchaVO captcha() {
-        String captcha = StringRandomUtils.generateLegibleEnNum(4);
+        String captcha = StringRandomUtils.generateEasyReadAndSpeakChar(4);
 
         // cache
         String token = UUID.randomUUID().toString();

@@ -24,7 +24,7 @@ public class ScheduledAspect {
 
     @Around("scheduledMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        ThreadContext.put("insignia", "[" + StringRandomUtils.generateLegibleEnNum(6) + "]");
+        ThreadContext.put("insignia", "[" + StringRandomUtils.generateEasyReadAndSpeakChar(6) + "]");
 
         Object result = point.proceed(point.getArgs());
 
