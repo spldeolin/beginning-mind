@@ -1,16 +1,16 @@
 package com.spldeolin.beginningmind.util.excel;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.web.multipart.MultipartFile;
-import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.util.excel.annotation.ExcelColumn;
 import com.spldeolin.beginningmind.util.excel.annotation.ExcelSheet;
 import com.spldeolin.beginningmind.util.excel.converter.CellConverter;
-import com.spldeolin.beginningmind.util.excel.entity.Invalid;
-import com.spldeolin.beginningmind.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.util.excel.exception.ExcelCellContentInvalidException;
+import com.spldeolin.beginningmind.util.excel.exception.ExcelReadException;
+import com.spldeolin.beginningmind.util.excel.exception.ExcelWriteException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -37,54 +37,40 @@ public class Excels {
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) {
+    public static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz) throws ExcelReadException {
         try {
             return ExcelReader.readExcel(multipartFile, clazz);
         } catch (ExcelCellContentInvalidException e) {
-            throw new BizException(report(e));
-        } catch (ExcelAnalyzeException e) {
-            throw new BizException(e.getCause());
+            throw new ExcelReadException(e);
+        } catch (IOException e) {
+            throw new ExcelReadException(e);
         }
     }
 
     /**
      * 读取Excel
      */
-    public static <T> List<T> readExcel(File file, Class<T> clazz) {
+    public static <T> List<T> readExcel(File file, Class<T> clazz) throws ExcelReadException {
         try {
             return ExcelReader.readExcel(file, clazz);
         } catch (ExcelCellContentInvalidException e) {
-            throw new BizException(report(e));
-        } catch (ExcelAnalyzeException e) {
-            throw new BizException(e.getCause());
+            throw new ExcelReadException(e);
         }
     }
 
     /**
      * 生成Excel
      */
-    public static <T> void writeExcel(File file, Class<T> clazz, List<T> data) {
+    public static <T> void writeExcel(File file, Class<T> clazz, List<T> data) throws ExcelWriteException {
         ExcelWriter.writeExcel(file, clazz, data);
     }
 
     /**
      * 生成Excel
      */
-    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> data) {
+    public static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> data)
+            throws ExcelWriteException {
         ExcelWriter.writeExcel(response, fileBaseName, clazz, data);
-    }
-
-    private static String report(ExcelCellContentInvalidException e) {
-        StringBuilder sb = new StringBuilder(64);
-        for (Invalid invalid : e.getParseInvalids()) {
-            sb.append("单元格[");
-            sb.append(invalid.getColumnLetter());
-            sb.append(invalid.getRowNumber());
-            sb.append("]解析失败，原因：");
-            sb.append(invalid.getCause());
-            sb.append("。");
-        }
-        return sb.toString();
     }
 
 }

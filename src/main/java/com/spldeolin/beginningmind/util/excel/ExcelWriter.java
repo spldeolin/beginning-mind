@@ -32,7 +32,7 @@ public class ExcelWriter {
     /**
      * 生成Excel
      */
-    static <T> void writeExcel(File file, Class<T> clazz, List<T> list) {
+    static <T> void writeExcel(File file, Class<T> clazz, List<T> list) throws ExcelWriteException {
         ensureFileExist(file);
         try (OutputStream os = new FileOutputStream(file)) {
             writeExcel(os, clazz, list);
@@ -41,7 +41,8 @@ public class ExcelWriter {
         }
     }
 
-    static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list) {
+    static <T> void writeExcel(HttpServletResponse response, String fileBaseName, Class<T> clazz, List<T> list)
+            throws ExcelWriteException {
         try {
             response.setContentType("application/vnd.ms-excel");
             response.setHeader("Content-Disposition",
@@ -49,7 +50,7 @@ public class ExcelWriter {
             response.setCharacterEncoding(utf8);
             ExcelWriter.writeExcel(response.getOutputStream(), clazz, list);
         } catch (IOException e) {
-            throw new RuntimeException("文件读写失败");
+            throw new ExcelWriteException("文件读写失败");
         }
     }
 

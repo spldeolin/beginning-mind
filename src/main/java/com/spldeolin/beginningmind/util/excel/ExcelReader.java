@@ -26,8 +26,8 @@ import com.spldeolin.beginningmind.util.excel.entity.Invalid;
 import com.spldeolin.beginningmind.util.excel.entity.SheetDefinition;
 import com.spldeolin.beginningmind.util.excel.exception.CellConverterReadException;
 import com.spldeolin.beginningmind.util.excel.exception.DefaultCellConverterAbsentException;
-import com.spldeolin.beginningmind.util.excel.exception.ExcelAnalyzeException;
 import com.spldeolin.beginningmind.util.excel.exception.ExcelCellContentInvalidException;
+import com.spldeolin.beginningmind.util.excel.exception.ExcelReadException;
 
 /**
  * @author Deolin 2019-08-23
@@ -38,13 +38,11 @@ public class ExcelReader {
      * 读取Excel
      */
     static <T> List<T> readExcel(MultipartFile multipartFile, Class<T> clazz)
-            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
+            throws ExcelCellContentInvalidException, IOException, ExcelReadException {
         try {
             ExcelDefinitionContext.newSheetDefinition();
             ExcelAnalyzer.analyzeMultipartFile(multipartFile);
             return readExcel(clazz);
-        } catch (IOException e) {
-            throw new RuntimeException("文件读写失败");
         } finally {
             close();
             ExcelDefinitionContext.clearAll();
@@ -55,14 +53,13 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    static <T> List<T> readExcel(File file, Class<T> clazz)
-            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
+    static <T> List<T> readExcel(File file, Class<T> clazz) throws ExcelCellContentInvalidException, ExcelReadException {
         try {
             ExcelDefinitionContext.newSheetDefinition();
             ExcelAnalyzer.analyzeFileForRead(file);
             return readExcel(clazz);
         } catch (IOException e) {
-            throw new RuntimeException("文件读写失败");
+            throw new ExcelReadException("文件读写失败");
         } finally {
             close();
             ExcelDefinitionContext.clearAll();
@@ -72,8 +69,7 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    private static <T> List<T> readExcel(Class<T> clazz)
-            throws ExcelCellContentInvalidException, ExcelAnalyzeException {
+    private static <T> List<T> readExcel(Class<T> clazz) throws ExcelCellContentInvalidException, ExcelReadException {
         try {
             ExcelAnalyzer.analyzeModel(clazz);
             Workbook workbook = openWorkbook();
@@ -135,7 +131,7 @@ public class ExcelReader {
         return result;
     }
 
-    private static Workbook openWorkbook() throws IOException, ExcelAnalyzeException {
+    private static Workbook openWorkbook() throws IOException, ExcelReadException {
         SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         Workbook workBook;
         String fileExtension = sheetDefinition.getFileExtension();
@@ -145,24 +141,24 @@ public class ExcelReader {
         } else if ("xls".equals(fileExtension)) {
             workBook = new HSSFWorkbook(inputStream);
         } else {
-            throw new ExcelAnalyzeException("文件拓展名非法");
+            throw new ExcelReadException("文件拓展名非法");
         }
         return workBook;
     }
 
-    private static Sheet openSheet(Workbook workbook) throws ExcelAnalyzeException {
+    private static Sheet openSheet(Workbook workbook) throws ExcelReadException {
         SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         if (workbook.getNumberOfSheets() == 0) {
-            throw new ExcelAnalyzeException("工作簿中不存在工作表");
+            throw new ExcelReadException("工作簿中不存在工作表");
         }
         Sheet sheet = workbook.getSheet(sheetDefinition.getSheetName());
         if (sheet == null) {
-            throw new ExcelAnalyzeException("工作表 [" + sheetDefinition.getSheetName() + "]不存在");
+            throw new ExcelReadException("工作表 [" + sheetDefinition.getSheetName() + "]不存在");
         }
         return sheet;
     }
 
-    private static List<Row> listValidRows(Sheet sheet) throws ExcelAnalyzeException {
+    private static List<Row> listValidRows(Sheet sheet) throws ExcelReadException {
         SheetDefinition sheetDefinition = ExcelDefinitionContext.getSheetDefinition();
         List<Row> rows = Lists.newArrayList();
         int startRowNum = sheet.getFirstRowNum();
@@ -179,7 +175,7 @@ public class ExcelReader {
             }
         }
         if (rows.size() == 0) {
-            throw new ExcelAnalyzeException("工作表中没有内容");
+            throw new ExcelReadException("工作表中没有内容");
         }
         return rows;
     }

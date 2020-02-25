@@ -4,22 +4,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 生产Excel时发生异常
+ * 读取Excel时发生异常
  *
- * @author Deolin
+ * @author Deolin 2020-02-24
  */
 @Data
-@EqualsAndHashCode(callSuper = false)
-public class ExcelWriteException extends RuntimeException {
+@EqualsAndHashCode(callSuper = true)
+public class ExcelWriteException extends Exception {
 
-    private static final long serialVersionUID = -2942232239107229341L;
-
-    public ExcelWriteException() {
-        super();
+    public ExcelWriteException(Exception e) {
+        super(e);
     }
 
-    public ExcelWriteException(Throwable t) {
-        super(t);
+    public ExcelWriteException(String message) {
+        super(message);
     }
+
+    private static final long serialVersionUID = 3812539018260837051L;
 
 }
