@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.util.excel.Excels;
+import com.spldeolin.beginningmind.util.excel.exception.ExcelWriteException;
 
 /**
  * @author Deolin 2019-08-25
@@ -18,7 +19,7 @@ import com.spldeolin.beginningmind.util.excel.Excels;
 public class DownloadController {
 
     @GetMapping("/aa")
-    void aa(HttpServletResponse response) {
+    void aa(HttpServletResponse response) throws ExcelWriteException {
         List<DemoDTO> dtos = Lists.newArrayList(DemoDTO.builder().id(1L).build());
 
         Excels.writeExcel(response, "测试", DemoDTO.class, dtos);
