@@ -9,6 +9,10 @@ package com.spldeolin.beginningmind.util;
  */
 public class Sessions {
 
+    private Sessions() {
+        throw new UnsupportedOperationException("Never instantiate me.");
+    }
+
     /**
      * 将k-v存入Session，只要Session不失效，该k-v就不会失效
      */

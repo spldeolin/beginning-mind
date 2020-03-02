@@ -1,8 +1,6 @@
 package com.spldeolin.beginningmind.entity;
 
 import java.time.LocalDate;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

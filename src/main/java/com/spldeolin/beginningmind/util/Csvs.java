@@ -27,16 +27,18 @@ public class Csvs {
 
     private static final String utf8 = StandardCharsets.UTF_8.name();
 
-    public static final CsvMapper defaultCsvMapper;
+    public static final CsvMapper defaultCsvMapper = new CsvMapper();
 
     static {
-        defaultCsvMapper = new CsvMapper();
-
         // 模组（jsr310）
         defaultCsvMapper.registerModule(Jsons.timeModule());
 
         // csv -> object时，忽略json中不认识的属性名
         defaultCsvMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+    }
+
+    private Csvs() {
+        throw new UnsupportedOperationException("Never instantiate me.");
     }
 
     /**

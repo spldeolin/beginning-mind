@@ -37,10 +37,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Jsons {
 
-    private static final ObjectMapper defaultObjectMapper;
+    private static final ObjectMapper defaultObjectMapper = newDefaultObjectMapper();
 
-    static {
-        defaultObjectMapper = newDefaultObjectMapper();
+    private Jsons() {
+        throw new UnsupportedOperationException("Never instantiate me.");
     }
 
     public static ObjectMapper newDefaultObjectMapper() {

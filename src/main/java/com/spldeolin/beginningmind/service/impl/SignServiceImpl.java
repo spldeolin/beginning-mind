@@ -15,17 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import com.google.code.kaptcha.Producer;
-import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
+import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.security.util.SignContext;
 import com.spldeolin.beginningmind.service.PermissionService;
 import com.spldeolin.beginningmind.service.SignService;
+import com.spldeolin.beginningmind.util.RandomStrings;
 import com.spldeolin.beginningmind.util.Sessions;
-import com.spldeolin.beginningmind.util.StringRandomUtils;
 import com.spldeolin.beginningmind.util.WebContext;
 import com.spldeolin.beginningmind.vo.CaptchaVO;
 import com.spldeolin.beginningmind.vo.SignerProfileVO;
@@ -54,7 +54,7 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public CaptchaVO captcha() {
-        String captcha = StringRandomUtils.generateEasyReadAndSpeakChar(4);
+        String captcha = RandomStrings.generateEasyReadAndSpeakChar(4);
 
         // cache
         String token = UUID.randomUUID().toString();

@@ -34,6 +34,10 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Excels {
 
+    private Excels() {
+        throw new UnsupportedOperationException("Never instantiate me.");
+    }
+
     /**
      * 读取Excel
      */

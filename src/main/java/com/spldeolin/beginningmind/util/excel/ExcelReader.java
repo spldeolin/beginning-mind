@@ -53,7 +53,8 @@ public class ExcelReader {
     /**
      * 读取Excel
      */
-    static <T> List<T> readExcel(File file, Class<T> clazz) throws ExcelCellContentInvalidException, ExcelReadException {
+    static <T> List<T> readExcel(File file, Class<T> clazz)
+            throws ExcelCellContentInvalidException, ExcelReadException {
         try {
             ExcelDefinitionContext.newSheetDefinition();
             ExcelAnalyzer.analyzeFileForRead(file);

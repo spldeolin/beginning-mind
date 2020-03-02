@@ -4,14 +4,14 @@ import java.util.List;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.constant.CoupledConstant;
 import com.spldeolin.beginningmind.entity.UserEntity;
+import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.mapper.PermissionMapper;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.service.UserService;
-import com.spldeolin.beginningmind.util.StringRandomUtils;
+import com.spldeolin.beginningmind.util.RandomStrings;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         checkOccupationForCreating(user);
 
         // 盐、密码
-        String salt = StringRandomUtils.generateVisibleAscii(32);
+        String salt = RandomStrings.generateVisibleAscii(32);
         user.setSalt(salt);
         String password = DigestUtils.sha512Hex(CoupledConstant.DEFAULT_PASSWORD_EX + salt);
         user.setPassword(password);

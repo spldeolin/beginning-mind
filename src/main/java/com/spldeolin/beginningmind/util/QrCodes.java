@@ -28,7 +28,7 @@ import sun.misc.BASE64Encoder;
  * @author Deolin 2018/12/29
  */
 @Log4j2
-public class QRCodes {
+public class QrCodes {
 
     /**
      * 二维码的默认宽度
@@ -66,6 +66,10 @@ public class QRCodes {
         HINTS.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.H);
         // 二维码与图片边距
         HINTS.put(EncodeHintType.MARGIN, 2);
+    }
+
+    private QrCodes() {
+        throw new UnsupportedOperationException("Never instantiate me.");
     }
 
     /**

@@ -51,6 +51,10 @@ public class Times {
 
     public static final DateTimeFormatter DEFAULT_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
 
+    private Times() {
+        throw new UnsupportedOperationException("Never instantiate me.");
+    }
+
     /**
      * java.util.Date -> LocalDateTime
      */

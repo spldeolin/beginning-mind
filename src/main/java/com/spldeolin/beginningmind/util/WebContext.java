@@ -24,6 +24,10 @@ public class WebContext {
 
     private static final ThreadLocal<HttpSession> SESSION = new ThreadLocal<>();
 
+    private WebContext() {
+        throw new UnsupportedOperationException("Never instantiate me.");
+    }
+
     public static void setRequestTrack(RequestTrack requestTrack) {
         REQUEST_TRACK.set(requestTrack);
     }

@@ -3,13 +3,10 @@ package com.spldeolin.beginningmind.util;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.List;
 import java.util.Map;
 import javax.imageio.ImageIO;
-import org.apache.commons.lang3.RandomUtils;
 import org.springframework.http.HttpStatus;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.exception.BizException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.FormBody;
@@ -34,34 +31,10 @@ import okhttp3.ResponseBody;
 @Log4j2
 public class Https {
 
-    private static final String[] FAKE_USER_AGENTS;
+    private static final OkHttpClient client = new OkHttpClient();
 
-    private static OkHttpClient client = new OkHttpClient();
-
-    static {
-        Request request = new Request.Builder().url("https://fake-useragent.herokuapp.com/browsers/0.1.11").build();
-        List<String> fake;
-        try {
-            Response response = doRequest(request);
-            String responseBody = ensureJsonAndGetBody(response);
-
-            Map<String, Map<String, List<String>>> responseBodyMap = Jsons.toObject(responseBody, Map.class);
-            Map<String, List<String>> browserMap = responseBodyMap.get("browsers");
-
-            fake = browserMap.get("chrome");
-            fake.addAll(browserMap.get("opera"));
-            fake.addAll(browserMap.get("firefox"));
-            fake.addAll(browserMap.get("internetexplorer"));
-            fake.addAll(browserMap.get("safari"));
-
-            log.info("获取到 {}个fake User-Agent", fake.size());
-        } catch (Exception e) {
-            log.warn("获取fake User-Agent失败，使用默认fake User-Agent");
-            fake = Lists.newArrayList("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14_4) AppleWebKit/537.36 (KHTML, like"
-                    + " Gecko) Chrome/73.0.3683.86 Safari/537.36");
-        }
-
-        FAKE_USER_AGENTS = fake.toArray(new String[0]);
+    private Https() {
+        throw new UnsupportedOperationException("Never instantiate me.");
     }
 
     /**
@@ -167,8 +140,7 @@ public class Https {
         }
 
         try {
-            Request request = new Request.Builder().url(url).post(form.build())
-                    .header("UserEntity-Agent", fakeUserAgent()).build();
+            Request request = new Request.Builder().url(url).post(form.build()).build();
             Response response = doRequest(request);
 
             return ensureJsonAndGetBody(response);
@@ -182,7 +154,7 @@ public class Https {
      * 为GET请求，构造request对象
      */
     private static Request buildGetRequest(String url) {
-        return new Request.Builder().url(url).header("UserEntity-Agent", fakeUserAgent()).build();
+        return new Request.Builder().url(url).build();
     }
 
     /**
@@ -190,7 +162,7 @@ public class Https {
      */
     private static Request buildJsonPostRequest(String url, String json) {
         okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
-        return new Request.Builder().url(url).post(body).header("UserEntity-Agent", fakeUserAgent()).build();
+        return new Request.Builder().url(url).post(body).build();
     }
 
     /**
@@ -225,10 +197,6 @@ public class Https {
             }
         }
         return response;
-    }
-
-    private static String fakeUserAgent() {
-        return FAKE_USER_AGENTS[RandomUtils.nextInt(0, FAKE_USER_AGENTS.length)];
     }
 
 }
