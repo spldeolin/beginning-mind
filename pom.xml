@@ -70,7 +70,7 @@
         <dependency>
             <groupId>org.springframework.session</groupId>
             <artifactId>spring-session-data-redis</artifactId>
-            <version>2.2.0.RELEASE</version>
+            <version>2.2.1.RELEASE</version>
         </dependency>
         <!-- jackson datatype (guava, yaml, csv) -->
         <dependency>
