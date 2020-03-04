@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.exception.BizException;
+import com.spldeolin.beginningmind.util.exception.CsvException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -44,15 +44,15 @@ public class Csvs {
     /**
      * 读取csv
      */
-    public static <T> List<T> readCsv(String csvContent, Class<T> clazz) {
+    public static <T> List<T> readCsv(String csvContent, Class<T> clazz) throws CsvException {
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
         ObjectReader reader = defaultCsvMapper.readerFor(clazz).with(schema);
 
         try {
             return Lists.newArrayList(reader.readValues(csvContent));
         } catch (IOException e) {
-            log.error("转化List失败", e);
-            throw new BizException("转化List失败");
+            log.error("csvContent={}, clazz={}", csvContent, clazz, e);
+            throw new CsvException();
         }
     }
 
@@ -66,8 +66,8 @@ public class Csvs {
         try {
             return writer.writeValueAsString(data);
         } catch (JsonProcessingException e) {
-            log.error("转化CSV失败", e);
-            throw new BizException("转化CSV失败");
+            log.error("data={}, clazz={}", data, clazz, e);
+            throw new CsvException();
         }
     }
 
@@ -88,7 +88,8 @@ public class Csvs {
             os.write(csvContent.getBytes(utf8));
             os.flush();
         } catch (IOException e) {
-            throw new BizException("下载失败");
+            log.error("data={}, clazz={}, fileBaseName={}", data, clazz, fileBaseName, e);
+            throw new CsvException();
         }
     }
 
