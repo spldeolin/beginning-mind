@@ -65,8 +65,8 @@ public class ReadContentFilter extends OncePerRequestFilter {
         } catch (IOException e) {
             log.error("读取responseContent失败", e);
         }
-        requestTrack.setRequestContent(Jsons.compress(requestContent));
-        requestTrack.setResponseContent(Jsons.compress(responseContent));
+        requestTrack.setRequestContent(requestContent);
+        requestTrack.setResponseContent(responseContent);
     }
 
 }

@@ -4,8 +4,8 @@ package com.spldeolin.beginningmind.util.exception;
  * 工具类Jsons遇到预想以外的情况或是内部异常时，
  * 会抛出这个异常，以交给调用方决定如何处理
  *
- * @see com.spldeolin.beginningmind.util.Jsons
  * @author Deolin 2020-03-05
+ * @see com.spldeolin.beginningmind.util.Jsons
  */
 public class JsonsException extends RuntimeException {
 
