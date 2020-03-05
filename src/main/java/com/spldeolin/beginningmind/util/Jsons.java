@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -36,15 +37,13 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Jsons {
 
-    private static final ObjectMapper om = newDefaultObjectMapper();
+    private static final ObjectMapper om = initObjectMapper(new ObjectMapper());
 
     private Jsons() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
-    public static ObjectMapper newDefaultObjectMapper() {
-        ObjectMapper om = new ObjectMapper();
-
+    public static ObjectMapper initObjectMapper(ObjectMapper om) {
         // 模组（guava collection、jsr310、Long转String）
         om.registerModule(new GuavaModule());
         om.registerModule(longToStringModule());
@@ -150,7 +149,8 @@ public class Jsons {
      */
     public static <T> List<T> toListOfObjects(String json, Class<T> clazz, ObjectMapper om) {
         // ObjectMapper.TypeFactory没有线程隔离，所以需要new一个默认ObjectMapper
-        JavaType javaType = newDefaultObjectMapper().getTypeFactory().constructParametricType(List.class, clazz);
+        TypeFactory typeFactory = initObjectMapper(new ObjectMapper()).getTypeFactory();
+        JavaType javaType = typeFactory.constructParametricType(List.class, clazz);
         try {
             return om.readValue(json, javaType);
         } catch (IOException e) {
