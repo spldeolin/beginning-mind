@@ -20,7 +20,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.spldeolin.beginningmind.exception.BizException;
+import com.spldeolin.beginningmind.util.exception.QrCodesException;
 import lombok.extern.log4j.Log4j2;
 import sun.misc.BASE64Encoder;
 
@@ -84,8 +84,8 @@ public class QrCodes {
                     .encode(content, BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, HINTS);
             return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
-            log.error("二维码生成失败", e);
-            throw new BizException("二维码生成失败");
+            log.error("content={}", content, e);
+            throw new QrCodesException();
         }
     }
 
@@ -101,8 +101,8 @@ public class QrCodes {
                     .encode(content, BarcodeFormat.QR_CODE, QRCODE_WIDTH, QRCODE_HEIGHT, HINTS);
             MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, stream);
         } catch (WriterException | IOException e) {
-            log.error("二维码生成失败", e);
-            throw new BizException("二维码生成失败");
+            log.error("content={}", content, e);
+            throw new QrCodesException();
         }
     }
 
@@ -135,8 +135,8 @@ public class QrCodes {
             BASE64Encoder encoder = new BASE64Encoder();
             return "data:img/" + FORMAT + ";base64," + encoder.encode(output.toByteArray());
         } catch (IOException e) {
-            log.error("二维码生成失败", e);
-            throw new BizException("二维码生成失败");
+            log.error("content={}, logoUrl={}", content, e);
+            throw new QrCodesException();
         }
     }
 

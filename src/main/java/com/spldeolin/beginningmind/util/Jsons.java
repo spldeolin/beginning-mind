@@ -22,14 +22,13 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.spldeolin.beginningmind.exception.BizException;
+import com.spldeolin.beginningmind.util.exception.JsonsException;
 import lombok.extern.log4j.Log4j2;
 
 /**
  * JSON工具类
  * <pre>
  * 支持JSON 与对象间、与对象列表间 的互相转换。
- * p.s.: 本工具类所有public方法都是 OR-ELSE-THROW 的
  * </pre>
  *
  * @author Deolin
@@ -37,7 +36,7 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class Jsons {
 
-    private static final ObjectMapper defaultObjectMapper = newDefaultObjectMapper();
+    private static final ObjectMapper om = newDefaultObjectMapper();
 
     private Jsons() {
         throw new UnsupportedOperationException("Never instantiate me.");
@@ -94,29 +93,18 @@ public class Jsons {
      */
     public static String beautify(Object object) {
         try {
-            return defaultObjectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+            return om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            log.error("转化JSON失败", e);
-            throw new BizException("转化JSON失败");
+            log.error("object={}", object, e);
+            throw new JsonsException("转化JSON失败");
         }
-    }
-
-    /**
-     * 压缩JSON
-     * <pre>
-     * e.g.:
-     * {"name":"Deolin","age":18,"isVip":true}
-     * </pre>
-     */
-    public static String compress(String json) {
-        return json.replace(" ", "").replace("\r", "").replace("\n", "").replace("\t", "");
     }
 
     /**
      * 将对象转化为JSON
      */
     public static String toJson(Object object) {
-        return toJson(object, defaultObjectMapper);
+        return toJson(object, om);
     }
 
     /**
@@ -126,8 +114,8 @@ public class Jsons {
         try {
             return om.writeValueAsString(object);
         } catch (JsonProcessingException e) {
-            log.error("转化JSON失败", e);
-            throw new BizException("转化JSON失败");
+            log.error("object={}", object, e);
+            throw new JsonsException("转化JSON失败");
         }
     }
 
@@ -135,7 +123,7 @@ public class Jsons {
      * 将JSON转化为对象
      */
     public static <T> T toObject(String json, Class<T> clazz) {
-        return toObject(json, clazz, defaultObjectMapper);
+        return toObject(json, clazz, om);
     }
 
     /**
@@ -145,8 +133,8 @@ public class Jsons {
         try {
             return om.readValue(json, clazz);
         } catch (IOException e) {
-            log.error("转化对象失败", e);
-            throw new BizException("转化对象失败");
+            log.error("json={}, clazz={}", json, clazz, e);
+            throw new JsonsException("转化对象失败");
         }
     }
 
@@ -154,7 +142,7 @@ public class Jsons {
      * 将JSON转化为对象列表
      */
     public static <T> List<T> toListOfObjects(String json, Class<T> clazz) {
-        return toListOfObjects(json, clazz, defaultObjectMapper);
+        return toListOfObjects(json, clazz, om);
     }
 
     /**
@@ -166,8 +154,8 @@ public class Jsons {
         try {
             return om.readValue(json, javaType);
         } catch (IOException e) {
-            log.error("转化对象列表失败", e);
-            throw new BizException("转化对象失败");
+            log.error("json={}, clazz={}", json, clazz, e);
+            throw new JsonsException("转化对象失败");
         }
 
     }

@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.util.exception.CsvException;
+import com.spldeolin.beginningmind.util.exception.CsvsException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -44,7 +44,7 @@ public class Csvs {
     /**
      * 读取csv
      */
-    public static <T> List<T> readCsv(String csvContent, Class<T> clazz) throws CsvException {
+    public static <T> List<T> readCsv(String csvContent, Class<T> clazz) throws CsvsException {
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
         ObjectReader reader = defaultCsvMapper.readerFor(clazz).with(schema);
 
@@ -52,7 +52,7 @@ public class Csvs {
             return Lists.newArrayList(reader.readValues(csvContent));
         } catch (IOException e) {
             log.error("csvContent={}, clazz={}", csvContent, clazz, e);
-            throw new CsvException();
+            throw new CsvsException();
         }
     }
 
@@ -67,19 +67,18 @@ public class Csvs {
             return writer.writeValueAsString(data);
         } catch (JsonProcessingException e) {
             log.error("data={}, clazz={}", data, clazz, e);
-            throw new CsvException();
+            throw new CsvsException();
         }
     }
 
     /**
      * 生成csv
      */
-    public static <T> void writeCsv(Collection<T> data, Class<T> clazz, HttpServletResponse response,
+    public static <T> void writeCsvToWeb(Collection<T> data, Class<T> clazz, HttpServletResponse response,
             String fileBaseName) {
         String csvContent = writeCsv(data, clazz);
 
         response.setContentType("application/CSV;numberformat:@");
-        response.setCharacterEncoding(utf8);
         response.setCharacterEncoding(utf8);
         try {
             response.setHeader("Content-Disposition",
@@ -89,7 +88,7 @@ public class Csvs {
             os.flush();
         } catch (IOException e) {
             log.error("data={}, clazz={}, fileBaseName={}", data, clazz, fileBaseName, e);
-            throw new CsvException();
+            throw new CsvsException();
         }
     }
 

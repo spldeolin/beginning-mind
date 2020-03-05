@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
 import com.google.common.base.Strings;
-import com.spldeolin.beginningmind.exception.BizException;
+import com.spldeolin.beginningmind.util.exception.HttpsException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -52,8 +52,8 @@ public class Https {
 
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
-            log.error("GET请求失败 {}", url);
-            throw new BizException("GET请求失败");
+            log.error("url={}", url, e);
+            throw new HttpsException();
         }
     }
 
@@ -71,17 +71,17 @@ public class Https {
 
             Response response = doRequest(request);
             if (!Strings.nullToEmpty(response.header("Content-Type")).startsWith("image/")) {
-                throw new RuntimeException("请求结果不是图片");
+                throw new RuntimeException("this url is not for a image.");
             }
 
             ResponseBody body = response.body();
             if (body == null) {
-                throw new RuntimeException("图片不存在");
+                throw new HttpsException("image absent.");
             }
             return ImageIO.read(body.byteStream());
         } catch (IOException e) {
-            log.error("GET请求失败 {}", url);
-            throw new BizException("GET请求失败");
+            log.error("url={}", url, e);
+            throw new HttpsException();
         }
     }
 
@@ -91,15 +91,15 @@ public class Https {
      * e.g.: Https.post("http://spldeolin.com/post/start", Jsons.toJson(userDTO));
      * </pre>
      */
-    public static String postJson(String url, String json) {
+    public static String postJson(String url, String bodyJson) {
         try {
-            Request request = buildJsonPostRequest(url, json);
+            Request request = buildJsonPostRequest(url, bodyJson);
             Response response = doRequest(request);
 
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
-            log.error("POST请求失败 {}", url);
-            throw new BizException("POST请求失败");
+            log.error("url={}, bodyJson={}", url, bodyJson, e);
+            throw new HttpsException();
         }
     }
 
@@ -113,7 +113,7 @@ public class Https {
         FormBody.Builder form = new FormBody.Builder();
         try {
             if (object instanceof Map) {
-                Map<?, ?> map = (Map) object;
+                Map<?, ?> map = (Map<?, ?>) object;
                 for (Map.Entry<?, ?> entry : map.entrySet()) {
                     Object key = entry.getKey();
                     if (key == null) {
@@ -135,8 +135,8 @@ public class Https {
                 }
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
-            log.error("解析对象失败", e);
-            throw new BizException("解析对象失败");
+            log.error("url={}, object={}", url, object, e);
+            throw new HttpsException();
         }
 
         try {
@@ -145,8 +145,8 @@ public class Https {
 
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
-            log.error("解析对象失败", e);
-            throw new BizException("解析对象失败");
+            log.error("url={}, object={}", url, object, e);
+            throw new HttpsException();
         }
     }
 
@@ -170,11 +170,11 @@ public class Https {
      */
     private static String ensureJsonAndGetBody(Response response) throws IOException {
         if (!Strings.nullToEmpty(response.header("Content-Type")).startsWith("application/json")) {
-            throw new RuntimeException("请求结果不是JSON");
+            throw new HttpsException("response Content-Type is not json.");
         }
         ResponseBody body = response.body();
         if (body == null) {
-            throw new RuntimeException("response body为空");
+            throw new HttpsException("response body empty.");
         }
         return body.string();
     }
@@ -192,7 +192,7 @@ public class Https {
             } else {
                 // 5次后依然非200则抛出异常
                 if (i == 5 - 1) {
-                    throw new RuntimeException(response.message());
+                    throw new HttpsException(response.message());
                 }
             }
         }
