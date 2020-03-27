@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.mapper.PermissionMapper;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.service.UserService;
-import com.spldeolin.beginningmind.util.RandomStrings;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
         checkOccupationForCreating(user);
 
         // 盐、密码
-        String salt = RandomStrings.generateVisibleAscii(32);
+        String salt = StringRandomUtils.generateVisibleAscii(32);
         user.setSalt(salt);
         String password = DigestUtils.sha512Hex(CoupledConstant.DEFAULT_PASSWORD_EX + salt);
         user.setPassword(password);

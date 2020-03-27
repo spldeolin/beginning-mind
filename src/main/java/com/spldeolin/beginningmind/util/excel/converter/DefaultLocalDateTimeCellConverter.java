@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.util.excel.converter;
 
 import java.time.LocalDateTime;
 import javax.annotation.Nonnull;
-import com.spldeolin.beginningmind.util.Times;
+import com.spldeolin.beginningmind.util.TimeUtils;
 import com.spldeolin.beginningmind.util.excel.exception.CellConverterReadException;
 
 /**
@@ -12,13 +12,13 @@ public class DefaultLocalDateTimeCellConverter implements CellConverter<LocalDat
 
     @Override
     public String writeToCellContent(@Nonnull LocalDateTime obj) {
-        return Times.DEFAULT_DATE_TIME_FORMATTER.format(obj);
+        return TimeUtils.DEFAULT_DATE_TIME_FORMATTER.format(obj);
     }
 
     @Override
     public LocalDateTime readFromCellContent(@Nonnull String string) throws CellConverterReadException {
         try {
-            return LocalDateTime.parse(string, Times.DEFAULT_DATE_TIME_FORMATTER);
+            return LocalDateTime.parse(string, TimeUtils.DEFAULT_DATE_TIME_FORMATTER);
         } catch (Exception e) {
             throw new CellConverterReadException();
         }

@@ -1,6 +1,12 @@
 package com.spldeolin.beginningmind.redis;
 
+import java.util.concurrent.TimeUnit;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.SetArgs;
@@ -14,6 +20,15 @@ import io.lettuce.core.api.sync.RedisCommands;
 @Component
 public class RedisLock {
 
+    private RedissonClient redisson;
+
+    public RedisLock(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port") Integer port,
+            @Value("${spring.redis.password}") String password) {
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
+        redisson = Redisson.create(config);
+    }
+
     @Autowired
     private RedisCommands<String, String> redisCommands;
 
@@ -26,6 +41,11 @@ public class RedisLock {
      * @return 是否成功获取锁
      */
     public boolean lock(String lockKey, String threadValue, int expireMilli) {
+        RLock lock = redisson.getLock(lockKey);
+        try {
+            lock.tryLock(expireMilli, expireMilli / 3, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException)
+
         return "OK".equals(redisCommands.set(lockKey, threadValue, SetArgs.Builder.nx().px(expireMilli)));
     }
 

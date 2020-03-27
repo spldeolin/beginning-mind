@@ -4,7 +4,7 @@ package com.spldeolin.beginningmind.security.util;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.service.impl.SignServiceImpl;
-import com.spldeolin.beginningmind.util.Sessions;
+import com.spldeolin.beginningmind.util.SessionUtils;
 
 /**
  * 工具类：登录者上下文
@@ -24,7 +24,7 @@ public class SignContext {
      * @return 当前登录者
      */
     public static CurrentSignerDTO current() {
-        return Sessions.get(SignServiceImpl.SIGNER_SESSION_KEY);
+        return SessionUtils.get(SignServiceImpl.SIGNER_SESSION_KEY);
     }
 
     /**

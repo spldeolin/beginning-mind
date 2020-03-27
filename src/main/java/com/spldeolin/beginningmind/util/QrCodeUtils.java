@@ -20,7 +20,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.spldeolin.beginningmind.util.exception.QrCodesException;
+import com.spldeolin.beginningmind.util.exception.QrCodeException;
 import lombok.extern.log4j.Log4j2;
 import sun.misc.BASE64Encoder;
 
@@ -28,7 +28,7 @@ import sun.misc.BASE64Encoder;
  * @author Deolin 2018/12/29
  */
 @Log4j2
-public class QrCodes {
+public class QrCodeUtils {
 
     /**
      * 二维码的默认宽度
@@ -68,7 +68,7 @@ public class QrCodes {
         HINTS.put(EncodeHintType.MARGIN, 2);
     }
 
-    private QrCodes() {
+    private QrCodeUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
@@ -85,7 +85,7 @@ public class QrCodes {
             return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             log.error("content={}", content, e);
-            throw new QrCodesException();
+            throw new QrCodeException();
         }
     }
 
@@ -102,7 +102,7 @@ public class QrCodes {
             MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, stream);
         } catch (WriterException | IOException e) {
             log.error("content={}", content, e);
-            throw new QrCodesException();
+            throw new QrCodeException();
         }
     }
 
@@ -127,7 +127,7 @@ public class QrCodes {
      */
     public static String generateBase64(String content, String logoUrl) {
         BufferedImage qrCode = generateImage(content);
-        insertLogo(qrCode, Https.getAsImage(logoUrl));
+        insertLogo(qrCode, HttpUtils.getAsImage(logoUrl));
 
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
@@ -136,7 +136,7 @@ public class QrCodes {
             return "data:img/" + FORMAT + ";base64," + encoder.encode(output.toByteArray());
         } catch (IOException e) {
             log.error("content={}, logoUrl={}", content, e);
-            throw new QrCodesException();
+            throw new QrCodeException();
         }
     }
 

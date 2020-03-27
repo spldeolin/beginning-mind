@@ -8,7 +8,7 @@ import io.protostuff.runtime.RuntimeSchema;
 /**
  * @author Deolin 2019-11-29
  */
-public class ProtostuffUtil {
+public class ProtostuffUtils {
 
     private static final ThreadLocal<LinkedBuffer> buffer = ThreadLocal.withInitial(() -> LinkedBuffer.allocate(512));
 

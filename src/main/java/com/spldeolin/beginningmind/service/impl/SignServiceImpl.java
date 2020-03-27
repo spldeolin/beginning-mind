@@ -24,8 +24,8 @@ import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.security.util.SignContext;
 import com.spldeolin.beginningmind.service.PermissionService;
 import com.spldeolin.beginningmind.service.SignService;
-import com.spldeolin.beginningmind.util.RandomStrings;
-import com.spldeolin.beginningmind.util.Sessions;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
+import com.spldeolin.beginningmind.util.SessionUtils;
 import com.spldeolin.beginningmind.util.WebContext;
 import com.spldeolin.beginningmind.vo.CaptchaVO;
 import com.spldeolin.beginningmind.vo.SignerProfileVO;
@@ -54,7 +54,7 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public CaptchaVO captcha() {
-        String captcha = RandomStrings.generateEasyReadAndSpeakChar(4);
+        String captcha = StringRandomUtils.generateEasyReadAndSpeakChar(4);
 
         // cache
         String token = UUID.randomUUID().toString();
@@ -95,7 +95,7 @@ public class SignServiceImpl implements SignService {
         currentSignerDTO.setSignedAt(LocalDateTime.now());
         currentSignerDTO.setPermissions(permissions);
 
-        Sessions.set(SIGNER_SESSION_KEY, currentSignerDTO);
+        SessionUtils.set(SIGNER_SESSION_KEY, currentSignerDTO);
 
         // profile
         return new SignerProfileVO(user.getName(), permissionIds);
@@ -106,7 +106,7 @@ public class SignServiceImpl implements SignService {
      */
     @Override
     public void signOut() {
-        Sessions.remove(SIGNER_SESSION_KEY);
+        SessionUtils.remove(SIGNER_SESSION_KEY);
     }
 
     private UserEntity signCheck(SignInput input) {

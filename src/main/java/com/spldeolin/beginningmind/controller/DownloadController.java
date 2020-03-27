@@ -7,7 +7,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.util.excel.Excels;
+import com.spldeolin.beginningmind.util.excel.ExcelUtils;
 import com.spldeolin.beginningmind.util.excel.exception.ExcelWriteException;
 
 /**
@@ -22,7 +22,7 @@ public class DownloadController {
     void aa(HttpServletResponse response) throws ExcelWriteException {
         List<DemoDTO> dtos = Lists.newArrayList(DemoDTO.builder().id(1L).build());
 
-        Excels.writeExcel(response, "测试", DemoDTO.class, dtos);
+        ExcelUtils.writeExcel(response, "测试", DemoDTO.class, dtos);
     }
 
 }

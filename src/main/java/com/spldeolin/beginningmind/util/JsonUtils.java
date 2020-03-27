@@ -23,7 +23,7 @@ import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.spldeolin.beginningmind.util.exception.JsonsException;
+import com.spldeolin.beginningmind.util.exception.JsonException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -35,11 +35,11 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin
  */
 @Log4j2
-public class Jsons {
+public class JsonUtils {
 
     private static final ObjectMapper om = initObjectMapper(new ObjectMapper());
 
-    private Jsons() {
+    private JsonUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
@@ -59,9 +59,9 @@ public class Jsons {
 
     public static SimpleModule timeModule() {
         SimpleModule javaTimeModule = new JavaTimeModule();
-        DateTimeFormatter date = Times.DEFAULT_DATE_FORMATTER;
-        DateTimeFormatter time = Times.DEFAULT_TIME_FORMATTER;
-        DateTimeFormatter dateTime = Times.DEFAULT_DATE_TIME_FORMATTER;
+        DateTimeFormatter date = TimeUtils.DEFAULT_DATE_FORMATTER;
+        DateTimeFormatter time = TimeUtils.DEFAULT_TIME_FORMATTER;
+        DateTimeFormatter dateTime = TimeUtils.DEFAULT_DATE_TIME_FORMATTER;
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(date))
                 .addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
                 .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
@@ -95,7 +95,7 @@ public class Jsons {
             return om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
         } catch (JsonProcessingException e) {
             log.error("object={}", object, e);
-            throw new JsonsException("转化JSON失败");
+            throw new JsonException("转化JSON失败");
         }
     }
 
@@ -114,7 +114,7 @@ public class Jsons {
             return om.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             log.error("object={}", object, e);
-            throw new JsonsException("转化JSON失败");
+            throw new JsonException("转化JSON失败");
         }
     }
 
@@ -133,7 +133,7 @@ public class Jsons {
             return om.readValue(json, clazz);
         } catch (IOException e) {
             log.error("json={}, clazz={}", json, clazz, e);
-            throw new JsonsException("转化对象失败");
+            throw new JsonException("转化对象失败");
         }
     }
 
@@ -155,7 +155,7 @@ public class Jsons {
             return om.readValue(json, javaType);
         } catch (IOException e) {
             log.error("json={}, clazz={}", json, clazz, e);
-            throw new JsonsException("转化对象失败");
+            throw new JsonException("转化对象失败");
         }
 
     }

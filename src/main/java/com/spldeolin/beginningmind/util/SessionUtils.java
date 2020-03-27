@@ -7,9 +7,9 @@ package com.spldeolin.beginningmind.util;
  *
  * @author Deolin
  */
-public class Sessions {
+public class SessionUtils {
 
-    private Sessions() {
+    private SessionUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 

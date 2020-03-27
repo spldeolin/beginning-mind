@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
-import com.spldeolin.beginningmind.util.Times;
+import com.spldeolin.beginningmind.util.TimeUtils;
 
 /**
  * @author Deolin 2018/11/12
@@ -20,7 +20,7 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
     /**
      * 起始的时间戳 2018-11-12 13:27:37
      */
-    private final static long START_STMP = Times.toUnixTimestamp(LocalDateTime.of(2018, 11, 12, 13, 27, 37)) * 1000L;
+    private final static long START_STMP = TimeUtils.toUnixTimestamp(LocalDateTime.of(2018, 11, 12, 13, 27, 37)) * 1000L;
 
     /**
      * 序列号占用的位数

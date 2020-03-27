@@ -13,7 +13,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.util.exception.CsvsException;
+import com.spldeolin.beginningmind.util.exception.CsvException;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -22,20 +22,20 @@ import lombok.extern.log4j.Log4j2;
  * @author Deolin 2019-01-14
  */
 @Log4j2
-public class Csvs {
+public class CsvUtils {
 
     private static final String utf8 = StandardCharsets.UTF_8.name();
 
-    public static final CsvMapper cm = (CsvMapper) Jsons.initObjectMapper(new CsvMapper());
+    public static final CsvMapper cm = (CsvMapper) JsonUtils.initObjectMapper(new CsvMapper());
 
-    private Csvs() {
+    private CsvUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
     /**
      * 读取csv
      */
-    public static <T> List<T> readCsv(String csvContent, Class<T> clazz) throws CsvsException {
+    public static <T> List<T> readCsv(String csvContent, Class<T> clazz) throws CsvException {
         CsvSchema schema = CsvSchema.emptySchema().withHeader();
         ObjectReader reader = cm.readerFor(clazz).with(schema);
 
@@ -43,7 +43,7 @@ public class Csvs {
             return Lists.newArrayList(reader.readValues(csvContent));
         } catch (IOException e) {
             log.error("csvContent={}, clazz={}", csvContent, clazz, e);
-            throw new CsvsException();
+            throw new CsvException();
         }
     }
 
@@ -58,7 +58,7 @@ public class Csvs {
             return writer.writeValueAsString(data);
         } catch (JsonProcessingException e) {
             log.error("data={}, clazz={}", data, clazz, e);
-            throw new CsvsException();
+            throw new CsvException();
         }
     }
 
@@ -79,7 +79,7 @@ public class Csvs {
             os.flush();
         } catch (IOException e) {
             log.error("data={}, clazz={}, fileBaseName={}", data, clazz, fileBaseName, e);
-            throw new CsvsException();
+            throw new CsvException();
         }
     }
 

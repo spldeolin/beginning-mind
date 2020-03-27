@@ -7,7 +7,7 @@ import org.apache.commons.lang3.RandomStringUtils;
  *
  * @author Deolin
  */
-public class RandomStrings {
+public class StringRandomUtils {
 
     private static final char[] LOW_EN_NUM = new char[]{'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
             'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2', '3', '4', '5', '6', '7',
@@ -16,7 +16,7 @@ public class RandomStrings {
     private static final char[] EASY_READ_AND_SPEAK = new char[]{'3', '4', '5', '7', '8', 'a', 'c', 'f', 'g', 'h', 'j',
             'k', 'p', 's', 't', 'u', 'v', 'w', 'x', 'y'};
 
-    private RandomStrings() {
+    private StringRandomUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
@@ -27,7 +27,7 @@ public class RandomStrings {
      * @return 随机字符串
      */
     public static String generateVisibleAscii(int stringLength) {
-        return RandomStringUtils.randomAscii(stringLength);
+        return org.apache.commons.lang3.RandomStringUtils.randomAscii(stringLength);
     }
 
     /**
@@ -37,7 +37,7 @@ public class RandomStrings {
      * @return 随机字符串
      */
     public static String generateEnNum(int stringLength) {
-        return RandomStringUtils.random(stringLength, true, true);
+        return org.apache.commons.lang3.RandomStringUtils.random(stringLength, true, true);
     }
 
     /**
@@ -47,7 +47,7 @@ public class RandomStrings {
      * @return 随机字符串
      */
     public static String generateLowEnNum(int stringLength) {
-        return RandomStringUtils.random(stringLength, LOW_EN_NUM);
+        return org.apache.commons.lang3.RandomStringUtils.random(stringLength, LOW_EN_NUM);
     }
 
     /**
@@ -57,7 +57,7 @@ public class RandomStrings {
      * @return 随机字符串
      */
     public static String generateNum(int stringLength) {
-        return RandomStringUtils.randomNumeric(stringLength);
+        return org.apache.commons.lang3.RandomStringUtils.randomNumeric(stringLength);
     }
 
     /**
@@ -67,7 +67,7 @@ public class RandomStrings {
      * @return 随机字符串
      */
     public static String generateEasyReadAndSpeakChar(int stringLength) {
-        return RandomStringUtils.random(stringLength, EASY_READ_AND_SPEAK);
+        return org.apache.commons.lang3.RandomStringUtils.random(stringLength, EASY_READ_AND_SPEAK);
     }
 
 }
