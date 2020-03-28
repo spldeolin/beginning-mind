@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.sync.RedisCommands;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 基于Redis的分布式锁（不可重入）
@@ -18,6 +19,7 @@ import io.lettuce.core.api.sync.RedisCommands;
  * @author Deolin 2018/09/27
  */
 @Component
+@Log4j2
 public class RedisLock {
 
     private RedissonClient redisson;
@@ -44,7 +46,9 @@ public class RedisLock {
         RLock lock = redisson.getLock(lockKey);
         try {
             lock.tryLock(expireMilli, expireMilli / 3, TimeUnit.MILLISECONDS);
-        } catch (InterruptedException)
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage());
+        }
 
         return "OK".equals(redisCommands.set(lockKey, threadValue, SetArgs.Builder.nx().px(expireMilli)));
     }
