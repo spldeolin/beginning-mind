@@ -43,7 +43,7 @@ public class CsvUtils {
             return Lists.newArrayList(reader.readValues(csvContent));
         } catch (IOException e) {
             log.error("csvContent={}, clazz={}", csvContent, clazz, e);
-            throw new CsvException();
+            throw new CsvException(e);
         }
     }
 
@@ -58,7 +58,7 @@ public class CsvUtils {
             return writer.writeValueAsString(data);
         } catch (JsonProcessingException e) {
             log.error("data={}, clazz={}", data, clazz, e);
-            throw new CsvException();
+            throw new CsvException(e);
         }
     }
 
@@ -79,7 +79,7 @@ public class CsvUtils {
             os.flush();
         } catch (IOException e) {
             log.error("data={}, clazz={}, fileBaseName={}", data, clazz, fileBaseName, e);
-            throw new CsvException();
+            throw new CsvException(e);
         }
     }
 

@@ -114,7 +114,7 @@ public class JsonUtils {
             return om.writeValueAsString(object);
         } catch (JsonProcessingException e) {
             log.error("object={}", object, e);
-            throw new JsonException("转化JSON失败");
+            throw new JsonException(e);
         }
     }
 
@@ -133,7 +133,7 @@ public class JsonUtils {
             return om.readValue(json, clazz);
         } catch (IOException e) {
             log.error("json={}, clazz={}", json, clazz, e);
-            throw new JsonException("转化对象失败");
+            throw new JsonException(e);
         }
     }
 
@@ -155,7 +155,7 @@ public class JsonUtils {
             return om.readValue(json, javaType);
         } catch (IOException e) {
             log.error("json={}, clazz={}", json, clazz, e);
-            throw new JsonException("转化对象失败");
+            throw new JsonException(e);
         }
 
     }

@@ -85,7 +85,7 @@ public class QrCodeUtils {
             return MatrixToImageWriter.toBufferedImage(bitMatrix);
         } catch (WriterException e) {
             log.error("content={}", content, e);
-            throw new QrCodeException();
+            throw new QrCodeException(e);
         }
     }
 
@@ -102,7 +102,7 @@ public class QrCodeUtils {
             MatrixToImageWriter.writeToStream(bitMatrix, FORMAT, stream);
         } catch (WriterException | IOException e) {
             log.error("content={}", content, e);
-            throw new QrCodeException();
+            throw new QrCodeException(e);
         }
     }
 
@@ -136,7 +136,7 @@ public class QrCodeUtils {
             return "data:img/" + FORMAT + ";base64," + encoder.encode(output.toByteArray());
         } catch (IOException e) {
             log.error("content={}, logoUrl={}", content, e);
-            throw new QrCodeException();
+            throw new QrCodeException(e);
         }
     }
 

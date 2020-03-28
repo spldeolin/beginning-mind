@@ -37,10 +37,6 @@ public class HttpUtils {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
-    public static void main(String[] args) {
-        System.out.println(Thread.currentThread().getId());
-    }
-
     /**
      * 发送一个GET请求，获取JSON
      * <pre>
@@ -57,7 +53,7 @@ public class HttpUtils {
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
             log.error("url={}", url, e);
-            throw new HttpException();
+            throw new HttpException(e);
         }
     }
 
@@ -85,7 +81,7 @@ public class HttpUtils {
             return ImageIO.read(body.byteStream());
         } catch (IOException e) {
             log.error("url={}", url, e);
-            throw new HttpException();
+            throw new HttpException(e);
         }
     }
 
@@ -103,7 +99,7 @@ public class HttpUtils {
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
             log.error("url={}, bodyJson={}", url, bodyJson, e);
-            throw new HttpException();
+            throw new HttpException(e);
         }
     }
 
@@ -140,7 +136,7 @@ public class HttpUtils {
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
             log.error("url={}, object={}", url, object, e);
-            throw new HttpException();
+            throw new HttpException(e);
         }
 
         try {
@@ -150,7 +146,7 @@ public class HttpUtils {
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
             log.error("url={}, object={}", url, object, e);
-            throw new HttpException();
+            throw new HttpException(e);
         }
     }
 

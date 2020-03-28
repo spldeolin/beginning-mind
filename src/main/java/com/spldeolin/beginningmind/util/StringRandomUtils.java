@@ -1,7 +1,5 @@
 package com.spldeolin.beginningmind.util;
 
-import org.apache.commons.lang3.RandomStringUtils;
-
 /**
  * 随机字符串
  *
