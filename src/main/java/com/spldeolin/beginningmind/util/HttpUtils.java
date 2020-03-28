@@ -37,6 +37,10 @@ public class HttpUtils {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
+    public static void main(String[] args) {
+        System.out.println(Thread.currentThread().getId());
+    }
+
     /**
      * 发送一个GET请求，获取JSON
      * <pre>
