@@ -7,7 +7,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
 import com.google.common.base.Strings;
-import com.spldeolin.beginningmind.util.exception.HttpsException;
+import com.spldeolin.beginningmind.util.exception.HttpException;
 import lombok.extern.log4j.Log4j2;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
@@ -29,11 +29,11 @@ import okhttp3.ResponseBody;
  * @author Deolin
  */
 @Log4j2
-public class Https {
+public class HttpUtils {
 
     private static final OkHttpClient client = new OkHttpClient();
 
-    private Https() {
+    private HttpUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
@@ -53,7 +53,7 @@ public class Https {
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
             log.error("url={}", url, e);
-            throw new HttpsException();
+            throw new HttpException(e);
         }
     }
 
@@ -76,12 +76,12 @@ public class Https {
 
             ResponseBody body = response.body();
             if (body == null) {
-                throw new HttpsException("image absent.");
+                throw new HttpException("image absent.");
             }
             return ImageIO.read(body.byteStream());
         } catch (IOException e) {
             log.error("url={}", url, e);
-            throw new HttpsException();
+            throw new HttpException(e);
         }
     }
 
@@ -99,7 +99,7 @@ public class Https {
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
             log.error("url={}, bodyJson={}", url, bodyJson, e);
-            throw new HttpsException();
+            throw new HttpException(e);
         }
     }
 
@@ -136,7 +136,7 @@ public class Https {
             }
         } catch (IllegalArgumentException | IllegalAccessException e) {
             log.error("url={}, object={}", url, object, e);
-            throw new HttpsException();
+            throw new HttpException(e);
         }
 
         try {
@@ -146,7 +146,7 @@ public class Https {
             return ensureJsonAndGetBody(response);
         } catch (IOException e) {
             log.error("url={}, object={}", url, object, e);
-            throw new HttpsException();
+            throw new HttpException(e);
         }
     }
 
@@ -170,11 +170,11 @@ public class Https {
      */
     private static String ensureJsonAndGetBody(Response response) throws IOException {
         if (!Strings.nullToEmpty(response.header("Content-Type")).startsWith("application/json")) {
-            throw new HttpsException("response Content-Type is not json.");
+            throw new HttpException("response Content-Type is not json.");
         }
         ResponseBody body = response.body();
         if (body == null) {
-            throw new HttpsException("response body empty.");
+            throw new HttpException("response body empty.");
         }
         return body.string();
     }
@@ -192,7 +192,7 @@ public class Https {
             } else {
                 // 5次后依然非200则抛出异常
                 if (i == 5 - 1) {
-                    throw new HttpsException(response.message());
+                    throw new HttpException(response.message());
                 }
             }
         }

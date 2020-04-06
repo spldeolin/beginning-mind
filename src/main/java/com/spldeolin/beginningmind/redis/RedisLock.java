@@ -1,10 +1,17 @@
 package com.spldeolin.beginningmind.redis;
 
+import java.util.concurrent.TimeUnit;
+import org.redisson.Redisson;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import io.lettuce.core.ScriptOutputType;
 import io.lettuce.core.SetArgs;
 import io.lettuce.core.api.sync.RedisCommands;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * 基于Redis的分布式锁（不可重入）
@@ -12,7 +19,17 @@ import io.lettuce.core.api.sync.RedisCommands;
  * @author Deolin 2018/09/27
  */
 @Component
+@Log4j2
 public class RedisLock {
+
+    private RedissonClient redisson;
+
+    public RedisLock(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port") Integer port,
+            @Value("${spring.redis.password}") String password) {
+        Config config = new Config();
+        config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
+        redisson = Redisson.create(config);
+    }
 
     @Autowired
     private RedisCommands<String, String> redisCommands;
@@ -26,6 +43,13 @@ public class RedisLock {
      * @return 是否成功获取锁
      */
     public boolean lock(String lockKey, String threadValue, int expireMilli) {
+        RLock lock = redisson.getLock(lockKey);
+        try {
+            lock.tryLock(expireMilli, expireMilli / 3, TimeUnit.MILLISECONDS);
+        } catch (InterruptedException e) {
+            log.warn(e.getMessage());
+        }
+
         return "OK".equals(redisCommands.set(lockKey, threadValue, SetArgs.Builder.nx().px(expireMilli)));
     }
 

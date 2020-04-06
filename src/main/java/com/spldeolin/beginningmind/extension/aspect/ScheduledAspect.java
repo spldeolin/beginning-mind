@@ -6,7 +6,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.util.RandomStrings;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
 
 /**
  * @author Deolin 2019-05-12
@@ -24,7 +24,7 @@ public class ScheduledAspect {
 
     @Around("scheduledMethod()")
     public Object around(ProceedingJoinPoint point) throws Throwable {
-        ThreadContext.put("insignia", "[" + RandomStrings.generateEasyReadAndSpeakChar(6) + "]");
+        ThreadContext.put("insignia", "[" + StringRandomUtils.generateEasyReadAndSpeakChar(6) + "]");
 
         Object result = point.proceed(point.getArgs());
 

@@ -11,7 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.util.Times;
+import com.spldeolin.beginningmind.util.TimeUtils;
 
 /**
  * Redis缓存 管理
@@ -154,7 +154,7 @@ public class RedisCache {
      * key不存在则返回false
      */
     public Boolean updateExpire(String key, LocalDateTime localDateTime) {
-        return redisTemplate.expireAt(key, Times.toDate(localDateTime));
+        return redisTemplate.expireAt(key, TimeUtils.toDate(localDateTime));
     }
 
     /**

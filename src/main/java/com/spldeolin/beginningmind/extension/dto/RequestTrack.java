@@ -7,7 +7,7 @@ import org.springframework.data.annotation.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.util.RandomStrings;
+import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.Data;
 
 /**
@@ -112,7 +112,7 @@ public class RequestTrack {
     private transient Stopwatch stopwatch;
 
     public RequestTrack() {
-        insignia = RandomStrings.generateEasyReadAndSpeakChar(6);
+        insignia = StringRandomUtils.generateEasyReadAndSpeakChar(6);
         requestedAt = LocalDateTime.now();
         stopwatch = Stopwatch.createStarted();
         mapperCalls = Lists.newLinkedList();

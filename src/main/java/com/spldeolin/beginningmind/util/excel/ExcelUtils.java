@@ -32,9 +32,9 @@ import lombok.extern.log4j.Log4j2;
  * @see ExcelCellContentInvalidException
  */
 @Log4j2
-public class Excels {
+public class ExcelUtils {
 
-    private Excels() {
+    private ExcelUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
