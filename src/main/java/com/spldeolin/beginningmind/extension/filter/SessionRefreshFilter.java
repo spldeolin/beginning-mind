@@ -32,11 +32,7 @@ public class SessionRefreshFilter extends OncePerRequestFilter {
             throws IOException, ServletException {
         filterChain.doFilter(request, response);
 
-        // 刷新全局会话的失效时间  56569288
-        reflashGlobalSession();
-    }
-
-    private void reflashGlobalSession() {
+        // 刷新全局会话的失效时间
         WebContext.getSession().setMaxInactiveInterval(SessionConfig.SESSION_EXPIRE_SECONDS);
     }
 
