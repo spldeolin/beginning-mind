@@ -13,6 +13,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.imageio.ImageIO;
+import org.apache.commons.codec.binary.Base64;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
 import com.google.zxing.MultiFormatWriter;
@@ -22,7 +23,6 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.spldeolin.beginningmind.util.exception.QrCodeException;
 import lombok.extern.log4j.Log4j2;
-import sun.misc.BASE64Encoder;
 
 /**
  * @author Deolin 2018/12/29
@@ -115,8 +115,7 @@ public class QrCodeUtils {
     public static String generateBase64(String content) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         generateOutput(content, output);
-        BASE64Encoder encoder = new BASE64Encoder();
-        return "data:img/" + FORMAT + ";base64," + encoder.encode(output.toByteArray());
+        return "data:img/" + FORMAT + ";base64," + Base64.encodeBase64String(output.toByteArray());
     }
 
     /**
@@ -132,8 +131,7 @@ public class QrCodeUtils {
         try {
             ByteArrayOutputStream output = new ByteArrayOutputStream();
             ImageIO.write(qrCode, FORMAT, output);
-            BASE64Encoder encoder = new BASE64Encoder();
-            return "data:img/" + FORMAT + ";base64," + encoder.encode(output.toByteArray());
+            return "data:img/" + FORMAT + ";base64," + Base64.encodeBase64String(output.toByteArray());
         } catch (IOException e) {
             log.error("content={}, logoUrl={}", content, e);
             throw new QrCodeException(e);
