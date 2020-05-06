@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
@@ -26,7 +27,12 @@ public class CsvUtils {
 
     private static final String utf8 = StandardCharsets.UTF_8.name();
 
-    public static final CsvMapper cm = (CsvMapper) JsonUtils.initObjectMapper(new CsvMapper());
+    public static final CsvMapper cm;
+
+    static {
+        cm = (CsvMapper) JsonUtils.initObjectMapper(new CsvMapper());
+        cm.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+    }
 
     private CsvUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
