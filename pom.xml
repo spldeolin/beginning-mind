@@ -132,7 +132,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.5.0</version>
+            <version>4.6.0</version>
         </dependency>
         <!-- protostuff -->
         <dependency>
@@ -173,7 +173,7 @@
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
-            <version>6.0.3</version>
+            <version>6.0.4</version>
         </dependency>
         <!-- pinyin4j -->
         <dependency>
