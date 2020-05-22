@@ -22,9 +22,9 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RedisLock {
 
-    private RedissonClient redisson;
+    private final RedissonClient redisson;
 
-    public RedisLock(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port") Integer port,
+    public RedisLock(@Value("${spring.redis.host}") String host, @Value("${spring.redis.port}") Integer port,
             @Value("${spring.redis.password}") String password) {
         Config config = new Config();
         config.useSingleServer().setAddress("redis://" + host + ":" + port).setPassword(password);
