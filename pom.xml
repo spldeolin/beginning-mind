@@ -103,7 +103,7 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
-            <version>3.12.5</version>
+            <version>3.13.0</version>
         </dependency>
         <!-- commons lang3 -->
         <dependency>
@@ -121,7 +121,7 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>okhttp</artifactId>
-            <version>4.6.0</version>
+            <version>4.7.2</version>
         </dependency>
         <!-- protostuff -->
         <dependency>
