@@ -4,88 +4,87 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
+import com.spldeolin.beginningmind.extension.exception.NotWebRequestThreadException;
 
 /**
  * Web请求的上下文
  *
- * 基于ThreadLocal，用于静态获取当前请求的请求轨迹、request、response和session
- *
- * 获取失败，当前线程并不是Web请求线程，调用getXXX方法时将会抛出异常
+ * 基于ThreadLocal，用于静态获取当前请求的请求轨迹、Http Request、Http Response和Http Session
  *
  * @author Deolin 2018/12/01
  */
 public class WebContext {
 
-    private static final ThreadLocal<RequestTrack> REQUEST_TRACK = new ThreadLocal<>();
+    private static final ThreadLocal<RequestTrack> requestTrackCtx = new ThreadLocal<>();
 
-    private static final ThreadLocal<HttpServletRequest> REQUEST = new ThreadLocal<>();
+    private static final ThreadLocal<HttpServletRequest> requestCtx = new ThreadLocal<>();
 
-    private static final ThreadLocal<HttpServletResponse> RESPONSE = new ThreadLocal<>();
+    private static final ThreadLocal<HttpServletResponse> responseCtx = new ThreadLocal<>();
 
-    private static final ThreadLocal<HttpSession> SESSION = new ThreadLocal<>();
+    private static final ThreadLocal<HttpSession> sessionCtx = new ThreadLocal<>();
 
     private WebContext() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
 
-    public static void setRequestTrack(RequestTrack requestTrack) {
-        REQUEST_TRACK.set(requestTrack);
+    public static void setRequestTrack(RequestTrack requestTrackCtx) {
+        WebContext.requestTrackCtx.set(requestTrackCtx);
     }
 
     public static RequestTrack getRequestTrack() {
-        return REQUEST_TRACK.get();
+        return requestTrackCtx.get();
     }
 
     public static void removeRequestTrack() {
-        REQUEST_TRACK.remove();
+        requestTrackCtx.remove();
     }
 
     public static void setRequest(HttpServletRequest request) {
-        REQUEST.set(request);
+        WebContext.requestCtx.set(request);
     }
 
     public static HttpServletRequest getRequest() {
-        HttpServletRequest request = REQUEST.get();
+        HttpServletRequest request = WebContext.requestCtx.get();
         if (request == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+            throw new NotWebRequestThreadException();
         }
         return request;
     }
 
     public static void removeRequest() {
-        REQUEST.remove();
+        requestCtx.remove();
     }
 
     public static void setResponse(HttpServletResponse response) {
-        RESPONSE.set(response);
+        responseCtx.set(response);
     }
 
-    public static HttpServletResponse getResponse() {
-        HttpServletResponse response = RESPONSE.get();
+    public static HttpServletResponse getResponse() throws NotWebRequestThreadException {
+        HttpServletResponse response = responseCtx.get();
         if (response == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+            throw new NotWebRequestThreadException();
         }
         return response;
     }
 
     public static void removeResponse() {
-        RESPONSE.remove();
+        responseCtx.remove();
     }
 
     public static void setSession(HttpSession session) {
-        SESSION.set(session);
+        sessionCtx.set(session);
     }
 
     public static HttpSession getSession() {
-        HttpSession session = SESSION.get();
+        HttpSession session = sessionCtx.get();
         if (session == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
+            throw new NotWebRequestThreadException();
         }
         return session;
     }
 
     public static void removeSession() {
-        SESSION.remove();
+        sessionCtx.remove();
     }
 
 }

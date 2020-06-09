@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.filter.async;
+package com.spldeolin.beginningmind.extension.filter;
 
 import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
