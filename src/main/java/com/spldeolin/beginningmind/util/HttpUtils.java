@@ -13,6 +13,7 @@ import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
@@ -161,7 +162,7 @@ public class HttpUtils {
      * 为POST请求，构造body是JSON的request对象
      */
     private static Request buildJsonPostRequest(String url, String json) {
-        okhttp3.RequestBody body = okhttp3.RequestBody.create(MediaType.parse("application/json"), json);
+        RequestBody body = RequestBody.create(json, MediaType.parse("application/json"));
         return new Request.Builder().url(url).post(body).build();
     }
 
