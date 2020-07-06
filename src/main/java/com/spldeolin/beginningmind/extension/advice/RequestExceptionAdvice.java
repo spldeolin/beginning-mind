@@ -12,22 +12,18 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.Invalid;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.extension.exception.ExtraInvalidException;
 import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
@@ -56,7 +52,7 @@ public class RequestExceptionAdvice {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public RequestResult handle(HttpRequestMethodNotSupportedException e) {
-        log.warn("请求动词不受支持，当前为[{}] 正确为[{}]", e.getMessage(), Arrays.toString(e.getSupportedMethods()));
+        log.warn("请求动词不受支持，当前为[{}] 正确为[{}]", e.getMethod(), Arrays.toString(e.getSupportedMethods()));
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
@@ -79,31 +75,7 @@ public class RequestExceptionAdvice {
     }
 
     /**
-     * 400 缺少RequestParam参数
-     * <pre>
-     * 但以下情况不会被捕获：
-     * /user?type
-     * /user?type=
-     * </pre>
-     */
-    @ExceptionHandler(MissingServletRequestParameterException.class)
-    public RequestResult handle(MissingServletRequestParameterException e) {
-        log.warn("缺少请求参数[{}]", e.getParameterName());
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 400 RequestParam参数类型错误
-     */
-    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public RequestResult handle(MethodArgumentTypeMismatchException e) {
-        log.warn("类型错误[{}]", e.getName());
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 400 @RequestParam参数没有通过注解校验（控制器声明@Validated时）
-     * 或者 @RequestBody List泛型 没有通过注解校验
+     * 400 @RequestBody List泛型 没有通过注解校验
      */
     @ExceptionHandler(ConstraintViolationException.class)
     public RequestResult handle(ConstraintViolationException e) {
@@ -122,16 +94,6 @@ public class RequestExceptionAdvice {
             Invalid invalid = new Invalid(dto.getName(), cv.getInvalidValue(), cv.getMessage());
             invalids.add(invalid);
         }
-        log.warn(invalids);
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 400 RequestParam参数没有通过注解校验（multi-param且声明@Valid时）
-     */
-    @ExceptionHandler(BindException.class)
-    public RequestResult handle(BindException e) {
-        List<Invalid> invalids = buildInvalids(e.getBindingResult());
         log.warn(invalids);
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
@@ -158,15 +120,6 @@ public class RequestExceptionAdvice {
     public RequestResult handle(MethodArgumentNotValidException e) {
         List<Invalid> invalids = buildInvalids(e.getBindingResult());
         log.warn(invalids);
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 400 成功绑定并通过校验的请求方法参数，没有通过切面的额外校验（如?temp&foo=这样的情况）
-     */
-    @ExceptionHandler(ExtraInvalidException.class)
-    public RequestResult handle(ExtraInvalidException e) {
-        log.warn(e.getInvalids());
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 

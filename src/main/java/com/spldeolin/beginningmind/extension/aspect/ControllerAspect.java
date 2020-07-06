@@ -49,12 +49,6 @@ public class ControllerAspect {
         // 填入切点信息
         fillJoinPointInfo(requestTrack, point);
 
-        // 注解额外校验
-        List<Invalid> invalids = handleAnnotations(requestTrack);
-        if (invalids.size() > 0) {
-            throw new ExtraInvalidException(invalids);
-        }
-
         // 执行切点
         return point.proceed(requestTrack.getParameterValues());
     }
@@ -67,46 +61,6 @@ public class ControllerAspect {
         requestTrack.setMethod(requestMethod);
         requestTrack.setParameterNames(parameterNames);
         requestTrack.setParameterValues(parameterValues);
-    }
-
-    private List<Invalid> handleAnnotations(RequestTrack requestTrack) {
-        List<Invalid> invalids = new ArrayList<>();
-        Annotation[][] annotationsEachParams = requestTrack.getMethod().getParameterAnnotations();
-        String[] parameterNames = requestTrack.getParameterNames();
-        Object[] parameterValues = requestTrack.getParameterValues();
-        for (int i = 0; i < annotationsEachParams.length; i++) {
-            Annotation[] annotations = annotationsEachParams[i];
-            String parameterName = parameterNames[i];
-            // 已绑定的参数值（副本）
-            Object parameterValue = parameterValues[i];
-            for (Annotation annotation : annotations) {
-                // 进行RequestParam注解的空检验
-                if (annotation instanceof RequestParam) {
-                    handleRequestParam(annotation, parameterName, parameterValue, invalids);
-                }
-                parameterValues[i] = parameterValue;
-            }
-        }
-        return invalids;
-    }
-
-    /**
-     * 处理RequestParam注解
-     *
-     * @param annotation RequestParam注解对象
-     * @param parameterName RequestParam修饰的参数的名称
-     * @param parameterValue RequestParam修饰的参数的值
-     * @param invalids 校验未通过的信息
-     */
-    private void handleRequestParam(Annotation annotation, String parameterName, Object parameterValue,
-            List<Invalid> invalids) {
-        if (((RequestParam) annotation).required()) {
-            // 空对象
-            if (parameterValue == null || (parameterValue instanceof String
-                    && ((String) parameterValue).length() == 0)) {
-                invalids.add(new Invalid(parameterName, null, "不能为空"));
-            }
-        }
     }
 
 }

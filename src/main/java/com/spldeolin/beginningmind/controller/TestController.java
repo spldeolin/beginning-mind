@@ -32,7 +32,6 @@ import lombok.extern.log4j.Log4j2;
  */
 @RestController
 @RequestMapping("/test")
-@Validated
 @Log4j2
 public class TestController {
 
@@ -115,11 +114,6 @@ public class TestController {
         log.info("sync");
 
         return "SUCCESS";
-    }
-
-    @GetMapping("/aaa")
-    String aaa(@RequestParam @ValidEnumValue(enumType = VipType.class) Integer a) {
-        return "SUCCESS" + a;
     }
 
 }

@@ -28,9 +28,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private SignService signService;
-
     /**
      * 创建一个“用户”
      *
@@ -40,49 +37,6 @@ public class UserController {
     @PostMapping("/create")
     Long create(@RequestBody @Valid UserInput userInput) {
         return userService.createUser(userInput.toEntity());
-    }
-
-    /**
-     * 获取一个“用户”
-     *
-     * @param id 待获取“用户”的ID
-     * @return 用户
-     */
-    @GetMapping("/get")
-    UserEntity get(@RequestParam Long id) {
-        return userService.getUser(id);
-    }
-
-    /**
-     * 更新一个“用户”
-     *
-     * @param id 待更新“用户”的ID
-     * @param userInput 待更新的“用户”
-     */
-    @PostMapping("/update")
-    void update(@RequestParam Long id, @RequestBody @Valid UserInput userInput) {
-        userService.updateUser(userInput.toEntity(id));
-    }
-
-    /**
-     * 删除一个“用户”
-     *
-     * @param id 待删除“用户”的ID
-     */
-    @PostMapping("/delete")
-    void delete(@RequestParam Long id) {
-        userService.deleteUser(id);
-    }
-
-    /**
-     * 删除一批“用户”
-     *
-     * @param ids 待删除“用户”的ID列表
-     * @return 删除情况
-     */
-    @PostMapping("/batchDelete")
-    String delete(@RequestBody List<Long> ids) {
-        return userService.deleteUsers(ids);
     }
 
 }
