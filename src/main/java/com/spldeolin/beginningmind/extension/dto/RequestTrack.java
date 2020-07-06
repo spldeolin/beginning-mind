@@ -1,14 +1,14 @@
 package com.spldeolin.beginningmind.extension.dto;
 
-import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.annotation.Transient;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 请求轨迹
@@ -16,10 +16,11 @@ import lombok.Data;
  * @author Deolin 2018/11/15
  */
 @Data
+@Slf4j
 public class RequestTrack {
 
     /**
-     * 请求标识
+     * insignia
      */
     private String insignia;
 
@@ -36,32 +37,32 @@ public class RequestTrack {
     /**
      * HTTP协议 URL
      */
-    private String url;
+    private String httpUrl;
 
     /**
-     * HTTP协议 request content
+     * HTTP协议 request headers
      */
-    private String requestContent;
+    private Map<String, String> requestHeaders;
 
     /**
-     * HTTP协议 response content
+     * HTTP协议 response headers
      */
-    private String responseContent;
+    private Map<String, String> responseHeaders;
 
     /**
-     * HTTP协议 User-Agent
+     * HTTP协议 request body
      */
-    private String userAgent;
+    private String requestBody;
 
     /**
-     * HTTP协议 Referer
+     * HTTP协议 response body
      */
-    private String referer;
+    private String responseBody;
 
     /**
-     * 处理本请求的handler的全限定名
+     * 请求URL
      */
-    private String fullName;
+    private String handlerUrl;
 
     /**
      * 耗时
@@ -71,7 +72,7 @@ public class RequestTrack {
     /**
      * 这次请求调用mapper中方法的信息一览（异步调用不会被记录）
      */
-    private List<MappedCallDTO> mapperCalls;
+    private List<MappedCallDTO> mapperCalls = Lists.newArrayList();
 
     /**
      * 登录者用户ID
@@ -83,39 +84,19 @@ public class RequestTrack {
      */
     private String ip;
 
-    /**
-     * 请求方法
-     */
-    @JsonIgnore
-    @Transient
-    private transient Method method;
-
-    /**
-     * 请求方法的参数名
-     */
-    @JsonIgnore
-    @Transient
-    private transient String[] parameterNames;
-
-    /**
-     * 请求方法的参数值
-     */
-    @JsonIgnore
-    @Transient
-    private transient Object[] parameterValues;
-
-    /**
-     * 请求计时
-     */
-    @JsonIgnore
-    @Transient
-    private transient Stopwatch stopwatch;
-
-    public RequestTrack() {
-        insignia = StringRandomUtils.generateEasyReadAndSpeakChar(6);
-        requestedAt = LocalDateTime.now();
-        stopwatch = Stopwatch.createStarted();
-        mapperCalls = Lists.newLinkedList();
+    public void log() {
+        log.info("requestedAt={}", requestedAt);
+        log.info("httpMethod={}", httpMethod);
+        log.info("httpUrl={}", httpUrl);
+        log.info("requestHeaders={}", requestHeaders);
+        log.info("responseHeaders={}", responseHeaders);
+        log.info("requestBody={}", requestBody);
+        log.info("responseBody={}", responseBody);
+        log.info("handlerUrl={}", handlerUrl);
+        log.info("elapsed={}", elapsed);
+        log.info("mapperCalls={}", mapperCalls);
+        log.info("signerId={}", signerId);
+        log.info("ip={}", ip);
     }
 
 }

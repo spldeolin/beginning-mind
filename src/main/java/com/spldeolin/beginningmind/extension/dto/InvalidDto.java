@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.extension.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 /**
  * （控制层）校验未通过的信息
@@ -9,13 +9,13 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
-@AllArgsConstructor
-public class Invalid {
+@Accessors(chain = true)
+public class InvalidDto {
 
-    private String name;
+    private String path;
 
     private Object value;
 
-    private String cause;
+    private String reason;
 
 }

@@ -5,6 +5,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.Mapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.entity.BizDemoEntity;
@@ -38,11 +40,11 @@ public class BizTestController {
         return bizDemoService.all();
     }
 
-    @GetMapping("/aa")
+    @PostMapping("/aa")
     Date aa() {
         BizDemoEntity entity = new BizDemoEntity();
-//        entity.setUserNumber("1");
-        bizDemoService.doSomething(entity, 6L);
+        entity.setUserNumber("1");
+        bizDemoService.doSomething(entity, 7L);
         return new Date();
     }
 

@@ -1,19 +1,13 @@
 package com.spldeolin.beginningmind.extension.advice;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import org.hibernate.validator.internal.engine.path.NodeImpl;
-import org.hibernate.validator.internal.engine.path.PathImpl;
+import java.util.Collection;
+import java.util.stream.Collectors;
+import javax.servlet.ServletException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -21,10 +15,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.extension.dto.Invalid;
+import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -38,63 +30,30 @@ import lombok.extern.log4j.Log4j2;
 @Log4j2
 public class RequestExceptionAdvice {
 
-    /**
-     * 404 Not Found
-     */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public RequestResult handle(NoHandlerFoundException e) {
-        log.warn("找不到handler，[{} {}]", e.getHttpMethod(), e.getRequestURL());
-        return RequestResult.failure(ResultCode.NOT_FOUND);
-    }
+    @ExceptionHandler(ServletException.class)
+    public RequestResult handle(ServletException e) {
+        String message = e.getMessage();
 
-    /**
-     * 400 请求动词错误
-     */
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public RequestResult handle(HttpRequestMethodNotSupportedException e) {
-        log.warn("请求动词不受支持，当前为[{}] 正确为[{}]", e.getMethod(), Arrays.toString(e.getSupportedMethods()));
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 400 请求Content-Type错误
-     * <pre>
-     * 往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
-     * </pre>
-     */
-    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public RequestResult handle(HttpMediaTypeNotSupportedException e) {
-        MediaType mediaType = e.getContentType();
-        String message = "Content-Type错误，";
-        if (mediaType != null) {
-            message += "当前为[" + e.getContentType().toString().replace(";charset=UTF-8", "") + "]，";
+        // 404 Not Found
+        // 只有spring.mvc.throw-exception-if-no-handler-found=true和spring.resources.add-mappings=false时，才会抛出这个异常
+        if (e instanceof NoHandlerFoundException) {
+            log.warn(message);
+            return RequestResult.failure(ResultCode.NOT_FOUND);
         }
-        message += "正确为[application/json]。";
+
+        // 400 请求动词错误
+        if (e instanceof HttpRequestMethodNotSupportedException) {
+            String supportedMethods = Arrays
+                    .toString(((HttpRequestMethodNotSupportedException) e).getSupportedMethods());
+            message += " " + supportedMethods;
+        }
+
+        // 400 请求Content-Type错误。往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
+        if (e instanceof HttpMediaTypeNotSupportedException) {
+            message += " [application/json]";
+        }
+
         log.warn(message);
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
-    }
-
-    /**
-     * 400 @RequestBody List泛型 没有通过注解校验
-     */
-    @ExceptionHandler(ConstraintViolationException.class)
-    public RequestResult handle(ConstraintViolationException e) {
-        Set<ConstraintViolation<?>> cvs = e.getConstraintViolations();
-        RequestTrack requestTrack = WebContext.getRequestTrack();
-        if (requestTrack == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
-        }
-
-        List<Invalid> invalids = new ArrayList<>();
-        for (ConstraintViolation<?> cv : cvs) {
-            // 参数路径
-            PathImpl pathImpl = (PathImpl) cv.getPropertyPath();
-            // 参数下标
-            NodeImpl dto = pathImpl.getLeafNode();
-            Invalid invalid = new Invalid(dto.getName(), cv.getInvalidValue(), cv.getMessage());
-            invalids.add(invalid);
-        }
-        log.warn(invalids);
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
@@ -108,29 +67,24 @@ public class RequestExceptionAdvice {
      * </pre>
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public RequestResult httpMessageNotReadable() {
-        log.warn("请求Body不可读");
+    public RequestResult httpMessageNotReadable(HttpMessageNotReadableException e) {
+        log.warn(e.getMessage());
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
     /**
-     * 400 请求Body内字段没有通过注解校验（形参声明@Valid时）
+     * 400 请求Body内字段没有通过注解校验（通过参数级@Valid 启用的参数校验）
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
-        List<Invalid> invalids = buildInvalids(e.getBindingResult());
-        log.warn(invalids);
+        log.warn(buildInvalids(e.getBindingResult()));
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
-    private List<Invalid> buildInvalids(BindingResult bindingResult) {
-        List<Invalid> invalids = new ArrayList<>();
-        for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            Invalid invalid = new Invalid(fieldError.getField(), fieldError.getRejectedValue(),
-                    fieldError.getDefaultMessage());
-            invalids.add(invalid);
-        }
-        return invalids;
+    private Collection<InvalidDto> buildInvalids(BindingResult bindingResult) {
+        return bindingResult.getFieldErrors().stream()
+                .map(error -> new InvalidDto().setPath(error.getField()).setValue(error.getRejectedValue())
+                        .setReason(error.getDefaultMessage())).collect(Collectors.toList());
     }
 
 }
