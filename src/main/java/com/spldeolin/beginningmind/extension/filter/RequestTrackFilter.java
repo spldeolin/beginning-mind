@@ -27,14 +27,14 @@ import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * web请求过滤器
+ * 请求轨迹过滤器
  *
  * @author Deolin 2018/12/06
  */
 @Order(1)
 @Component
 @Log4j2
-public class WebRequestFilter extends OncePerRequestFilter {
+public class RequestTrackFilter extends OncePerRequestFilter {
 
     /**
      * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同
