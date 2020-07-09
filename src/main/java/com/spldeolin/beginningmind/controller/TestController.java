@@ -3,28 +3,21 @@ package com.spldeolin.beginningmind.controller;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Executors;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.constant.VipType;
 import com.spldeolin.beginningmind.entity.User2permissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
-import com.spldeolin.beginningmind.util.MdcRunnable;
-import com.spldeolin.beginningmind.valid.annotation.ValidEnumValue;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -94,26 +87,6 @@ public class TestController {
         result.put(10, userMapper.selectList(query));
 
         return result;
-    }
-
-    @GetMapping("/asyncMdc")
-    Object asyncMdc() {
-        log.info("sync");
-        log.info("sync");
-        log.info("sync");
-        log.info("sync");
-
-        Executors.newFixedThreadPool(1).submit(new MdcRunnable(() -> {
-            try {
-                Thread.sleep(10_000);
-            } catch (InterruptedException ignored) {
-            }
-            log.info("async");
-        }));
-
-        log.info("sync");
-
-        return "SUCCESS";
     }
 
 }

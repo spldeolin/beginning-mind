@@ -9,12 +9,12 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.CoreProperties;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.security.PermissionChecker;
 import com.spldeolin.beginningmind.security.SignedChecker;
 import com.spldeolin.beginningmind.security.TokenChecker;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
-import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -67,11 +67,11 @@ public class SecurityAspect {
             case SIGN_AND_AUTH:
                 // 登录 与 鉴权
                 signedChecker.ensureSigned();
-                permissionChecker.ensurePermission(WebContext.getRequest());
+                permissionChecker.ensurePermission(RequestTrack.getCurrent().getRequest());
                 break;
             case TOKEN:
                 // TOKEN
-                tokenChecker.ensureTokenCorrect(WebContext.getRequest(), requestMethod);
+                tokenChecker.ensureTokenCorrect(RequestTrack.getCurrent().getRequest(), requestMethod);
                 break;
         }
     }

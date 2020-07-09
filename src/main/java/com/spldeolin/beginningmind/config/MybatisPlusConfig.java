@@ -10,9 +10,7 @@ import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.OptimisticLockerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
-import com.spldeolin.beginningmind.util.WebContext;
 
 /**
  * Mybatis Plus配置
@@ -54,7 +52,7 @@ public class MybatisPlusConfig {
 
     private static class CommonFieldFillHandler implements MetaObjectHandler {
 
-        private SnowFlakeService snowFlakeService;
+        private final SnowFlakeService snowFlakeService;
 
         private CommonFieldFillHandler(SnowFlakeService snowFlakeService) {
             this.snowFlakeService = snowFlakeService;
@@ -73,10 +71,6 @@ public class MybatisPlusConfig {
             if (this.getFieldValByName("updatedAt", metaObject) == null) {
                 this.setFieldValByName("updatedAt", now, metaObject);
             }
-
-            String insignia = nullToEmpty(WebContext.getRequestTrack());
-            this.setFieldValByName("insertedInsignia", insignia, metaObject);
-            this.setFieldValByName("updatedInsignia", insignia, metaObject);
         }
 
         @Override
@@ -86,16 +80,6 @@ public class MybatisPlusConfig {
             if (this.getFieldValByName("updatedAt", metaObject) == null) {
                 this.setFieldValByName("updatedAt", now, metaObject);
             }
-
-            String insignia = nullToEmpty(WebContext.getRequestTrack());
-            this.setFieldValByName("updatedInsignia", insignia, metaObject);
-        }
-
-        private String nullToEmpty(RequestTrack dto) {
-            if (dto == null) {
-                return "";
-            }
-            return dto.getInsignia();
         }
 
     }

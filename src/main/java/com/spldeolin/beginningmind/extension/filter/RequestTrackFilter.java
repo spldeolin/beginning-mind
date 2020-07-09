@@ -23,7 +23,6 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
-import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -51,14 +50,11 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         Stopwatch stopwatch = Stopwatch.createStarted();
 
         // 将request、response、session、新构造的请求轨迹存入ThreadLocal
-        RequestTrack track = new RequestTrack();
+        RequestTrack track = RequestTrack.getCurrent();
         track.setInsignia(StringRandomUtils.generateEasyReadAndSpeakChar(6));
         track.setRequestedAt(LocalDateTime.now());
-
-        WebContext.setRequestTrack(track);
-        WebContext.setRequest(request);
-        WebContext.setResponse(response);
-        WebContext.setSession(request.getSession());
+        track.setRequest(request);
+        track.setResponse(response);
 
         // 设置Log MDC
         ThreadContext.put(logMdcInsignia, "[" + track.getInsignia() + "]");
@@ -86,13 +82,9 @@ public class RequestTrackFilter extends OncePerRequestFilter {
             // 打印RequestTrack
             track.log();
 
-
             // 清空ThreadLocal
             ThreadContext.remove(logMdcInsignia);
-            WebContext.removeRequestTrack();
-            WebContext.removeRequest();
-            WebContext.removeResponse();
-            WebContext.removeSession();
+            RequestTrack.removeCurrent();
         }
     }
 

@@ -2,7 +2,6 @@ package com.spldeolin.beginningmind.extension.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.constant.ResultCode;
-import com.spldeolin.beginningmind.util.WebContext;
 import lombok.Data;
 
 /**
@@ -19,19 +18,6 @@ public class RequestResult {
     private Object data;
 
     private String message;
-
-    private String insignia;
-
-    private RequestResult() {
-        setupCurrentInsignia();
-    }
-
-    private void setupCurrentInsignia() {
-        RequestTrack requestTrack = WebContext.getRequestTrack();
-        if (requestTrack != null) {
-            insignia = requestTrack.getInsignia();
-        }
-    }
 
     public static RequestResult success() {
         return success(null);

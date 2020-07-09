@@ -12,7 +12,6 @@ import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.util.WebContext;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -47,11 +46,7 @@ public class InternalErrorAdvice {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrack requestTrack = WebContext.getRequestTrack();
-        if (requestTrack == null) {
-            throw new RuntimeException("获取失败，当前线程并不是Web请求线程");
-        }
-
+        RequestTrack requestTrack = RequestTrack.getCurrent();
         String insignia = requestTrack.getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
         return RequestResult.failure(ResultCode.INTERNAL_ERROR);

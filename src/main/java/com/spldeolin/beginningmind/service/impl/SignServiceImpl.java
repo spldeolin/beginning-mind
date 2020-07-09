@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,7 @@ import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.exception.BizException;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.input.SignInput;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
@@ -25,8 +27,6 @@ import com.spldeolin.beginningmind.security.util.SignContext;
 import com.spldeolin.beginningmind.service.PermissionService;
 import com.spldeolin.beginningmind.service.SignService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
-import com.spldeolin.beginningmind.util.SessionUtils;
-import com.spldeolin.beginningmind.util.WebContext;
 import com.spldeolin.beginningmind.vo.CaptchaVO;
 import com.spldeolin.beginningmind.vo.SignerProfileVO;
 import lombok.extern.log4j.Log4j2;
@@ -86,7 +86,8 @@ public class SignServiceImpl implements SignService {
         List<Long> permissionIds = permissions.stream().map(PermissionEntity::getId).collect(Collectors.toList());
 
         // 获取会话ID
-        String sessionId = WebContext.getSession().getId();
+        HttpSession session = RequestTrack.getCurrent().getRequest().getSession();
+        String sessionId = session.getId();
 
         // 用户信息存入Session
         CurrentSignerDTO currentSignerDTO = new CurrentSignerDTO();
@@ -95,7 +96,7 @@ public class SignServiceImpl implements SignService {
         currentSignerDTO.setSignedAt(LocalDateTime.now());
         currentSignerDTO.setPermissions(permissions);
 
-        SessionUtils.set(SIGNER_SESSION_KEY, currentSignerDTO);
+        session.setAttribute(SIGNER_SESSION_KEY, currentSignerDTO);
 
         // profile
         return new SignerProfileVO(user.getName(), permissionIds);
@@ -106,7 +107,7 @@ public class SignServiceImpl implements SignService {
      */
     @Override
     public void signOut() {
-        SessionUtils.remove(SIGNER_SESSION_KEY);
+        RequestTrack.getCurrent().getRequest().getSession().removeAttribute(SIGNER_SESSION_KEY);
     }
 
     private UserEntity signCheck(SignInput input) {

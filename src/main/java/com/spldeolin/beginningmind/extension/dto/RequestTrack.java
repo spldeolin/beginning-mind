@@ -1,12 +1,10 @@
 package com.spldeolin.beginningmind.extension.dto;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Map;
-import org.springframework.data.annotation.Transient;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.base.Stopwatch;
-import com.google.common.collect.Lists;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -18,6 +16,19 @@ import lombok.extern.slf4j.Slf4j;
 @Data
 @Slf4j
 public class RequestTrack {
+
+    private static final ThreadLocal<RequestTrack> context = ThreadLocal.withInitial(RequestTrack::new);
+
+    private RequestTrack() {
+    }
+
+    public static RequestTrack getCurrent() {
+        return context.get();
+    }
+
+    public static void removeCurrent() {
+        context.remove();
+    }
 
     /**
      * insignia
@@ -70,11 +81,6 @@ public class RequestTrack {
     private Long elapsed;
 
     /**
-     * 这次请求调用mapper中方法的信息一览（异步调用不会被记录）
-     */
-    private List<MappedCallDTO> mapperCalls = Lists.newArrayList();
-
-    /**
      * 登录者用户ID
      */
     private Long signerId;
@@ -83,6 +89,10 @@ public class RequestTrack {
      * 请求者IP
      */
     private String ip;
+
+    private HttpServletRequest request;
+
+    private HttpServletResponse response;
 
     public void log() {
         log.info("requestedAt={}", requestedAt);
@@ -94,7 +104,6 @@ public class RequestTrack {
         log.info("responseBody={}", responseBody);
         log.info("handlerUrl={}", handlerUrl);
         log.info("elapsed={}", elapsed);
-        log.info("mapperCalls={}", mapperCalls);
         log.info("signerId={}", signerId);
         log.info("ip={}", ip);
     }
