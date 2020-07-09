@@ -89,7 +89,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
     }
 
     private String getInsigniaOrElseCreate(HttpServletRequest request) {
-        String result = request.getHeader("insigna");
+        String result = request.getHeader("insignia");
         if (result == null) {
             result = StringRandomUtils.generateEasyReadAndSpeakChar(6);
         }
