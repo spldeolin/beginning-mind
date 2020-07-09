@@ -51,7 +51,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
 
         // 将request、response、session、新构造的请求轨迹存入ThreadLocal
         RequestTrack track = RequestTrack.getCurrent();
-        track.setInsignia(StringRandomUtils.generateEasyReadAndSpeakChar(6));
+        track.setInsignia(this.getInsigniaOrElseCreate(request));
         track.setRequestedAt(LocalDateTime.now());
         track.setRequest(request);
         track.setResponse(response);
@@ -86,6 +86,14 @@ public class RequestTrackFilter extends OncePerRequestFilter {
             ThreadContext.remove(logMdcInsignia);
             RequestTrack.removeCurrent();
         }
+    }
+
+    private String getInsigniaOrElseCreate(HttpServletRequest request) {
+        String result = request.getHeader("insigna");
+        if (result == null) {
+            result = StringRandomUtils.generateEasyReadAndSpeakChar(6);
+        }
+        return result;
     }
 
     @NotNull
