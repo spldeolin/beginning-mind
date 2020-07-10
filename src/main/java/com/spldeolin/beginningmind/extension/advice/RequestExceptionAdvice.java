@@ -17,7 +17,7 @@ import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 控制层Advice切面：Http请求相关异常处理
@@ -27,7 +27,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Log4j2
+@Slf4j
 public class RequestExceptionAdvice {
 
     @ExceptionHandler(ServletException.class)
@@ -68,7 +68,7 @@ public class RequestExceptionAdvice {
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult httpMessageNotReadable(HttpMessageNotReadableException e) {
-        log.warn(e.getMessage());
+        log.warn("message={}", e.getMessage());
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
@@ -77,7 +77,7 @@ public class RequestExceptionAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
-        log.warn(buildInvalids(e.getBindingResult()));
+        log.warn("invalids={}", buildInvalids(e.getBindingResult()));
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 

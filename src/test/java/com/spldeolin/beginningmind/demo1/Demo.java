@@ -1,11 +1,12 @@
 package com.spldeolin.beginningmind.demo1;
 
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin 2019-08-22
  */
-@Log4j2
+@Slf4j
 public class Demo {
 
     public static void main(String[] args) {

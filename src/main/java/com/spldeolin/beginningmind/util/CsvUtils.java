@@ -15,14 +15,14 @@ import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.util.exception.CsvException;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * CSV工具类
  *
  * @author Deolin 2019-01-14
  */
-@Log4j2
+@Slf4j
 public class CsvUtils {
 
     private static final String utf8 = StandardCharsets.UTF_8.name();

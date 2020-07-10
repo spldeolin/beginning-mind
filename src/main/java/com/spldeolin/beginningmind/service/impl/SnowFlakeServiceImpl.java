@@ -20,7 +20,8 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
     /**
      * 起始的时间戳 2018-11-12 13:27:37
      */
-    private final static long START_STMP = TimeUtils.toUnixTimestamp(LocalDateTime.of(2018, 11, 12, 13, 27, 37)) * 1000L;
+    private final static long START_STMP =
+            TimeUtils.toUnixTimestamp(LocalDateTime.of(2018, 11, 12, 13, 27, 37)) * 1000L;
 
     /**
      * 序列号占用的位数

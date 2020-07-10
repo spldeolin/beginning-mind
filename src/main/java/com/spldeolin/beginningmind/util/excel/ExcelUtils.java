@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.util.excel.converter.CellConverter;
 import com.spldeolin.beginningmind.util.excel.exception.ExcelCellContentInvalidException;
 import com.spldeolin.beginningmind.util.excel.exception.ExcelReadException;
 import com.spldeolin.beginningmind.util.excel.exception.ExcelWriteException;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Excel读写工具类
@@ -31,7 +31,7 @@ import lombok.extern.log4j.Log4j2;
  * @see CellConverter
  * @see ExcelCellContentInvalidException
  */
-@Log4j2
+@Slf4j
 public class ExcelUtils {
 
     private ExcelUtils() {

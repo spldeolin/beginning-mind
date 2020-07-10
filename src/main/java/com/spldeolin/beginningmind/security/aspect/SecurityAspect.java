@@ -15,14 +15,14 @@ import com.spldeolin.beginningmind.security.SignedChecker;
 import com.spldeolin.beginningmind.security.TokenChecker;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin 2019-02-08
  */
 @Component
 @Aspect
-@Log4j2
+@Slf4j
 public class SecurityAspect {
 
     @Autowired

@@ -12,12 +12,12 @@ import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.service.UserService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin 2018/11/12
  */
-@Log4j2
+@Slf4j
 @Service
 public class UserServiceImpl implements UserService {
 

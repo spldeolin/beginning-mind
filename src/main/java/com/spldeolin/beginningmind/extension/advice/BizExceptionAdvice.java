@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 控制层Advice切面：Http请求相关异常处理
@@ -17,7 +17,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Log4j2
+@Slf4j
 public class BizExceptionAdvice {
 
     /**

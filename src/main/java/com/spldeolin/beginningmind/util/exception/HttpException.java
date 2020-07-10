@@ -6,8 +6,8 @@ import com.spldeolin.beginningmind.util.HttpUtils;
  * 工具类Https遇到预想以外的情况或是内部异常时，
  * 会抛出这个异常，以交给调用方决定如何处理
  *
- * @see HttpUtils
  * @author Deolin 2020-03-05
+ * @see HttpUtils
  */
 public class HttpException extends RuntimeException {
 

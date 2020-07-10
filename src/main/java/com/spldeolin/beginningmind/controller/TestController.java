@@ -18,14 +18,14 @@ import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess;
 import com.spldeolin.beginningmind.security.annotation.SecurityAccess.AccessMode;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin 2018/11/16
  */
 @RestController
 @RequestMapping("/test")
-@Log4j2
+@Slf4j
 public class TestController {
 
     @Autowired
@@ -39,7 +39,7 @@ public class TestController {
     @PostMapping("/requestTrackReport")
     @SecurityAccess(AccessMode.TOKEN)
     Map<Integer, Object> requestTrackReport(@RequestBody User2permissionEntity user2permission) {
-        log.info(user2permission);
+        log.info("user2permission={}", user2permission);
         Map<Integer, Object> result = Maps.newHashMap();
 
         LambdaQueryWrapper<UserEntity> query = new LambdaQueryWrapper<>();

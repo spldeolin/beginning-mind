@@ -29,13 +29,13 @@ import com.spldeolin.beginningmind.service.SignService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
 import com.spldeolin.beginningmind.vo.CaptchaVO;
 import com.spldeolin.beginningmind.vo.SignerProfileVO;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin
  */
 @Service
-@Log4j2
+@Slf4j
 public class SignServiceImpl implements SignService {
 
     public static final String SIGNER_SESSION_KEY = "signer";

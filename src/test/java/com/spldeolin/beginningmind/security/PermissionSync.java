@@ -17,6 +17,7 @@ import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.mapper.PermissionMapper;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 当前权限、寄存权限同步
@@ -26,7 +27,7 @@ import lombok.extern.log4j.Log4j2;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
-@Log4j2
+@Slf4j
 public class PermissionSync {
 
     @Autowired

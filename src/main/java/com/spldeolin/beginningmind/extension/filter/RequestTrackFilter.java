@@ -23,7 +23,7 @@ import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 请求轨迹过滤器
@@ -32,7 +32,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @Order(1)
 @Component
-@Log4j2
+@Slf4j
 public class RequestTrackFilter extends OncePerRequestFilter {
 
     /**

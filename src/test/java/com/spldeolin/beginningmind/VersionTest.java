@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin 2018/11/19
@@ -17,7 +18,7 @@ import lombok.extern.log4j.Log4j2;
 @RunWith(SpringRunner.class)
 @SpringBootTest
 @ActiveProfiles("dev")
-@Log4j2
+@Slf4j
 public class VersionTest {
 
     @Autowired

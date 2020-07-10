@@ -24,7 +24,7 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.spldeolin.beginningmind.util.exception.JsonException;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * JSON工具类
@@ -34,7 +34,7 @@ import lombok.extern.log4j.Log4j2;
  *
  * @author Deolin
  */
-@Log4j2
+@Slf4j
 public class JsonUtils {
 
     private static final ObjectMapper om = initObjectMapper(new ObjectMapper());

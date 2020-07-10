@@ -12,7 +12,7 @@ import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 控制层Advice切面：内部BUG
@@ -21,7 +21,7 @@ import lombok.extern.log4j.Log4j2;
  * @see ResultCode
  */
 @RestControllerAdvice
-@Log4j2
+@Slf4j
 public class InternalErrorAdvice {
 
     /**
@@ -37,7 +37,7 @@ public class InternalErrorAdvice {
                     .setReason(cv.getMessage());
             invalids.add(invalid);
         }
-        log.error(invalids);
+        log.error("invalids={}", invalids);
         return RequestResult.failure(ResultCode.INTERNAL_ERROR);
     }
 

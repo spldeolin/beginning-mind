@@ -8,7 +8,7 @@ import javax.imageio.ImageIO;
 import org.springframework.http.HttpStatus;
 import com.google.common.base.Strings;
 import com.spldeolin.beginningmind.util.exception.HttpException;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.FormBody;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -29,7 +29,7 @@ import okhttp3.ResponseBody;
  *
  * @author Deolin
  */
-@Log4j2
+@Slf4j
 public class HttpUtils {
 
     private static final OkHttpClient client = new OkHttpClient();

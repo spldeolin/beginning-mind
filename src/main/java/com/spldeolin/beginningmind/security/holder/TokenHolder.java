@@ -4,12 +4,12 @@ import java.util.List;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.spldeolin.beginningmind.entity.SecurityAccessTokenEntity;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Deolin 2019-02-23
  */
-@Log4j
+@Slf4j
 public class TokenHolder {
 
     /**

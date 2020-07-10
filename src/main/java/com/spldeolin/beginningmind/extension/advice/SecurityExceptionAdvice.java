@@ -8,7 +8,7 @@ import com.spldeolin.beginningmind.constant.ResultCode;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 控制层Advice切面：异常处理
@@ -18,7 +18,7 @@ import lombok.extern.log4j.Log4j2;
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@Log4j2
+@Slf4j
 public class SecurityExceptionAdvice {
 
     /**

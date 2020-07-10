@@ -10,12 +10,13 @@ import com.google.common.collect.Multimap;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.util.MultimapCollectors;
 import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author Administrator 2019/01/01
  */
 
-@Log4j2
+@Slf4j
 public class ListToMapTest {
 
     private List<UserEntity> users;
@@ -49,11 +50,11 @@ public class ListToMapTest {
     public void uniqueField() {
         // okay
         Map<Long, UserEntity> usersById = Maps.uniqueIndex(users, UserEntity::getId);
-        log.info(usersById);
+        log.info("usersById={}", usersById);
 
         // java.lang.IllegalArgumentException: Multiple entries with same key:
         Map<String, UserEntity> usersByName = Maps.uniqueIndex(users, UserEntity::getName);
-        log.info(usersByName);
+        log.info("usersByName={}", usersByName);
 
     }
 
@@ -61,12 +62,12 @@ public class ListToMapTest {
     public void multiMap() {
         // okey
         Multimap<Long, UserEntity> usersById = users.stream().collect(MultimapCollectors.toMultimap(UserEntity::getId));
-        log.info(usersById);
+        log.info("usersById={}", usersById);
 
         // okey
         Multimap<String, UserEntity> usersByName = users.stream()
                 .collect(MultimapCollectors.toMultimap(UserEntity::getName));
-        log.info(usersByName);
+        log.info("usersByName={}", usersByName);
     }
 
 }
