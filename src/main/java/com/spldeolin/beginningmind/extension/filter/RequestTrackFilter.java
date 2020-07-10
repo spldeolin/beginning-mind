@@ -12,8 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.ThreadContext;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -57,7 +57,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         track.setResponse(response);
 
         // 设置Log MDC
-        ThreadContext.put(logMdcInsignia, "[" + track.getInsignia() + "]");
+        MDC.put(logMdcInsignia, "[" + track.getInsignia() + "]");
 
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
@@ -83,7 +83,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
             track.log();
 
             // 清空ThreadLocal
-            ThreadContext.remove(logMdcInsignia);
+            MDC.clear();
             RequestTrack.removeCurrent();
         }
     }
