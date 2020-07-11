@@ -6,13 +6,11 @@ import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.concurrent.TimeUnit;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
-import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
@@ -21,11 +19,9 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
-import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -52,7 +48,8 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         if (uri.equals("/favicon.ico") || uri.equals("/")) {
             return;
         }
-        Stopwatch stopwatch = Stopwatch.createStarted();
+
+        long beganAt = System.currentTimeMillis();
 
         // 将request、response、session、新构造的请求轨迹存入ThreadLocal
         RequestTrack track = RequestTrack.getCurrent();
@@ -81,7 +78,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
             track.setResponseHeaders(this.getResponseHeaders(wrappedResponse));
             track.setRequestBody(this.getRequestBody(wrappedRequest));
             track.setResponseBody(this.getResponseBody(wrappedResponse));
-            track.setElapsed(stopwatch.elapsed(TimeUnit.MILLISECONDS));
+            track.setElapsed(System.currentTimeMillis() - beganAt);
             track.setIp(this.getIp(wrappedRequest));
 
             // 打印RequestTrack
@@ -101,7 +98,6 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         return result;
     }
 
-    @NotNull
     private Map<String, String> getResponseHeaders(ContentCachingResponseWrapper wrappedResponse) {
         Map<String, String> responseHeaders = Maps.newHashMap();
         Collection<String> headerNames1 = wrappedResponse.getHeaderNames();
@@ -113,7 +109,6 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         return responseHeaders;
     }
 
-    @NotNull
     private Map<String, String> getRequestHeaders(ContentCachingRequestWrapper wrappedRequest) {
         Map<String, String> requestHeaders = Maps.newHashMap();
         Enumeration<String> headerNames = wrappedRequest.getHeaderNames();
