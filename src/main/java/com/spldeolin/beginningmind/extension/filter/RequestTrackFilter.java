@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -23,6 +24,7 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.google.common.base.Stopwatch;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
+import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.util.StringRandomUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,6 +41,9 @@ public class RequestTrackFilter extends OncePerRequestFilter {
     private static final String insigniaPlaceholder = "insignia";
 
     private static final String handlerUrlPlaceholder = "url";
+
+    @Autowired
+    private SnowFlakeService snowFlakeService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -91,7 +96,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
     private String getInsigniaOrElseCreate(HttpServletRequest request) {
         String result = request.getHeader("insignia");
         if (result == null) {
-            result = StringRandomUtils.generateEasyReadAndSpeakChar(6);
+            result = String.valueOf(snowFlakeService.nextId());
         }
         return result;
     }
