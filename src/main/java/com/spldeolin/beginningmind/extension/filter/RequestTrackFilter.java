@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
@@ -35,10 +36,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RequestTrackFilter extends OncePerRequestFilter {
 
-    /**
-     * 必须与log4j2.yml的PatternLayout.pattern中的%X{insignia}占位符名相同
-     */
-    private static final String logMdcInsignia = "insignia";
+    private static final String insigniaPlaceholder = "insignia";
+
+    private static final String handlerUrlPlaceholder = "url";
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -57,7 +57,8 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         track.setResponse(response);
 
         // 设置Log MDC
-        MDC.put(logMdcInsignia, "[" + track.getInsignia() + "]");
+        MDC.put(insigniaPlaceholder, " [" + track.getInsignia() + "]");
+        MDC.put(handlerUrlPlaceholder, " [" + uri + "]");
 
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
@@ -66,7 +67,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
-            response.setHeader(logMdcInsignia, track.getInsignia());
+            response.setHeader(insigniaPlaceholder, track.getInsignia());
 
             // 补全RequestTrack
             track.setHttpMethod(wrappedRequest.getMethod());
@@ -75,7 +76,6 @@ public class RequestTrackFilter extends OncePerRequestFilter {
             track.setResponseHeaders(this.getResponseHeaders(wrappedResponse));
             track.setRequestBody(this.getRequestBody(wrappedRequest));
             track.setResponseBody(this.getResponseBody(wrappedResponse));
-            track.setHandlerUrl(uri);
             track.setElapsed(stopwatch.elapsed(TimeUnit.MILLISECONDS));
             track.setIp(this.getIp(wrappedRequest));
 
@@ -123,7 +123,13 @@ public class RequestTrackFilter extends OncePerRequestFilter {
 
     private String getRequestBody(ContentCachingRequestWrapper wrappedRequest) {
         try {
-            return IOUtils.toString(wrappedRequest.getInputStream(), wrappedRequest.getCharacterEncoding());
+            String encoding = wrappedRequest.getCharacterEncoding();
+            String result = IOUtils.toString(wrappedRequest.getContentAsByteArray(), encoding);
+            if (StringUtils.isEmpty(result)) {
+                // 报文有body，但handler没有@RequestBody时，wrappedRequest.getInputStream()会有内容
+                result = IOUtils.toString(wrappedRequest.getInputStream(), encoding);
+            }
+            return result;
         } catch (IOException e) {
             log.error("读取request body失败", e);
             return "";

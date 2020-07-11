@@ -70,11 +70,6 @@ public class RequestTrack {
     private String responseBody;
 
     /**
-     * 请求URL
-     */
-    private String handlerUrl;
-
-    /**
      * 耗时
      */
     private Long elapsed;
@@ -101,7 +96,6 @@ public class RequestTrack {
         log.info("responseHeaders={}", responseHeaders);
         log.info("requestBody={}", requestBody);
         log.info("responseBody={}", responseBody);
-        log.info("handlerUrl={}", handlerUrl);
         log.info("elapsed={}", elapsed);
         log.info("signerId={}", signerId);
         log.info("ip={}", ip);
