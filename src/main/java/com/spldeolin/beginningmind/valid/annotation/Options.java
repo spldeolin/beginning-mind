@@ -7,25 +7,26 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import com.spldeolin.beginningmind.valid.validator.MobileValidator;
+import com.spldeolin.beginningmind.valid.validator.OptionsValidator;
 
 /**
- * 确保手机号是有效的
+ * 确保值在可选范围内
  *
  * <pre>
- * 支持类型：String
- * 规则：11位数字，以1开头
+ * 支持类型：Number
  * </pre>
  *
- * @author Deolin 2018-05-23
+ * @author Deolin 2019-10-29
  */
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = {MobileValidator.class})
-public @interface Mobile {
+@Constraint(validatedBy = {OptionsValidator.class})
+public @interface Options {
 
-    String message() default "不是有效的手机号";
+    double[] value() default {};
+
+    String message() default "值不在可选范围内";
 
     Class<?>[] groups() default {};
 

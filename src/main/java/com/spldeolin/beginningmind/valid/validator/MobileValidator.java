@@ -5,11 +5,11 @@ import javax.validation.ConstraintValidatorContext;
 import com.spldeolin.beginningmind.valid.annotation.Mobile;
 
 /**
- * “手机号”校验器
+ * 校验器：确保手机号是有效的
  *
- * @author Deolin
+ * @author Deolin 2018-05-23
  */
-public class MobileValidator implements ConstraintValidator<Mobile, String> {
+public class MobileValidator extends CustomMessageValidator<Mobile, String> {
 
     @Override
     public void initialize(Mobile constraintAnnotation) {

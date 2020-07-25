@@ -7,25 +7,25 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 import javax.validation.Constraint;
 import javax.validation.Payload;
-import com.spldeolin.beginningmind.valid.validator.MobileValidator;
+import com.spldeolin.beginningmind.valid.validator.NotEmptyExValidator;
+import com.spldeolin.beginningmind.valid.validator.NotNullExValidator;
 
 /**
- * 确保手机号是有效的
+ * 确保Collection对象不能为empty，并且内部元素均不能为null
  *
  * <pre>
- * 支持类型：String
- * 规则：11位数字，以1开头
+ * 支持类型：Collection<?>
  * </pre>
  *
- * @author Deolin 2018-05-23
+ * @author Deolin 2020-07-25
  */
 @Target({ElementType.FIELD, ElementType.PARAMETER, ElementType.TYPE_USE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = {MobileValidator.class})
-public @interface Mobile {
+@Constraint(validatedBy = {NotEmptyExValidator.class})
+public @interface NotEmptyEx {
 
-    String message() default "不是有效的手机号";
+    String message() default "不能为空，且必须有元素，且元素均不能为null";
 
     Class<?>[] groups() default {};
 
