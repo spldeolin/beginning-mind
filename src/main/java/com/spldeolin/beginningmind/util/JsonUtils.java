@@ -9,12 +9,11 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.TimeZone;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import com.fasterxml.jackson.databind.type.TypeFactory;
 import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -158,11 +157,9 @@ public class JsonUtils {
      * 将JSON转化为对象列表，支持自定义ObjectMapper
      */
     public static <T> List<T> toListOfObjects(String json, Class<T> clazz, ObjectMapper om) {
-        // ObjectMapper.TypeFactory没有线程隔离，所以需要new一个默认ObjectMapper
-        TypeFactory typeFactory = initObjectMapper(new ObjectMapper()).getTypeFactory();
-        JavaType javaType = typeFactory.constructParametricType(List.class, clazz);
         try {
-            return om.readValue(json, javaType);
+            return om.readValue(json, new TypeReference<List<T>>() {
+            });
         } catch (IOException e) {
             log.error("json={}, clazz={}", json, clazz, e);
             throw new JsonException(e);
