@@ -32,7 +32,7 @@ import lombok.extern.slf4j.Slf4j;
  * 支持JSON 与对象间、与对象列表间 的互相转换。
  * </pre>
  *
- * @author Deolin
+ * @author Deolin 2018-04-02
  */
 @Slf4j
 public class JsonUtils {
@@ -44,12 +44,22 @@ public class JsonUtils {
     }
 
     public static ObjectMapper initObjectMapper(ObjectMapper om) {
-        // 模组（guava collection、jsr310、Long转String）
+        // 支持Guava提供的数据结构
         om.registerModule(new GuavaModule());
+
+        // Long转化为String
         om.registerModule(longToStringModule());
+
+        // Java8时间类型的全局格式
         om.registerModule(timeModule());
 
-        // json -> object时，忽略json中不认识的属性名
+        // 反序列化时，忽略Collection中为null的元素
+        om.registerModule(new DeserializeIgnoreNullElementModule());
+
+        // 反序列化时，对每个String进行trim
+        om.registerModule(new StringTrimModule());
+
+        // 反序列化时，忽略json中存在，但Javabean中不存在的属性
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         // 时区
@@ -157,7 +167,6 @@ public class JsonUtils {
             log.error("json={}, clazz={}", json, clazz, e);
             throw new JsonException(e);
         }
-
     }
 
 }
