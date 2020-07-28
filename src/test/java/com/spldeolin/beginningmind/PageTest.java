@@ -13,7 +13,6 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.util.JsonUtils;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -37,7 +36,7 @@ public class PageTest {
         wrapper.eq(UserEntity::getMobile, "1");
 
         IPage<UserEntity> pageResult = userMapper.selectPage(pageParam, wrapper);
-        log.info(JsonUtils.beautify(pageResult));
+        log.info(JsonUtils.toJsonPrettily(pageResult));
     }
 
     @Test
@@ -45,7 +44,7 @@ public class PageTest {
         Page<UserEntity> pageParam = new Page<>(1, 2); // 当前页码，每页条数
 
         List<UserEntity> pageResult = userMapper.listAsPageByMobile(pageParam, "1");
-        log.info(JsonUtils.beautify(pageResult));
+        log.info(JsonUtils.toJsonPrettily(pageResult));
     }
 
 }

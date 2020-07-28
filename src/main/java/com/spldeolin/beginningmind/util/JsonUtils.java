@@ -89,26 +89,6 @@ public class JsonUtils {
     }
 
     /**
-     * 美化JSON
-     * <pre>
-     * e.g.:
-     * {
-     *   "name" : "Deolin",
-     *   "age" : 18,
-     *   "isVip" : true
-     * }
-     * </pre>
-     */
-    public static String beautify(Object object) {
-        try {
-            return om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
-        } catch (JsonProcessingException e) {
-            log.error("object={}", object, e);
-            throw new JsonException("转化JSON失败");
-        }
-    }
-
-    /**
      * 将对象转化为JSON
      */
     public static String toJson(Object object) {
@@ -124,6 +104,25 @@ public class JsonUtils {
         } catch (JsonProcessingException e) {
             log.error("object={}", object, e);
             throw new JsonException(e);
+        }
+    }
+
+    /**
+     * 将对象转化为JSON，结果是美化的
+     */
+    public static String toJsonPrettily(Object object) {
+        return toJsonPrettily(object, om);
+    }
+
+    /**
+     * 将对象转化为JSON，结果是美化的
+     */
+    public static String toJsonPrettily(Object object, ObjectMapper om) {
+        try {
+            return om.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+        } catch (JsonProcessingException e) {
+            log.error("object={}", object, e);
+            throw new JsonException("转化JSON失败");
         }
     }
 
@@ -149,19 +148,32 @@ public class JsonUtils {
     /**
      * 将JSON转化为对象列表
      */
-    public static <T> List<T> toListOfObjects(String json, Class<T> clazz) {
-        return toListOfObjects(json, clazz, om);
+    public static <T> List<T> toListOfObject(String json, Class<T> clazz) {
+        return toListOfObject(json, clazz, om);
     }
 
     /**
      * 将JSON转化为对象列表，支持自定义ObjectMapper
      */
-    public static <T> List<T> toListOfObjects(String json, Class<T> clazz, ObjectMapper om) {
+    public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
             return om.readValue(json, new TypeReference<List<T>>() {
             });
         } catch (IOException e) {
             log.error("json={}, clazz={}", json, clazz, e);
+            throw new JsonException(e);
+        }
+    }
+
+    /**
+     * JSON -> 参数化的对象
+     */
+    public static <T> T toParameterizedObject(String json) {
+        try {
+            return om.readValue(json, new TypeReference<T>() {
+            });
+        } catch (IOException e) {
+            log.error("json={}", json, e);
             throw new JsonException(e);
         }
     }
