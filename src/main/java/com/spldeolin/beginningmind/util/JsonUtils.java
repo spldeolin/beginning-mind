@@ -128,6 +128,8 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象
+     *
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
      */
     public static <T> T toObject(String json, Class<T> clazz) {
         return toObject(json, clazz, om);
@@ -135,6 +137,8 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象，支持自定义ObjectMapper
+     *
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
      */
     public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
@@ -147,6 +151,8 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象列表
+     *
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
      */
     public static <T> List<T> toListOfObject(String json, Class<T> clazz) {
         return toListOfObject(json, clazz, om);
@@ -154,6 +160,8 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象列表，支持自定义ObjectMapper
+     *
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
      */
     public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
@@ -167,6 +175,10 @@ public class JsonUtils {
 
     /**
      * JSON -> 参数化的对象
+     *
+     * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
+     *
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
      */
     public static <T> T toParameterizedObject(String json) {
         try {
