@@ -27,8 +27,9 @@ import lombok.extern.slf4j.Slf4j;
 
 /**
  * JSON工具类
+ *
  * <pre>
- * 支持JSON 与对象间、与对象列表间 的互相转换。
+ * 支持JSON与对象间的互相转换
  * </pre>
  *
  * @author Deolin 2018-04-02
@@ -96,7 +97,7 @@ public class JsonUtils {
     }
 
     /**
-     * 将对象转化为JSON，支持自定义ObjectMapper
+     * 将对象转化为JSON
      */
     public static String toJson(Object object, ObjectMapper om) {
         try {
@@ -129,16 +130,16 @@ public class JsonUtils {
     /**
      * 将JSON转化为对象
      *
-     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，如果需要补偿处理，可以捕获这个异常
      */
     public static <T> T toObject(String json, Class<T> clazz) {
         return toObject(json, clazz, om);
     }
 
     /**
-     * 将JSON转化为对象，支持自定义ObjectMapper
+     * 将JSON转化为对象
      *
-     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，如果需要补偿处理，可以捕获这个异常
      */
     public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
@@ -152,16 +153,16 @@ public class JsonUtils {
     /**
      * 将JSON转化为对象列表
      *
-     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，如果需要补偿处理，可以捕获这个异常
      */
     public static <T> List<T> toListOfObject(String json, Class<T> clazz) {
         return toListOfObject(json, clazz, om);
     }
 
     /**
-     * 将JSON转化为对象列表，支持自定义ObjectMapper
+     * 将JSON转化为对象列表
      *
-     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，如果需要补偿处理，可以捕获这个异常
      */
     public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
@@ -178,7 +179,7 @@ public class JsonUtils {
      *
      * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
      *
-     * @throws JsonException 转化失败时，抛出这个Runtime异常，不可能失败时可以不捕获它
+     * @throws JsonException 转化失败时，抛出这个Runtime异常，如果需要补偿处理，可以捕获这个异常
      */
     public static <T> T toParameterizedObject(String json) {
         try {
