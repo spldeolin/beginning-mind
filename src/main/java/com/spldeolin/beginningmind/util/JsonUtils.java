@@ -47,17 +47,11 @@ public class JsonUtils {
         // 支持Guava提供的数据结构
         om.registerModule(new GuavaModule());
 
-        // Long转化为String
+        // 序列化时，Long转化为String
         om.registerModule(longToStringModule());
 
         // Java8时间类型的全局格式
         om.registerModule(timeModule());
-
-        // 反序列化时，忽略Collection中为null的元素
-        om.registerModule(new DeserializeIgnoreNullElementModule());
-
-        // 反序列化时，对每个String进行trim
-        om.registerModule(new StringTrimModule());
 
         // 反序列化时，忽略json中存在，但Javabean中不存在的属性
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);

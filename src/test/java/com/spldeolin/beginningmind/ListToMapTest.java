@@ -8,8 +8,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.spldeolin.beginningmind.entity.UserEntity;
-import com.spldeolin.beginningmind.util.MultimapCollectors;
-import lombok.extern.log4j.Log4j2;
+import com.spldeolin.beginningmind.support.MultimapCollectors;
 import lombok.extern.slf4j.Slf4j;
 
 /**

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.util;
+package com.spldeolin.beginningmind.support;
 
 import java.io.IOException;
 import com.fasterxml.jackson.core.JsonParser;
