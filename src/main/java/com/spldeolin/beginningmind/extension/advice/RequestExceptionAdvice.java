@@ -30,30 +30,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RequestExceptionAdvice {
 
-    @ExceptionHandler(ServletException.class)
-    public RequestResult handle(ServletException e) {
-        String message = e.getMessage();
+    /**
+     * 404 Not Found
+     * 只有spring.mvc.throw-exception-if-no-handler-found=true和spring.resources.add-mappings=false时，才会抛出这个异常
+     */
+    @ExceptionHandler(NoHandlerFoundException.class)
+    public RequestResult handler(NoHandlerFoundException e) {
+        log.warn(e.getMessage());
+        return RequestResult.failure(ResultCode.NOT_FOUND);
+    }
 
-        // 404 Not Found
-        // 只有spring.mvc.throw-exception-if-no-handler-found=true和spring.resources.add-mappings=false时，才会抛出这个异常
-        if (e instanceof NoHandlerFoundException) {
-            log.warn(message);
-            return RequestResult.failure(ResultCode.NOT_FOUND);
-        }
+    /**
+     * 400 请求动词错误
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public RequestResult handler(HttpRequestMethodNotSupportedException e) {
+        String supportedMethods = Arrays.toString(e.getSupportedMethods());
+        log.warn(e.getMessage() + " " + supportedMethods);
+        return RequestResult.failure(ResultCode.BAD_REQEUST);
+    }
 
-        // 400 请求动词错误
-        if (e instanceof HttpRequestMethodNotSupportedException) {
-            String supportedMethods = Arrays
-                    .toString(((HttpRequestMethodNotSupportedException) e).getSupportedMethods());
-            message += " " + supportedMethods;
-        }
-
-        // 400 请求Content-Type错误。往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
-        if (e instanceof HttpMediaTypeNotSupportedException) {
-            message += " [application/json]";
-        }
-
-        log.warn(message);
+    /**
+     * 400 请求Content-Type错误。往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
+     */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    public RequestResult handler(HttpMediaTypeNotSupportedException e) {
+        log.warn(e.getMessage() + " " + " [application/json]");
         return RequestResult.failure(ResultCode.BAD_REQEUST);
     }
 
