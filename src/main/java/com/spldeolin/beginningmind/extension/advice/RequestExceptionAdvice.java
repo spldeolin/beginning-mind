@@ -53,7 +53,7 @@ public class RequestExceptionAdvice {
     /**
      * 400 请求Content-Type错误。往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
      */
-    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult handler(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage() + " " + " [application/json]");
         return RequestResult.failure(ResultCode.BAD_REQEUST);
