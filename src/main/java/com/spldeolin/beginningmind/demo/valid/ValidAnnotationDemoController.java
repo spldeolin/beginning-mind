@@ -6,8 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.spldeolin.beginningmind.valid.annotation.Mobile;
-import com.spldeolin.beginningmind.valid.annotation.NotEmptyEx;
-import com.spldeolin.beginningmind.valid.annotation.NotNullEx;
 import com.spldeolin.beginningmind.valid.annotation.Options;
 import lombok.Data;
 
@@ -57,22 +55,16 @@ InvalidDto(path=h, value=9, reason=值不在可选范围内)]
         @Mobile
         private String a;
 
-        @NotEmptyEx
         private List<Integer> b;
 
-        @NotEmptyEx
         private List<Integer> c;
 
-        @NotEmptyEx
         private List<Integer> d;
 
-        @NotNullEx
         private List<Integer> e;
 
-        @NotNullEx
         private List<Integer> f;
 
-        @NotNullEx
         private List<Integer> g;
 
         @Options({1, 2})
