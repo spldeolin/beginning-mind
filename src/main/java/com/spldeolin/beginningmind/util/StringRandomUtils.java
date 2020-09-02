@@ -1,5 +1,7 @@
 package com.spldeolin.beginningmind.util;
 
+import org.apache.commons.lang3.RandomStringUtils;
+
 /**
  * 随机字符串
  *
@@ -25,7 +27,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateVisibleAscii(int stringLength) {
-        return org.apache.commons.lang3.RandomStringUtils.randomAscii(stringLength);
+        return RandomStringUtils.randomAscii(stringLength);
     }
 
     /**
@@ -35,7 +37,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateEnNum(int stringLength) {
-        return org.apache.commons.lang3.RandomStringUtils.random(stringLength, true, true);
+        return RandomStringUtils.random(stringLength, true, true);
     }
 
     /**
@@ -45,7 +47,7 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateLowEnNum(int stringLength) {
-        return org.apache.commons.lang3.RandomStringUtils.random(stringLength, LOW_EN_NUM);
+        return RandomStringUtils.random(stringLength, LOW_EN_NUM);
     }
 
     /**
@@ -55,17 +57,28 @@ public class StringRandomUtils {
      * @return 随机字符串
      */
     public static String generateNum(int stringLength) {
-        return org.apache.commons.lang3.RandomStringUtils.randomNumeric(stringLength);
+        return RandomStringUtils.randomNumeric(stringLength);
     }
 
     /**
-     * 随机选取除了o、0、l、i、1、q、9、z、2、b、6、m、n、b、d、r、e的小写英文字母和数字，生成易区分和易读的字符串
+     * 随机选取发音或者书写时不容易混淆的小写英文字母和数字，生成字符串
      *
      * @param stringLength 字符串长度
      * @return 随机字符串
      */
     public static String generateEasyReadAndSpeakChar(int stringLength) {
-        return org.apache.commons.lang3.RandomStringUtils.random(stringLength, EASY_READ_AND_SPEAK);
+        return RandomStringUtils.random(stringLength, EASY_READ_AND_SPEAK);
+    }
+
+    /**
+     * 随机生成汉字
+     */
+    public static String generateHanzi(int stringLength) {
+        StringBuilder sb = new StringBuilder(64);
+        for (int i = 0; i < stringLength; i++) {
+            sb.append((char) (0x4e00 + (int) (Math.random() * (0x9fa5 - 0x4e00 + 1))));
+        }
+        return sb.toString();
     }
 
 }
