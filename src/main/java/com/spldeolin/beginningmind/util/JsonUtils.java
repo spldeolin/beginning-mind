@@ -65,30 +65,31 @@ public class JsonUtils {
     }
 
     public static ObjectMapper createObjectMapper(NumberToStringMightJsonSerializer numberToStringMightJsonSerializer) {
+        ObjectMapper result = new ObjectMapper();
         // Guava的数据结构
-        om.registerModule(new GuavaModule());
+        result.registerModule(new GuavaModule());
 
         // 忽略json中存在，但Javabean中不存在的属性
-        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        result.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
         // Long to String
-        om.registerModule(toStringModule(numberToStringMightJsonSerializer));
+        result.registerModule(toStringModule(numberToStringMightJsonSerializer));
 
         // Java8 time
-        om.registerModule(java8TimeModule());
+        result.registerModule(java8TimeModule());
 
         // java.util.Date
-        om.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+        result.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
 
         // 反序列化时，忽略Collection中为null的元素
-        om.registerModule(new CollectionIgnoreNullElementDeserializerModule());
+        result.registerModule(new CollectionIgnoreNullElementDeserializerModule());
 
         // 反序列化时，对每个String进行trim
-        om.registerModule(stringTrimModule());
+        result.registerModule(stringTrimModule());
 
         // 时区
-        om.setTimeZone(TimeZone.getDefault());
-        return om;
+        result.setTimeZone(TimeZone.getDefault());
+        return result;
     }
 
     public static SimpleModule stringTrimModule() {
