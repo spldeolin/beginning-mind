@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.support;
+package com.spldeolin.beginningmind.util;
 
 import java.util.Set;
 import java.util.function.BiConsumer;

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.support;
+package com.spldeolin.beginningmind.json;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -16,7 +16,8 @@ import com.fasterxml.jackson.databind.deser.std.CollectionDeserializer;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.type.CollectionType;
 
-public class DeserializeIgnoreNullElementModule extends SimpleModule {
+
+public class CollectionIgnoreNullElementDeserializerModule extends SimpleModule {
 
     private static class CustomizedCollectionDeserializer extends CollectionDeserializer {
 

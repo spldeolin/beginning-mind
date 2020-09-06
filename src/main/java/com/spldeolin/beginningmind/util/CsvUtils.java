@@ -4,10 +4,13 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
+import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -25,17 +28,32 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CsvUtils {
 
-    private static final String utf8 = StandardCharsets.UTF_8.name();
-
-    public static final CsvMapper cm;
-
-    static {
-        cm = (CsvMapper) JsonUtils.initObjectMapper(new CsvMapper());
-        cm.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
-    }
+    public static final CsvMapper cm = createCsvMapper();
 
     private CsvUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
+    }
+
+    public static CsvMapper createCsvMapper() {
+        CsvMapper result = new CsvMapper();
+        // 忽略csv中存在，但Javabean中不存在的属性
+        result.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        // Java8 time
+        result.registerModule(JsonUtils.java8TimeModule());
+
+        // java.util.Date
+        result.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+        // 反序列化时，对每个String进行trim
+        result.registerModule(JsonUtils.stringTrimModule());
+
+        // 时区
+        result.setTimeZone(TimeZone.getDefault());
+
+        // 序列化时，不按属性名排序
+        result.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+        return result;
     }
 
     /**
@@ -75,6 +93,7 @@ public class CsvUtils {
             String fileBaseName) {
         String csvContent = writeCsv(data, clazz);
 
+        String utf8 = StandardCharsets.UTF_8.name();
         response.setContentType("application/CSV;numberformat:@");
         response.setCharacterEncoding(utf8);
         try {
