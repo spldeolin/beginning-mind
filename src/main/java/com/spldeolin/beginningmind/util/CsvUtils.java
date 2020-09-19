@@ -4,13 +4,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.SimpleDateFormat;
 import java.util.Collection;
 import java.util.List;
-import java.util.TimeZone;
 import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectReader;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -35,25 +32,13 @@ public class CsvUtils {
     }
 
     public static CsvMapper createCsvMapper() {
-        CsvMapper result = new CsvMapper();
-        // 忽略csv中存在，但Javabean中不存在的属性
-        result.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        // Java8 time
-        result.registerModule(JsonUtils.java8TimeModule());
-
-        // java.util.Date
-        result.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
-        // 反序列化时，对每个String进行trim
-        result.registerModule(JsonUtils.stringTrimModule());
-
-        // 时区
-        result.setTimeZone(TimeZone.getDefault());
+        // 缺省配置
+        CsvMapper cm = ObjectMapperUtils.initDefault(new CsvMapper());
 
         // 序列化时，不按属性名排序
-        result.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
-        return result;
+        cm.disable(MapperFeature.SORT_PROPERTIES_ALPHABETICALLY);
+
+        return cm;
     }
 
     /**

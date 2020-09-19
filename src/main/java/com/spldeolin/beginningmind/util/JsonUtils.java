@@ -1,31 +1,12 @@
 package com.spldeolin.beginningmind.util;
 
 import java.io.IOException;
-import java.math.BigInteger;
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.TimeZone;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
-import com.spldeolin.beginningmind.json.CollectionIgnoreNullElementDeserializerModule;
-import com.spldeolin.beginningmind.json.NumberToStringMightJsonSerializer;
-import com.spldeolin.beginningmind.json.StringTrimDeserializer;
+import com.google.common.collect.Lists;
 import com.spldeolin.beginningmind.util.exception.JsonException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,70 +35,10 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JsonUtils {
 
-    private static final ObjectMapper om = createObjectMapper();
+    private static final ObjectMapper om = ObjectMapperUtils.initDefault(new ObjectMapper());
 
     private JsonUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
-    }
-
-    public static ObjectMapper createObjectMapper() {
-        return createObjectMapper(new NumberToStringMightJsonSerializer());
-    }
-
-    public static ObjectMapper createObjectMapper(NumberToStringMightJsonSerializer numberToStringMightJsonSerializer) {
-        ObjectMapper result = new ObjectMapper();
-        // Guava的数据结构
-        result.registerModule(new GuavaModule());
-
-        // 忽略json中存在，但Javabean中不存在的属性
-        result.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        // Long to String
-        result.registerModule(toStringModule(numberToStringMightJsonSerializer));
-
-        // Java8 time
-        result.registerModule(java8TimeModule());
-
-        // java.util.Date
-        result.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
-        // 反序列化时，忽略Collection中为null的元素
-        result.registerModule(new CollectionIgnoreNullElementDeserializerModule());
-
-        // 反序列化时，对每个String进行trim
-        result.registerModule(stringTrimModule());
-
-        // 时区
-        result.setTimeZone(TimeZone.getDefault());
-        return result;
-    }
-
-    public static SimpleModule stringTrimModule() {
-        SimpleModule result = new SimpleModule();
-        result.addDeserializer(String.class, new StringTrimDeserializer());
-        return result;
-    }
-
-    public static SimpleModule java8TimeModule() {
-        SimpleModule result = new JavaTimeModule();
-        DateTimeFormatter date = TimeUtils.DEFAULT_DATE_FORMATTER;
-        DateTimeFormatter time = TimeUtils.DEFAULT_TIME_FORMATTER;
-        DateTimeFormatter dateTime = TimeUtils.DEFAULT_DATE_TIME_FORMATTER;
-        result.addSerializer(LocalDate.class, new LocalDateSerializer(date))
-                .addDeserializer(LocalDate.class, new LocalDateDeserializer(date))
-                .addSerializer(LocalTime.class, new LocalTimeSerializer(time))
-                .addDeserializer(LocalTime.class, new LocalTimeDeserializer(time))
-                .addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(dateTime))
-                .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(dateTime));
-        return result;
-    }
-
-    private static SimpleModule toStringModule(NumberToStringMightJsonSerializer numberToStringMightJsonSerializer) {
-        SimpleModule simpleModule = new SimpleModule();
-        simpleModule.addSerializer(BigInteger.class, numberToStringMightJsonSerializer);
-        simpleModule.addSerializer(Long.class, numberToStringMightJsonSerializer);
-        simpleModule.addSerializer(Long.TYPE, numberToStringMightJsonSerializer);
-        return simpleModule;
     }
 
     /**
@@ -195,11 +116,13 @@ public class JsonUtils {
      *
      * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
+
     public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
-            return om.readValue(json, new TypeReference<List<T>>() {
-            });
-        } catch (IOException e) {
+            @SuppressWarnings("unchecked") Class<T[]> arrayClass = (Class<T[]>) Class
+                    .forName("[L" + clazz.getName() + ";");
+            return Lists.newArrayList(om.readValue(json, arrayClass));
+        } catch (IOException | ClassNotFoundException e) {
             log.error("json={}, clazz={}", json, clazz, e);
             throw new JsonException(e);
         }
@@ -235,7 +158,7 @@ public class JsonUtils {
     /**
      * JSON -> JsonNode对象
      *
-     * <strong>不建议使用</strong>
+     * <strong>除非JSON对应数据结构在运行时是变化的，否则不建议使这个方法</strong>
      *
      * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
@@ -246,7 +169,7 @@ public class JsonUtils {
     /**
      * JSON -> JsonNode对象
      *
-     * <strong>不建议使用</strong>
+     * <strong>除非JSON对应数据结构在运行时是变化的，否则不建议使这个方法</strong>
      *
      * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
