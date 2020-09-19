@@ -28,7 +28,12 @@ public class ObjectMapperUtils {
     /**
      * 对 ObjectMapper 进行缺省化配置
      *
-     * 时间相关的pattern缺省为yyyy-MM-dd HH:mm:ss、yyyy-MM-dd、HH:mm:ss
+     * <pre>
+     * 1. 时间相关的pattern缺省为yyyy-MM-dd HH:mm:ss、yyyy-MM-dd、HH:mm:ss，时区缺省为系统时区
+     * 2. 发现并注册所有 jackson-datatype-* 依赖
+     * 3. 反序列化时，忽略Javabean中不存在的属性，而不是抛出异常
+     * 4. 反序列化时，忽略Javabean中Collection属性对应JSON Array中的为null的元素
+     * </pre>
      *
      * @see ObjectMapperUtils#findAndRegister
      * @see ObjectMapperUtils#ignoreCollectionNullElement

@@ -14,20 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * JSON工具类
  *
  * <pre>
- * 特性：
- * 1. 支持Guava的数据结构，如Multimap、Table等
- * 2. 反系列化时，忽略JSON中提供了而Javabean中不存在的属性，不抛出异常
- * 3. 序列化时，支持将Long、long、BigInteger类型转化为String，作用范围可指定
- *    （可通过@JsonSerializer覆盖这个特性）
- * 4. 支持Java8 time包下的LocalDate、LocalTime、LocalDateTime，缺省pattern分别为"yyyy-MM-dd"、"HH:mm:ss"、"yyyy-MM-dd HH:mm:ss"
- *    （可通过@JsonFormat覆盖这个特性）
- * 5. java.util.Date的缺省pattern为yyyy-MM-dd HH:mm:ss
- *    （可通过@JsonFormat覆盖这个特性）
- * 6. 时区默认为东8区
- *    （可通过@JsonFormat覆盖这个特性）
- * 7. 反序列化时，忽略Collection中为null的元素，不add(null)到容器对象中
- * 8. 反序列化时，对每个String进行trim
- *    （可通过@JsonDeserializer覆盖这个特性）
+ * 序列化与反序列化策略参考{@link ObjectMapperUtils#initDefault}
  * </pre>
  *
  * @author Deolin 2018-04-02
