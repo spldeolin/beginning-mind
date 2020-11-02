@@ -10,7 +10,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.4.RELEASE</version>
+        <version>2.3.5.RELEASE</version>
         <relativePath/>
     </parent>
 
@@ -154,7 +154,7 @@
         <dependency>
             <groupId>org.simplejavamail</groupId>
             <artifactId>simple-java-mail</artifactId>
-            <version>6.4.3</version>
+            <version>6.4.4</version>
         </dependency>
         <!-- pinyin4j -->
         <dependency>
