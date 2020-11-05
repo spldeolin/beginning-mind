@@ -150,12 +150,6 @@
             <artifactId>javase</artifactId>
             <version>3.4.1</version>
         </dependency>
-        <!-- simple java email -->
-        <dependency>
-            <groupId>org.simplejavamail</groupId>
-            <artifactId>simple-java-mail</artifactId>
-            <version>6.4.4</version>
-        </dependency>
         <!-- pinyin4j -->
         <dependency>
             <groupId>com.belerweb</groupId>
