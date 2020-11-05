@@ -21,16 +21,4 @@ public class SignInput {
     @NotBlank
     private String password;
 
-    /**
-     * 验证码
-     */
-    @NotBlank
-    private String captcha;
-
-    /**
-     * 用于获取验证码缓存的token
-     */
-    @NotBlank
-    private String captchaToken;
-
 }

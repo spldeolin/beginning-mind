@@ -1,21 +1,13 @@
 package com.spldeolin.beginningmind.service.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpSession;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import com.google.code.kaptcha.Producer;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.exception.BizException;
@@ -26,8 +18,6 @@ import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.security.util.SignContext;
 import com.spldeolin.beginningmind.service.PermissionService;
 import com.spldeolin.beginningmind.service.SignService;
-import com.spldeolin.beginningmind.util.StringRandomUtils;
-import com.spldeolin.beginningmind.vo.CaptchaVO;
 import com.spldeolin.beginningmind.vo.SignerProfileVO;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,33 +35,6 @@ public class SignServiceImpl implements SignService {
 
     @Autowired
     private PermissionService permissionService;
-
-    @Autowired
-    private Producer kaptchaProducer;
-
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
-    @Override
-    public CaptchaVO captcha() {
-        String captcha = StringRandomUtils.generateEasyReadAndSpeakChar(4);
-
-        // cache
-        String token = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(token, captcha, 5, TimeUnit.MINUTES);
-
-        // base64
-        String base64;
-        try (ByteArrayOutputStream os = new ByteArrayOutputStream()) {
-            ImageIO.write(kaptchaProducer.createImage(captcha), "png", os);
-            base64 = "data:image/jpg;base64," + Base64.encodeBase64String(os.toByteArray());
-        } catch (IOException e) {
-            log.error("验证码生成失败", e);
-            throw new BizException("验证码生成失败");
-        }
-
-        return new CaptchaVO(base64, token);
-    }
 
     /**
      * 登录
@@ -111,17 +74,6 @@ public class SignServiceImpl implements SignService {
     }
 
     private UserEntity signCheck(SignInput input) {
-        // 验证码校验
-        String token = input.getCaptchaToken();
-        String captcha = (String) redisTemplate.opsForValue().get(token);
-        redisTemplate.delete(token);
-        if (captcha == null) {
-            throw new BizException("验证码超时");
-        }
-        if (!captcha.equalsIgnoreCase(input.getCaptcha())) {
-            throw new BizException("验证码错误");
-        }
-
         // 重复登录校验
         if (SignContext.isSigning()) {
             throw new BizException("已登录，请勿重复登录");
