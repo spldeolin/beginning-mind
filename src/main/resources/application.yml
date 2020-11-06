@@ -36,6 +36,7 @@ spring:
       connection-test-query: select 'x'
 
   redis:
+    database: 0
     host: 占位符
     port: 占位符
     password: 占位符
