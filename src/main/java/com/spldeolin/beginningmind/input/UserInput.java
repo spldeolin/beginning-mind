@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.input;
 
+import org.hibernate.validator.constraints.Length;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import lombok.Data;
 
@@ -19,6 +20,7 @@ public class UserInput {
     /**
      * 用户编号
      */
+    @Length(max = 1)
     private String serialNumber;
 
     /**

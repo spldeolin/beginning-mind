@@ -31,22 +31,10 @@ public abstract class CommonEntity {
     private LocalDateTime insertedAt;
 
     /**
-     * 插入数据时所处请求的insignia
-     */
-    @TableField(value = "inserted_insignia", fill = FieldFill.INSERT)
-    private String insertedInsignia;
-
-    /**
      * 最近一次更新时间
      */
     @TableField(value = "updated_at", fill = FieldFill.INSERT_UPDATE)
     private LocalDateTime updatedAt;
-
-    /**
-     * 最近一次更新数据时所处请求的insignia
-     */
-    @TableField(value = "updated_insignia", fill = FieldFill.INSERT_UPDATE)
-    private String updatedInsignia;
 
     /**
      * 是否被删除
