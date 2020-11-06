@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.extension.filter;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -123,6 +124,7 @@ public class RequestTrackFilter extends OncePerRequestFilter {
 
     private String getRequestBody(ContentCachingRequestWrapper wrappedRequest) {
         try {
+            // Response Body由客户端提供，所以编码从报文中获取
             String encoding = wrappedRequest.getCharacterEncoding();
             String result = IOUtils.toString(wrappedRequest.getContentAsByteArray(), encoding);
             if (StringUtils.isEmpty(result)) {
@@ -138,8 +140,8 @@ public class RequestTrackFilter extends OncePerRequestFilter {
 
     private String getResponseBody(ContentCachingResponseWrapper wrappedResponse) {
         try {
-            String result = IOUtils
-                    .toString(wrappedResponse.getContentInputStream(), wrappedResponse.getCharacterEncoding());
+            // Response Body由服务端产生，所以编码固定是UTF-8
+            String result = IOUtils.toString(wrappedResponse.getContentInputStream(), StandardCharsets.UTF_8);
             wrappedResponse.copyBodyToResponse();
             return result;
         } catch (IOException e) {
