@@ -16,7 +16,6 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.mapper.PermissionMapper;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -47,12 +46,15 @@ public class PermissionSync {
                 continue;
             }
             String mappingMethod = getFirstMethod(mappingInfo);
-            PermissionEntity permission = new PermissionEntity(mappingMethod, mappingPath);
+            PermissionEntity permission = new PermissionEntity();
+            permission.setMappingMethod(mappingMethod);
+            permission.setMappingPath(mappingPath);
             actualPermissions.add(permission);
         }
 
         // 在数据库中保存的既存权限
-        Set<PermissionEntity> persistentPermissions = Sets.newHashSet(permissionMapper.selectList(null));
+        Set<PermissionEntity> persistentPermissions = Sets
+                .newHashSet(permissionMapper.queryByEntity(new PermissionEntity()));
 
         // 待删除权限、待创建权限
         List<Long> toDeleteIds = Lists.newArrayList();

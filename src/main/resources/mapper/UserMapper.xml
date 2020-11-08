@@ -2,44 +2,186 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.spldeolin.beginningmind.mapper.UserMapper">
 
-    <select id="listAsPageByMobile" resultType="com.spldeolin.beginningmind.entity.UserEntity">
-        select * from user where is_deleted = false and mobile = #{mobile}
-    </select>
-
     <select id="getByNameOrMobileOrEmail" resultType="com.spldeolin.beginningmind.entity.UserEntity">
         SELECT *
         FROM user
         WHERE
-              is_deleted = FALSE
-          AND (
-                      name = #{nameOrMobileOrEmail}
-                      OR mobile = #{nameOrMobileOrEmail}
-                      OR email = #{nameOrMobileOrEmail}
-                  )
+        delete_flag = FALSE
+        AND (
+        name = #{nameOrMobileOrEmail}
+        OR mobile = #{nameOrMobileOrEmail}
+        OR email = #{nameOrMobileOrEmail}
+        )
     </select>
 
     <select id="getIdByName" resultType="java.lang.Long">
         SELECT id
         FROM user
         WHERE
-              is_deleted = FALSE
-          AND name = #{name}
+        delete_flag = FALSE
+        AND name = #{name}
     </select>
 
     <select id="getIdByEmail" resultType="java.lang.Long">
         SELECT id
         FROM user
         WHERE
-              is_deleted = FALSE
-          AND email = #{email}
+        delete_flag = FALSE
+        AND email = #{email}
     </select>
 
     <select id="getIdByMobile" resultType="java.lang.Long">
         SELECT id
         FROM user
         WHERE
-              is_deleted = FALSE
-          AND mobile = #{mobile}
+        delete_flag = FALSE
+        AND mobile = #{mobile}
     </select>
 
+    <!-- <DPgdAl> 从本行到锚点<Be7WhS>之间的内容，由Allison 1875生成，请勿人为修改 -->
+    <resultMap id="all" type="com.spldeolin.beginningmind.entity.UserEntity">
+        <id column="id" property="id"/>
+        <result column="delete_flag" property="deleteFlag"/>
+        <result column="inserted_at" property="insertedAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="serial_number" property="serialNumber"/>
+        <result column="name" property="name"/>
+        <result column="mobile" property="mobile"/>
+        <result column="email" property="email"/>
+        <result column="password" property="password"/>
+        <result column="salt" property="salt"/>
+        <result column="enable_sign" property="enableSign"/>
+    </resultMap>
+    <sql id="all">
+        id, delete_flag, inserted_at, updated_at, serial_number, name, mobile, email, password, salt, enable_sign
+    </sql>
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.entity.UserEntity">
+        INSERT INTO user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id!=null">id,</if>
+            <if test="deleteFlag!=null">delete_flag,</if>
+            <if test="insertedAt!=null">inserted_at,</if>
+            <if test="updatedAt!=null">updated_at,</if>
+            <if test="serialNumber!=null">serial_number,</if>
+            <if test="name!=null">name,</if>
+            <if test="mobile!=null">mobile,</if>
+            <if test="email!=null">email,</if>
+            <if test="password!=null">password,</if>
+            <if test="salt!=null">salt,</if>
+            <if test="enableSign!=null">enable_sign,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id!=null">#{id},</if>
+            <if test="deleteFlag!=null">#{deleteFlag},</if>
+            <if test="insertedAt!=null">#{insertedAt},</if>
+            <if test="updatedAt!=null">#{updatedAt},</if>
+            <if test="serialNumber!=null">#{serialNumber},</if>
+            <if test="name!=null">#{name},</if>
+            <if test="mobile!=null">#{mobile},</if>
+            <if test="email!=null">#{email},</if>
+            <if test="password!=null">#{password},</if>
+            <if test="salt!=null">#{salt},</if>
+            <if test="enableSign!=null">#{enableSign},</if>
+        </trim>
+    </insert>
+    <insert id="batchInsertEvenNull">
+        INSERT INTO user
+        (<include refid="all"/>)
+        VALUES
+        <foreach collection="entities" item="one" separator=",">
+            (
+            #{one.id},
+            #{one.deleteFlag},
+            #{one.insertedAt},
+            #{one.updatedAt},
+            #{one.serialNumber},
+            #{one.name},
+            #{one.mobile},
+            #{one.email},
+            #{one.password},
+            #{one.salt},
+            #{one.enableSign}
+            )
+        </foreach>
+    </insert>
+    <select id="queryById" parameterType="Long" resultMap="all">
+        SELECT
+        <include refid="all"/>
+        FROM user
+        WHERE
+        delete_flag = FALSE
+        AND id = #{id}
+    </select>
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.entity.UserEntity">
+        UPDATE user
+        <set>
+            <if test="deleteFlag!=null">delete_flag = #{deleteFlag},</if>
+            <if test="insertedAt!=null">inserted_at = #{insertedAt},</if>
+            <if test="updatedAt!=null">updated_at = #{updatedAt},</if>
+            <if test="serialNumber!=null">serial_number = #{serialNumber},</if>
+            <if test="name!=null">name = #{name},</if>
+            <if test="mobile!=null">mobile = #{mobile},</if>
+            <if test="email!=null">email = #{email},</if>
+            <if test="password!=null">password = #{password},</if>
+            <if test="salt!=null">salt = #{salt},</if>
+            <if test="enableSign!=null">enable_sign = #{enableSign},</if>
+        </set>
+        WHERE
+        delete_flag = FALSE
+        AND id = #{id}
+    </update>
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.entity.UserEntity">
+        UPDATE user
+        SET
+        delete_flag = #{deleteFlag},
+        inserted_at = #{insertedAt},
+        updated_at = #{updatedAt},
+        serial_number = #{serialNumber},
+        name = #{name},
+        mobile = #{mobile},
+        email = #{email},
+        password = #{password},
+        salt = #{salt},
+        enable_sign = #{enableSign}
+        WHERE
+        delete_flag = FALSE
+        AND id = #{id}
+    </update>
+    <select id="queryByIds" parameterType="Long" resultMap="all">
+        SELECT
+        <include refid="all"/>
+        FROM user
+        WHERE
+        delete_flag = FALSE
+        AND id IN (
+        <foreach collection="ids" item="one" separator=",">#{one}</foreach>)
+    </select>
+    <select id="queryByIdsEachId" parameterType="Long" resultMap="all">
+        SELECT
+        <include refid="all"/>
+        FROM user
+        WHERE
+        delete_flag = FALSE
+        AND id IN (
+        <foreach collection="ids" item="one" separator=",">#{one}</foreach>)
+    </select>
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.entity.UserEntity" resultMap="all">
+        SELECT
+        <include refid="all"/>
+        FROM user
+        WHERE TRUE
+        AND delete_flag = FALSE
+        <if test="id!=null">AND id = #{id}</if>
+        <if test="deleteFlag!=null">AND delete_flag = #{deleteFlag}</if>
+        <if test="insertedAt!=null">AND inserted_at = #{insertedAt}</if>
+        <if test="updatedAt!=null">AND updated_at = #{updatedAt}</if>
+        <if test="serialNumber!=null">AND serial_number = #{serialNumber}</if>
+        <if test="name!=null">AND name = #{name}</if>
+        <if test="mobile!=null">AND mobile = #{mobile}</if>
+        <if test="email!=null">AND email = #{email}</if>
+        <if test="password!=null">AND password = #{password}</if>
+        <if test="salt!=null">AND salt = #{salt}</if>
+        <if test="enableSign!=null">AND enable_sign = #{enableSign}</if>
+    </select>
+    <!-- 从锚点<DPgdAl>到本行之间的内容，由Allison 1875生成，请勿人为修改 <Be7WhS> -->
 </mapper>

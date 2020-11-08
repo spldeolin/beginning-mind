@@ -5,16 +5,16 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 /**
- * 用户与权限的关联关系
- * <p>user2permission
+ * 建表语句
+ * <p>__template
  *
  * <p><p><strong>该类型由Allison 1875生成，请勿人为修改</strong>
  *
- * @author Deolin 2018/12/07
+ * @author Deolin 2020-11-06
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class User2permissionEntity extends EntityAncestor {
+public class TemplateEntity extends EntityAncestor {
 
     /**
      * 删除标记
@@ -24,15 +24,4 @@ public class User2permissionEntity extends EntityAncestor {
      */
     private Boolean deleteFlag;
 
-    /**
-     * 用户ID
-     * <p>user_id
-     */
-    private Long userId;
-
-    /**
-     * 权限ID
-     * <p>permission_id
-     */
-    private Long permissionId;
 }

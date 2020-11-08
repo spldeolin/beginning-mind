@@ -50,7 +50,6 @@ public class UserInput {
         userEntity.setName(this.name);
         userEntity.setMobile(this.mobile);
         userEntity.setEmail(this.email);
-        userEntity.setVersion(this.version);
         return userEntity;
     }
 

@@ -51,17 +51,8 @@ logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
 mybatis:
-  configuration:
-    map-underscore-to-camel-case: true
-
-mybatis-plus:
+  map-underscore-to-camel-case: true
   mapper-locations: classpath*:mapper/*.xml
-  global-config:
-    banner: false
-    db-config:
-      id-type: INPUT
-      logic-delete-value: true
-      logic-not-delete-value: false
 
 core:
 
@@ -74,20 +65,6 @@ core:
   snow-flake:
     datacenter-id: 占位符
     machine-id: 占位符
-
-  email:
-    server-host: smtp.163.com
-    server-port: 25
-    addresser-name: # TODO E-Mail
-    addresser-email: # TODO E-Mail
-    addresser-auth-code: # TODO E-Mail
-
-  oss:
-    bucke-name: beginning-mind
-    end-point: oss-cn-hangzhou.aliyuncs.com
-    access-key-id: # TODO 阿里云OSS
-    access-key-secret: # TODO 阿里云OSS
-    file-host: image
 
   enable-security: 占位符
 
