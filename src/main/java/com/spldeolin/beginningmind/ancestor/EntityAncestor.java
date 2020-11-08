@@ -24,6 +24,12 @@ public class EntityAncestor {
      */
     private Date insertedAt;
 
+    /**
+     * 最近一次更新数据的时间。如果数据从未更新过，与inserted_at保持一致
+     * <p>updated_at
+     * <p>不能为null
+     * <p>默认：CURRENT_TIMESTAMP
+     */
     private Date updatedAt;
 
 }
