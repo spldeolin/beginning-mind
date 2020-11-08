@@ -25,11 +25,6 @@ public class CoreProperties {
     private SnowFlakeProp snowFlake;
 
     /**
-     * E-Mail
-     */
-    private EmailProp email;
-
-    /**
      * 是否启用安全模块
      */
     private Boolean enableSecurity;
@@ -53,21 +48,6 @@ public class CoreProperties {
         private Long datacenterId;
 
         private Long machineId;
-
-    }
-
-    @Data
-    public static class EmailProp {
-
-        private String serverHost;
-
-        private Integer serverPort;
-
-        private String addresserName;
-
-        private String addresserEmail;
-
-        private String addresserAuthCode;
 
     }
 
