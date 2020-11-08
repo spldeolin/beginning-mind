@@ -14,9 +14,4 @@ public interface CoupledConstant {
      */
     String DEFAULT_PASSWORD_EX = DigestUtils.sha512Hex("000000");
 
-    /**
-     * 第一个用户
-     */
-    Long ADAM_USER_ID = 1L;
-
 }

@@ -4,7 +4,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;
@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
  * 控制层Advice切面：异常处理
  *
  * @author Deolin
- * @see ResultCode
+ * @see ResultCodeEnum
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -26,7 +26,7 @@ public class SecurityExceptionAdvice {
      */
     @ExceptionHandler(UnsignedException.class)
     public RequestResult handleUnsignException(UnsignedException e) {
-        return RequestResult.failure(ResultCode.UNSIGNED, e.getMessage());
+        return RequestResult.failure(ResultCodeEnum.UNSIGNED, e.getMessage());
     }
 
     /**
@@ -34,7 +34,7 @@ public class SecurityExceptionAdvice {
      */
     @ExceptionHandler(UnauthorizeException.class)
     public RequestResult handleUnauthorizeException(UnauthorizeException e) {
-        return RequestResult.failure(ResultCode.FORBIDDEN, e.getMessage());
+        return RequestResult.failure(ResultCodeEnum.FORBIDDEN, e.getMessage());
     }
 
 }

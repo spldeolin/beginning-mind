@@ -3,7 +3,6 @@ package com.spldeolin.beginningmind.extension.advice;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.stream.Collectors;
-import javax.servlet.ServletException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import lombok.extern.slf4j.Slf4j;
@@ -23,7 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * 控制层Advice切面：Http请求相关异常处理
  *
  * @author Deolin
- * @see ResultCode
+ * @see ResultCodeEnum
  */
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
@@ -37,7 +36,7 @@ public class RequestExceptionAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     public RequestResult handler(NoHandlerFoundException e) {
         log.warn(e.getMessage());
-        return RequestResult.failure(ResultCode.NOT_FOUND);
+        return RequestResult.failure(ResultCodeEnum.NOT_FOUND);
     }
 
     /**
@@ -47,7 +46,7 @@ public class RequestExceptionAdvice {
     public RequestResult handler(HttpRequestMethodNotSupportedException e) {
         String supportedMethods = Arrays.toString(e.getSupportedMethods());
         log.warn(e.getMessage() + " " + supportedMethods);
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
 
     /**
@@ -56,7 +55,7 @@ public class RequestExceptionAdvice {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult handler(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage() + " " + " [application/json]");
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
 
     /**
@@ -71,7 +70,7 @@ public class RequestExceptionAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult httpMessageNotReadable(HttpMessageNotReadableException e) {
         log.warn("message={}", e.getMessage());
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
 
     /**
@@ -80,7 +79,7 @@ public class RequestExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult handle(MethodArgumentNotValidException e) {
         log.warn("invalids={}", buildInvalids(e.getBindingResult()));
-        return RequestResult.failure(ResultCode.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
 
     private Collection<InvalidDto> buildInvalids(BindingResult bindingResult) {

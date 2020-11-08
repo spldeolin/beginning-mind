@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.extension.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import lombok.Data;
 
 /**
@@ -13,7 +13,7 @@ import lombok.Data;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RequestResult {
 
-    private Integer code;
+    private ResultCodeEnum code;
 
     private Object data;
 
@@ -25,18 +25,18 @@ public class RequestResult {
 
     public static RequestResult success(Object data) {
         RequestResult instance = new RequestResult();
-        instance.setCode(ResultCode.OK.getCode());
+        instance.setCode(ResultCodeEnum.OK);
         instance.setData(data);
         return instance;
     }
 
-    public static RequestResult failure(ResultCode code) {
+    public static RequestResult failure(ResultCodeEnum code) {
         return failure(code, null);
     }
 
-    public static RequestResult failure(ResultCode code, String message) {
+    public static RequestResult failure(ResultCodeEnum code, String message) {
         RequestResult instance = new RequestResult();
-        instance.setCode(code.getCode());
+        instance.setCode(code);
         instance.setMessage(message);
         return instance;
     }

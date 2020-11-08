@@ -8,7 +8,7 @@ import javax.validation.ConstraintViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.google.common.base.Joiner;
-import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
@@ -38,7 +38,7 @@ public class InternalErrorAdvice {
             invalids.add(invalid);
         }
         log.error("invalids={}", invalids);
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR);
+        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR);
     }
 
     /**
@@ -49,7 +49,7 @@ public class InternalErrorAdvice {
         RequestTrack requestTrack = RequestTrack.getCurrent();
         String insignia = requestTrack.getInsignia();
         log.error("统一异常处理被击穿！标识：" + insignia, e);
-        return RequestResult.failure(ResultCode.INTERNAL_ERROR);
+        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR);
     }
 
 }

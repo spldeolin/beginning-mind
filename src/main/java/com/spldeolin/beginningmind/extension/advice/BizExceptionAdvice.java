@@ -4,7 +4,7 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import com.spldeolin.beginningmind.constant.ResultCode;
+import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +25,7 @@ public class BizExceptionAdvice {
      */
     @ExceptionHandler(BizException.class)
     public RequestResult handle(BizException e) {
-        return RequestResult.failure(ResultCode.SERVICE_ERROR, e.getMessage());
+        return RequestResult.failure(ResultCodeEnum.SERVICE_ERROR, e.getMessage());
     }
 
 }
