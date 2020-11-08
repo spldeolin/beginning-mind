@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.vo;
+package com.spldeolin.beginningmind.javabean.resp;
 
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -9,7 +9,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class SignerProfileVO {
+public class SignerProfileRespDto {
 
     private String userName;
 

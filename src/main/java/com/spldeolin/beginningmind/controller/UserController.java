@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.spldeolin.beginningmind.input.UserInput;
+import com.spldeolin.beginningmind.javabean.req.UserReqDto;
 import com.spldeolin.beginningmind.service.UserService;
 
 /**
@@ -30,7 +30,7 @@ public class UserController {
      * @return 创建成功后生成的ID
      */
     @PostMapping("/create")
-    Long create(@RequestBody @Valid UserInput userInput) {
+    Long create(@RequestBody @Valid UserReqDto userInput) {
         return userService.createUser(userInput.toEntity());
     }
 

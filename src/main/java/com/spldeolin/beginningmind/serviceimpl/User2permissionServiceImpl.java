@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.service.impl;
+package com.spldeolin.beginningmind.serviceimpl;
 
 import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.service.User2permissionService;

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.service.impl;
+package com.spldeolin.beginningmind.serviceimpl;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.service.impl;
+package com.spldeolin.beginningmind.serviceimpl;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,13 +12,13 @@ import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.input.SignInput;
+import com.spldeolin.beginningmind.javabean.req.SignReqDto;
+import com.spldeolin.beginningmind.javabean.resp.SignerProfileRespDto;
 import com.spldeolin.beginningmind.mapper.UserMapper;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.security.util.SignContext;
 import com.spldeolin.beginningmind.service.PermissionService;
 import com.spldeolin.beginningmind.service.SignService;
-import com.spldeolin.beginningmind.vo.SignerProfileVO;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -40,7 +40,7 @@ public class SignServiceImpl implements SignService {
      * 登录
      */
     @Override
-    public SignerProfileVO signIn(SignInput input) {
+    public SignerProfileRespDto signIn(SignReqDto input) {
         // 获取用户，同时进行验证码、重复登录、用户名密码校验
         UserEntity user = signCheck(input);
 
@@ -62,7 +62,7 @@ public class SignServiceImpl implements SignService {
         session.setAttribute(SIGNER_SESSION_KEY, currentSignerDTO);
 
         // profile
-        return new SignerProfileVO(user.getName(), permissionIds);
+        return new SignerProfileRespDto(user.getName(), permissionIds);
     }
 
     /**
@@ -73,7 +73,7 @@ public class SignServiceImpl implements SignService {
         RequestTrack.getCurrent().getRequest().getSession().removeAttribute(SIGNER_SESSION_KEY);
     }
 
-    private UserEntity signCheck(SignInput input) {
+    private UserEntity signCheck(SignReqDto input) {
         // 重复登录校验
         if (SignContext.isSigning()) {
             throw new BizException("已登录，请勿重复登录");

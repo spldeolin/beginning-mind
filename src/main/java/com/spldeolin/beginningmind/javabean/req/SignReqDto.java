@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.input;
+package com.spldeolin.beginningmind.javabean.req;
 
 import javax.validation.constraints.NotBlank;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
-public class SignInput {
+public class SignReqDto {
 
     /**
      * 用户输入的“用户名/手机/邮箱”

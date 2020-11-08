@@ -4,7 +4,7 @@ package com.spldeolin.beginningmind.security.util;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
-import com.spldeolin.beginningmind.service.impl.SignServiceImpl;
+import com.spldeolin.beginningmind.serviceimpl.SignServiceImpl;
 
 /**
  * 工具类：登录者上下文

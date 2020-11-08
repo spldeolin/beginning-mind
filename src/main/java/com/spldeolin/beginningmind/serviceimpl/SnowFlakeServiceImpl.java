@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.service.impl;
+package com.spldeolin.beginningmind.serviceimpl;
 
 import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
