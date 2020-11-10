@@ -14,4 +14,4 @@ target/
 .DS_Store
 
 # Allison 1875
-.bak
+*.bak
