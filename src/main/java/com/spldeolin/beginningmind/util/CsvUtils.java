@@ -59,7 +59,7 @@ public class CsvUtils {
     /**
      * 生成csv
      */
-    public static <T> String writeCsv(Collection<T> data, Class<T> clazz) {
+    public static <T> String writeCsv(Collection<T> data, Class<T> clazz) throws CsvException {
         CsvSchema schema = cm.schemaFor(clazz).withHeader();
         ObjectWriter writer = cm.writer(schema);
 
@@ -75,7 +75,7 @@ public class CsvUtils {
      * 生成csv
      */
     public static <T> void writeCsvToWeb(Collection<T> data, Class<T> clazz, HttpServletResponse response,
-            String fileBaseName) {
+            String fileBaseName) throws CsvException {
         String csvContent = writeCsv(data, clazz);
 
         String utf8 = StandardCharsets.UTF_8.name();
