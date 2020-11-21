@@ -68,19 +68,15 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toObject(String json, Class<T> clazz) {
+    public static <T> T toObject(String json, Class<T> clazz) throws JsonException {
         return toObject(json, clazz, om);
     }
 
     /**
      * 将JSON转化为对象
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
+    public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) throws JsonException {
         try {
             return om.readValue(json, clazz);
         } catch (IOException e) {
@@ -91,20 +87,15 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象列表
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> List<T> toListOfObject(String json, Class<T> clazz) {
+    public static <T> List<T> toListOfObject(String json, Class<T> clazz) throws JsonException {
         return toListOfObject(json, clazz, om);
     }
 
     /**
      * 将JSON转化为对象列表
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-
-    public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) {
+    public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) throws JsonException {
         try {
             @SuppressWarnings("unchecked") Class<T[]> arrayClass = (Class<T[]>) Class
                     .forName("[L" + clazz.getName() + ";");
@@ -117,23 +108,16 @@ public class JsonUtils {
 
     /**
      * JSON -> 参数化的对象
-     *
-     * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference) {
+    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference) throws JsonException {
         return toParameterizedObject(json, typeReference, om);
     }
 
     /**
      * JSON -> 参数化的对象
-     *
-     * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference, ObjectMapper om) {
+    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference, ObjectMapper om)
+            throws JsonException {
         try {
             return om.readValue(json, typeReference);
         } catch (JsonProcessingException e) {
@@ -146,10 +130,8 @@ public class JsonUtils {
      * JSON -> JsonNode对象
      *
      * <strong>除非JSON对应数据结构在运行时是变化的，否则不建议使这个方法</strong>
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static JsonNode toTree(String json) {
+    public static JsonNode toTree(String json) throws JsonException {
         return toTree(json, om);
     }
 
@@ -157,10 +139,8 @@ public class JsonUtils {
      * JSON -> JsonNode对象
      *
      * <strong>除非JSON对应数据结构在运行时是变化的，否则不建议使这个方法</strong>
-     *
-     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static JsonNode toTree(String json, ObjectMapper om) {
+    public static JsonNode toTree(String json, ObjectMapper om) throws JsonException {
         try {
             return om.readTree(json);
         } catch (JsonProcessingException e) {

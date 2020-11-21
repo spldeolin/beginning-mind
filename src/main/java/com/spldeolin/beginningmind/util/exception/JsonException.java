@@ -3,8 +3,7 @@ package com.spldeolin.beginningmind.util.exception;
 import com.spldeolin.beginningmind.util.JsonUtils;
 
 /**
- * 工具类Jsons遇到预想以外的情况或是内部异常时，
- * 会抛出这个异常，以交给调用方决定如何处理
+ * 工具类Jsons内部抛出的异常，调用方可自行决定如何处理
  *
  * @author Deolin 2020-03-05
  * @see JsonUtils
