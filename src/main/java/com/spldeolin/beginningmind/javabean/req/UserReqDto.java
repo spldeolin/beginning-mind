@@ -1,7 +1,6 @@
 package com.spldeolin.beginningmind.javabean.req;
 
 import org.hibernate.validator.constraints.Length;
-import com.spldeolin.beginningmind.ancestor.ReqDtoAncestor;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import lombok.Data;
 
@@ -11,7 +10,7 @@ import lombok.Data;
  * @author Deolin 2018/8/4
  */
 @Data
-public class UserReqDto implements ReqDtoAncestor {
+public class UserReqDto {
 
     /**
      * 通用字段 数据版本

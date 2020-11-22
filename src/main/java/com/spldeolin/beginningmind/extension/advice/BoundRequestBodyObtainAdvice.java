@@ -9,6 +9,8 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAd
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 
 /**
+ * 用于获取@RequestBody参数对象的ControllerAdvice
+ *
  * @author Deolin 2020-11-22
  */
 @RestControllerAdvice

@@ -4,10 +4,8 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.jetbrains.annotations.NotNull;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.util.JsonUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -74,21 +72,19 @@ public class RequestTrack {
     @JsonIgnore
     private transient HttpServletResponse response;
 
-    /**
-     * 对于RequestBody类而言，无法绑定的字段
-     */
-    private transient Map<String, Object> unrecognizedRequestBodyProperties = Maps.newHashMap();
-
-    public void log() {
-        String curl = convertToCurl();
-        log.info("请求到达\nHTTP Request\n\t{}\nHTTP Response\n\theaders={} body={}\nMore\n\telapsed={}ms ip={}", curl,
-                responseHeaders, responseBody, elapsed, ip);
-        unrecognizedRequestBodyProperties.forEach((name, value) -> log
-                .warn("unrecognized property from http body. name={} value={}", name, JsonUtils.toJson(value)));
-        log.info("boundRequestBody={}", JsonUtils.toJson(boundRequestBody));
+    public void report() {
+        StringBuilder sb = new StringBuilder(1024);
+        sb.append("请求到达").append("\n");
+        sb.append("HTTP Request").append("\n");
+        sb.append("\t").append(convertToCurl()).append("\n");
+        sb.append("HTTP Response").append("\n");
+        sb.append("\t").append("headers=").append(responseHeaders).append(" body=").append(responseBody).append("\n");
+        sb.append("More").append("\n");
+        sb.append("\t").append("elapsed=").append(elapsed).append(" ip=").append(ip).append("\n");
+        sb.append("\t").append("boundRequestBody=").append(JsonUtils.toJson(boundRequestBody)).append("\n");
+        log.info(sb.toString());
     }
 
-    @NotNull
     private String convertToCurl() {
         final StringBuilder curl = new StringBuilder(1024);
         curl.append("curl ");

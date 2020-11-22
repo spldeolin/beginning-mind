@@ -82,8 +82,8 @@ public class RequestTrackFilter extends OncePerRequestFilter {
             track.setElapsed(System.currentTimeMillis() - beganAt);
             track.setIp(this.getIp(wrappedRequest));
 
-            // 打印RequestTrack
-            track.log();
+            // 报告RequestTrack
+            track.report();
 
             // 清空ThreadLocal
             MDC.clear();

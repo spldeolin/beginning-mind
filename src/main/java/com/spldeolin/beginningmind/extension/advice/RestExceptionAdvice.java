@@ -23,7 +23,7 @@ import com.spldeolin.beginningmind.security.exception.UnsignedException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * 控制层Advice切面：Http请求相关异常处理
+ * 用于统一异常处理的ControllerAdvice
  *
  * @author Deolin
  * @see ResultCodeEnum
