@@ -4,6 +4,9 @@ import java.time.LocalDateTime;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.jetbrains.annotations.NotNull;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.spldeolin.beginningmind.util.JsonUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 
@@ -39,34 +42,16 @@ public class RequestTrack {
      */
     private LocalDateTime requestedAt;
 
-    /**
-     * HTTP协议 请求动词
-     */
     private String httpMethod;
 
-    /**
-     * HTTP协议 URL
-     */
     private String httpUrl;
 
-    /**
-     * HTTP协议 request headers
-     */
     private Map<String, String> requestHeaders;
 
-    /**
-     * HTTP协议 response headers
-     */
     private Map<String, String> responseHeaders;
 
-    /**
-     * HTTP协议 request body
-     */
     private String requestBody;
 
-    /**
-     * HTTP协议 response body
-     */
     private String responseBody;
 
     /**
@@ -75,30 +60,43 @@ public class RequestTrack {
     private Long elapsed;
 
     /**
-     * 登录者用户ID
-     */
-    private Long signerId;
-
-    /**
      * 请求者IP
      */
     private String ip;
 
-    private HttpServletRequest request;
+    @JsonIgnore
+    private transient HttpServletRequest request;
 
-    private HttpServletResponse response;
+    @JsonIgnore
+    private transient HttpServletResponse response;
 
     public void log() {
-        log.info("requestedAt={}", requestedAt);
-        log.info("httpMethod={}", httpMethod);
-        log.info("httpUrl={}", httpUrl);
-        log.info("requestHeaders={}", requestHeaders);
-        log.info("responseHeaders={}", responseHeaders);
-        log.info("requestBody={}", requestBody);
-        log.info("responseBody={}", responseBody);
-        log.info("elapsed={}", elapsed);
-        log.info("signerId={}", signerId);
-        log.info("ip={}", ip);
+        String curl = convertToCurl();
+        log.info("请求到达\nHTTP Request\n\t{}\nHTTP Response\n\theaders={} body={}\nMore\n\telapsed={}ms ip={}", curl,
+                responseHeaders, responseBody, elapsed, ip);
+    }
+
+    @NotNull
+    private String convertToCurl() {
+        final StringBuilder curl = new StringBuilder(1024);
+        curl.append("curl ");
+        curl.append("--location ").append("--request ");
+        curl.append(httpMethod).append(" ");
+        curl.append("'").append(httpUrl).append("' ");
+        requestHeaders.forEach((k, v) -> {
+            if ("content-length".equals(k)) {
+                return;
+            }
+            curl.append("--header '").append(k).append(": ").append(v).append("' ");
+        });
+        String rawJson;
+        try {
+            rawJson = JsonUtils.toJson(JsonUtils.toObject(requestBody, Map.class));
+        } catch (Exception e) {
+            rawJson = requestBody;
+        }
+        curl.append("--data-raw '").append(rawJson).append("'");
+        return curl.toString();
     }
 
 }
