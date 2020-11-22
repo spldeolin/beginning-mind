@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension;
+package com.spldeolin.beginningmind.extension.advice;
 
 import java.lang.reflect.Type;
 import org.springframework.core.MethodParameter;

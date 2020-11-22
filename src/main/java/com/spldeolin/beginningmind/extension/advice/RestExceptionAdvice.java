@@ -14,8 +14,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import com.spldeolin.beginningmind.enums.ResultCodeEnum;
+import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack;
+import com.spldeolin.beginningmind.security.exception.UnauthorizeException;
+import com.spldeolin.beginningmind.security.exception.UnsignedException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -27,7 +31,11 @@ import lombok.extern.slf4j.Slf4j;
 @RestControllerAdvice
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @Slf4j
-public class RequestExceptionAdvice {
+public class RestExceptionAdvice {
+
+    /*
+        request
+     */
 
     /**
      * 404 Not Found
@@ -86,6 +94,53 @@ public class RequestExceptionAdvice {
         return bindingResult.getFieldErrors().stream()
                 .map(error -> new InvalidDto().setPath(error.getField()).setValue(error.getRejectedValue())
                         .setReason(error.getDefaultMessage())).collect(Collectors.toList());
+    }
+
+    /*
+        security
+     */
+
+    /**
+     * 401 未登录
+     */
+    @ExceptionHandler(UnsignedException.class)
+    public RequestResult handleUnsignException(UnsignedException e) {
+        return RequestResult.failure(ResultCodeEnum.UNSIGNED, e.getMessage());
+    }
+
+    /**
+     * 403 未授权
+     */
+    @ExceptionHandler(UnauthorizeException.class)
+    public RequestResult handleUnauthorizeException(UnauthorizeException e) {
+        return RequestResult.failure(ResultCodeEnum.FORBIDDEN, e.getMessage());
+    }
+
+    /*
+        biz
+     */
+
+    /**
+     * 1001 业务异常
+     */
+    @ExceptionHandler(BizException.class)
+    public RequestResult handle(BizException e) {
+        return RequestResult.failure(ResultCodeEnum.SERVICE_ERROR, e.getMessage());
+    }
+
+    /*
+        internal
+     */
+
+    /**
+     * 500 无法预料的异常
+     */
+    @ExceptionHandler(Throwable.class)
+    public RequestResult handle(Throwable e) {
+        RequestTrack requestTrack = RequestTrack.getCurrent();
+        String insignia = requestTrack.getInsignia();
+        log.error("统一异常处理被击穿！标识：" + insignia, e);
+        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR);
     }
 
 }
