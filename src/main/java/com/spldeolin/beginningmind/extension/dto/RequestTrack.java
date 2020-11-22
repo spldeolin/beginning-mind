@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.jetbrains.annotations.NotNull;
 import com.alibaba.ttl.TransmittableThreadLocal;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.util.JsonUtils;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -71,10 +72,17 @@ public class RequestTrack {
     @JsonIgnore
     private transient HttpServletResponse response;
 
+    /**
+     * 对于RequestBody类而言，无法绑定的字段
+     */
+    private transient Map<String, Object> unrecognizedRequestBodyProperties = Maps.newHashMap();
+
     public void log() {
         String curl = convertToCurl();
         log.info("请求到达\nHTTP Request\n\t{}\nHTTP Response\n\theaders={} body={}\nMore\n\telapsed={}ms ip={}", curl,
                 responseHeaders, responseBody, elapsed, ip);
+        unrecognizedRequestBodyProperties.forEach((name, value) -> log
+                .warn("unrecognized property from http body. name={} value={}", name, JsonUtils.toJson(value)));
     }
 
     @NotNull
