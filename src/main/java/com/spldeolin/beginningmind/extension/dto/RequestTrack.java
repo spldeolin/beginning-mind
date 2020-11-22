@@ -54,6 +54,8 @@ public class RequestTrack {
 
     private String requestBody;
 
+    private Object boundRequestBody;
+
     private String responseBody;
 
     /**
@@ -83,6 +85,7 @@ public class RequestTrack {
                 responseHeaders, responseBody, elapsed, ip);
         unrecognizedRequestBodyProperties.forEach((name, value) -> log
                 .warn("unrecognized property from http body. name={} value={}", name, JsonUtils.toJson(value)));
+        log.info("boundRequestBody={}", JsonUtils.toJson(boundRequestBody));
     }
 
     @NotNull
