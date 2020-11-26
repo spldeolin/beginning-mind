@@ -97,12 +97,7 @@ public class RequestTrack {
             }
             curl.append("--header '").append(k).append(": ").append(v).append("' ");
         });
-        String rawJson;
-        try {
-            rawJson = JsonUtils.toJson(JsonUtils.toObject(requestBody, Map.class));
-        } catch (Exception e) {
-            rawJson = requestBody;
-        }
+        String rawJson = JsonUtils.compressJson(requestBody);
         curl.append("--data-raw '").append(rawJson).append("'");
         return curl.toString();
     }

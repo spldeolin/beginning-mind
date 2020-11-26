@@ -2,6 +2,7 @@ package com.spldeolin.beginningmind.util;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -48,14 +49,14 @@ public class JsonUtils {
     }
 
     /**
-     * 将对象转化为JSON，结果是美化的
+     * 将对象转化为美化后的JSON
      */
     public static String toJsonPrettily(Object object) {
         return toJsonPrettily(object, om);
     }
 
     /**
-     * 将对象转化为JSON，结果是美化的
+     * 将对象转化为美化后的JSON
      */
     public static String toJsonPrettily(Object object, ObjectMapper om) {
         try {
@@ -63,6 +64,19 @@ public class JsonUtils {
         } catch (JsonProcessingException e) {
             log.error("object={}", object, e);
             throw new JsonException("转化JSON失败");
+        }
+    }
+
+    /**
+     * 压缩JSON（去除美化JSON中多余的换行与空格，如果参数字符串不是一个JSON，则无事发生）
+     */
+    public static String compressJson(String json) {
+        try {
+            Map<?, ?> map = om.readValue(json, Map.class);
+            return toJson(map);
+        } catch (JsonProcessingException e) {
+            // is not a json
+            return json;
         }
     }
 
