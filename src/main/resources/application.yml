@@ -51,7 +51,6 @@ logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
 mybatis:
-  map-underscore-to-camel-case: true
   mapper-locations: classpath*:mapper/*.xml
 
 core:
