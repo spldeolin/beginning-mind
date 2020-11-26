@@ -24,7 +24,11 @@ public class ResponseBodyWrapAdvice implements ResponseBodyAdvice<Object> {
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType,
             Class selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
-        return ensureWrapped(body);
+        if (selectedContentType == MediaType.APPLICATION_JSON
+                || selectedContentType == MediaType.APPLICATION_JSON_UTF8) {
+            body = ensureWrapped(body);
+        }
+        return body;
     }
 
     private RequestResult ensureWrapped(Object returnValue) {
