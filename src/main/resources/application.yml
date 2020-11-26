@@ -52,6 +52,8 @@ logging:
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    default-enum-type-handler: com.spldeolin.beginningmind.mybatis.EnumTypeHandlerEx
 
 core:
 
