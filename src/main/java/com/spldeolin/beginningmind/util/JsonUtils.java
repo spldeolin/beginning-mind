@@ -1,13 +1,30 @@
 package com.spldeolin.beginningmind.util;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.datatype.guava.GuavaModule;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.google.common.collect.Lists;
+import com.spldeolin.beginningmind.json.IgnoreCollectionNullElementDeserializeModule;
 import com.spldeolin.beginningmind.util.exception.JsonException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -23,7 +40,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class JsonUtils {
 
-    private static final ObjectMapper om = ObjectMapperUtils.initDefault(new ObjectMapper());
+    private static final ObjectMapper om = createObjectMapper();
+
+    public static ObjectMapper createObjectMapper() {
+        ObjectMapper om = new ObjectMapper();
+
+        // 反序列化时，忽略Javabean中Collection属性对应JSON Array中的为null的元素
+        om.registerModule(new IgnoreCollectionNullElementDeserializeModule());
+
+        // 反序列化时，忽略Javabean中不存在的属性，而不是抛出异常
+        om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+
+        // 使用所在操作系统的时区
+        om.setTimeZone(TimeZone.getDefault());
+
+        // 配置Java8的LocalDateTime、LocalDate、LocalTime的pattern（yyyy-MM-dd HH:mm:ss、yyyy-MM-dd、HH:mm:ss）
+        om.registerModule(java8timeSimplePattern());
+
+        // 配置java.util.Date的pattern
+        om.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
+
+        // 适配Guava
+        om.registerModule(new GuavaModule());
+
+        return om;
+    }
+
+    private static SimpleModule java8timeSimplePattern() {
+        SimpleModule module = new JavaTimeModule();
+        DateTimeFormatter ldtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter ldFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        DateTimeFormatter ltFormattter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(ldtFormatter))
+                .addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(ldtFormatter))
+                .addSerializer(LocalDate.class, new LocalDateSerializer(ldFormatter))
+                .addDeserializer(LocalDate.class, new LocalDateDeserializer(ldFormatter))
+                .addSerializer(LocalTime.class, new LocalTimeSerializer(ltFormattter))
+                .addDeserializer(LocalTime.class, new LocalTimeDeserializer(ltFormattter));
+        return module;
+    }
 
     private JsonUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
