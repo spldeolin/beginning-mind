@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.dto;
+package com.spldeolin.beginningmind.extension.javabean;
 
 import java.time.LocalDateTime;
 import java.util.Map;
@@ -50,8 +50,8 @@ public class RequestTrack {
     private final HttpServletResponse rawResponse;
 
     /**
-     * 更多信息，用于作为内层的过滤器、拦截器、切面、Handle的上下文
+     * 更多信息，用于作为内层的过滤器、拦截器、切面、Handle的上下文，Map#value将会toString之后与key一起打印到requestLeaved报告中
      */
-    private final Map<String, String> more = Maps.newHashMap();
+    private final Map<String, Object> more = Maps.newHashMap();
 
 }

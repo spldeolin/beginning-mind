@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.dto;
+package com.spldeolin.beginningmind.extension.javabean;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.enums.ResultCodeEnum;

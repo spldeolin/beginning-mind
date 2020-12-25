@@ -7,7 +7,7 @@ import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.RequestBodyAdviceAdapter;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
+import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
 import com.spldeolin.beginningmind.util.JsonUtils;
 
 /**

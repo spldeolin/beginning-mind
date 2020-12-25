@@ -12,13 +12,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack.RequestTrackBuilder;
+import com.spldeolin.beginningmind.extension.constant.RequestTrackConstant;
 import com.spldeolin.beginningmind.extension.handle.FullUrlHandle;
 import com.spldeolin.beginningmind.extension.handle.InsigniaCreationHandle;
 import com.spldeolin.beginningmind.extension.handle.MdcHandle;
 import com.spldeolin.beginningmind.extension.handle.ReportRequestTrackHandle;
 import com.spldeolin.beginningmind.extension.handle.RequestIgnoreHandle;
+import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
+import com.spldeolin.beginningmind.extension.javabean.RequestTrack.RequestTrackBuilder;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -29,13 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class RequestTrackFilter extends OncePerRequestFilter implements Ordered {
-
-    /**
-     * 其他所有Filter需要大于这个值，否则使用不了RequestTrack.CURRENT
-     */
-    public static final int REQUEST_TRACK_FILTER_ORDER = 1001;
-
-    public static final String INSIGNIA_PLACEHOLDER = "insignia";
 
     @Autowired
     private RequestIgnoreHandle requestIgnoreHandle;
@@ -94,7 +88,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
             log.info(report.append(moreReport).toString());
 
             // insignia保存到response报文
-            response.setHeader(INSIGNIA_PLACEHOLDER, insignia);
+            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, insignia);
 
             // 清空上下文
             mdcHandle.removeAllMdcs();
@@ -104,7 +98,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
 
     @Override
     public int getOrder() {
-        return REQUEST_TRACK_FILTER_ORDER;
+        return RequestTrackConstant.REQUEST_TRACK_FILTER_ORDER;
     }
 
 }

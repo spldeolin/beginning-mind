@@ -2,9 +2,9 @@ package com.spldeolin.beginningmind.extension.handleimpl;
 
 import org.slf4j.MDC;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.extension.filter.RequestTrackFilter;
+import com.spldeolin.beginningmind.extension.constant.RequestTrackConstant;
 import com.spldeolin.beginningmind.extension.handle.MdcHandle;
+import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
 
 /**
  * @author Deolin 2020-12-25
@@ -16,7 +16,7 @@ public class DefaultMdcHandle implements MdcHandle {
 
     @Override
     public void putInsignia(String insignia) {
-        MDC.put(RequestTrackFilter.INSIGNIA_PLACEHOLDER, " [" + insignia + "]");
+        MDC.put(RequestTrackConstant.INSIGNIA_PLACEHOLDER, " [" + insignia + "]");
     }
 
     @Override

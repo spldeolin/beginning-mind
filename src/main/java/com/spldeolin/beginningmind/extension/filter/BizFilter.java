@@ -8,7 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
+import com.spldeolin.beginningmind.extension.constant.RequestTrackConstant;
+import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -31,7 +32,7 @@ public class BizFilter extends OncePerRequestFilter implements Ordered {
 
     @Override
     public int getOrder() {
-        return RequestTrackFilter.REQUEST_TRACK_FILTER_ORDER + 1;
+        return RequestTrackConstant.REQUEST_TRACK_FILTER_ORDER + 1;
     }
 
 }

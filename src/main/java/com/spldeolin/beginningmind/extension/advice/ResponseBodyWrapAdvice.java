@@ -6,7 +6,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
-import com.spldeolin.beginningmind.extension.dto.RequestResult;
+import com.spldeolin.beginningmind.extension.javabean.RequestResult;
 
 /**
  * 用于确保ResponseBody对象被包装在统一包装类中的ControllerAdvice

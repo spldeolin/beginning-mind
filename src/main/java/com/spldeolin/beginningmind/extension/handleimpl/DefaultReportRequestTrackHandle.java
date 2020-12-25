@@ -17,8 +17,8 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.extension.handle.ReportRequestTrackHandle;
+import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
 import com.spldeolin.beginningmind.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 
@@ -61,9 +61,9 @@ public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle
     }
 
     @Override
-    public StringBuilder buildMoreLeavedReport(Map<String, String> more) {
+    public StringBuilder buildMoreLeavedReport(Map<String, Object> more) {
         StringBuilder sb = new StringBuilder(64);
-        more.forEach((k, v) -> sb.append("\t").append(k).append("=").append(v).append("\n"));
+        more.forEach((k, v) -> sb.append("\t").append(k).append("=").append(v.toString()).append("\n"));
         return sb;
     }
 

@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.dto;
+package com.spldeolin.beginningmind.extension.javabean;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
