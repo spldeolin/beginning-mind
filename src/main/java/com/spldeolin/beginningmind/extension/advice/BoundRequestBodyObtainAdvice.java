@@ -28,7 +28,7 @@ public class BoundRequestBodyObtainAdvice extends RequestBodyAdviceAdapter {
     @Override
     public Object afterBodyRead(Object body, HttpInputMessage inputMessage, MethodParameter parameter, Type targetType,
             Class<? extends HttpMessageConverter<?>> converterType) {
-        RequestTrack.CURRENT.get().getMore().put("boundRequestBody", JsonUtils.compressJson(JsonUtils.toJson(body)));
+        RequestTrack.current().getMore().put("boundRequestBody", JsonUtils.compressJson(JsonUtils.toJson(body)));
         return super.afterBodyRead(body, inputMessage, parameter, targetType, converterType);
     }
 

@@ -25,7 +25,7 @@ public class BizFilter extends OncePerRequestFilter implements Ordered {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
 
-        RequestTrack.CURRENT.get().getMore().put("aaaa", "你好啊");
+        RequestTrack.current().getMore().put("aaaa", "你好啊");
 
         filterChain.doFilter(request, response);
     }

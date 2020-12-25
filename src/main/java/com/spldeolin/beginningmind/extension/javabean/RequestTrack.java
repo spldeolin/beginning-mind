@@ -18,7 +18,7 @@ import lombok.Data;
 @Builder
 public class RequestTrack {
 
-    public static final ThreadLocal<RequestTrack> CURRENT = new TransmittableThreadLocal<>();
+    static final ThreadLocal<RequestTrack> current = new TransmittableThreadLocal<>();
 
     /**
      * insignia
@@ -53,5 +53,17 @@ public class RequestTrack {
      * 更多信息，用于作为内层的过滤器、拦截器、切面、Handle的上下文，Map#value将会toString之后与key一起打印到requestLeaved报告中
      */
     private final Map<String, Object> more = Maps.newHashMap();
+
+    public static RequestTrack current() {
+        return current.get();
+    }
+
+    public static void setCurrent(RequestTrack requestTrack) {
+        current.set(requestTrack);
+    }
+
+    public static void removeCurrent() {
+        current.remove();
+    }
 
 }

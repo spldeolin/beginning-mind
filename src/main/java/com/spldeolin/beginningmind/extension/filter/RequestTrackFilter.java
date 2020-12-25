@@ -65,7 +65,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
         builder.rawRequest(request);
         builder.rawResponse(response);
         RequestTrack track = builder.build();
-        RequestTrack.CURRENT.set(track);
+        RequestTrack.setCurrent(track);
 
         // 设置Log MDC
         mdcHandle.putInsignia(insignia);
@@ -92,7 +92,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
 
             // 清空上下文
             mdcHandle.removeAllMdcs();
-            RequestTrack.CURRENT.remove();
+            RequestTrack.removeCurrent();
         }
     }
 
