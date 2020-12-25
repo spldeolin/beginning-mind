@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.handle.impl;
+package com.spldeolin.beginningmind.extension.handleimpl;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;

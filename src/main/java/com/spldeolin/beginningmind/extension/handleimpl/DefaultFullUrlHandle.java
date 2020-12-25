@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.handle.impl;
+package com.spldeolin.beginningmind.extension.handleimpl;
 
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
