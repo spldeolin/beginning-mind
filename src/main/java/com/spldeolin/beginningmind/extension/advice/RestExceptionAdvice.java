@@ -17,7 +17,6 @@ import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.dto.InvalidDto;
 import com.spldeolin.beginningmind.extension.dto.RequestResult;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.security.exception.UnauthorizeException;
 import com.spldeolin.beginningmind.security.exception.UnsignedException;
 import lombok.extern.slf4j.Slf4j;
@@ -137,9 +136,7 @@ public class RestExceptionAdvice {
      */
     @ExceptionHandler(Throwable.class)
     public RequestResult handle(Throwable e) {
-        RequestTrack requestTrack = RequestTrack.getCurrent();
-        String insignia = requestTrack.getInsignia();
-        log.error("统一异常处理被击穿！标识：" + insignia, e);
+        log.error("统一异常处理被击穿！", e);
         return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR);
     }
 
