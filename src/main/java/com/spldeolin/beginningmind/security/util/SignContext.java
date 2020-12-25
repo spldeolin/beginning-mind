@@ -1,10 +1,11 @@
 package com.spldeolin.beginningmind.security.util;
 
 
+import javax.servlet.http.HttpServletRequest;
 import com.spldeolin.beginningmind.entity.UserEntity;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.security.dto.CurrentSignerDTO;
 import com.spldeolin.beginningmind.serviceimpl.SignServiceImpl;
+import com.spldeolin.beginningmind.util.ServletUtil;
 
 /**
  * 工具类：登录者上下文
@@ -24,8 +25,11 @@ public class SignContext {
      * @return 当前登录者
      */
     public static CurrentSignerDTO current() {
-        return (CurrentSignerDTO) RequestTrack.getCurrent().getRequest().getSession()
-                .getAttribute(SignServiceImpl.SIGNER_SESSION_KEY);
+        HttpServletRequest currentHttpRequest = ServletUtil.getCurrentHttpRequest();
+        if (currentHttpRequest == null) {
+            return null;
+        }
+        return (CurrentSignerDTO) currentHttpRequest.getSession().getAttribute(SignServiceImpl.SIGNER_SESSION_KEY);
     }
 
     /**

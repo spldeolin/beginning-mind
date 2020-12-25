@@ -1,28 +1,24 @@
 package com.spldeolin.beginningmind.extension.filter;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.Map.Entry;
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.apache.commons.io.IOUtils;
-import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.extension.dto.RequestTrack;
-import com.spldeolin.beginningmind.service.SnowFlakeService;
+import com.spldeolin.beginningmind.extension.dto.RequestTrack.RequestTrackBuilder;
+import com.spldeolin.beginningmind.extension.handle.FullUrlHandle;
+import com.spldeolin.beginningmind.extension.handle.InsigniaCreationHandle;
+import com.spldeolin.beginningmind.extension.handle.MdcHandle;
+import com.spldeolin.beginningmind.extension.handle.ReportRequestTrackHandle;
+import com.spldeolin.beginningmind.extension.handle.RequestIgnoreHandle;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,38 +26,59 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author Deolin 2018/12/06
  */
-@Order(1)
 @Component
 @Slf4j
-public class RequestTrackFilter extends OncePerRequestFilter {
+public class RequestTrackFilter extends OncePerRequestFilter implements Ordered {
 
-    private static final String insigniaPlaceholder = "insignia";
+    /**
+     * 其他所有Filter需要大于这个值，否则使用不了RequestTrack.CURRENT
+     */
+    public static final int REQUEST_TRACK_FILTER_ORDER = 1001;
 
-    private static final String handlerUrlPlaceholder = "url";
+    public static final String INSIGNIA_PLACEHOLDER = "insignia";
 
     @Autowired
-    private SnowFlakeService snowFlakeService;
+    private RequestIgnoreHandle requestIgnoreHandle;
+
+    @Autowired
+    private InsigniaCreationHandle insigniaCreationHandle;
+
+    @Autowired
+    private MdcHandle mdcHandle;
+
+    @Autowired
+    private FullUrlHandle fullUrlHandle;
+
+    @Autowired
+    private ReportRequestTrackHandle reportRequestTrackHandle;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
-        String uri = request.getRequestURI();
-        if (uri.equals("/favicon.ico") || uri.equals("/")) {
-            return;
+        // 过滤规则
+        if (requestIgnoreHandle.isIgnore(request)) {
+            filterChain.doFilter(request, response);
         }
 
-        long beganAt = System.currentTimeMillis();
-
-        // 将request、response、session、新构造的请求轨迹存入ThreadLocal
-        RequestTrack track = RequestTrack.getCurrent();
-        track.setInsignia(this.getInsigniaOrElseCreate(request));
-        track.setRequestedAt(LocalDateTime.now());
-        track.setRequest(request);
-        track.setResponse(response);
+        // 构造RequestTrack对象 并保存到上下文
+        RequestTrackBuilder builder = RequestTrack.builder();
+        String insignia = insigniaCreationHandle.createInsignia(request);
+        builder.insignia(insignia);
+        builder.requestArrivedAt(LocalDateTime.now());
+        builder.httpMethod(request.getMethod());
+        builder.uri(request.getRequestURI());
+        builder.fullUrl(fullUrlHandle.parseFullUrl(request));
+        builder.rawRequest(request);
+        builder.rawResponse(response);
+        RequestTrack track = builder.build();
+        RequestTrack.CURRENT.set(track);
 
         // 设置Log MDC
-        MDC.put(insigniaPlaceholder, " [" + track.getInsignia() + "]");
-        MDC.put(handlerUrlPlaceholder, " [" + uri + "]");
+        mdcHandle.putInsignia(insignia);
+        mdcHandle.putOtherMdcs(track);
+
+        // 报告请求到达
+        log.info(reportRequestTrackHandle.buildArrivedReport(track).toString());
 
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
@@ -70,118 +87,24 @@ public class RequestTrackFilter extends OncePerRequestFilter {
         try {
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
-            response.setHeader(insigniaPlaceholder, track.getInsignia());
 
-            // 补全RequestTrack
-            track.setHttpMethod(wrappedRequest.getMethod());
-            track.setHttpUrl(this.getFullUrl(wrappedRequest));
-            track.setRequestHeaders(this.getRequestHeaders(wrappedRequest));
-            track.setResponseHeaders(this.getResponseHeaders(wrappedResponse));
-            track.setRequestBody(this.getRequestBody(wrappedRequest));
-            track.setResponseBody(this.getResponseBody(wrappedResponse));
-            track.setElapsed(System.currentTimeMillis() - beganAt);
-            track.setIp(this.getIp(wrappedRequest));
+            // 报告请求离开
+            StringBuilder report = reportRequestTrackHandle.buildLeavedReport(track, wrappedRequest, wrappedResponse);
+            StringBuilder moreReport = reportRequestTrackHandle.buildMoreLeavedReport(track.getMore());
+            log.info(report.append(moreReport).toString());
 
-            // 报告RequestTrack
-            track.report();
+            // insignia保存到response报文
+            response.setHeader(INSIGNIA_PLACEHOLDER, insignia);
 
-            // 清空ThreadLocal
-            MDC.clear();
-            RequestTrack.removeCurrent();
+            // 清空上下文
+            mdcHandle.removeAllMdcs();
+            RequestTrack.CURRENT.remove();
         }
     }
 
-    private String getInsigniaOrElseCreate(HttpServletRequest request) {
-        String result = request.getHeader("insignia");
-        if (result == null) {
-            result = String.valueOf(snowFlakeService.nextId());
-        }
-        return result;
-    }
-
-    private Map<String, String> getResponseHeaders(ContentCachingResponseWrapper wrappedResponse) {
-        Map<String, String> responseHeaders = Maps.newHashMap();
-        Collection<String> headerNames1 = wrappedResponse.getHeaderNames();
-        if (headerNames1 != null) {
-            for (String headerName : headerNames1) {
-                responseHeaders.put(headerName, wrappedResponse.getHeader(headerName));
-            }
-        }
-        return responseHeaders;
-    }
-
-    private Map<String, String> getRequestHeaders(ContentCachingRequestWrapper wrappedRequest) {
-        Map<String, String> requestHeaders = Maps.newHashMap();
-        Enumeration<String> headerNames = wrappedRequest.getHeaderNames();
-        if (headerNames != null) {
-            while (headerNames.hasMoreElements()) {
-                String headerName = headerNames.nextElement();
-                requestHeaders.put(headerName, wrappedRequest.getHeader(headerName));
-            }
-        }
-        return requestHeaders;
-    }
-
-    private String getRequestBody(ContentCachingRequestWrapper wrappedRequest) {
-        try {
-            // Response Body由客户端提供，所以编码从报文中获取
-            String encoding = wrappedRequest.getCharacterEncoding();
-            String result = IOUtils.toString(wrappedRequest.getContentAsByteArray(), encoding);
-            if (StringUtils.isEmpty(result)) {
-                // 报文有body，但handler没有@RequestBody时，wrappedRequest.getInputStream()会有内容
-                result = IOUtils.toString(wrappedRequest.getInputStream(), encoding);
-            }
-            return result;
-        } catch (IOException e) {
-            log.error("读取request body失败", e);
-            return "";
-        }
-    }
-
-    private String getResponseBody(ContentCachingResponseWrapper wrappedResponse) {
-        try {
-            // Response Body由服务端产生，所以编码固定是UTF-8
-            String result = IOUtils.toString(wrappedResponse.getContentInputStream(), StandardCharsets.UTF_8);
-            wrappedResponse.copyBodyToResponse();
-            return result;
-        } catch (IOException e) {
-            log.error("读取response body失败", e);
-            return "";
-        }
-    }
-
-    private String getFullUrl(HttpServletRequest request) {
-        StringBuilder url = new StringBuilder(64);
-        url.append(request.getRequestURL());
-        for (Entry<String, String[]> queryValuesEachKey : request.getParameterMap().entrySet()) {
-            String queryKey = queryValuesEachKey.getKey();
-            for (String queryValue : queryValuesEachKey.getValue()) {
-                if (queryValue != null) {
-                    url.append("&");
-                    url.append(queryKey);
-                    url.append("=");
-                    url.append(queryValue);
-                }
-            }
-        }
-        return url.toString().replaceFirst("&", "?");
-    }
-
-    private String getIp(HttpServletRequest request) {
-        String ip = request.getHeader("x-forwarded-for");
-        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("X-Real-IP");
-        }
-        if (null == ip || 0 == ip.length() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
-        return ip;
+    @Override
+    public int getOrder() {
+        return REQUEST_TRACK_FILTER_ORDER;
     }
 
 }

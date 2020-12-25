@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.stereotype.Service;
 import com.spldeolin.beginningmind.entity.PermissionEntity;
 import com.spldeolin.beginningmind.entity.UserEntity;
 import com.spldeolin.beginningmind.exception.BizException;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.javabean.req.SignReqDto;
 import com.spldeolin.beginningmind.javabean.resp.SignerProfileRespDto;
 import com.spldeolin.beginningmind.mapper.UserMapper;
@@ -36,6 +36,9 @@ public class SignServiceImpl implements SignService {
     @Autowired
     private PermissionService permissionService;
 
+    @Autowired
+    private HttpServletRequest httpServletRequest;
+
     /**
      * 登录
      */
@@ -49,7 +52,7 @@ public class SignServiceImpl implements SignService {
         List<Long> permissionIds = permissions.stream().map(PermissionEntity::getId).collect(Collectors.toList());
 
         // 获取会话ID
-        HttpSession session = RequestTrack.getCurrent().getRequest().getSession();
+        HttpSession session = httpServletRequest.getSession();
         String sessionId = session.getId();
 
         // 用户信息存入Session
@@ -70,7 +73,7 @@ public class SignServiceImpl implements SignService {
      */
     @Override
     public void signOut() {
-        RequestTrack.getCurrent().getRequest().getSession().removeAttribute(SIGNER_SESSION_KEY);
+        httpServletRequest.getSession().removeAttribute(SIGNER_SESSION_KEY);
     }
 
     private UserEntity signCheck(SignReqDto input) {

@@ -1,6 +1,7 @@
 package com.spldeolin.beginningmind.security.aspect;
 
 import java.lang.reflect.Method;
+import javax.servlet.http.HttpServletRequest;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
@@ -9,7 +10,6 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.CoreProperties;
-import com.spldeolin.beginningmind.extension.dto.RequestTrack;
 import com.spldeolin.beginningmind.security.PermissionChecker;
 import com.spldeolin.beginningmind.security.SignedChecker;
 import com.spldeolin.beginningmind.security.TokenChecker;
@@ -36,6 +36,9 @@ public class SecurityAspect {
 
     @Autowired
     private CoreProperties coreProperties;
+
+    @Autowired
+    private HttpServletRequest httpServletRequest;
 
     /**
      * 包名以com.spldeolin.beginningmind.开头的，
@@ -67,11 +70,11 @@ public class SecurityAspect {
             case SIGN_AND_AUTH:
                 // 登录 与 鉴权
                 signedChecker.ensureSigned();
-                permissionChecker.ensurePermission(RequestTrack.getCurrent().getRequest());
+                permissionChecker.ensurePermission(httpServletRequest);
                 break;
             case TOKEN:
                 // TOKEN
-                tokenChecker.ensureTokenCorrect(RequestTrack.getCurrent().getRequest(), requestMethod);
+                tokenChecker.ensureTokenCorrect(httpServletRequest, requestMethod);
                 break;
         }
     }
