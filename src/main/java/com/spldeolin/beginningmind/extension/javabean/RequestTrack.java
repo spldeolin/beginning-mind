@@ -18,7 +18,7 @@ import lombok.Data;
 @Builder
 public class RequestTrack {
 
-    static final ThreadLocal<RequestTrack> current = new TransmittableThreadLocal<>();
+    private static final ThreadLocal<RequestTrack> current = new TransmittableThreadLocal<>();
 
     /**
      * insignia
