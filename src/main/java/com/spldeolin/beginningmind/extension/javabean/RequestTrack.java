@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.extension.javabean;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -16,7 +17,9 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class RequestTrack {
+public class RequestTrack implements Serializable {
+
+    private static final long serialVersionUID = 7801628604259321149L;
 
     private static final ThreadLocal<RequestTrack> current = new TransmittableThreadLocal<>();
 
@@ -45,14 +48,18 @@ public class RequestTrack {
      */
     private final String fullUrl;
 
-    private final HttpServletRequest rawRequest;
+    private final transient HttpServletRequest rawRequest;
 
-    private final HttpServletResponse rawResponse;
+    private final transient HttpServletResponse rawResponse;
 
     /**
      * 更多信息，用于作为内层的过滤器、拦截器、切面、Handle的上下文，Map#value将会toString之后与key一起打印到requestLeaved报告中
      */
     private final Map<String, Object> more = Maps.newHashMap();
+
+    /*
+        其他需要保存在上下文中的信息
+     */
 
     public static RequestTrack current() {
         return current.get();
