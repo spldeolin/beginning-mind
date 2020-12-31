@@ -10,7 +10,7 @@ import com.spldeolin.beginningmind.service.SnowFlakeService;
  * @author Deolin 2020-12-25
  */
 @Component
-public class SnowFlakeInsigniaCreationHandle implements InsigniaCreationHandle {
+public class DefaultInsigniaCreationHandle implements InsigniaCreationHandle {
 
     @Autowired
     private SnowFlakeService snowFlakeService;
@@ -19,7 +19,7 @@ public class SnowFlakeInsigniaCreationHandle implements InsigniaCreationHandle {
     public String createInsignia(HttpServletRequest request) {
         String result = request.getHeader("insignia");
         if (result == null) {
-            result = String.valueOf(snowFlakeService.nextId());
+            result = "RT" + snowFlakeService.nextId();
         }
         return result;
     }
