@@ -2,6 +2,8 @@ package com.spldeolin.beginningmind.extension.reqtrack;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -78,6 +80,13 @@ public class RequestTrack implements Serializable {
                 rawResponse);
         result.getMore().putAll(more);
         return result;
+    }
+
+    /**
+     * convenient method for 'requestArrivedAt'
+     */
+    public Date getRequestedAt() {
+        return Date.from(requestArrivedAt.atZone(ZoneId.systemDefault()).toInstant());
     }
 
 }
