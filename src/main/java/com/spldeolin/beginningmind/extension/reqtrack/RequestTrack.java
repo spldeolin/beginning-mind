@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
-import java.util.Map;
+import java.util.TreeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import com.alibaba.ttl.TransmittableThreadLocal;
@@ -57,7 +57,7 @@ public class RequestTrack implements Serializable {
     /**
      * 更多信息，用于作为内层的过滤器、拦截器、切面、Handle的上下文，Map#value将会toString之后与key一起打印到requestLeaved报告中
      */
-    private final Map<String, Object> more = Maps.newHashMap();
+    private final TreeMap<String, Object> more = Maps.newTreeMap();
 
     /*
         其他需要保存在上下文中的信息
