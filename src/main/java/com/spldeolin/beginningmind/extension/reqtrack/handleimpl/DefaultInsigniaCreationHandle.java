@@ -19,7 +19,7 @@ public class DefaultInsigniaCreationHandle implements InsigniaCreationHandle {
     public String createInsignia(HttpServletRequest request) {
         String result = request.getHeader("insignia");
         if (result == null) {
-            result = "RT" + snowFlakeService.nextId();
+            result = "rt" + snowFlakeService.nextId();
         }
         return result;
     }
