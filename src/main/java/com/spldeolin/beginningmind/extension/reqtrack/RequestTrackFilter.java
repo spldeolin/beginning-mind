@@ -17,7 +17,7 @@ import com.spldeolin.beginningmind.extension.reqtrack.handle.FullUrlHandle;
 import com.spldeolin.beginningmind.extension.reqtrack.handle.InsigniaCreationHandle;
 import com.spldeolin.beginningmind.extension.reqtrack.handle.MdcHandle;
 import com.spldeolin.beginningmind.extension.reqtrack.handle.ReportRequestTrackHandle;
-import com.spldeolin.beginningmind.extension.reqtrack.handle.RequestIgnoreHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.RequestExclusionHandle;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 public class RequestTrackFilter extends OncePerRequestFilter implements Ordered {
 
     @Autowired
-    private RequestIgnoreHandle requestIgnoreHandle;
+    private RequestExclusionHandle requestIgnoreHandleExcluded;
 
     @Autowired
     private InsigniaCreationHandle insigniaCreationHandle;
@@ -48,7 +48,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws IOException, ServletException {
         // 过滤规则
-        if (requestIgnoreHandle.isIgnore(request)) {
+        if (requestIgnoreHandleExcluded.isExcluded(request)) {
             filterChain.doFilter(request, response);
         }
 
@@ -71,7 +71,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
         mdcHandle.putInsignia(track.getInsignia());
         mdcHandle.putOtherMdcs(track);
 
-        // 报告请求到达
+        // 请求到达时的报告
         log.info(reportRequestTrackHandle.buildArrivedReport(track).toString());
 
         // 包装request和response
@@ -82,7 +82,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
 
-            // 报告请求离开
+            // 请求离开时的报告
             StringBuilder report = reportRequestTrackHandle.buildLeavedReport(track, wrappedRequest, wrappedResponse);
             StringBuilder moreReport = reportRequestTrackHandle.buildMoreLeavedReport(track.getMore());
             log.info(report.append(moreReport).toString());
