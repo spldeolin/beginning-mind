@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.io.IOUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -18,6 +19,7 @@ import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrackProperties;
 import com.spldeolin.beginningmind.extension.reqtrack.handle.ReportRequestTrackHandle;
 import com.spldeolin.beginningmind.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle {
+
+    @Autowired
+    private RequestTrackProperties requestTrackProperties;
 
     @Override
     public StringBuilder buildArrivedReport(RequestTrack requestTrack) {
@@ -42,9 +47,10 @@ public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle
             ContentCachingResponseWrapper contentCachingResponseWrapper) {
         long elapsed = Duration.between(requestTrack.getRequestArrivedAt(), LocalDateTime.now()).toMillis();
         Collection<String> curlLines = convertToCurlLines(requestTrack, contentCachingRequestWrapper);
-        String curl = Joiner.on("\n\t").join(curlLines);
+        String curl = limitLength(Joiner.on("\n\t").join(curlLines), requestTrackProperties.getCurlMaxLength());
         Map<String, String> responseHeaders = getResponseHeaders(contentCachingResponseWrapper);
-        String rawResponseBody = getRawResponseBody(contentCachingResponseWrapper);
+        String rawResponseBody = limitLength(getRawResponseBody(contentCachingResponseWrapper),
+                requestTrackProperties.getResponseBodyMaxLength());
 
         StringBuilder sb = new StringBuilder(1024);
         sb.append("requestLeaved-").append(requestTrack.getUri()).append("-").append(requestTrack.getInsignia())
@@ -72,6 +78,9 @@ public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle
         Collection<String> headerNames = response.getHeaderNames();
         if (headerNames != null) {
             for (String headerName : headerNames) {
+                if (requestTrackProperties.getHiddenResponseHeaderNames().contains(headerName)) {
+                    continue;
+                }
                 responseHeaders.put(headerName, response.getHeader(headerName));
             }
         }
@@ -85,7 +94,7 @@ public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle
         String rawJson = JsonUtils.compressJson(getRawRequestBody(request));
         result.add("--data-raw '" + rawJson + "'");
         getRequestHeaders(request).forEach((k, v) -> {
-            if ("content-length".equals(k)) {
+            if ("content-length".equals(k) || requestTrackProperties.getHiddenRequestHeaderNames().contains(k)) {
                 return;
             }
             result.add("--header '" + k + ": " + v + "'");
@@ -148,6 +157,13 @@ public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle
             ip = request.getRemoteAddr();
         }
         return ip;
+    }
+
+    private String limitLength(String raw, int maxLength) {
+        if (raw.length() > maxLength) {
+            return raw.substring(0, maxLength);
+        }
+        return raw;
     }
 
 }
