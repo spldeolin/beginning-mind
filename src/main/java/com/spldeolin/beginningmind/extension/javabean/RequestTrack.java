@@ -17,7 +17,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class RequestTrack implements Serializable {
+public class RequestTrack implements Serializable, Cloneable {
 
     private static final long serialVersionUID = 7801628604259321149L;
 
@@ -71,6 +71,13 @@ public class RequestTrack implements Serializable {
 
     public static void removeCurrent() {
         current.remove();
+    }
+
+    public RequestTrack shallowClone() {
+        RequestTrack result = new RequestTrack(insignia, requestArrivedAt, httpMethod, uri, fullUrl, rawRequest,
+                rawResponse);
+        result.getMore().putAll(more);
+        return result;
     }
 
 }

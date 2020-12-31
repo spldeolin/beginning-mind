@@ -54,21 +54,23 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
             filterChain.doFilter(request, response);
         }
 
-        // 构造RequestTrack对象 并保存到上下文
-        RequestTrackBuilder builder = RequestTrack.builder();
-        String insignia = insigniaCreationHandle.createInsignia(request);
-        builder.insignia(insignia);
-        builder.requestArrivedAt(LocalDateTime.now());
-        builder.httpMethod(request.getMethod());
-        builder.uri(request.getRequestURI());
-        builder.fullUrl(fullUrlHandle.parseFullUrl(request));
-        builder.rawRequest(request);
-        builder.rawResponse(response);
-        RequestTrack track = builder.build();
+        // 构造RequestTrack对象，保存到上下文
+        RequestTrack track = RequestTrack.current();
+        if (track == null) {
+            RequestTrackBuilder builder = RequestTrack.builder();
+            builder.insignia(insigniaCreationHandle.createInsignia(request));
+            builder.requestArrivedAt(LocalDateTime.now());
+            builder.httpMethod(request.getMethod());
+            builder.uri(request.getRequestURI());
+            builder.fullUrl(fullUrlHandle.parseFullUrl(request));
+            builder.rawRequest(request);
+            builder.rawResponse(response);
+            track = builder.build();
+        }
         RequestTrack.setCurrent(track);
 
         // 设置Log MDC
-        mdcHandle.putInsignia(insignia);
+        mdcHandle.putInsignia(track.getInsignia());
         mdcHandle.putOtherMdcs(track);
 
         // 报告请求到达
@@ -88,7 +90,7 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
             log.info(report.append(moreReport).toString());
 
             // insignia保存到response报文
-            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, insignia);
+            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, track.getInsignia());
 
             // 清空上下文
             mdcHandle.removeAllMdcs();
