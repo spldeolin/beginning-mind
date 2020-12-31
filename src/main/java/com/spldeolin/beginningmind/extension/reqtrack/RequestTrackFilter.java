@@ -81,14 +81,13 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
         try {
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
+            // insignia保存到response报文
+            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, track.getInsignia());
 
             // 请求离开时的报告
             StringBuilder report = reportRequestTrackHandle.buildLeavedReport(track, wrappedRequest, wrappedResponse);
             StringBuilder moreReport = reportRequestTrackHandle.buildMoreLeavedReport(track.getMore());
             log.info(report.append(moreReport).toString());
-
-            // insignia保存到response报文
-            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, track.getInsignia());
 
             // 清空上下文
             mdcHandle.removeAllMdcs();
