@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.filter;
+package com.spldeolin.beginningmind.extension.reqtrack;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -12,14 +12,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.extension.constant.RequestTrackConstant;
-import com.spldeolin.beginningmind.extension.handle.FullUrlHandle;
-import com.spldeolin.beginningmind.extension.handle.InsigniaCreationHandle;
-import com.spldeolin.beginningmind.extension.handle.MdcHandle;
-import com.spldeolin.beginningmind.extension.handle.ReportRequestTrackHandle;
-import com.spldeolin.beginningmind.extension.handle.RequestIgnoreHandle;
-import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
-import com.spldeolin.beginningmind.extension.javabean.RequestTrack.RequestTrackBuilder;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack.RequestTrackBuilder;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.FullUrlHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.InsigniaCreationHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.MdcHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.ReportRequestTrackHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.RequestIgnoreHandle;
 import lombok.extern.slf4j.Slf4j;
 
 /**

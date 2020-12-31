@@ -1,8 +1,8 @@
-package com.spldeolin.beginningmind.extension.handleimpl;
+package com.spldeolin.beginningmind.extension.reqtrack.handleimpl;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.extension.handle.RequestIgnoreHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.RequestIgnoreHandle;
 
 /**
  * @author Deolin 2020-12-25

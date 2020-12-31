@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.javabean;
+package com.spldeolin.beginningmind.extension.reqtrack;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -17,7 +17,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class RequestTrack implements Serializable, Cloneable {
+public class RequestTrack implements Serializable {
 
     private static final long serialVersionUID = 7801628604259321149L;
 

@@ -1,9 +1,9 @@
-package com.spldeolin.beginningmind.extension.handle;
+package com.spldeolin.beginningmind.extension.reqtrack.handle;
 
 import java.util.Map;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
-import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack;
 
 /**
  * @author Deolin 2020-12-25

@@ -8,8 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import com.spldeolin.beginningmind.extension.constant.RequestTrackConstant;
-import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrackConstant;
 import lombok.extern.slf4j.Slf4j;
 
 /**

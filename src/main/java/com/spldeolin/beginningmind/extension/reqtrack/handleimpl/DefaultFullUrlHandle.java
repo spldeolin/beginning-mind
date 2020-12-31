@@ -1,9 +1,9 @@
-package com.spldeolin.beginningmind.extension.handleimpl;
+package com.spldeolin.beginningmind.extension.reqtrack.handleimpl;
 
 import java.util.Map.Entry;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.extension.handle.FullUrlHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.FullUrlHandle;
 
 /**
  * @author Deolin 2020-12-25

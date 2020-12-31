@@ -1,4 +1,4 @@
-package com.spldeolin.beginningmind.extension.handleimpl;
+package com.spldeolin.beginningmind.extension.reqtrack.handleimpl;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -17,8 +17,8 @@ import org.springframework.web.util.ContentCachingResponseWrapper;
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.spldeolin.beginningmind.extension.handle.ReportRequestTrackHandle;
-import com.spldeolin.beginningmind.extension.javabean.RequestTrack;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.ReportRequestTrackHandle;
 import com.spldeolin.beginningmind.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 

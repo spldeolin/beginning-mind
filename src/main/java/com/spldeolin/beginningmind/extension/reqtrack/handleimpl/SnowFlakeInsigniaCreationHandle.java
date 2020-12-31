@@ -1,9 +1,9 @@
-package com.spldeolin.beginningmind.extension.handleimpl;
+package com.spldeolin.beginningmind.extension.reqtrack.handleimpl;
 
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import com.spldeolin.beginningmind.extension.handle.InsigniaCreationHandle;
+import com.spldeolin.beginningmind.extension.reqtrack.handle.InsigniaCreationHandle;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 
 /**
