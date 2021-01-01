@@ -161,7 +161,7 @@ public class DefaultReportRequestTrackHandle implements ReportRequestTrackHandle
 
     private String limitLength(String raw, int maxLength) {
         if (raw.length() > maxLength) {
-            return raw.substring(0, maxLength);
+            return raw.substring(0, maxLength) + " <hide beyond part>";
         }
         return raw;
     }

@@ -24,7 +24,7 @@ public class RequestTrackProperties {
     /**
      * responseBody的长度限制
      */
-    private Integer responseBodyMaxLength = 100000;
+    private Integer responseBodyMaxLength = 2000;
 
     /**
      * 需要隐藏的request header names
