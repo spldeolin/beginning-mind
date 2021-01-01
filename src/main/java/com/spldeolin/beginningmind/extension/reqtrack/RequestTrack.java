@@ -75,13 +75,6 @@ public class RequestTrack implements Serializable {
         current.remove();
     }
 
-    public RequestTrack shallowClone() {
-        RequestTrack result = new RequestTrack(insignia, requestArrivedAt, httpMethod, uri, fullUrl, rawRequest,
-                rawResponse);
-        result.getMore().putAll(more);
-        return result;
-    }
-
     /**
      * convenient method for 'requestArrivedAt'
      */
