@@ -53,26 +53,23 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
         }
 
         // 构造RequestTrack对象，保存到上下文
-        RequestTrack track = RequestTrack.current();
-        if (track == null) {
-            RequestTrackBuilder builder = RequestTrack.builder();
-            builder.insignia(insigniaCreationHandle.createInsignia(request));
-            builder.requestArrivedAt(LocalDateTime.now());
-            builder.httpMethod(request.getMethod());
-            builder.uri(request.getRequestURI());
-            builder.fullUrl(fullUrlHandle.parseFullUrl(request));
-            builder.rawRequest(request);
-            builder.rawResponse(response);
-            track = builder.build();
-        }
-        RequestTrack.setCurrent(track);
+        RequestTrackBuilder builder = RequestTrack.builder();
+        builder.insignia(insigniaCreationHandle.createInsignia(request));
+        builder.requestArrivedAt(LocalDateTime.now());
+        builder.httpMethod(request.getMethod());
+        builder.uri(request.getRequestURI());
+        builder.fullUrl(fullUrlHandle.parseFullUrl(request));
+        builder.rawRequest(request);
+        builder.rawResponse(response);
+        RequestTrack requestTrack = builder.build();
+        RequestTrack.setCurrent(requestTrack);
 
         // 设置Log MDC
-        mdcHandle.putInsignia(track.getInsignia());
-        mdcHandle.putOtherMdcs(track);
+        mdcHandle.putInsignia(requestTrack.getInsignia());
+        mdcHandle.putOtherMdcs(requestTrack);
 
         // 请求到达时的报告
-        log.info(reportRequestTrackHandle.buildArrivedReport(track).toString());
+        log.info(reportRequestTrackHandle.buildArrivedReport(requestTrack).toString());
 
         // 包装request和response
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request);
@@ -82,11 +79,11 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
             filterChain.doFilter(wrappedRequest, wrappedResponse);
         } finally {
             // insignia保存到response报文
-            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, track.getInsignia());
+            response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, requestTrack.getInsignia());
 
             // 请求离开时的报告
-            StringBuilder report = reportRequestTrackHandle.buildLeavedReport(track, wrappedRequest, wrappedResponse);
-            StringBuilder moreReport = reportRequestTrackHandle.buildMoreLeavedReport(track.getMore());
+            StringBuilder report = reportRequestTrackHandle.buildLeavedReport(requestTrack, wrappedRequest, wrappedResponse);
+            StringBuilder moreReport = reportRequestTrackHandle.buildMoreLeavedReport(requestTrack.getMore());
             log.info(report.append(moreReport).toString());
 
             // 清空上下文
