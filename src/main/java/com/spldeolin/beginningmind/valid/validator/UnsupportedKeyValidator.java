@@ -6,7 +6,7 @@ import javax.validation.ConstraintValidatorContext;
 import com.spldeolin.beginningmind.valid.annotation.UnsupportedKey;
 
 /**
- * 校验器：确保值在可选范围内
+ * 校验器：确保不出现不允许使用的key
  *
  * @author Deolin 2019-10-29
  */
