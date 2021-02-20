@@ -21,6 +21,9 @@ public class UnsupportedKeyValidator implements ConstraintValidator<UnsupportedK
 
     @Override
     public boolean isValid(Map<String, ?> value, ConstraintValidatorContext context) {
+        if (value == null) {
+            return true;
+        }
         for (String unsupportedKey : unsupportedKeys) {
             if (value.containsKey(unsupportedKey)) {
                 return false;
