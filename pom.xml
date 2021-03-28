@@ -138,7 +138,18 @@
         <dependency>
             <groupId>com.spldeolin.allison1875</groupId>
             <artifactId>allison1875-all</artifactId>
-            <version>1.0</version>
+            <version>4.2</version>
+            <scope>test</scope>
+        </dependency>
+        <!--
+            1. git clone https://github.com/spldeolin/allison1875-support.git
+            2. cd allison1875-support/
+            3. mvn install source:jar install -Dmaven.test.skip=true
+         -->
+        <dependency>
+            <groupId>com.spldeolin.allison1875</groupId>
+            <artifactId>allison1875-support</artifactId>
+            <version>3.0</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
