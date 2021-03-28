@@ -9,7 +9,7 @@ import com.spldeolin.beginningmind.valid.annotation.Mobile;
  *
  * @author Deolin 2018-05-23
  */
-public class MobileValidator extends CustomMessageValidator<Mobile, String> {
+public class MobileValidator implements ConstraintValidator<Mobile, String> {
 
     @Override
     public void initialize(Mobile constraintAnnotation) {
