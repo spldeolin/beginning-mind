@@ -82,7 +82,8 @@ public class RequestTrackFilter extends OncePerRequestFilter implements Ordered 
             response.setHeader(RequestTrackConstant.INSIGNIA_PLACEHOLDER, requestTrack.getInsignia());
 
             // 请求离开时的报告
-            StringBuilder report = reportRequestTrackHandle.buildLeavedReport(requestTrack, wrappedRequest, wrappedResponse);
+            StringBuilder report = reportRequestTrackHandle
+                    .buildLeavedReport(requestTrack, wrappedRequest, wrappedResponse);
             StringBuilder moreReport = reportRequestTrackHandle.buildMoreLeavedReport(requestTrack.getMore());
             log.info(report.append(moreReport).toString());
 
