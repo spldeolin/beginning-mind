@@ -24,11 +24,6 @@ public class CoreProperties {
      */
     private SnowFlakeProp snowFlake;
 
-    /**
-     * 是否启用安全模块
-     */
-    private Boolean enableSecurity;
-
     @Data
     public static class TaskExecutorProp {
 
