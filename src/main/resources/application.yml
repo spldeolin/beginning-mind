@@ -13,7 +13,7 @@ server:
 
 spring:
 
-  profiles.active: ${profile}
+  profiles.active: @maven.spring.profile@
 
   # throw a exception when 404
   mvc.throw-exception-if-no-handler-found: true
@@ -90,39 +90,6 @@ spring:
     host: 127.0.0.1
     port: 6379
     password: root
-
-snow-flake:
-  datacenter-id: 1
-  machine-id: 1
-
----
-
-########################
-##                    ##
-##        Test        ##
-##                    ##
-########################
-
-server:
-  port: 8080
-  context-path: /
-
-spring:
-
-  profiles: test
-
-  datasource:
-    url: jdbc:mysql://192.168.2.2:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true
-    username: guest
-    password: guest
-
-  redis:
-    host: 192.168.2.2
-    port: 6379
-    password: guest
-
-logging:
-  config: classpath:log4j2/log4j2-test.yml
 
 snow-flake:
   datacenter-id: 1

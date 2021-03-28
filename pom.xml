@@ -143,6 +143,24 @@
         </dependency>
     </dependencies>
 
+    <profiles>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <maven.spring.profile>dev</maven.spring.profile>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <maven.spring.profile>prod</maven.spring.profile>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>${project.artifactId}</finalName>
         <plugins>
