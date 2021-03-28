@@ -24,7 +24,6 @@ import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalTimeSerializer;
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.json.IgnoreCollectionNullElementDeserializeModule;
 import com.spldeolin.beginningmind.util.exception.JsonException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -44,9 +43,6 @@ public class JsonUtils {
 
     public static ObjectMapper createObjectMapper() {
         ObjectMapper om = new ObjectMapper();
-
-        // 反序列化时，忽略Javabean中Collection属性对应JSON Array中的为null的元素
-        om.registerModule(new IgnoreCollectionNullElementDeserializeModule());
 
         // 反序列化时，忽略Javabean中不存在的属性，而不是抛出异常
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
