@@ -12,11 +12,6 @@ package com.spldeolin.beginningmind.service;
 public interface SnowFlakeService {
 
     /**
-     * 初始化datacenter和服务器码
-     */
-    void initDatacenterAndMachine();
-
-    /**
      * 产生下一个ID
      */
     long nextId();

@@ -2,9 +2,8 @@ package com.spldeolin.beginningmind.serviceimpl;
 
 import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.CoreProperties;
 import com.spldeolin.beginningmind.service.SnowFlakeService;
 import com.spldeolin.beginningmind.util.TimeUtils;
 
@@ -13,9 +12,6 @@ import com.spldeolin.beginningmind.util.TimeUtils;
  */
 @Service
 public class SnowFlakeServiceImpl implements SnowFlakeService {
-
-    @Autowired
-    private CoreProperties coreProperties;
 
     /**
      * 起始的时间戳 2018-11-12 13:27:37
@@ -68,9 +64,11 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
      */
     private final static long TIMESTMP_LEFT = DATACENTER_LEFT + DATACENTER_BIT;
 
-    private long datacenterId;
+    @Value("${snow-flake.datacenter-id}")
+    private Long datacenterId;
 
-    private long machineId;
+    @Value("${snow-flake.machine-id}")
+    private Long machineId;
 
     private long sequence = 0L;
 
@@ -80,20 +78,13 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
     private long lastStmp = -1L;
 
     @PostConstruct
-    @Override
     public void initDatacenterAndMachine() {
-        long datacenterId = coreProperties.getSnowFlake().getDatacenterId();
-        long machineId = coreProperties.getSnowFlake().getMachineId();
-
         if (datacenterId > MAX_DATACENTER_NUM || datacenterId < 0) {
             throw new IllegalArgumentException("datacenterId can't be greater than MAX_DATACENTER_NUM or less than 0");
         }
         if (machineId > MAX_MACHINE_NUM || machineId < 0) {
             throw new IllegalArgumentException("machineId can't be greater than MAX_MACHINE_NUM or less than 0");
         }
-
-        this.datacenterId = datacenterId;
-        this.machineId = machineId;
     }
 
     /**

@@ -55,19 +55,15 @@ mybatis:
   configuration:
     default-enum-type-handler: com.spldeolin.beginningmind.mybatis.EnumTypeHandlerEx
 
-core:
+thread-pool:
+  core-size: 5
+  maximum-size: 10
+  queue-capacity: 20
+  keep-alive-seconds: 60
 
-  task-executor:
-    core-size: 5
-    maximum-size: 10
-    queue-capacity: 20
-    keep-alive-seconds: 60
-
-  snow-flake:
-    datacenter-id: 占位符
-    machine-id: 占位符
-
-  enable-security: 占位符
+snow-flake:
+  datacenter-id: 占位符
+  machine-id: 占位符
 
 ---
 
@@ -95,11 +91,9 @@ spring:
     port: 6379
     password: root
 
-core:
-  snow-flake:
-    datacenter-id: 1
-    machine-id: 1
-  enable-security: false
+snow-flake:
+  datacenter-id: 1
+  machine-id: 1
 
 ---
 
@@ -130,11 +124,9 @@ spring:
 logging:
   config: classpath:log4j2/log4j2-test.yml
 
-core:
-  snow-flake:
-    datacenter-id: 1
-    machine-id: 1
-  enable-security: false
+snow-flake:
+  datacenter-id: 1
+  machine-id: 1
 
 ---
 
@@ -165,8 +157,6 @@ spring:
 logging:
   config: classpath:log4j2/log4j2-prod.yml
 
-core:
-  snow-flake:
-    datacenter-id: # TODO 生产环境 雪花算法数据中心ID
-    machine-id: # TODO 生产环境 雪花算法机器ID
-  enable-security: true
+snow-flake:
+  datacenter-id: # TODO 生产环境 雪花算法数据中心ID
+  machine-id: # TODO 生产环境 雪花算法机器ID

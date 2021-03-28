@@ -1,13 +1,11 @@
 package com.spldeolin.beginningmind.config;
 
 import java.util.concurrent.ThreadPoolExecutor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
-import com.spldeolin.beginningmind.CoreProperties;
-import com.spldeolin.beginningmind.CoreProperties.TaskExecutorProp;
 
 /**
  * 全局线程池配置
@@ -17,17 +15,25 @@ import com.spldeolin.beginningmind.CoreProperties.TaskExecutorProp;
 @Configuration
 public class ThreadPoolConfig {
 
-    @Autowired
-    private CoreProperties coreProperties;
+    @Value("${thread-pool.core-size}")
+    private Integer coreSize;
+
+    @Value("${thread-pool.maximum-size}")
+    private Integer maximumSize;
+
+    @Value("${thread-pool.queue-capacity}")
+    private Integer queueCapacity;
+
+    @Value("${thread-pool.keep-alive-seconds}")
+    private Integer keepAliveSeconds;
 
     @Bean
     public TaskExecutor taskExecutor() {
-        TaskExecutorProp props = coreProperties.getTaskExecutor();
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setCorePoolSize(props.getCoreSize());
-        executor.setMaxPoolSize(props.getMaximumSize());
-        executor.setQueueCapacity(props.getQueueCapacity());
-        executor.setKeepAliveSeconds(props.getKeepAliveSeconds());
+        executor.setCorePoolSize(coreSize);
+        executor.setMaxPoolSize(maximumSize);
+        executor.setQueueCapacity(queueCapacity);
+        executor.setKeepAliveSeconds(keepAliveSeconds);
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
         executor.setWaitForTasksToCompleteOnShutdown(true);
         return executor;
