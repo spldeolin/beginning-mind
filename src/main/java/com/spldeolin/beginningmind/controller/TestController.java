@@ -1,31 +1,27 @@
-package com.spldeolin.beginningmind;
+package com.spldeolin.beginningmind.controller;
 
 import java.util.concurrent.TimeUnit;
-import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.redisson.api.RBucket;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author Deolin 2019/01/06
+ * doc-ignore
+ *
+ * @author Deolin 2021-03-28
  */
-
-@RunWith(SpringRunner.class)
-@SpringBootTest
-@ActiveProfiles("dev")
+@RestController
 @Slf4j
-public class RedisTest {
+public class TestController {
 
     @Autowired
     private RedissonClient redissonClient;
 
-    @Test
+    @GetMapping("lock")
     public void lock() {
         String key = "goods" + 1001L;
 
@@ -43,7 +39,7 @@ public class RedisTest {
         log.info("结束");
     }
 
-    @Test
+    @GetMapping("set")
     public void set() {
         String key = "aaa";
         RBucket<String> bucket = redissonClient.getBucket(key);
