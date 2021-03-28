@@ -10,7 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  */
 @ComponentScan("com.spldeolin.beginningmind")
 @SpringBootApplication
-public class Startup {
+public class Application {
 
     public static void main(String[] args) {
         if (!StringUtils.equalsAny(System.getProperty("profile"), "dev", "test", "prod")) {
@@ -18,7 +18,7 @@ public class Startup {
             return;
         }
 
-        SpringApplication.run(Startup.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

@@ -17,8 +17,6 @@ import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.javabean.InvalidDto;
 import com.spldeolin.beginningmind.extension.javabean.RequestResult;
-import com.spldeolin.beginningmind.security.exception.UnauthorizeException;
-import com.spldeolin.beginningmind.security.exception.UnsignedException;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -96,26 +94,6 @@ public class RestExceptionAdvice {
     }
 
     /*
-        security
-     */
-
-    /**
-     * 401 未登录
-     */
-    @ExceptionHandler(UnsignedException.class)
-    public RequestResult handleUnsignException(UnsignedException e) {
-        return RequestResult.failure(ResultCodeEnum.UNSIGNED, e.getMessage());
-    }
-
-    /**
-     * 403 未授权
-     */
-    @ExceptionHandler(UnauthorizeException.class)
-    public RequestResult handleUnauthorizeException(UnauthorizeException e) {
-        return RequestResult.failure(ResultCodeEnum.FORBIDDEN, e.getMessage());
-    }
-
-    /*
         biz
      */
 
@@ -124,7 +102,7 @@ public class RestExceptionAdvice {
      */
     @ExceptionHandler(BizException.class)
     public RequestResult handle(BizException e) {
-        return RequestResult.failure(ResultCodeEnum.SERVICE_ERROR, e.getMessage());
+        return RequestResult.failure(ResultCodeEnum.BIZ_ERROR, e.getMessage());
     }
 
     /*

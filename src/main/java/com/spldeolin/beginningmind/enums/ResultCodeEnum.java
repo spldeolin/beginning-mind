@@ -37,7 +37,7 @@ public enum ResultCodeEnum implements EnumAncestor<Integer> {
 
     INTERNAL_ERROR(500, "权限不足"),
 
-    SERVICE_ERROR(1001, "业务异常"),
+    BIZ_ERROR(1001, "业务异常"),
 
     ;
 
