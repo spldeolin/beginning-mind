@@ -1,6 +1,5 @@
 package com.spldeolin.beginningmind.extension.javabean;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import lombok.Data;
 
@@ -10,34 +9,33 @@ import lombok.Data;
  * @author Deolin
  */
 @Data
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public class RequestResult {
+public class RequestResult<T> {
 
     private ResultCodeEnum code;
 
-    private Object data;
+    private T data;
 
-    private String message;
+    private String errmsg;
 
-    public static RequestResult success() {
+    public static <T> RequestResult<T> success() {
         return success(null);
     }
 
-    public static RequestResult success(Object data) {
-        RequestResult instance = new RequestResult();
+    public static <T> RequestResult<T> success(T data) {
+        RequestResult<T> instance = new RequestResult<>();
         instance.setCode(ResultCodeEnum.OK);
         instance.setData(data);
         return instance;
     }
 
-    public static RequestResult failure(ResultCodeEnum code) {
+    public static <T> RequestResult<T> failure(ResultCodeEnum code) {
         return failure(code, null);
     }
 
-    public static RequestResult failure(ResultCodeEnum code, String message) {
-        RequestResult instance = new RequestResult();
+    public static <T> RequestResult<T> failure(ResultCodeEnum code, String message) {
+        RequestResult<T> instance = new RequestResult<>();
         instance.setCode(code);
-        instance.setMessage(message);
+        instance.setErrmsg(message);
         return instance;
     }
 

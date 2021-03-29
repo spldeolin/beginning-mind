@@ -39,7 +39,7 @@ public class RestExceptionAdvice {
      * 只有spring.mvc.throw-exception-if-no-handler-found=true和spring.resources.add-mappings=false时，才会抛出这个异常
      */
     @ExceptionHandler(NoHandlerFoundException.class)
-    public RequestResult handler(NoHandlerFoundException e) {
+    public RequestResult<?> handler(NoHandlerFoundException e) {
         log.warn(e.getMessage());
         return RequestResult.failure(ResultCodeEnum.NOT_FOUND);
     }
@@ -48,7 +48,7 @@ public class RestExceptionAdvice {
      * 400 请求动词错误
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public RequestResult handler(HttpRequestMethodNotSupportedException e) {
+    public RequestResult<?> handler(HttpRequestMethodNotSupportedException e) {
         String supportedMethods = Arrays.toString(e.getSupportedMethods());
         log.warn(e.getMessage() + " " + supportedMethods);
         return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
@@ -58,7 +58,7 @@ public class RestExceptionAdvice {
      * 400 请求Content-Type错误。往往是因为后端的@RequestBody和前端的application/json没有同时指定或同时不指定导致的
      */
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
-    public RequestResult handler(HttpMediaTypeNotSupportedException e) {
+    public RequestResult<?> handler(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage() + " " + " [application/json]");
         return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
@@ -73,7 +73,7 @@ public class RestExceptionAdvice {
      * </pre>
      */
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public RequestResult httpMessageNotReadable(HttpMessageNotReadableException e) {
+    public RequestResult<?> httpMessageNotReadable(HttpMessageNotReadableException e) {
         log.warn("message={}", e.getMessage());
         return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
@@ -82,7 +82,7 @@ public class RestExceptionAdvice {
      * 400 请求Body内字段没有通过注解校验（通过参数级@Valid 启用的参数校验）
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public RequestResult handle(MethodArgumentNotValidException e) {
+    public RequestResult<?> handle(MethodArgumentNotValidException e) {
         log.warn("invalids={}", buildInvalids(e.getBindingResult()));
         return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
     }
@@ -101,7 +101,7 @@ public class RestExceptionAdvice {
      * 1001 业务异常
      */
     @ExceptionHandler(BizException.class)
-    public RequestResult handle(BizException e) {
+    public RequestResult<?> handle(BizException e) {
         return RequestResult.failure(ResultCodeEnum.BIZ_ERROR, e.getMessage());
     }
 
@@ -113,7 +113,7 @@ public class RestExceptionAdvice {
      * 500 无法预料的异常
      */
     @ExceptionHandler(Throwable.class)
-    public RequestResult handle(Throwable e) {
+    public RequestResult<?> handle(Throwable e) {
         log.error("统一异常处理被击穿！", e);
         return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR);
     }

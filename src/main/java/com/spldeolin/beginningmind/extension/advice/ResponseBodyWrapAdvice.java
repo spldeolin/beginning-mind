@@ -31,9 +31,9 @@ public class ResponseBodyWrapAdvice implements ResponseBodyAdvice<Object> {
         return body;
     }
 
-    private RequestResult ensureWrapped(Object returnValue) {
+    private RequestResult<?> ensureWrapped(Object returnValue) {
         if (returnValue instanceof RequestResult) {
-            return (RequestResult) returnValue;
+            return (RequestResult<?>) returnValue;
         }
         return RequestResult.success(returnValue);
     }
