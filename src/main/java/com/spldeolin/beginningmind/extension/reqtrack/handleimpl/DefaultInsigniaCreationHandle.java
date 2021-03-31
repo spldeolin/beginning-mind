@@ -13,13 +13,13 @@ import com.spldeolin.beginningmind.id.SnowFlake;
 public class DefaultInsigniaCreationHandle implements InsigniaCreationHandle {
 
     @Autowired
-    private SnowFlake snowFlakeService;
+    private SnowFlake snowFlake;
 
     @Override
     public String createInsignia(HttpServletRequest request) {
         String result = request.getHeader("insignia");
         if (result == null) {
-            result = "rt" + snowFlakeService.nextId();
+            result = "rt" + snowFlake.nextId();
         }
         return result;
     }
