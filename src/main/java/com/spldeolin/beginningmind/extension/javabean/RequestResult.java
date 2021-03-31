@@ -28,10 +28,6 @@ public class RequestResult<T> {
         return instance;
     }
 
-    public static <T> RequestResult<T> failure(ResultCodeEnum code) {
-        return failure(code, null);
-    }
-
     public static <T> RequestResult<T> failure(ResultCodeEnum code, String message) {
         RequestResult<T> instance = new RequestResult<>();
         instance.setCode(code);

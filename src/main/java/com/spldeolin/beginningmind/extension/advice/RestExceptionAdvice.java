@@ -17,6 +17,7 @@ import com.spldeolin.beginningmind.enums.ResultCodeEnum;
 import com.spldeolin.beginningmind.exception.BizException;
 import com.spldeolin.beginningmind.extension.javabean.InvalidDto;
 import com.spldeolin.beginningmind.extension.javabean.RequestResult;
+import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -41,7 +42,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     public RequestResult<?> handler(NoHandlerFoundException e) {
         log.warn(e.getMessage());
-        return RequestResult.failure(ResultCodeEnum.NOT_FOUND);
+        return RequestResult.failure(ResultCodeEnum.NOT_FOUND, concatInsignia(ResultCodeEnum.BAD_REQEUST));
     }
 
     /**
@@ -51,7 +52,7 @@ public class RestExceptionAdvice {
     public RequestResult<?> handler(HttpRequestMethodNotSupportedException e) {
         String supportedMethods = Arrays.toString(e.getSupportedMethods());
         log.warn(e.getMessage() + " " + supportedMethods);
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
     }
 
     /**
@@ -60,7 +61,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult<?> handler(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage() + " " + " [application/json]");
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
     }
 
     /**
@@ -75,7 +76,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult<?> httpMessageNotReadable(HttpMessageNotReadableException e) {
         log.warn("message={}", e.getMessage());
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
     }
 
     /**
@@ -84,7 +85,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult<?> handle(MethodArgumentNotValidException e) {
         log.warn("invalids={}", buildInvalids(e.getBindingResult()));
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST);
+        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
     }
 
     private Collection<InvalidDto> buildInvalids(BindingResult bindingResult) {
@@ -115,7 +116,11 @@ public class RestExceptionAdvice {
     @ExceptionHandler(Throwable.class)
     public RequestResult<?> handle(Throwable e) {
         log.error("统一异常处理被击穿！", e);
-        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR);
+        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR, concatInsignia(ResultCodeEnum.INTERNAL_ERROR));
+    }
+
+    private String concatInsignia(ResultCodeEnum resultCode) {
+        return resultCode.getTitle() + String.format(" [%s]", RequestTrack.current().getInsignia());
     }
 
 }
