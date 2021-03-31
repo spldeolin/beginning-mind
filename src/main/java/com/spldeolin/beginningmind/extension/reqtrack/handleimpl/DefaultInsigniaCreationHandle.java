@@ -4,7 +4,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.extension.reqtrack.handle.InsigniaCreationHandle;
-import com.spldeolin.beginningmind.service.SnowFlakeService;
+import com.spldeolin.beginningmind.id.SnowFlake;
 
 /**
  * @author Deolin 2020-12-25
@@ -13,7 +13,7 @@ import com.spldeolin.beginningmind.service.SnowFlakeService;
 public class DefaultInsigniaCreationHandle implements InsigniaCreationHandle {
 
     @Autowired
-    private SnowFlakeService snowFlakeService;
+    private SnowFlake snowFlakeService;
 
     @Override
     public String createInsignia(HttpServletRequest request) {

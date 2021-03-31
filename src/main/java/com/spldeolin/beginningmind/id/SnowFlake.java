@@ -1,17 +1,16 @@
-package com.spldeolin.beginningmind.serviceimpl;
+package com.spldeolin.beginningmind.id;
 
 import java.time.LocalDateTime;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Service;
-import com.spldeolin.beginningmind.service.SnowFlakeService;
+import org.springframework.stereotype.Component;
 import com.spldeolin.beginningmind.util.TimeUtils;
 
 /**
  * @author Deolin 2018/11/12
  */
-@Service
-public class SnowFlakeServiceImpl implements SnowFlakeService {
+@Component
+public class SnowFlake {
 
     /**
      * 起始的时间戳 2018-11-12 13:27:37
@@ -90,7 +89,6 @@ public class SnowFlakeServiceImpl implements SnowFlakeService {
     /**
      * 产生下一个ID
      */
-    @Override
     public synchronized long nextId() {
         long currStmp = getNewstmp();
         if (currStmp < lastStmp) {
