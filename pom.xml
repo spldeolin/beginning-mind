@@ -144,7 +144,7 @@
         <dependency>
             <groupId>com.spldeolin.allison1875</groupId>
             <artifactId>allison1875-all</artifactId>
-            <version>4.2</version>
+            <version>5.0</version>
             <scope>test</scope>
         </dependency>
         <!--
