@@ -11,9 +11,9 @@ import com.spldeolin.beginningmind.allison1875.config.ConfigConstant;
 public class InspectorBoot {
 
     public static void main(String[] args) {
-        InspectorConfig config = ConfigConstant.inspectorConfig;
-        config.setProjectLocalGitPath("/Users/deolin/Documents/project-repo/beginning-mind");
-        Allison1875.allison1875(InspectorBoot.class, new InspectorModule(), ConfigConstant.baseConfig, config);
+        InspectorConfig inspectorConfig = ConfigConstant.inspectorConfig;
+        inspectorConfig.setProjectLocalGitPath("/Users/deolin/Documents/project-repo/beginning-mind");
+        Allison1875.allison1875(InspectorBoot.class, new InspectorModule(inspectorConfig));
     }
 
 }

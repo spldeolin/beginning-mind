@@ -11,12 +11,10 @@ import com.spldeolin.beginningmind.allison1875.module.BmHandlerTransformerModule
 public class HandlerTransformerBoot {
 
     public static void main(String[] args) {
-        HandlerTransformerConfig config = ConfigConstant.handlerTransformerConfig;
-        config.batchSetAllPackagesByWildcard("com.spldeolin.beginningmind.-");
-        config.setAuthor("Deolin");
-        Allison1875
-                .allison1875(HandlerTransformerBoot.class, new BmHandlerTransformerModule(), ConfigConstant.baseConfig,
-                        config);
+        HandlerTransformerConfig handlerTransformerModule = ConfigConstant.handlerTransformerConfig;
+        handlerTransformerModule.batchSetAllPackagesByWildcard("com.spldeolin.beginningmind.-");
+        handlerTransformerModule.setAuthor("Deolin");
+        Allison1875.allison1875(HandlerTransformerBoot.class, new BmHandlerTransformerModule(handlerTransformerModule));
     }
 
 }

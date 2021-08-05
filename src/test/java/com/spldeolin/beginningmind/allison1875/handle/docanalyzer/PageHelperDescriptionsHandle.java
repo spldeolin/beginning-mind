@@ -11,7 +11,7 @@ import com.spldeolin.allison1875.docanalyzer.handle.SpecificFieldDescriptionsHan
  * @author Deolin 2020-11-30
  */
 @Singleton
-public class PageHelperDescriptionsHandle implements SpecificFieldDescriptionsHandle {
+public class PageHelperDescriptionsHandle extends SpecificFieldDescriptionsHandle {
 
     @Override
     public Table<String, String, String> provideSpecificFieldDescriptions() {

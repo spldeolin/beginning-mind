@@ -13,8 +13,8 @@ import com.spldeolin.beginningmind.allison1875.config.ConfigConstant;
 public class LineCounterBoot {
 
     public static void main(String[] args) {
-        LineCounterConfig config = ConfigConstant.lineCountConfig;
-        Allison1875.allison1875(LineCounterBoot.class, new LineCounterModule(), ConfigConstant.baseConfig, config);
+        LineCounterConfig lineCounterConfig = ConfigConstant.lineCountConfig;
+        Allison1875.allison1875(LineCounterBoot.class, new LineCounterModule(lineCounterConfig));
     }
 
 }

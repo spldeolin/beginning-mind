@@ -12,11 +12,11 @@ import com.spldeolin.beginningmind.allison1875.module.BmDocAnalyzerModule;
 public class DocAnalyzerBoot {
 
     public static void main(String[] args) {
-        DocAnalyzerConfig config = ConfigConstant.docAnalyzerConfig;
-        config.setDependencyProjectPaths(Lists.newArrayList());
-        config.setGlobalUrlPrefix("");
-        config.setYapiToken("bb007399eacfc009fcf3453f17f9acf75c36812311419f166453f4ad0536c955");
-        Allison1875.allison1875(DocAnalyzerBoot.class, new BmDocAnalyzerModule(), ConfigConstant.baseConfig, config);
+        DocAnalyzerConfig docAnalyzerConfig = ConfigConstant.docAnalyzerConfig;
+        docAnalyzerConfig.setDependencyProjectPaths(Lists.newArrayList());
+        docAnalyzerConfig.setGlobalUrlPrefix("");
+        docAnalyzerConfig.setYapiToken("bb007399eacfc009fcf3453f17f9acf75c36812311419f166453f4ad0536c955");
+        Allison1875.allison1875(DocAnalyzerBoot.class, new BmDocAnalyzerModule(docAnalyzerConfig));
 
     }
 

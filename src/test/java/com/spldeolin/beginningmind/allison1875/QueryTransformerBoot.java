@@ -11,10 +11,9 @@ import com.spldeolin.beginningmind.allison1875.config.ConfigConstant;
 public class QueryTransformerBoot {
 
     public static void main(String[] args) {
-        QueryTransformerConfig config = ConfigConstant.queryTransformerConfig;
-        config.setMapperXmlDirectoryPath("src/main/resources/mapper");
-        Allison1875.allison1875(QueryTransformerBoot.class, new QueryTransformerModule(), ConfigConstant.baseConfig,
-                config);
+        QueryTransformerConfig queryTransformerConfig = ConfigConstant.queryTransformerConfig;
+        queryTransformerConfig.batchSetAllPackagesByWildcard("com.spldeolin.beginningmind.javabean.-");
+        Allison1875.allison1875(QueryTransformerBoot.class, new QueryTransformerModule(queryTransformerConfig));
     }
 
 }

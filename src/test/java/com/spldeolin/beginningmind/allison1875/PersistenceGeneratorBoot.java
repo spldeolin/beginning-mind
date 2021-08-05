@@ -13,21 +13,21 @@ import com.spldeolin.beginningmind.allison1875.module.BmPersistenceGeneratorModu
 public class PersistenceGeneratorBoot {
 
     public static void main(String[] args) {
-        PersistenceGeneratorConfig config = ConfigConstant.persistenceGeneratorConfig;
-        config.setJdbcUrl("jdbc:mysql://127.0.0.1:3306");
-        config.setUserName("root");
-        config.setPassword("root");
-        config.setAuthor("Deolin");
-        config.setSchema("beginning_mind");
-        config.setTables(Lists.newArrayList());
-        config.setMapperXmlDirectoryPath("src/main/resources/mapper");
-        config.batchSetAllPackagesByWildcard("com.spldeolin.beginningmind.-");
-        config.setEnableGenerateQueryDesign(false);
-        config.setIsEntityEndWithEntity(true);
+        PersistenceGeneratorConfig persistenceGeneratorConfig = ConfigConstant.persistenceGeneratorConfig;
+        persistenceGeneratorConfig.setJdbcUrl("jdbc:mysql://127.0.0.1:3306");
+        persistenceGeneratorConfig.setUserName("root");
+        persistenceGeneratorConfig.setPassword("root");
+        persistenceGeneratorConfig.setAuthor("Deolin");
+        persistenceGeneratorConfig.setSchema("beginning_mind");
+        persistenceGeneratorConfig.setTables(Lists.newArrayList());
+        persistenceGeneratorConfig.setMapperXmlDirectoryPath("src/main/resources/mapper");
+        persistenceGeneratorConfig.batchSetAllPackagesByWildcard("com.spldeolin.beginningmind.-");
+        persistenceGeneratorConfig.setEnableGenerateDesign(true);
+        persistenceGeneratorConfig.setIsEntityEndWithEntity(true);
         EnumConfig enumConfig = new EnumConfig();
         enumConfig.setEnumPackage("com.spldeolin.beginningmind.enums");
-        Allison1875.allison1875(PersistenceGeneratorBoot.class, new BmPersistenceGeneratorModule(),
-                ConfigConstant.baseConfig, config, enumConfig);
+        Allison1875.allison1875(PersistenceGeneratorBoot.class,
+                new BmPersistenceGeneratorModule(persistenceGeneratorConfig, enumConfig));
     }
 
 }

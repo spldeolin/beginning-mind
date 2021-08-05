@@ -1,10 +1,7 @@
 package com.spldeolin.beginningmind.allison1875.config;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
-import com.spldeolin.allison1875.base.BaseConfig;
 import com.spldeolin.allison1875.docanalyzer.DocAnalyzerConfig;
 import com.spldeolin.allison1875.gadget.LineCounterConfig;
 import com.spldeolin.allison1875.handlertransformer.HandlerTransformerConfig;
@@ -16,8 +13,6 @@ import com.spldeolin.allison1875.querytransformer.QueryTransformerConfig;
  * @author Deolin 2020-12-09
  */
 public class ConfigConstant {
-
-    public static final BaseConfig baseConfig = new BaseConfig();
 
     public static final DocAnalyzerConfig docAnalyzerConfig = new DocAnalyzerConfig();
 
@@ -32,10 +27,6 @@ public class ConfigConstant {
     public static final QueryTransformerConfig queryTransformerConfig = new QueryTransformerConfig();
 
     static {
-
-        baseConfig.setRedisAddress("redis://127.0.0.1:6379");
-        baseConfig.setRedisPassword("root");
-
         docAnalyzerConfig.setYapiUrl("http://127.0.0.1:3000");
 
         lineCountConfig.setTypePostfix(Lists.newArrayList("ServiceImpl"));
@@ -47,7 +38,6 @@ public class ConfigConstant {
 
         inspectorConfig.setTargetFileSince(LocalDateTime.of(2020, 9, 7, 0, 0));
 
-        persistenceGeneratorConfig.setQueryPredicateQualifier("com.spldeolin.beginningmind.support.QueryPredicate");
         persistenceGeneratorConfig.setIsEntityUsingAlias(false);
         persistenceGeneratorConfig.setIsEntityEndWithEntity(true);
         persistenceGeneratorConfig.setDeletedSql("delete_flag = TRUE");
@@ -69,12 +59,6 @@ public class ConfigConstant {
         persistenceGeneratorConfig.setDisableQueryByKeys(false);
         persistenceGeneratorConfig.setDisableQueryByEntity(false);
         persistenceGeneratorConfig.setDisableListAll(false);
-
-        Map<String, String> entityCommonPropertyTypes = Maps.newHashMap();
-        entityCommonPropertyTypes.put("id", "Long");
-        entityCommonPropertyTypes.put("insertedAt", "LocalDateTime");
-        entityCommonPropertyTypes.put("updatedAt", "LocalDateTime");
-        queryTransformerConfig.setEntityCommonPropertyTypes(entityCommonPropertyTypes);
     }
 
 }

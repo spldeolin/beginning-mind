@@ -11,7 +11,7 @@ import com.spldeolin.beginningmind.ancestor.javabean.CodeAndTitle;
  * @author Deolin 2020-09-21
  */
 @Singleton
-public class EnumAncestorHandle implements AnalyzeEnumConstantHandle {
+public class EnumAncestorHandle extends AnalyzeEnumConstantHandle {
 
     @Override
     public boolean supportEnumType(Class<?> enumType) {

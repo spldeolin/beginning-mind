@@ -1,31 +1,43 @@
 package com.spldeolin.beginningmind.allison1875.module;
 
-import java.util.Set;
-import com.spldeolin.allison1875.persistencegenerator.PersistenceGeneratorModule;
-import com.spldeolin.allison1875.persistencegenerator.handle.GenerateEntityFieldHandle;
-import com.spldeolin.allison1875.persistencegenerator.handle.GenerateQueryDesignFieldHandle;
+import com.spldeolin.allison1875.base.ancestor.Allison1875MainProcessor;
+import com.spldeolin.allison1875.base.ancestor.Allison1875Module;
+import com.spldeolin.allison1875.base.util.ValidateUtils;
+import com.spldeolin.allison1875.persistencegenerator.PersistenceGeneratorConfig;
+import com.spldeolin.allison1875.persistencegenerator.handle.CommentHandle;
 import com.spldeolin.allison1875.persistencegenerator.handle.JdbcTypeHandle;
+import com.spldeolin.allison1875.persistencegenerator.processor.PersistenceGenerator;
 import com.spldeolin.beginningmind.allison1875.config.EnumConfig;
-import com.spldeolin.beginningmind.allison1875.handle.persistencegenerator.DesignatedEntityTypeOverwriteHandle;
-import com.spldeolin.beginningmind.allison1875.handle.persistencegenerator.Java8TimeJdbcTypeHandle;
+import com.spldeolin.beginningmind.allison1875.handle.persistencegenerator.EnumJdbcTypeHandle;
+import com.spldeolin.beginningmind.allison1875.handle.persistencegenerator.TrimEnumAndTypeHandle;
 
 /**
  * @author Deolin 2020-12-08
  */
-public class BmPersistenceGeneratorModule extends PersistenceGeneratorModule {
+public class BmPersistenceGeneratorModule extends Allison1875Module {
+
+    private final PersistenceGeneratorConfig persistenceGeneratorConfig;
+
+    private final EnumConfig enumConfig;
+
+    public BmPersistenceGeneratorModule(PersistenceGeneratorConfig persistenceGeneratorConfig, EnumConfig enumConfig) {
+        this.persistenceGeneratorConfig = persistenceGeneratorConfig;
+        this.enumConfig = enumConfig;
+    }
 
     @Override
-    protected Set<Class<?>> provideConfigTypes() {
-        Set<Class<?>> result = super.provideConfigTypes();
-        result.add(EnumConfig.class);
-        return result;
+    public Class<? extends Allison1875MainProcessor> provideMainProcessorType() {
+        return PersistenceGenerator.class;
     }
 
     @Override
     protected void configure() {
-        bind(GenerateEntityFieldHandle.class).to(DesignatedEntityTypeOverwriteHandle.class);
-        bind(GenerateQueryDesignFieldHandle.class).to(DesignatedEntityTypeOverwriteHandle.class);
-        bind(JdbcTypeHandle.class).to(Java8TimeJdbcTypeHandle.class);
+        bind(JdbcTypeHandle.class).to(EnumJdbcTypeHandle.class);
+        bind(CommentHandle.class).to(TrimEnumAndTypeHandle.class);
+        ValidateUtils.ensureValid(persistenceGeneratorConfig);
+        ValidateUtils.ensureValid(enumConfig);
+        bind(PersistenceGeneratorConfig.class).toInstance(persistenceGeneratorConfig);
+        bind(EnumConfig.class).toInstance(enumConfig);
     }
 
 }

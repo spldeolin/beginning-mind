@@ -10,7 +10,7 @@ import com.spldeolin.allison1875.docanalyzer.handle.MoreJpdvAnalysisHandle;
  * @author Deolin 2020-12-02
  */
 @Singleton
-public class EnumNameJpdvAnalysisHandle implements MoreJpdvAnalysisHandle {
+public class EnumNameJpdvAnalysisHandle extends MoreJpdvAnalysisHandle {
 
     @Override
     public Object moreAnalysisFromField(Field field) {

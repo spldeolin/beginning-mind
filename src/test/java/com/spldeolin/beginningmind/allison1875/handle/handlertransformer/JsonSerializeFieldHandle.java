@@ -13,7 +13,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Singleton
 @Slf4j
-public class JsonSerializeFieldHandle implements FieldHandle {
+public class JsonSerializeFieldHandle extends FieldHandle {
 
     private boolean anyEquals(Object one, Object... others) {
         for (Object other : others) {
