@@ -1,6 +1,6 @@
 package com.spldeolin.beginningmind.extension.javabean;
 
-import com.spldeolin.beginningmind.enums.ResultCodeEnum;
+import com.spldeolin.beginningmind.stderr.CommonStderrEnum;
 import lombok.Data;
 
 /**
@@ -11,11 +11,11 @@ import lombok.Data;
 @Data
 public class RequestResult<T> {
 
-    private ResultCodeEnum code;
+    private String code;
 
     private T data;
 
-    private String errmsg;
+    private String errorMessage;
 
     public static <T> RequestResult<T> success() {
         return success(null);
@@ -23,15 +23,15 @@ public class RequestResult<T> {
 
     public static <T> RequestResult<T> success(T data) {
         RequestResult<T> instance = new RequestResult<>();
-        instance.setCode(ResultCodeEnum.OK);
+        instance.setCode(CommonStderrEnum.OK.getCode());
         instance.setData(data);
         return instance;
     }
 
-    public static <T> RequestResult<T> failure(ResultCodeEnum code, String message) {
+    public static <T> RequestResult<T> failure(String code, String errorMessage) {
         RequestResult<T> instance = new RequestResult<>();
         instance.setCode(code);
-        instance.setErrmsg(message);
+        instance.setErrorMessage(errorMessage);
         return instance;
     }
 

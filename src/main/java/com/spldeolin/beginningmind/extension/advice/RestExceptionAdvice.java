@@ -13,11 +13,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import com.spldeolin.beginningmind.enums.ResultCodeEnum;
-import com.spldeolin.beginningmind.exception.BizException;
+import com.spldeolin.beginningmind.exception.StdException;
 import com.spldeolin.beginningmind.extension.javabean.InvalidDto;
 import com.spldeolin.beginningmind.extension.javabean.RequestResult;
-import com.spldeolin.beginningmind.extension.reqtrack.RequestTrack;
+import com.spldeolin.beginningmind.stderr.CommonStderrEnum;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -42,7 +41,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     public RequestResult<?> handler(NoHandlerFoundException e) {
         log.warn(e.getMessage());
-        return RequestResult.failure(ResultCodeEnum.NOT_FOUND, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(CommonStderrEnum.NOT_FOUND.code(), CommonStderrEnum.NOT_FOUND.errorMessage());
     }
 
     /**
@@ -52,7 +51,7 @@ public class RestExceptionAdvice {
     public RequestResult<?> handler(HttpRequestMethodNotSupportedException e) {
         String supportedMethods = Arrays.toString(e.getSupportedMethods());
         log.warn(e.getMessage() + " " + supportedMethods);
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(CommonStderrEnum.BAD_REQEUST.code(), CommonStderrEnum.BAD_REQEUST.errorMessage());
     }
 
     /**
@@ -61,7 +60,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult<?> handler(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage() + " " + " [application/json]");
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(CommonStderrEnum.BAD_REQEUST.code(), CommonStderrEnum.BAD_REQEUST.errorMessage());
     }
 
     /**
@@ -76,7 +75,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult<?> httpMessageNotReadable(HttpMessageNotReadableException e) {
         log.warn("message={}", e.getMessage());
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(CommonStderrEnum.BAD_REQEUST.code(), CommonStderrEnum.BAD_REQEUST.errorMessage());
     }
 
     /**
@@ -85,7 +84,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult<?> handle(MethodArgumentNotValidException e) {
         log.warn("invalids={}", buildInvalids(e.getBindingResult()));
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(CommonStderrEnum.BAD_REQEUST.code(), CommonStderrEnum.BAD_REQEUST.errorMessage());
     }
 
     private Collection<InvalidDto> buildInvalids(BindingResult bindingResult) {
@@ -101,9 +100,9 @@ public class RestExceptionAdvice {
     /**
      * 1001 业务异常
      */
-    @ExceptionHandler(BizException.class)
-    public RequestResult<?> handle(BizException e) {
-        return RequestResult.failure(ResultCodeEnum.BIZ_ERROR, e.getMessage());
+    @ExceptionHandler(StdException.class)
+    public RequestResult<?> handle(StdException e) {
+        return RequestResult.failure(e.getStderr().code(), e.getStderr().errorMessage());
     }
 
     /*
@@ -116,11 +115,8 @@ public class RestExceptionAdvice {
     @ExceptionHandler(Throwable.class)
     public RequestResult<?> handle(Throwable e) {
         log.error("统一异常处理被击穿！", e);
-        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR, concatInsignia(ResultCodeEnum.INTERNAL_ERROR));
-    }
-
-    private String concatInsignia(ResultCodeEnum resultCode) {
-        return resultCode.getTitle() + String.format(" [%s]", RequestTrack.current().getInsignia());
+        return RequestResult.failure(CommonStderrEnum.INTERNAL_ERROR.code(),
+                CommonStderrEnum.INTERNAL_ERROR.errorMessage());
     }
 
 }
