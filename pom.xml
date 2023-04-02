@@ -19,11 +19,6 @@
     </properties>
 
     <dependencies>
-        <!-- spring boot -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter</artifactId>
-        </dependency>
         <!-- springboot web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -39,7 +34,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
-        <!-- jackson (jsr310, yaml) -->
+        <!-- jackson jsr310 -->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>
@@ -68,7 +63,6 @@
             <artifactId>fst</artifactId>
             <version>2.57</version>
         </dependency>
-
         <!-- alibaba ttl -->
         <dependency>
             <groupId>com.alibaba</groupId>
