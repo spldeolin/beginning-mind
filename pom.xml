@@ -151,7 +151,7 @@
         <dependency>
             <groupId>com.spldeolin.allison1875</groupId>
             <artifactId>allison1875-all</artifactId>
-            <version>8.0</version>
+            <version>8.8</version>
             <scope>test</scope>
         </dependency>
         <!--
