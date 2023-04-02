@@ -35,7 +35,7 @@ public enum ResultCodeEnum implements EnumAncestor<Integer> {
 
     NOT_FOUND(404, "Not Found"),
 
-    INTERNAL_ERROR(500, "权限不足"),
+    INTERNAL_ERROR(500, "内部错误"),
 
     BIZ_ERROR(1001, "业务异常"),
 
