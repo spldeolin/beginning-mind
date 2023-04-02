@@ -14,8 +14,8 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.datatype.guava.GuavaModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
@@ -41,28 +41,23 @@ public class JsonUtils {
 
     private static final ObjectMapper om = createObjectMapper();
 
-    public static ObjectMapper createObjectMapper() {
+    private static ObjectMapper createObjectMapper() {
         ObjectMapper om = new ObjectMapper();
 
-        // 反序列化时，忽略Javabean中不存在的属性，而不是抛出异常
         om.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-
-        // 使用所在操作系统的时区
+        om.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
         om.setTimeZone(TimeZone.getDefault());
 
-        // 配置Java8的LocalDateTime、LocalDate、LocalTime的pattern（yyyy-MM-dd HH:mm:ss、yyyy-MM-dd、HH:mm:ss）
-        om.registerModule(java8timeSimplePattern());
+        // Java8 LocalDateTime, LocalDate, LocalTime default format
+        om.registerModule(java8timeFormatModule());
 
-        // 配置java.util.Date的pattern
+        // Java1 Date default format
         om.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-
-        // 适配Guava
-        om.registerModule(new GuavaModule());
 
         return om;
     }
 
-    private static SimpleModule java8timeSimplePattern() {
+    public static SimpleModule java8timeFormatModule() {
         SimpleModule module = new JavaTimeModule();
         DateTimeFormatter ldtFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter ldFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -79,6 +74,7 @@ public class JsonUtils {
     private JsonUtils() {
         throw new UnsupportedOperationException("Never instantiate me.");
     }
+
 
     /**
      * 将对象转化为JSON
@@ -100,14 +96,14 @@ public class JsonUtils {
     }
 
     /**
-     * 将对象转化为美化后的JSON
+     * 将对象转化为JSON，结果是美化的
      */
     public static String toJsonPrettily(Object object) {
         return toJsonPrettily(object, om);
     }
 
     /**
-     * 将对象转化为美化后的JSON
+     * 将对象转化为JSON，结果是美化的
      */
     public static String toJsonPrettily(Object object, ObjectMapper om) {
         try {
@@ -125,7 +121,7 @@ public class JsonUtils {
         try {
             Map<?, ?> map = om.readValue(json, Map.class);
             return toJson(map);
-        } catch (JsonProcessingException e) {
+        } catch (Exception e) {
             // is not a json
             return json;
         }
@@ -133,15 +129,19 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toObject(String json, Class<T> clazz) throws JsonException {
+    public static <T> T toObject(String json, Class<T> clazz) {
         return toObject(json, clazz, om);
     }
 
     /**
      * 将JSON转化为对象
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) throws JsonException {
+    public static <T> T toObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
             return om.readValue(json, clazz);
         } catch (IOException e) {
@@ -152,15 +152,20 @@ public class JsonUtils {
 
     /**
      * 将JSON转化为对象列表
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> List<T> toListOfObject(String json, Class<T> clazz) throws JsonException {
+    public static <T> List<T> toListOfObject(String json, Class<T> clazz) {
         return toListOfObject(json, clazz, om);
     }
 
     /**
      * 将JSON转化为对象列表
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) throws JsonException {
+
+    public static <T> List<T> toListOfObject(String json, Class<T> clazz, ObjectMapper om) {
         try {
             @SuppressWarnings("unchecked") Class<T[]> arrayClass = (Class<T[]>) Class
                     .forName("[L" + clazz.getName() + ";");
@@ -173,19 +178,26 @@ public class JsonUtils {
 
     /**
      * JSON -> 参数化的对象
+     * <p>
+     * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference) throws JsonException {
+    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference) {
         return toParameterizedObject(json, typeReference, om);
     }
 
     /**
      * JSON -> 参数化的对象
+     * <p>
+     * 示例： Collection<<User<UserAddress>> users = JsonUtils.toParameterizedObject(text);
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference, ObjectMapper om)
-            throws JsonException {
+    public static <T> T toParameterizedObject(String json, TypeReference<T> typeReference, ObjectMapper om) {
         try {
             return om.readValue(json, typeReference);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             log.error("json={}, typeReference={}", json, typeReference, e);
             throw new JsonException(e);
         }
@@ -195,8 +207,10 @@ public class JsonUtils {
      * JSON -> JsonNode对象
      *
      * <strong>除非JSON对应数据结构在运行时是变化的，否则不建议使这个方法</strong>
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static JsonNode toTree(String json) throws JsonException {
+    public static JsonNode toTree(String json) {
         return toTree(json, om);
     }
 
@@ -204,11 +218,13 @@ public class JsonUtils {
      * JSON -> JsonNode对象
      *
      * <strong>除非JSON对应数据结构在运行时是变化的，否则不建议使这个方法</strong>
+     *
+     * @throws JsonException 任何原因转化失败时，抛出这个异常，如果需要补偿处理，可以进行捕获
      */
-    public static JsonNode toTree(String json, ObjectMapper om) throws JsonException {
+    public static JsonNode toTree(String json, ObjectMapper om) {
         try {
             return om.readTree(json);
-        } catch (JsonProcessingException e) {
+        } catch (IOException e) {
             log.error("json={}", json, e);
             throw new JsonException(e);
         }
