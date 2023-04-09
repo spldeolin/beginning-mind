@@ -12,7 +12,6 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
 import java.text.SimpleDateFormat;
@@ -24,7 +23,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  */
 @ComponentScan("com.spldeolin.beginningmind")
 @MapperScan(basePackages = "com.spldeolin.beginningmind.mapper")
-@EnableFeignClients(basePackages = "com.**") // TODO precision
+@EnableFeignClients(basePackages = "com.spldeolin.**") // TODO precision
 @EnableDiscoveryClient
 @SpringBootApplication
 public class Application {
@@ -63,7 +62,7 @@ public class Application {
     private Integer keepAliveSeconds;
 
     @Bean
-    public TaskExecutor taskExecutor() {
+    public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(coreSize);
         executor.setMaxPoolSize(maximumSize);
