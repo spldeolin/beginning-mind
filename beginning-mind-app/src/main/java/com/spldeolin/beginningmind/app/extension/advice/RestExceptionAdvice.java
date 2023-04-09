@@ -1,8 +1,9 @@
 package com.spldeolin.beginningmind.app.extension.advice;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.stream.Collectors;
+import com.spldeolin.beginningmind.api.common.RequestResult;
+import com.spldeolin.beginningmind.app.exception.BizException;
+import com.spldeolin.beginningmind.app.extension.javabean.InvalidDto;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -13,12 +14,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
-import com.spldeolin.beginningmind.app.enums.ResultCodeEnum;
-import com.spldeolin.beginningmind.app.exception.BizException;
-import com.spldeolin.beginningmind.app.extension.javabean.InvalidDto;
-import com.spldeolin.beginningmind.app.extension.javabean.RequestResult;
-import com.spldeolin.beginningmind.app.extension.reqtrack.RequestTrack;
-import lombok.extern.slf4j.Slf4j;
+
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 /**
  * 用于统一异常处理的ControllerAdvice
@@ -31,10 +30,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class RestExceptionAdvice {
 
-    /*
-        request
-     */
-
     /**
      * 404 Not Found
      * 只有spring.mvc.throw-exception-if-no-handler-found=true和spring.resources.add-mappings=false时，才会抛出这个异常
@@ -42,7 +37,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(NoHandlerFoundException.class)
     public RequestResult<?> handler(NoHandlerFoundException e) {
         log.warn(e.getMessage());
-        return RequestResult.failure(ResultCodeEnum.NOT_FOUND, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(404, null);
     }
 
     /**
@@ -52,7 +47,7 @@ public class RestExceptionAdvice {
     public RequestResult<?> handler(HttpRequestMethodNotSupportedException e) {
         String supportedMethods = Arrays.toString(e.getSupportedMethods());
         log.warn(e.getMessage() + " " + supportedMethods);
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(400, null);
     }
 
     /**
@@ -61,7 +56,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(HttpMediaTypeNotSupportedException.class)
     public RequestResult<?> handler(HttpMediaTypeNotSupportedException e) {
         log.warn(e.getMessage() + " " + " [application/json]");
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(400, null);
     }
 
     /**
@@ -76,7 +71,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public RequestResult<?> httpMessageNotReadable(HttpMessageNotReadableException e) {
         log.warn("message={}", e.getMessage());
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(400, null);
     }
 
     /**
@@ -85,7 +80,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public RequestResult<?> handle(MethodArgumentNotValidException e) {
         log.warn("invalids={}", buildInvalids(e.getBindingResult()));
-        return RequestResult.failure(ResultCodeEnum.BAD_REQEUST, concatInsignia(ResultCodeEnum.BAD_REQEUST));
+        return RequestResult.failure(400, null);
     }
 
     private Collection<InvalidDto> buildInvalids(BindingResult bindingResult) {
@@ -94,16 +89,12 @@ public class RestExceptionAdvice {
                         .setReason(error.getDefaultMessage())).collect(Collectors.toList());
     }
 
-    /*
-        biz
-     */
-
     /**
      * 1001 业务异常
      */
     @ExceptionHandler(BizException.class)
     public RequestResult<?> handle(BizException e) {
-        return RequestResult.failure(ResultCodeEnum.BIZ_ERROR, e.getMessage());
+        return RequestResult.failure(599, e.getMessage());
     }
 
     /*
@@ -116,11 +107,7 @@ public class RestExceptionAdvice {
     @ExceptionHandler(Throwable.class)
     public RequestResult<?> handle(Throwable e) {
         log.error("统一异常处理被击穿！", e);
-        return RequestResult.failure(ResultCodeEnum.INTERNAL_ERROR, concatInsignia(ResultCodeEnum.INTERNAL_ERROR));
-    }
-
-    private String concatInsignia(ResultCodeEnum resultCode) {
-        return resultCode.getTitle() + String.format(" [%s]", RequestTrack.current().getInsignia());
+        return RequestResult.failure(500, "内部错误");
     }
 
 }
