@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: beginning-mind
+
+  profiles:
+    active: '@profileActive@'
+
+---
+spring:
+  profiles: dev
+  cloud:
+    nacos:
+      config:
+        server-addr:
+        namespace:
+        name: demo-dev
+        file-extension: yml
+
+---
+spring:
+  profiles: prod
+  cloud:
+    nacos:
+      config:
+        server-addr:
+        namespace:
+        name: demo-prod
+        file-extension: yml
+
+---

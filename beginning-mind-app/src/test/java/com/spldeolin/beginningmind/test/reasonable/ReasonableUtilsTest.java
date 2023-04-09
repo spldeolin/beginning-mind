@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.test.reasonable;
 
 import com.google.common.collect.Lists;
-import com.spldeolin.beginningmind.app.reasonable.ReasonableUtils;
+import com.spldeolin.beginningmind.app.util.ReasonableUtils;
 
 /**
  * @author Deolin 2023-04-07

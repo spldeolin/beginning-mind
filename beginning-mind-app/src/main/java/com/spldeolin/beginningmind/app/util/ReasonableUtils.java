@@ -1,19 +1,12 @@
-package com.spldeolin.beginningmind.app.reasonable;
+package com.spldeolin.beginningmind.app.util;
+
+import com.google.common.collect.Maps;
+import jodd.exception.UncheckedException;
+import org.springframework.beans.BeanUtils;
 
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import org.springframework.beans.BeanUtils;
-import com.google.common.collect.Maps;
-import jodd.exception.UncheckedException;
+import java.util.*;
 
 /**
  * @author Deolin 2023-04-01
