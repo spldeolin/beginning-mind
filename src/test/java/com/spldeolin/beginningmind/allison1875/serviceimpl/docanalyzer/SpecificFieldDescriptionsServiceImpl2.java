@@ -1,17 +1,17 @@
-package com.spldeolin.beginningmind.allison1875.handle.docanalyzer;
+package com.spldeolin.beginningmind.allison1875.serviceimpl.docanalyzer;
 
 import com.github.pagehelper.PageInfo;
 import com.github.pagehelper.PageSerializable;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.inject.Singleton;
-import com.spldeolin.allison1875.docanalyzer.handle.SpecificFieldDescriptionsHandle;
+import com.spldeolin.allison1875.docanalyzer.service.SpecificFieldDescriptionsService;
 
 /**
  * @author Deolin 2020-11-30
  */
 @Singleton
-public class PageHelperDescriptionsHandle extends SpecificFieldDescriptionsHandle {
+public class SpecificFieldDescriptionsServiceImpl2 implements SpecificFieldDescriptionsService {
 
     @Override
     public Table<String, String, String> provideSpecificFieldDescriptions() {

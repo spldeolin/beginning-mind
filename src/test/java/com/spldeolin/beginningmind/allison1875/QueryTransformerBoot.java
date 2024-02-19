@@ -1,9 +1,9 @@
 package com.spldeolin.beginningmind.allison1875;
 
-import com.spldeolin.allison1875.base.Allison1875;
+import com.spldeolin.allison1875.common.Allison1875;
 import com.spldeolin.allison1875.querytransformer.QueryTransformerConfig;
 import com.spldeolin.allison1875.querytransformer.QueryTransformerModule;
-import com.spldeolin.beginningmind.allison1875.config.ConfigConstant;
+import com.spldeolin.beginningmind.Application;
 
 /**
  * @author Deolin 2020-11-17
@@ -11,9 +11,11 @@ import com.spldeolin.beginningmind.allison1875.config.ConfigConstant;
 public class QueryTransformerBoot {
 
     public static void main(String[] args) {
-        QueryTransformerConfig queryTransformerConfig = ConfigConstant.queryTransformerConfig;
-        queryTransformerConfig.batchSetAllPackagesByWildcard("com.spldeolin.beginningmind.javabean.-");
-        Allison1875.allison1875(QueryTransformerBoot.class, new QueryTransformerModule(queryTransformerConfig));
+        QueryTransformerConfig config = new QueryTransformerConfig();
+        config.setCommonConfig(Constant.COMMON_CONFIG);
+        config.setEnableLotNoAnnounce(true);
+
+        Allison1875.allison1875(Application.class, new QueryTransformerModule(config));
     }
 
 }
