@@ -1,9 +1,10 @@
 package com.spldeolin.beginningmind.app;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.spldeolin.beginningmind.app.util.JsonUtils;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
@@ -12,18 +13,16 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.spldeolin.beginningmind.app.util.JsonUtils;
 
 /**
  * @author Deolin 2019-01-22
  */
-@ComponentScan("com.spldeolin.beginningmind")
-@MapperScan(basePackages = "com.spldeolin.beginningmind.mapper")
+@ComponentScan("com.spldeolin.beginningmind.app")
+@MapperScan(basePackages = "com.spldeolin.beginningmind.app.mapper")
 @EnableFeignClients(basePackages = "com.spldeolin.**") // TODO precision
 @EnableDiscoveryClient
 @SpringBootApplication

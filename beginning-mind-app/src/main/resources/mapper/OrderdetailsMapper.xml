@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spldeolin.beginningmind.app.mapper.OrderdetailsMapper">
+    <!-- [START] Any modifications may be overwritten by future code generations. -->
+
+    <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
+        <id column="orderNumber" property="orderNumber"/>
+        <id column="productCode" property="productCode"/>
+        <result column="quantityOrdered" property="quantityOrdered"/>
+        <result column="priceEach" property="priceEach"/>
+    </resultMap>
+
+    <sql id="all">
+        `orderNumber`, `productCode`, `quantityOrdered`, `priceEach`
+    </sql>
+
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `orderdetails`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNumber!=null"> `orderNumber`, </if>
+            <if test="productCode!=null"> `productCode`, </if>
+            <if test="quantityOrdered!=null"> `quantityOrdered`, </if>
+            <if test="priceEach!=null"> `priceEach`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="orderNumber!=null"> #{orderNumber}, </if>
+            <if test="productCode!=null"> #{productCode}, </if>
+            <if test="quantityOrdered!=null"> #{quantityOrdered}, </if>
+            <if test="priceEach!=null"> #{priceEach}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsert">
+        <!-- @formatter:off -->
+        <foreach collection="entities" item="one" separator=";">
+            INSERT INTO `orderdetails`
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="one.orderNumber!=null"> `orderNumber`, </if>
+                <if test="one.productCode!=null"> `productCode`, </if>
+                <if test="one.quantityOrdered!=null"> `quantityOrdered`, </if>
+                <if test="one.priceEach!=null"> `priceEach`, </if>
+            </trim>
+            <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
+                <if test="one.orderNumber!=null"> #{one.orderNumber}, </if>
+                <if test="one.productCode!=null"> #{one.productCode}, </if>
+                <if test="one.quantityOrdered!=null"> #{one.quantityOrdered}, </if>
+                <if test="one.priceEach!=null"> #{one.priceEach}, </if>
+            </trim>
+        </foreach>;
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsertEvenNull">
+        <!-- @formatter:off -->
+        INSERT INTO `orderdetails`
+            ( <include refid="all"/> )
+        VALUES
+            <foreach collection="entities" item="one" separator=",">(
+                #{one.orderNumber}, #{one.productCode}, #{one.quantityOrdered}, #{one.priceEach}
+            )</foreach>
+        <!-- @formatter:on -->
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `orderdetails`
+            <set>
+                <if test="one.quantityOrdered!=null"> `quantityOrdered` = #{one.quantityOrdered}, </if>
+                <if test="one.priceEach!=null"> `priceEach` = #{one.priceEach}, </if>
+            </set>
+            WHERE TRUE
+              AND `orderNumber` = #{one.orderNumber}
+              AND `productCode` = #{one.productCode}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <update id="batchUpdateEvenNull">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `orderdetails`
+            SET
+                `quantityOrdered` = #{one.quantityOrdered},
+                `priceEach` = #{one.priceEach}
+            WHERE TRUE
+              AND `orderNumber` = #{one.orderNumber}
+              AND `productCode` = #{one.productCode}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <select id="queryById" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `orderdetails`
+        WHERE TRUE
+          AND `orderNumber` = #{orderNumber}
+          AND `productCode` = #{productCode}
+        <!-- @formatter:on -->
+    </select>
+
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
+        <!-- @formatter:off -->
+        UPDATE `orderdetails`
+        <set>
+            <if test="quantityOrdered!=null"> `quantityOrdered` = #{quantityOrdered}, </if>
+            <if test="priceEach!=null"> `priceEach` = #{priceEach}, </if>
+        </set>
+        WHERE TRUE
+          AND `orderNumber` = #{orderNumber}
+          AND `productCode` = #{productCode}
+        <!-- @formatter:on -->
+    </update>
+
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
+        <!-- @formatter:off -->
+        UPDATE `orderdetails`
+        SET
+            `quantityOrdered` = #{quantityOrdered},
+            `priceEach` = #{priceEach}
+        WHERE TRUE
+          AND `orderNumber` = #{orderNumber}
+          AND `productCode` = #{productCode}
+        <!-- @formatter:on -->
+    </update>
+
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity"
+        resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `orderdetails`
+        WHERE TRUE
+          <if test="orderNumber!=null"> AND `orderNumber` = #{orderNumber} </if>
+          <if test="productCode!=null"> AND `productCode` = #{productCode} </if>
+          <if test="quantityOrdered!=null"> AND `quantityOrdered` = #{quantityOrdered} </if>
+          <if test="priceEach!=null"> AND `priceEach` = #{priceEach} </if>
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="listAll" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `orderdetails`
+        WHERE TRUE
+        <!-- @formatter:on -->
+    </select>
+
+    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `orderdetails`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="orderNumber!=null"> `orderNumber`, </if>
+            <if test="productCode!=null"> `productCode`, </if>
+            <if test="quantityOrdered!=null"> `quantityOrdered`, </if>
+            <if test="priceEach!=null"> `priceEach`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="orderNumber!=null"> #{orderNumber}, </if>
+            <if test="productCode!=null"> #{productCode}, </if>
+            <if test="quantityOrdered!=null"> #{quantityOrdered}, </if>
+            <if test="priceEach!=null"> #{priceEach}, </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="quantityOrdered!=null"> `quantityOrdered` = #{quantityOrdered}, </if>
+            <if test="priceEach!=null"> `priceEach` = #{priceEach}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <!-- [END] Any modifications may be overwritten by future code generations. -->
+</mapper>
