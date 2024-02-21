@@ -1,10 +1,6 @@
 package com.spldeolin.beginningmind.app.allison1875;
 
-import java.io.File;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import org.apache.commons.io.FileUtils;
 import com.google.common.collect.Lists;
 import com.spldeolin.allison1875.common.Allison1875;
 import com.spldeolin.allison1875.common.enums.FileExistenceResolutionEnum;
@@ -22,15 +18,12 @@ import com.spldeolin.beginningmind.app.allison1875.serviceimpl.persistencegenera
 public class PersistenceGeneratorBoot {
 
     public static void main(String[] args) throws IOException {
-        List<String> dbConfig = FileUtils.readLines(new File("/Users/deolin/Documents/temp-db.txt"),
-                StandardCharsets.UTF_8);
-
         PersistenceGeneratorConfig config = new PersistenceGeneratorConfig();
         config.setCommonConfig(Constant.COMMON_CONFIG);
-        config.setJdbcUrl("jdbc:mysql://" + dbConfig.get(0));
-        config.setUserName(dbConfig.get(1));
-        config.setPassword(dbConfig.get(2));
-        config.setSchema(dbConfig.get(3));
+        config.setJdbcUrl("jdbc:mysql://localhost:3306");
+        config.setUserName("root");
+        config.setPassword("root");
+        config.setSchema("beginningmind");
         config.setTables(Lists.newArrayList());
         config.setEnableGenerateDesign(true);
         config.setIsEntityUsingAlias(false);

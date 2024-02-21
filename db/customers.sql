@@ -13,9 +13,7 @@ create table customers
     postalCode             varchar(15)    null,
     country                varchar(50)    not null,
     salesRepEmployeeNumber int            null,
-    creditLimit            decimal(10, 2) null,
-    constraint customers_ibfk_1
-        foreign key (salesRepEmployeeNumber) references employees (employeeNumber)
+    creditLimit            decimal(10, 2) null
 );
 
 create index salesRepEmployeeNumber

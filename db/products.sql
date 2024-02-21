@@ -9,9 +9,7 @@ create table products
     productDescription text           not null,
     quantityInStock    smallint       not null,
     buyPrice           decimal(10, 2) not null,
-    MSRP               decimal(10, 2) not null,
-    constraint products_ibfk_1
-        foreign key (productLine) references productlines (productLine)
+    MSRP               decimal(10, 2) not null
 );
 
 create index productLine

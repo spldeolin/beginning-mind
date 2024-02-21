@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class TestController {
 
-    //    @Autowired
+    @Autowired
     private RedissonClient redissonClient;
 
     @Autowired

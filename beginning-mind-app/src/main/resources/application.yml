@@ -35,12 +35,6 @@ spring:
       connection-timeout: 30000
       connection-test-query: select 'x'
 
-  redis:
-    redisson:
-      singleServerConfig:
-        address: 占位符
-        password: 占位符
-
 logging:
   config: # 未被覆盖时使用默认log4j2.yml
 
@@ -76,15 +70,16 @@ spring:
   profiles: dev
 
   datasource:
-    url: jdbc:mysql://beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-    username:
-    password:
+    url: jdbc:mysql://localhost:3306/beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
 
   redis:
     redisson:
-      singleServerConfig:
-        address: "redis://127.0.0.1:6379"
-        password: root
+      config: |
+        singleServerConfig:
+          address: redis://localhost:6379
+          password: root
 
 snow-flake:
   datacenter-id: 1
@@ -113,10 +108,10 @@ spring:
 
   redis:
     redisson:
-      singleServerConfig:
-        address: # TODO 生产环境Redis
-        password: # TODO 生产环境Redis
-
+      config: | # TODO 生产环境 Redis
+        singleServerConfig:
+          address: 
+          password:
 logging:
   config: classpath:log4j2/log4j2-prod.yml
 

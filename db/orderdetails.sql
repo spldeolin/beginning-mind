@@ -5,11 +5,7 @@ create table orderdetails
     quantityOrdered int            not null,
     priceEach       decimal(10, 2) not null,
     orderLineNumber smallint       not null,
-    primary key (orderNumber, productCode),
-    constraint orderdetails_ibfk_1
-        foreign key (orderNumber) references orders (orderNumber),
-    constraint orderdetails_ibfk_2
-        foreign key (productCode) references products (productCode)
+    primary key (orderNumber, productCode)
 );
 
 create index productCode

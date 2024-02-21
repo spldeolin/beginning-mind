@@ -7,9 +7,7 @@ create table orders
     shippedDate    datetime    null,
     status         varchar(15) not null,
     comments       text        null,
-    customerNumber int         not null,
-    constraint orders_ibfk_1
-        foreign key (customerNumber) references customers (customerNumber)
+    customerNumber int         not null
 );
 
 create index customerNumber

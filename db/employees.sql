@@ -8,11 +8,7 @@ create table employees
     email          varchar(100) not null,
     officeCode     varchar(10)  not null,
     reportsTo      int          null,
-    jobTitle       varchar(50)  not null,
-    constraint employees_ibfk_1
-        foreign key (reportsTo) references employees (employeeNumber),
-    constraint employees_ibfk_2
-        foreign key (officeCode) references offices (officeCode)
+    jobTitle       varchar(50)  not null
 );
 
 create index officeCode

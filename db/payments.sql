@@ -5,9 +5,7 @@ create table payments
     paymentDate    datetime       not null,
     amount         decimal(10, 2) not null,
     isPaid         tinyint(1)     null comment '已支付',
-    primary key (customerNumber, checkNumber),
-    constraint payments_ibfk_1
-        foreign key (customerNumber) references customers (customerNumber)
+    primary key (customerNumber, checkNumber)
 );
 
 INSERT INTO beginningmind.payments (customerNumber, checkNumber, paymentDate, amount, isPaid) VALUES (103, 'HQ336336', '2004-10-19 00:00:00', 6066.78, null);
