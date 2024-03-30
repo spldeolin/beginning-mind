@@ -5,160 +5,70 @@
 
     <groupId>com.spldeolin</groupId>
     <artifactId>beginning-mind</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>beginning-mind-api</module>
+        <module>beginning-mind-app</module>
+    </modules>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.5.RELEASE</version>
+        <version>2.3.12.RELEASE</version>
         <relativePath/>
     </parent>
 
     <properties>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
-
-    <dependencies>
-        <!-- springboot web -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <!-- springboot validation -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <!-- springboot aspect -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-aop</artifactId>
-        </dependency>
-        <!-- jackson jsr310 -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.datatype</groupId>
-            <artifactId>jackson-datatype-jsr310</artifactId>
-        </dependency>
-        <!-- mybatis -->
-        <dependency>
-            <groupId>org.mybatis.spring.boot</groupId>
-            <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.4</version>
-        </dependency>
-        <!-- pagehelper -->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper-spring-boot-starter</artifactId>
-            <version>1.2.13</version>
-        </dependency>
-        <!-- redisson -->
-        <dependency>
-            <groupId>org.redisson</groupId>
-            <artifactId>redisson-spring-boot-starter</artifactId>
-            <version>3.14.0</version>
-        </dependency>
-        <!-- FST (Redisson Codec) -->
-        <dependency>
-            <groupId>de.ruedigermoeller</groupId>
-            <artifactId>fst</artifactId>
-            <version>2.57</version>
-        </dependency>
-        <!-- alibaba ttl -->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>transmittable-thread-local</artifactId>
-            <version>2.12.0</version>
-        </dependency>
-        <!-- commons lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.10</version>
-        </dependency>
-        <!-- guava -->
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>30.0-jre</version>
-        </dependency>
-        <!-- commons io -->
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.8.0</version>
-        </dependency>
-
-        <!-- mysql -->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <!-- lombok -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!-- Allison 1875 -->
-        <!--
-            1. git clone https://github.com/spldeolin/allison1875.git
-            2. cd allison1875/
-            3. mvn install source:jar install -Dmaven.test.skip=true
-         -->
-        <dependency>
-            <groupId>com.spldeolin.allison1875</groupId>
-            <artifactId>allison1875-all</artifactId>
-            <version>10.1-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-        <!--
-            1. git clone https://github.com/spldeolin/allison1875-support.git
-            2. cd allison1875-support/
-            3. mvn install source:jar install -Dmaven.test.skip=true
-         -->
-        <dependency>
-            <groupId>com.spldeolin.allison1875</groupId>
-            <artifactId>allison1875-support</artifactId>
-            <version>5.0</version>
-            <scope>test</scope>
-        </dependency>
-    </dependencies>
 
     <profiles>
         <profile>
             <id>dev</id>
+            <properties>
+                <profileActive>dev</profileActive>
+            </properties>
             <activation>
                 <activeByDefault>true</activeByDefault>
             </activation>
-            <properties>
-                <maven.spring.profile>dev</maven.spring.profile>
-            </properties>
         </profile>
         <profile>
             <id>prod</id>
             <properties>
-                <maven.spring.profile>prod</maven.spring.profile>
+                <profileActive>prod</profileActive>
             </properties>
         </profile>
     </profiles>
 
-    <build>
-        <finalName>${project.artifactId}</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <dependencyManagement>
+        <dependencies>
+            <!-- https://github.com/spldeolin/satisficing-framework -->
+            <dependency>
+                <groupId>com.spldeolin.satisficing</groupId>
+                <artifactId>satisficing-api</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.spldeolin.satisficing</groupId>
+                <artifactId>satisficing-app</artifactId>
+                <version>0.1-SNAPSHOT</version>
+            </dependency>
+            <!-- https://github.com/spldeolin/allison1875 -->
+            <dependency>
+                <groupId>com.spldeolin.allison1875</groupId>
+                <artifactId>allison1875-all</artifactId>
+                <version>10.1-SNAPSHOT</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- https://github.com/spldeolin/allison1875-support -->
+            <dependency>
+                <groupId>com.spldeolin.allison1875</groupId>
+                <artifactId>allison1875-support</artifactId>
+                <version>5.0</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>

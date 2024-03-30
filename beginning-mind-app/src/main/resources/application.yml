@@ -1,0 +1,126 @@
+# 所有“占位符”属性均由profile指定
+# core节点下属性映射到CoreProperties类
+
+########################
+##                    ##
+##       Common       ##
+##                    ##
+########################
+
+server:
+  port: 占位符
+  context-path: 占位符
+
+spring:
+
+  application.name: beginning-mind
+
+  profiles.active: @profileActive@
+
+  # throw a exception when 404
+  mvc.throw-exception-if-no-handler-found: true
+  resources.add-mappings: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: 占位符
+    username: 占位符
+    password: 占位符
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: select 'x'
+
+  redis:
+    redisson:
+      file: classpath:redisson-dev.yml
+
+logging:
+  config: classpath:logback-spring.xml
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    default-enum-type-handler: com.spldeolin.satisficing.framework.app.mybatis.EnumTypeHandlerEx
+
+thread-pool:
+  core-size: 5
+  maximum-size: 10
+  queue-capacity: 20
+  keep-alive-seconds: 60
+
+snow-flake:
+  datacenter-id: 占位符
+  machine-id: 占位符
+
+---
+
+########################
+##                    ##
+##     Devlopment     ##
+##                    ##
+########################
+
+server:
+  port: 2333
+  context-path: /
+
+spring:
+
+  profiles: dev
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+
+  redis:
+    redisson:
+      file: classpath:redisson-dev.yml
+
+logging:
+  config: classpath:logback-spring.xml
+
+snow-flake:
+  datacenter-id: 1
+  machine-id: 1
+
+---
+
+########################
+##                    ##
+##     Production     ##
+##                    ##
+########################
+
+server:
+  port: # TODO 生产环境 端口号
+  context-path: /
+
+spring:
+
+  profiles: prod
+
+  datasource:
+    url: # TODO 生产环境 MySQL
+    username: # TODO 生产环境 MySQL
+    password: # TODO 生产环境 MySQL
+
+  redis:
+    redisson:
+      config: | # TODO 生产环境 Redis
+        singleServerConfig:
+          address: 
+          password:
+logging:
+  config: classpath:log4j2/log4j2-prod.yml
+
+snow-flake:
+  datacenter-id: # TODO 生产环境 雪花算法数据中心ID
+  machine-id: # TODO 生产环境 雪花算法机器ID
