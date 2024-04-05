@@ -6,25 +6,25 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 /**
- * <p>productlines
+ * <p>courselines
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class ProductlinesEntity implements Serializable, Cloneable {
+public class CourselinesEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 9054362912404348928L;
+    private static final long serialVersionUID = 888113807109566464L;
 
     /**
-     * <p>productLine
+     * <p>courseLine
      * <p>长度：50
      * <p>不能为null
      */
-    String productLine;
+    String courseLine;
 
     /**
      * <p>textDescription
@@ -32,9 +32,20 @@ public class ProductlinesEntity implements Serializable, Cloneable {
      */
     String textDescription;
 
+    /**
+     * <p>htmlDescription
+     * <p>长度：4294967295
+     */
+    String htmlDescription;
+
+    /**
+     * <p>imageUrl
+     * <p>长度：255
+     */
+    String imageUrl;
+
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

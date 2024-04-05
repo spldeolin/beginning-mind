@@ -7,60 +7,60 @@ import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 /**
- * <p>products
+ * <p>courses
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class ProductsEntity implements Serializable, Cloneable {
+public class CoursesEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 7951364311900925952L;
+    private static final long serialVersionUID = 7865254131753546752L;
 
     /**
-     * <p>productCode
+     * <p>courseCode
      * <p>长度：15
      * <p>不能为null
      */
-    String productCode;
+    String courseCode;
 
     /**
-     * <p>productName
+     * <p>courseName
      * <p>长度：70
      * <p>不能为null
      */
-    String productName;
+    String courseName;
 
     /**
-     * <p>productLine
+     * <p>courseLine
      * <p>长度：50
      * <p>不能为null
      */
-    String productLine;
+    String courseLine;
 
     /**
-     * <p>productScale
+     * <p>courseScale
      * <p>长度：10
      * <p>不能为null
      */
-    String productScale;
+    String courseScale;
 
     /**
-     * <p>productVendor
+     * <p>courseVendor
      * <p>长度：50
      * <p>不能为null
      */
-    String productVendor;
+    String courseVendor;
 
     /**
-     * <p>productDescription
+     * <p>courseDescription
      * <p>长度：65535
      * <p>不能为null
      */
-    String productDescription;
+    String courseDescription;
 
     /**
      * <p>buyPrice
@@ -78,5 +78,4 @@ public class ProductsEntity implements Serializable, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

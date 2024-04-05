@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spldeolin.beginningmind.app.mapper.CustomersMapper">
+<mapper namespace="com.spldeolin.beginningmind.app.mapper.StudentsMapper">
     <!-- [START] Any modifications may be overwritten by future code generations. -->
 
-    <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.CustomersEntity">
-        <id column="customerNumber" property="customerNumber"/>
-        <result column="customerName" property="customerName"/>
-        <result column="contactLastName" property="contactLastName"/>
-        <result column="contactFirstName" property="contactFirstName"/>
+    <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.StudentsEntity">
+        <id column="studentNumber" property="studentNumber"/>
+        <result column="LastName" property="lastName"/>
+        <result column="FirstName" property="firstName"/>
         <result column="phone" property="phone"/>
         <result column="addressLine1" property="addressLine1"/>
         <result column="addressLine2" property="addressLine2"/>
@@ -20,19 +19,18 @@
     </resultMap>
 
     <sql id="all">
-        `customerNumber`, `customerName`, `contactLastName`, `contactFirstName`, `phone`, `addressLine1`,
-        `addressLine2`,
-        `city`, `state`, `postalCode`, `country`, `salesRepEmployeeNumber`, `creditLimit`
+        `studentNumber`, `LastName`, `FirstName`, `phone`, `addressLine1`, `addressLine2`, `city`, `state`,
+        `postalCode`,
+        `country`, `salesRepEmployeeNumber`, `creditLimit`
     </sql>
 
-    <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.CustomersEntity">
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.StudentsEntity">
         <!-- @formatter:off -->
-        INSERT INTO `customers`
+        INSERT INTO `students`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> `customerNumber`, </if>
-            <if test="customerName!=null"> `customerName`, </if>
-            <if test="contactLastName!=null"> `contactLastName`, </if>
-            <if test="contactFirstName!=null"> `contactFirstName`, </if>
+            <if test="studentNumber!=null"> `studentNumber`, </if>
+            <if test="lastName!=null"> `LastName`, </if>
+            <if test="firstName!=null"> `FirstName`, </if>
             <if test="phone!=null"> `phone`, </if>
             <if test="addressLine1!=null"> `addressLine1`, </if>
             <if test="addressLine2!=null"> `addressLine2`, </if>
@@ -44,10 +42,9 @@
             <if test="creditLimit!=null"> `creditLimit`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> #{customerNumber}, </if>
-            <if test="customerName!=null"> #{customerName}, </if>
-            <if test="contactLastName!=null"> #{contactLastName}, </if>
-            <if test="contactFirstName!=null"> #{contactFirstName}, </if>
+            <if test="studentNumber!=null"> #{studentNumber}, </if>
+            <if test="lastName!=null"> #{lastName}, </if>
+            <if test="firstName!=null"> #{firstName}, </if>
             <if test="phone!=null"> #{phone}, </if>
             <if test="addressLine1!=null"> #{addressLine1}, </if>
             <if test="addressLine2!=null"> #{addressLine2}, </if>
@@ -64,12 +61,11 @@
     <insert id="batchInsert">
         <!-- @formatter:off -->
         <foreach collection="entities" item="one" separator=";">
-            INSERT INTO `customers`
+            INSERT INTO `students`
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="one.customerNumber!=null"> `customerNumber`, </if>
-                <if test="one.customerName!=null"> `customerName`, </if>
-                <if test="one.contactLastName!=null"> `contactLastName`, </if>
-                <if test="one.contactFirstName!=null"> `contactFirstName`, </if>
+                <if test="one.studentNumber!=null"> `studentNumber`, </if>
+                <if test="one.lastName!=null"> `LastName`, </if>
+                <if test="one.firstName!=null"> `FirstName`, </if>
                 <if test="one.phone!=null"> `phone`, </if>
                 <if test="one.addressLine1!=null"> `addressLine1`, </if>
                 <if test="one.addressLine2!=null"> `addressLine2`, </if>
@@ -81,10 +77,9 @@
                 <if test="one.creditLimit!=null"> `creditLimit`, </if>
             </trim>
             <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
-                <if test="one.customerNumber!=null"> #{one.customerNumber}, </if>
-                <if test="one.customerName!=null"> #{one.customerName}, </if>
-                <if test="one.contactLastName!=null"> #{one.contactLastName}, </if>
-                <if test="one.contactFirstName!=null"> #{one.contactFirstName}, </if>
+                <if test="one.studentNumber!=null"> #{one.studentNumber}, </if>
+                <if test="one.lastName!=null"> #{one.lastName}, </if>
+                <if test="one.firstName!=null"> #{one.firstName}, </if>
                 <if test="one.phone!=null"> #{one.phone}, </if>
                 <if test="one.addressLine1!=null"> #{one.addressLine1}, </if>
                 <if test="one.addressLine2!=null"> #{one.addressLine2}, </if>
@@ -101,12 +96,12 @@
 
     <insert id="batchInsertEvenNull">
         <!-- @formatter:off -->
-        INSERT INTO `customers`
+        INSERT INTO `students`
             ( <include refid="all"/> )
         VALUES
             <foreach collection="entities" item="one" separator=",">(
-                #{one.customerNumber}, #{one.customerName}, #{one.contactLastName}, #{one.contactFirstName}, #{one.phone},
-                #{one.addressLine1}, #{one.addressLine2}, #{one.city}, #{one.state}, #{one.postalCode}, #{one.country},
+                #{one.studentNumber}, #{one.lastName}, #{one.firstName}, #{one.phone}, #{one.addressLine1},
+                #{one.addressLine2}, #{one.city}, #{one.state}, #{one.postalCode}, #{one.country},
                 #{one.salesRepEmployeeNumber}, #{one.creditLimit}
             )</foreach>
         <!-- @formatter:on -->
@@ -115,11 +110,10 @@
     <update id="batchUpdate">
         <foreach collection="entities" item="one" separator=";">
             <!-- @formatter:off -->
-            UPDATE `customers`
+            UPDATE `students`
             <set>
-                <if test="one.customerName!=null"> `customerName` = #{one.customerName}, </if>
-                <if test="one.contactLastName!=null"> `contactLastName` = #{one.contactLastName}, </if>
-                <if test="one.contactFirstName!=null"> `contactFirstName` = #{one.contactFirstName}, </if>
+                <if test="one.lastName!=null"> `LastName` = #{one.lastName}, </if>
+                <if test="one.firstName!=null"> `FirstName` = #{one.firstName}, </if>
                 <if test="one.phone!=null"> `phone` = #{one.phone}, </if>
                 <if test="one.addressLine1!=null"> `addressLine1` = #{one.addressLine1}, </if>
                 <if test="one.addressLine2!=null"> `addressLine2` = #{one.addressLine2}, </if>
@@ -131,7 +125,7 @@
                 <if test="one.creditLimit!=null"> `creditLimit` = #{one.creditLimit}, </if>
             </set>
             WHERE TRUE
-              AND `customerNumber` = #{one.customerNumber}
+              AND `studentNumber` = #{one.studentNumber}
             <!-- @formatter:on -->
         </foreach>
     </update>
@@ -139,11 +133,10 @@
     <update id="batchUpdateEvenNull">
         <foreach collection="entities" item="one" separator=";">
             <!-- @formatter:off -->
-            UPDATE `customers`
+            UPDATE `students`
             SET
-                `customerName` = #{one.customerName},
-                `contactLastName` = #{one.contactLastName},
-                `contactFirstName` = #{one.contactFirstName},
+                `LastName` = #{one.lastName},
+                `FirstName` = #{one.firstName},
                 `phone` = #{one.phone},
                 `addressLine1` = #{one.addressLine1},
                 `addressLine2` = #{one.addressLine2},
@@ -154,7 +147,7 @@
                 `salesRepEmployeeNumber` = #{one.salesRepEmployeeNumber},
                 `creditLimit` = #{one.creditLimit}
             WHERE TRUE
-              AND `customerNumber` = #{one.customerNumber}
+              AND `studentNumber` = #{one.studentNumber}
             <!-- @formatter:on -->
         </foreach>
     </update>
@@ -163,19 +156,18 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `customers`
+        FROM `students`
         WHERE TRUE
-          AND `customerNumber` = #{customerNumber}
+          AND `studentNumber` = #{studentNumber}
         <!-- @formatter:on -->
     </select>
 
-    <update id="updateById" parameterType="com.spldeolin.beginningmind.app.entity.CustomersEntity">
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.app.entity.StudentsEntity">
         <!-- @formatter:off -->
-        UPDATE `customers`
+        UPDATE `students`
         <set>
-            <if test="customerName!=null"> `customerName` = #{customerName}, </if>
-            <if test="contactLastName!=null"> `contactLastName` = #{contactLastName}, </if>
-            <if test="contactFirstName!=null"> `contactFirstName` = #{contactFirstName}, </if>
+            <if test="lastName!=null"> `LastName` = #{lastName}, </if>
+            <if test="firstName!=null"> `FirstName` = #{firstName}, </if>
             <if test="phone!=null"> `phone` = #{phone}, </if>
             <if test="addressLine1!=null"> `addressLine1` = #{addressLine1}, </if>
             <if test="addressLine2!=null"> `addressLine2` = #{addressLine2}, </if>
@@ -187,17 +179,16 @@
             <if test="creditLimit!=null"> `creditLimit` = #{creditLimit}, </if>
         </set>
         WHERE TRUE
-          AND `customerNumber` = #{customerNumber}
+          AND `studentNumber` = #{studentNumber}
         <!-- @formatter:on -->
     </update>
 
-    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.app.entity.CustomersEntity">
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.app.entity.StudentsEntity">
         <!-- @formatter:off -->
-        UPDATE `customers`
+        UPDATE `students`
         SET
-            `customerName` = #{customerName},
-            `contactLastName` = #{contactLastName},
-            `contactFirstName` = #{contactFirstName},
+            `LastName` = #{lastName},
+            `FirstName` = #{firstName},
             `phone` = #{phone},
             `addressLine1` = #{addressLine1},
             `addressLine2` = #{addressLine2},
@@ -208,7 +199,7 @@
             `salesRepEmployeeNumber` = #{salesRepEmployeeNumber},
             `creditLimit` = #{creditLimit}
         WHERE TRUE
-          AND `customerNumber` = #{customerNumber}
+          AND `studentNumber` = #{studentNumber}
         <!-- @formatter:on -->
     </update>
 
@@ -216,9 +207,9 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `customers`
+        FROM `students`
         WHERE TRUE
-          AND `customerNumber` IN (<foreach collection="customerNumbers" item="one" separator=",">#{one}</foreach>)
+          AND `studentNumber` IN (<foreach collection="studentNumbers" item="one" separator=",">#{one}</foreach>)
         <!-- @formatter:on -->
     </select>
 
@@ -226,22 +217,21 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `customers`
+        FROM `students`
         WHERE TRUE
-          AND `customerNumber` IN (<foreach collection="customerNumbers" item="one" separator=",">#{one}</foreach>)
+          AND `studentNumber` IN (<foreach collection="studentNumbers" item="one" separator=",">#{one}</foreach>)
         <!-- @formatter:on -->
     </select>
 
-    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.app.entity.CustomersEntity" resultMap="all">
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.app.entity.StudentsEntity" resultMap="all">
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `customers`
+        FROM `students`
         WHERE TRUE
-          <if test="customerNumber!=null"> AND `customerNumber` = #{customerNumber} </if>
-          <if test="customerName!=null"> AND `customerName` = #{customerName} </if>
-          <if test="contactLastName!=null"> AND `contactLastName` = #{contactLastName} </if>
-          <if test="contactFirstName!=null"> AND `contactFirstName` = #{contactFirstName} </if>
+          <if test="studentNumber!=null"> AND `studentNumber` = #{studentNumber} </if>
+          <if test="lastName!=null"> AND `LastName` = #{lastName} </if>
+          <if test="firstName!=null"> AND `FirstName` = #{firstName} </if>
           <if test="phone!=null"> AND `phone` = #{phone} </if>
           <if test="addressLine1!=null"> AND `addressLine1` = #{addressLine1} </if>
           <if test="addressLine2!=null"> AND `addressLine2` = #{addressLine2} </if>
@@ -258,19 +248,18 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `customers`
+        FROM `students`
         WHERE TRUE
         <!-- @formatter:on -->
     </select>
 
-    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.app.entity.CustomersEntity">
+    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.app.entity.StudentsEntity">
         <!-- @formatter:off -->
-        INSERT INTO `customers`
+        INSERT INTO `students`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> `customerNumber`, </if>
-            <if test="customerName!=null"> `customerName`, </if>
-            <if test="contactLastName!=null"> `contactLastName`, </if>
-            <if test="contactFirstName!=null"> `contactFirstName`, </if>
+            <if test="studentNumber!=null"> `studentNumber`, </if>
+            <if test="lastName!=null"> `LastName`, </if>
+            <if test="firstName!=null"> `FirstName`, </if>
             <if test="phone!=null"> `phone`, </if>
             <if test="addressLine1!=null"> `addressLine1`, </if>
             <if test="addressLine2!=null"> `addressLine2`, </if>
@@ -282,10 +271,9 @@
             <if test="creditLimit!=null"> `creditLimit`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> #{customerNumber}, </if>
-            <if test="customerName!=null"> #{customerName}, </if>
-            <if test="contactLastName!=null"> #{contactLastName}, </if>
-            <if test="contactFirstName!=null"> #{contactFirstName}, </if>
+            <if test="studentNumber!=null"> #{studentNumber}, </if>
+            <if test="lastName!=null"> #{lastName}, </if>
+            <if test="firstName!=null"> #{firstName}, </if>
             <if test="phone!=null"> #{phone}, </if>
             <if test="addressLine1!=null"> #{addressLine1}, </if>
             <if test="addressLine2!=null"> #{addressLine2}, </if>
@@ -298,9 +286,8 @@
         </trim>
         ON DUPLICATE KEY UPDATE
         <trim suffixOverrides=",">
-            <if test="customerName!=null"> `customerName` = #{customerName}, </if>
-            <if test="contactLastName!=null"> `contactLastName` = #{contactLastName}, </if>
-            <if test="contactFirstName!=null"> `contactFirstName` = #{contactFirstName}, </if>
+            <if test="lastName!=null"> `LastName` = #{lastName}, </if>
+            <if test="firstName!=null"> `FirstName` = #{firstName}, </if>
             <if test="phone!=null"> `phone` = #{phone}, </if>
             <if test="addressLine1!=null"> `addressLine1` = #{addressLine1}, </if>
             <if test="addressLine2!=null"> `addressLine2` = #{addressLine2}, </if>

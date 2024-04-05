@@ -3,11 +3,12 @@ package com.spldeolin.beginningmind.app.mapper;
 import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import com.spldeolin.beginningmind.app.entity.OrderdetailsEntity;
+import com.spldeolin.beginningmind.app.javabean.record.QueryOrderdetailsRecord;
 
 /**
  * <p>orderdetails
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 public interface OrderdetailsMapper {
 
@@ -51,8 +52,7 @@ public interface OrderdetailsMapper {
      * <p>
      * <p>Any modifications may be overwritten by future code generations.
      */
-    com.spldeolin.beginningmind.app.entity.OrderdetailsEntity queryById(@Param("orderNumber") Integer orderNumber,
-            @Param("productCode") String productCode);
+    OrderdetailsEntity queryById(@Param("orderNumber") Integer orderNumber, @Param("courseCode") String courseCode);
 
     /**
      * 根据ID更新数据，忽略值为null的属性
@@ -89,4 +89,8 @@ public interface OrderdetailsMapper {
      */
     int insertOrUpdate(OrderdetailsEntity entity);
 
+    /**
+     * QT1001S-6EE40EE2
+     */
+    List<QueryOrderdetailsRecord> queryOrderdetails(@Param("orderNumber") List<Integer> orderNumber);
 }

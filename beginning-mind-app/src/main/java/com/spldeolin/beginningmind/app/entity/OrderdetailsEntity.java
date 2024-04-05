@@ -11,14 +11,14 @@ import lombok.experimental.FieldDefaults;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class OrderdetailsEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 5519740203450332160L;
+    private static final long serialVersionUID = 6868807325881096192L;
 
     /**
      * <p>orderNumber
@@ -27,11 +27,11 @@ public class OrderdetailsEntity implements Serializable, Cloneable {
     Integer orderNumber;
 
     /**
-     * <p>productCode
+     * <p>courseCode
      * <p>长度：15
      * <p>不能为null
      */
-    String productCode;
+    String courseCode;
 
     /**
      * <p>quantityOrdered
@@ -49,5 +49,4 @@ public class OrderdetailsEntity implements Serializable, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

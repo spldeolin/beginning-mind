@@ -1,0 +1,51 @@
+server:
+  port: 2333
+  context-path: /
+
+spring:
+
+  profiles: dev
+
+  application.name: beginning-mind
+
+  # throw a exception when 404
+  mvc.throw-exception-if-no-handler-found: true
+  resources.add-mappings: false
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 15
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: DatebookHikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: select 'x'
+
+  redis:
+    redisson:
+      file: classpath:redisson-dev.yml
+
+logging:
+  config: classpath:logback-spring.xml
+
+mybatis:
+  mapper-locations: classpath*:mapper/*.xml
+  configuration:
+    default-enum-type-handler: com.spldeolin.satisficing.framework.app.mybatis.EnumTypeHandlerEx
+
+thread-pool:
+  core-size: 5
+  maximum-size: 10
+  queue-capacity: 20
+  keep-alive-seconds: 60
+
+snow-flake:
+  datacenter-id: 1
+  machine-id: 1

@@ -15,7 +15,7 @@ import com.spldeolin.beginningmind.app.entity.OrdersEntity;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @SuppressWarnings("all")
 public class OrdersDesign {
@@ -80,7 +80,7 @@ public class OrdersDesign {
 
         /**
          */
-        public QueryChain customerNumber;
+        public QueryChain studentNumber;
 
         public ByChainReturn<NextableByChainReturn> by() {
             throw e;
@@ -143,7 +143,7 @@ public class OrdersDesign {
 
         /**
          */
-        NextableUpdateChain customerNumber(Integer customerNumber);
+        NextableUpdateChain studentNumber(Integer studentNumber);
     }
 
     public interface NextableUpdateChain extends UpdateChain {
@@ -192,7 +192,7 @@ public class OrdersDesign {
 
         /**
          */
-        public ByChainPredicate<NEXT, Integer> customerNumber;
+        public ByChainPredicate<NEXT, Integer> studentNumber;
     }
 
     public static class NextableByChainReturn {
@@ -223,7 +223,7 @@ public class OrdersDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, Integer> customerNumber;
+        public ByChainPredicate<NextableByChainReturn, Integer> studentNumber;
 
         public List<OrdersEntity> many() {
             throw e;
@@ -278,7 +278,7 @@ public class OrdersDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, Integer> customerNumber;
+        public ByChainPredicate<NextableByChainVoid, Integer> studentNumber;
 
         public int over() {
             throw e;
@@ -313,7 +313,7 @@ public class OrdersDesign {
 
         /**
          */
-        public OrderChainPredicate<NextableOrderChain> customerNumber;
+        public OrderChainPredicate<NextableOrderChain> studentNumber;
     }
 
     public static class NextableOrderChain extends OrderChain {
@@ -353,7 +353,7 @@ public class OrdersDesign {
 
         Each<String> comments = (Each<String>) new Object();
 
-        Each<Integer> customerNumber = (Each<Integer>) new Object();
+        Each<Integer> studentNumber = (Each<Integer>) new Object();
     }
 
     public interface MultiEach<P> {
@@ -370,7 +370,7 @@ public class OrdersDesign {
 
         MultiEach<String> comments = (MultiEach<String>) new Object();
 
-        MultiEach<Integer> customerNumber = (MultiEach<Integer>) new Object();
+        MultiEach<Integer> studentNumber = (MultiEach<Integer>) new Object();
     }
 
     public static EntityKey<OrdersEntity, Integer> orderNumber;
@@ -385,8 +385,8 @@ public class OrdersDesign {
 
     public static EntityKey<OrdersEntity, String> comments;
 
-    public static EntityKey<OrdersEntity, Integer> customerNumber;
+    public static EntityKey<OrdersEntity, Integer> studentNumber;
 
-    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.OrdersEntity\",\"entityName\":\"OrdersEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.OrdersMapper\",\"mapperName\":\"OrdersMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/OrdersMapper.xml\"],\"properties\":{\"orderNumber\":{\"columnName\":\"orderNumber\",\"propertyName\":\"orderNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"comments\":{\"columnName\":\"comments\",\"propertyName\":\"comments\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":65535,\"notnull\":false,\"defaultV\":null},\"requiredDate\":{\"columnName\":\"requiredDate\",\"propertyName\":\"requiredDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"customerNumber\":{\"columnName\":\"customerNumber\",\"propertyName\":\"customerNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"orderDate\":{\"columnName\":\"orderDate\",\"propertyName\":\"orderDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"shippedDate\":{\"columnName\":\"shippedDate\",\"propertyName\":\"shippedDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"status\":{\"columnName\":\"status\",\"propertyName\":\"status\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"orders\",\"notDeletedSql\":null}";
+    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.OrdersEntity\",\"entityName\":\"OrdersEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.OrdersMapper\",\"mapperName\":\"OrdersMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/OrdersMapper.xml\"],\"properties\":{\"orderNumber\":{\"columnName\":\"orderNumber\",\"propertyName\":\"orderNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"comments\":{\"columnName\":\"comments\",\"propertyName\":\"comments\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":65535,\"notnull\":false,\"defaultV\":null},\"studentNumber\":{\"columnName\":\"studentNumber\",\"propertyName\":\"studentNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"requiredDate\":{\"columnName\":\"requiredDate\",\"propertyName\":\"requiredDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"orderDate\":{\"columnName\":\"orderDate\",\"propertyName\":\"orderDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"shippedDate\":{\"columnName\":\"shippedDate\",\"propertyName\":\"shippedDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"status\":{\"columnName\":\"status\",\"propertyName\":\"status\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"orders\",\"notDeletedSql\":null}";
 }
-//850ee83b403d2c6e280569395250a21d
+//723e41ec9bd6ac252d67177fb0bf172d

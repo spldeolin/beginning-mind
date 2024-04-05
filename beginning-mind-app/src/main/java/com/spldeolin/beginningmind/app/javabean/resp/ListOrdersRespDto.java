@@ -1,5 +1,6 @@
 package com.spldeolin.beginningmind.app.javabean.resp;
 
+import java.util.Collection;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
@@ -45,5 +46,10 @@ public class ListOrdersRespDto {
      * 描述
      */
     String comments;
+
+    /**
+     * 课程编号
+     */
+    Collection<String> courseCodes;
 
 }

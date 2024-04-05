@@ -10,11 +10,11 @@
         <result column="shippedDate" property="shippedDate"/>
         <result column="status" property="status"/>
         <result column="comments" property="comments"/>
-        <result column="customerNumber" property="customerNumber"/>
+        <result column="studentNumber" property="studentNumber"/>
     </resultMap>
 
     <sql id="all">
-        `orderNumber`, `orderDate`, `requiredDate`, `shippedDate`, `status`, `comments`, `customerNumber`
+        `orderNumber`, `orderDate`, `requiredDate`, `shippedDate`, `status`, `comments`, `studentNumber`
     </sql>
 
     <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.OrdersEntity">
@@ -27,7 +27,7 @@
             <if test="shippedDate!=null"> `shippedDate`, </if>
             <if test="status!=null"> `status`, </if>
             <if test="comments!=null"> `comments`, </if>
-            <if test="customerNumber!=null"> `customerNumber`, </if>
+            <if test="studentNumber!=null"> `studentNumber`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="orderNumber!=null"> #{orderNumber}, </if>
@@ -36,7 +36,7 @@
             <if test="shippedDate!=null"> #{shippedDate}, </if>
             <if test="status!=null"> #{status}, </if>
             <if test="comments!=null"> #{comments}, </if>
-            <if test="customerNumber!=null"> #{customerNumber}, </if>
+            <if test="studentNumber!=null"> #{studentNumber}, </if>
         </trim>
         <!-- @formatter:on -->
     </insert>
@@ -52,7 +52,7 @@
                 <if test="one.shippedDate!=null"> `shippedDate`, </if>
                 <if test="one.status!=null"> `status`, </if>
                 <if test="one.comments!=null"> `comments`, </if>
-                <if test="one.customerNumber!=null"> `customerNumber`, </if>
+                <if test="one.studentNumber!=null"> `studentNumber`, </if>
             </trim>
             <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
                 <if test="one.orderNumber!=null"> #{one.orderNumber}, </if>
@@ -61,7 +61,7 @@
                 <if test="one.shippedDate!=null"> #{one.shippedDate}, </if>
                 <if test="one.status!=null"> #{one.status}, </if>
                 <if test="one.comments!=null"> #{one.comments}, </if>
-                <if test="one.customerNumber!=null"> #{one.customerNumber}, </if>
+                <if test="one.studentNumber!=null"> #{one.studentNumber}, </if>
             </trim>
         </foreach>;
         <!-- @formatter:on -->
@@ -74,7 +74,7 @@
         VALUES
             <foreach collection="entities" item="one" separator=",">(
                 #{one.orderNumber}, #{one.orderDate}, #{one.requiredDate}, #{one.shippedDate}, #{one.status},
-                #{one.comments}, #{one.customerNumber}
+                #{one.comments}, #{one.studentNumber}
             )</foreach>
         <!-- @formatter:on -->
     </insert>
@@ -89,7 +89,7 @@
                 <if test="one.shippedDate!=null"> `shippedDate` = #{one.shippedDate}, </if>
                 <if test="one.status!=null"> `status` = #{one.status}, </if>
                 <if test="one.comments!=null"> `comments` = #{one.comments}, </if>
-                <if test="one.customerNumber!=null"> `customerNumber` = #{one.customerNumber}, </if>
+                <if test="one.studentNumber!=null"> `studentNumber` = #{one.studentNumber}, </if>
             </set>
             WHERE TRUE
               AND `orderNumber` = #{one.orderNumber}
@@ -107,7 +107,7 @@
                 `shippedDate` = #{one.shippedDate},
                 `status` = #{one.status},
                 `comments` = #{one.comments},
-                `customerNumber` = #{one.customerNumber}
+                `studentNumber` = #{one.studentNumber}
             WHERE TRUE
               AND `orderNumber` = #{one.orderNumber}
             <!-- @formatter:on -->
@@ -133,7 +133,7 @@
             <if test="shippedDate!=null"> `shippedDate` = #{shippedDate}, </if>
             <if test="status!=null"> `status` = #{status}, </if>
             <if test="comments!=null"> `comments` = #{comments}, </if>
-            <if test="customerNumber!=null"> `customerNumber` = #{customerNumber}, </if>
+            <if test="studentNumber!=null"> `studentNumber` = #{studentNumber}, </if>
         </set>
         WHERE TRUE
           AND `orderNumber` = #{orderNumber}
@@ -149,7 +149,7 @@
             `shippedDate` = #{shippedDate},
             `status` = #{status},
             `comments` = #{comments},
-            `customerNumber` = #{customerNumber}
+            `studentNumber` = #{studentNumber}
         WHERE TRUE
           AND `orderNumber` = #{orderNumber}
         <!-- @formatter:on -->
@@ -187,7 +187,7 @@
           <if test="shippedDate!=null"> AND `shippedDate` = #{shippedDate} </if>
           <if test="status!=null"> AND `status` = #{status} </if>
           <if test="comments!=null"> AND `comments` = #{comments} </if>
-          <if test="customerNumber!=null"> AND `customerNumber` = #{customerNumber} </if>
+          <if test="studentNumber!=null"> AND `studentNumber` = #{studentNumber} </if>
         <!-- @formatter:on -->
     </select>
 
@@ -210,7 +210,7 @@
             <if test="shippedDate!=null"> `shippedDate`, </if>
             <if test="status!=null"> `status`, </if>
             <if test="comments!=null"> `comments`, </if>
-            <if test="customerNumber!=null"> `customerNumber`, </if>
+            <if test="studentNumber!=null"> `studentNumber`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="orderNumber!=null"> #{orderNumber}, </if>
@@ -219,7 +219,7 @@
             <if test="shippedDate!=null"> #{shippedDate}, </if>
             <if test="status!=null"> #{status}, </if>
             <if test="comments!=null"> #{comments}, </if>
-            <if test="customerNumber!=null"> #{customerNumber}, </if>
+            <if test="studentNumber!=null"> #{studentNumber}, </if>
         </trim>
         ON DUPLICATE KEY UPDATE
         <trim suffixOverrides=",">
@@ -228,23 +228,32 @@
             <if test="shippedDate!=null"> `shippedDate` = #{shippedDate}, </if>
             <if test="status!=null"> `status` = #{status}, </if>
             <if test="comments!=null"> `comments` = #{comments}, </if>
-            <if test="customerNumber!=null"> `customerNumber` = #{customerNumber}, </if>
+            <if test="studentNumber!=null"> `studentNumber` = #{studentNumber}, </if>
         </trim>
         <!-- @formatter:on -->
     </insert>
 
     <!-- [END] Any modifications may be overwritten by future code generations. -->
 
-    <!-- Allison 1875 Lot No: QT1001S-D7AB04BE -->
-    <select id='queryOrders' resultMap='all'>
+    <!-- Allison 1875 Lot No: QT1001S-E73C252D -->
+    <select id='queryOrders' parameterType='com.spldeolin.beginningmind.app.javabean.cond.QueryOrdersCond'
+        resultMap='all'>
         <!-- @formatter:off -->
         SELECT
             <include refid='all' />
         FROM
             `orders`
         WHERE TRUE
-        <if test="customerNumber != null">
-            AND `customerNumber` = #{customerNumber}
+        <if test="studentNumber != null">
+            AND `studentNumber` = #{studentNumber}
+        </if>
+        <if test="studentNumberEx != null">
+            <if test="studentNumberEx.size() > 0">
+                AND `studentNumber` IN (<foreach collection='studentNumberEx' item='one' separator=','>#{one}</foreach>)
+            </if>
+            <if test="studentNumberEx.size() == 0">
+                AND FALSE
+            </if>
         </if>
         <if test="orderDate != null">
             AND `orderDate` >= #{orderDate}

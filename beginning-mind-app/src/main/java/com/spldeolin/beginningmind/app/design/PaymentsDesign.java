@@ -16,7 +16,7 @@ import com.spldeolin.beginningmind.app.entity.PaymentsEntity;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @SuppressWarnings("all")
 public class PaymentsDesign {
@@ -57,7 +57,7 @@ public class PaymentsDesign {
 
         /**
          */
-        public QueryChain customerNumber;
+        public QueryChain studentNumber;
 
         /**
          */
@@ -70,11 +70,6 @@ public class PaymentsDesign {
         /**
          */
         public QueryChain amount;
-
-        /**
-         * 已支付
-         */
-        public QueryChain isPaid;
 
         public ByChainReturn<NextableByChainReturn> by() {
             throw e;
@@ -113,7 +108,7 @@ public class PaymentsDesign {
 
         /**
          */
-        NextableUpdateChain customerNumber(Integer customerNumber);
+        NextableUpdateChain studentNumber(Integer studentNumber);
 
         /**
          */
@@ -126,11 +121,6 @@ public class PaymentsDesign {
         /**
          */
         NextableUpdateChain amount(BigDecimal amount);
-
-        /**
-         * 已支付
-         */
-        NextableUpdateChain isPaid(Boolean isPaid);
     }
 
     public interface NextableUpdateChain extends UpdateChain {
@@ -155,7 +145,7 @@ public class PaymentsDesign {
 
         /**
          */
-        public ByChainPredicate<NEXT, Integer> customerNumber;
+        public ByChainPredicate<NEXT, Integer> studentNumber;
 
         /**
          */
@@ -168,18 +158,13 @@ public class PaymentsDesign {
         /**
          */
         public ByChainPredicate<NEXT, BigDecimal> amount;
-
-        /**
-         * 已支付
-         */
-        public ByChainPredicate<NEXT, Boolean> isPaid;
     }
 
     public static class NextableByChainReturn {
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, Integer> customerNumber;
+        public ByChainPredicate<NextableByChainReturn, Integer> studentNumber;
 
         /**
          */
@@ -192,11 +177,6 @@ public class PaymentsDesign {
         /**
          */
         public ByChainPredicate<NextableByChainReturn, BigDecimal> amount;
-
-        /**
-         * 已支付
-         */
-        public ByChainPredicate<NextableByChainReturn, Boolean> isPaid;
 
         public List<PaymentsEntity> many() {
             throw e;
@@ -227,7 +207,7 @@ public class PaymentsDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, Integer> customerNumber;
+        public ByChainPredicate<NextableByChainVoid, Integer> studentNumber;
 
         /**
          */
@@ -241,11 +221,6 @@ public class PaymentsDesign {
          */
         public ByChainPredicate<NextableByChainVoid, BigDecimal> amount;
 
-        /**
-         * 已支付
-         */
-        public ByChainPredicate<NextableByChainVoid, Boolean> isPaid;
-
         public int over() {
             throw e;
         }
@@ -255,7 +230,7 @@ public class PaymentsDesign {
 
         /**
          */
-        public OrderChainPredicate<NextableOrderChain> customerNumber;
+        public OrderChainPredicate<NextableOrderChain> studentNumber;
 
         /**
          */
@@ -268,11 +243,6 @@ public class PaymentsDesign {
         /**
          */
         public OrderChainPredicate<NextableOrderChain> amount;
-
-        /**
-         * 已支付
-         */
-        public OrderChainPredicate<NextableOrderChain> isPaid;
     }
 
     public static class NextableOrderChain extends OrderChain {
@@ -300,31 +270,27 @@ public class PaymentsDesign {
 
     public interface Each<P> {
 
-        Each<Integer> customerNumber = (Each<Integer>) new Object();
+        Each<Integer> studentNumber = (Each<Integer>) new Object();
 
         Each<String> checkNumber = (Each<String>) new Object();
 
         Each<Date> paymentDate = (Each<Date>) new Object();
 
         Each<BigDecimal> amount = (Each<BigDecimal>) new Object();
-
-        Each<Boolean> isPaid = (Each<Boolean>) new Object();
     }
 
     public interface MultiEach<P> {
 
-        MultiEach<Integer> customerNumber = (MultiEach<Integer>) new Object();
+        MultiEach<Integer> studentNumber = (MultiEach<Integer>) new Object();
 
         MultiEach<String> checkNumber = (MultiEach<String>) new Object();
 
         MultiEach<Date> paymentDate = (MultiEach<Date>) new Object();
 
         MultiEach<BigDecimal> amount = (MultiEach<BigDecimal>) new Object();
-
-        MultiEach<Boolean> isPaid = (MultiEach<Boolean>) new Object();
     }
 
-    public static EntityKey<PaymentsEntity, Integer> customerNumber;
+    public static EntityKey<PaymentsEntity, Integer> studentNumber;
 
     public static EntityKey<PaymentsEntity, String> checkNumber;
 
@@ -332,8 +298,6 @@ public class PaymentsDesign {
 
     public static EntityKey<PaymentsEntity, BigDecimal> amount;
 
-    public static EntityKey<PaymentsEntity, Boolean> isPaid;
-
-    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.PaymentsEntity\",\"entityName\":\"PaymentsEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.PaymentsMapper\",\"mapperName\":\"PaymentsMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/PaymentsMapper.xml\"],\"properties\":{\"isPaid\":{\"columnName\":\"isPaid\",\"propertyName\":\"isPaid\",\"javaType\":{\"simpleName\":\"Boolean\",\"qualifier\":\"java.lang.Boolean\"},\"description\":\"已支付\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"checkNumber\":{\"columnName\":\"checkNumber\",\"propertyName\":\"checkNumber\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"amount\":{\"columnName\":\"amount\",\"propertyName\":\"amount\",\"javaType\":{\"simpleName\":\"BigDecimal\",\"qualifier\":\"java.math.BigDecimal\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"customerNumber\":{\"columnName\":\"customerNumber\",\"propertyName\":\"customerNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"paymentDate\":{\"columnName\":\"paymentDate\",\"propertyName\":\"paymentDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"payments\",\"notDeletedSql\":null}";
+    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.PaymentsEntity\",\"entityName\":\"PaymentsEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.PaymentsMapper\",\"mapperName\":\"PaymentsMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/PaymentsMapper.xml\"],\"properties\":{\"checkNumber\":{\"columnName\":\"checkNumber\",\"propertyName\":\"checkNumber\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"amount\":{\"columnName\":\"amount\",\"propertyName\":\"amount\",\"javaType\":{\"simpleName\":\"BigDecimal\",\"qualifier\":\"java.math.BigDecimal\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"studentNumber\":{\"columnName\":\"studentNumber\",\"propertyName\":\"studentNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"paymentDate\":{\"columnName\":\"paymentDate\",\"propertyName\":\"paymentDate\",\"javaType\":{\"simpleName\":\"Date\",\"qualifier\":\"java.util.Date\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"payments\",\"notDeletedSql\":null}";
 }
-//e199ed2a6a6812a8a3a2709d2739d5d0
+//a1b48a2340d2a964f59fb61d8d2ff194

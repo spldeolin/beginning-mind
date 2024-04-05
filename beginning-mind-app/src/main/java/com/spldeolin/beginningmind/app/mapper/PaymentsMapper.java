@@ -7,7 +7,7 @@ import com.spldeolin.beginningmind.app.entity.PaymentsEntity;
 /**
  * <p>payments
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 public interface PaymentsMapper {
 
@@ -51,7 +51,7 @@ public interface PaymentsMapper {
      * <p>
      * <p>Any modifications may be overwritten by future code generations.
      */
-    com.spldeolin.beginningmind.app.entity.PaymentsEntity queryById(@Param("customerNumber") Integer customerNumber,
+    com.spldeolin.beginningmind.app.entity.PaymentsEntity queryById(@Param("studentNumber") Integer studentNumber,
             @Param("checkNumber") String checkNumber);
 
     /**
@@ -88,5 +88,4 @@ public interface PaymentsMapper {
      * <p>Any modifications may be overwritten by future code generations.
      */
     int insertOrUpdate(PaymentsEntity entity);
-
 }

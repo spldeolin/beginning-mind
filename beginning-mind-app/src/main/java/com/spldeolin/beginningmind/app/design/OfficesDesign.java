@@ -7,7 +7,7 @@ import com.spldeolin.allison1875.support.ByChainPredicate;
 import com.spldeolin.allison1875.support.EntityKey;
 import com.spldeolin.allison1875.support.OrderChainPredicate;
 import com.spldeolin.beginningmind.app.entity.OfficesEntity;
-import com.spldeolin.beginningmind.app.enums.OfficesStateEnum;
+import com.spldeolin.beginningmind.app.enums.OfficeStateEnum;
 
 //@formatter:off
 /**
@@ -15,7 +15,7 @@ import com.spldeolin.beginningmind.app.enums.OfficesStateEnum;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @SuppressWarnings("all")
 public class OfficesDesign {
@@ -147,7 +147,7 @@ public class OfficesDesign {
 
         /**
          */
-        NextableUpdateChain state(OfficesStateEnum state);
+        NextableUpdateChain state(OfficeStateEnum state);
 
         /**
          */
@@ -204,7 +204,7 @@ public class OfficesDesign {
 
         /**
          */
-        public ByChainPredicate<NEXT, OfficesStateEnum> state;
+        public ByChainPredicate<NEXT, OfficeStateEnum> state;
 
         /**
          */
@@ -243,7 +243,7 @@ public class OfficesDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, OfficesStateEnum> state;
+        public ByChainPredicate<NextableByChainReturn, OfficeStateEnum> state;
 
         /**
          */
@@ -306,7 +306,7 @@ public class OfficesDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, OfficesStateEnum> state;
+        public ByChainPredicate<NextableByChainVoid, OfficeStateEnum> state;
 
         /**
          */
@@ -399,7 +399,7 @@ public class OfficesDesign {
 
         Each<String> addressLine2 = (Each<String>) new Object();
 
-        Each<OfficesStateEnum> state = (Each<OfficesStateEnum>) new Object();
+        Each<OfficeStateEnum> state = (Each<OfficeStateEnum>) new Object();
 
         Each<String> country = (Each<String>) new Object();
 
@@ -420,7 +420,7 @@ public class OfficesDesign {
 
         MultiEach<String> addressLine2 = (MultiEach<String>) new Object();
 
-        MultiEach<OfficesStateEnum> state = (MultiEach<OfficesStateEnum>) new Object();
+        MultiEach<OfficeStateEnum> state = (MultiEach<OfficeStateEnum>) new Object();
 
         MultiEach<String> country = (MultiEach<String>) new Object();
 
@@ -439,7 +439,7 @@ public class OfficesDesign {
 
     public static EntityKey<OfficesEntity, String> addressLine2;
 
-    public static EntityKey<OfficesEntity, OfficesStateEnum> state;
+    public static EntityKey<OfficesEntity, OfficeStateEnum> state;
 
     public static EntityKey<OfficesEntity, String> country;
 
@@ -447,6 +447,6 @@ public class OfficesDesign {
 
     public static EntityKey<OfficesEntity, String> territory;
 
-    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.OfficesEntity\",\"entityName\":\"OfficesEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.OfficesMapper\",\"mapperName\":\"OfficesMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/OfficesMapper.xml\"],\"properties\":{\"country\":{\"columnName\":\"country\",\"propertyName\":\"country\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"city\":{\"columnName\":\"city\",\"propertyName\":\"city\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"phone\":{\"columnName\":\"phone\",\"propertyName\":\"phone\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"postalCode\":{\"columnName\":\"postalCode\",\"propertyName\":\"postalCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":true,\"defaultV\":null},\"officeCode\":{\"columnName\":\"officeCode\",\"propertyName\":\"officeCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":10,\"notnull\":true,\"defaultV\":null},\"addressLine1\":{\"columnName\":\"addressLine1\",\"propertyName\":\"addressLine1\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"addressLine2\":{\"columnName\":\"addressLine2\",\"propertyName\":\"addressLine2\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null},\"state\":{\"columnName\":\"state\",\"propertyName\":\"state\",\"javaType\":{\"simpleName\":\"OfficesStateEnum\",\"qualifier\":\"com.spldeolin.beginningmind.app.enums.OfficesStateEnum\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null},\"territory\":{\"columnName\":\"territory\",\"propertyName\":\"territory\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":10,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"offices\",\"notDeletedSql\":null}";
+    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.OfficesEntity\",\"entityName\":\"OfficesEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.OfficesMapper\",\"mapperName\":\"OfficesMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/OfficesMapper.xml\"],\"properties\":{\"country\":{\"columnName\":\"country\",\"propertyName\":\"country\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"city\":{\"columnName\":\"city\",\"propertyName\":\"city\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"phone\":{\"columnName\":\"phone\",\"propertyName\":\"phone\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"postalCode\":{\"columnName\":\"postalCode\",\"propertyName\":\"postalCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":true,\"defaultV\":null},\"officeCode\":{\"columnName\":\"officeCode\",\"propertyName\":\"officeCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":10,\"notnull\":true,\"defaultV\":null},\"addressLine1\":{\"columnName\":\"addressLine1\",\"propertyName\":\"addressLine1\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"addressLine2\":{\"columnName\":\"addressLine2\",\"propertyName\":\"addressLine2\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null},\"state\":{\"columnName\":\"state\",\"propertyName\":\"state\",\"javaType\":{\"simpleName\":\"OfficeStateEnum\",\"qualifier\":\"com.spldeolin.beginningmind.app.enums.OfficeStateEnum\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null},\"territory\":{\"columnName\":\"territory\",\"propertyName\":\"territory\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":10,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"offices\",\"notDeletedSql\":null}";
 }
-//a8f67bbd29994d9fea7e329f98a474fe
+//7e728951de5f01fe3312a58594826807

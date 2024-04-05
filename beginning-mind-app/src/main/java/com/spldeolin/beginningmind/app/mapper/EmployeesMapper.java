@@ -9,7 +9,7 @@ import com.spldeolin.beginningmind.app.entity.EmployeesEntity;
 /**
  * <p>employees
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 public interface EmployeesMapper {
 
@@ -104,5 +104,4 @@ public interface EmployeesMapper {
      * <p>Any modifications may be overwritten by future code generations.
      */
     int insertOrUpdate(EmployeesEntity entity);
-
 }

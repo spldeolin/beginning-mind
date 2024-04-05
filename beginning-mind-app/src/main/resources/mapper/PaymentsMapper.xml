@@ -4,33 +4,30 @@
     <!-- [START] Any modifications may be overwritten by future code generations. -->
 
     <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.PaymentsEntity">
-        <id column="customerNumber" property="customerNumber"/>
+        <id column="studentNumber" property="studentNumber"/>
         <id column="checkNumber" property="checkNumber"/>
         <result column="paymentDate" property="paymentDate"/>
         <result column="amount" property="amount"/>
-        <result column="isPaid" property="isPaid"/>
     </resultMap>
 
     <sql id="all">
-        `customerNumber`, `checkNumber`, `paymentDate`, `amount`, `isPaid`
+        `studentNumber`, `checkNumber`, `paymentDate`, `amount`
     </sql>
 
     <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.PaymentsEntity">
         <!-- @formatter:off -->
         INSERT INTO `payments`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> `customerNumber`, </if>
+            <if test="studentNumber!=null"> `studentNumber`, </if>
             <if test="checkNumber!=null"> `checkNumber`, </if>
             <if test="paymentDate!=null"> `paymentDate`, </if>
             <if test="amount!=null"> `amount`, </if>
-            <if test="isPaid!=null"> `isPaid`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> #{customerNumber}, </if>
+            <if test="studentNumber!=null"> #{studentNumber}, </if>
             <if test="checkNumber!=null"> #{checkNumber}, </if>
             <if test="paymentDate!=null"> #{paymentDate}, </if>
             <if test="amount!=null"> #{amount}, </if>
-            <if test="isPaid!=null"> #{isPaid}, </if>
         </trim>
         <!-- @formatter:on -->
     </insert>
@@ -40,18 +37,16 @@
         <foreach collection="entities" item="one" separator=";">
             INSERT INTO `payments`
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="one.customerNumber!=null"> `customerNumber`, </if>
+                <if test="one.studentNumber!=null"> `studentNumber`, </if>
                 <if test="one.checkNumber!=null"> `checkNumber`, </if>
                 <if test="one.paymentDate!=null"> `paymentDate`, </if>
                 <if test="one.amount!=null"> `amount`, </if>
-                <if test="one.isPaid!=null"> `isPaid`, </if>
             </trim>
             <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
-                <if test="one.customerNumber!=null"> #{one.customerNumber}, </if>
+                <if test="one.studentNumber!=null"> #{one.studentNumber}, </if>
                 <if test="one.checkNumber!=null"> #{one.checkNumber}, </if>
                 <if test="one.paymentDate!=null"> #{one.paymentDate}, </if>
                 <if test="one.amount!=null"> #{one.amount}, </if>
-                <if test="one.isPaid!=null"> #{one.isPaid}, </if>
             </trim>
         </foreach>;
         <!-- @formatter:on -->
@@ -63,7 +58,7 @@
             ( <include refid="all"/> )
         VALUES
             <foreach collection="entities" item="one" separator=",">(
-                #{one.customerNumber}, #{one.checkNumber}, #{one.paymentDate}, #{one.amount}, #{one.isPaid}
+                #{one.studentNumber}, #{one.checkNumber}, #{one.paymentDate}, #{one.amount}
             )</foreach>
         <!-- @formatter:on -->
     </insert>
@@ -75,10 +70,9 @@
             <set>
                 <if test="one.paymentDate!=null"> `paymentDate` = #{one.paymentDate}, </if>
                 <if test="one.amount!=null"> `amount` = #{one.amount}, </if>
-                <if test="one.isPaid!=null"> `isPaid` = #{one.isPaid}, </if>
             </set>
             WHERE TRUE
-              AND `customerNumber` = #{one.customerNumber}
+              AND `studentNumber` = #{one.studentNumber}
               AND `checkNumber` = #{one.checkNumber}
             <!-- @formatter:on -->
         </foreach>
@@ -90,10 +84,9 @@
             UPDATE `payments`
             SET
                 `paymentDate` = #{one.paymentDate},
-                `amount` = #{one.amount},
-                `isPaid` = #{one.isPaid}
+                `amount` = #{one.amount}
             WHERE TRUE
-              AND `customerNumber` = #{one.customerNumber}
+              AND `studentNumber` = #{one.studentNumber}
               AND `checkNumber` = #{one.checkNumber}
             <!-- @formatter:on -->
         </foreach>
@@ -105,7 +98,7 @@
             <include refid="all"/>
         FROM `payments`
         WHERE TRUE
-          AND `customerNumber` = #{customerNumber}
+          AND `studentNumber` = #{studentNumber}
           AND `checkNumber` = #{checkNumber}
         <!-- @formatter:on -->
     </select>
@@ -116,10 +109,9 @@
         <set>
             <if test="paymentDate!=null"> `paymentDate` = #{paymentDate}, </if>
             <if test="amount!=null"> `amount` = #{amount}, </if>
-            <if test="isPaid!=null"> `isPaid` = #{isPaid}, </if>
         </set>
         WHERE TRUE
-          AND `customerNumber` = #{customerNumber}
+          AND `studentNumber` = #{studentNumber}
           AND `checkNumber` = #{checkNumber}
         <!-- @formatter:on -->
     </update>
@@ -129,10 +121,9 @@
         UPDATE `payments`
         SET
             `paymentDate` = #{paymentDate},
-            `amount` = #{amount},
-            `isPaid` = #{isPaid}
+            `amount` = #{amount}
         WHERE TRUE
-          AND `customerNumber` = #{customerNumber}
+          AND `studentNumber` = #{studentNumber}
           AND `checkNumber` = #{checkNumber}
         <!-- @formatter:on -->
     </update>
@@ -143,11 +134,10 @@
             <include refid="all"/>
         FROM `payments`
         WHERE TRUE
-          <if test="customerNumber!=null"> AND `customerNumber` = #{customerNumber} </if>
+          <if test="studentNumber!=null"> AND `studentNumber` = #{studentNumber} </if>
           <if test="checkNumber!=null"> AND `checkNumber` = #{checkNumber} </if>
           <if test="paymentDate!=null"> AND `paymentDate` = #{paymentDate} </if>
           <if test="amount!=null"> AND `amount` = #{amount} </if>
-          <if test="isPaid!=null"> AND `isPaid` = #{isPaid} </if>
         <!-- @formatter:on -->
     </select>
 
@@ -164,24 +154,21 @@
         <!-- @formatter:off -->
         INSERT INTO `payments`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> `customerNumber`, </if>
+            <if test="studentNumber!=null"> `studentNumber`, </if>
             <if test="checkNumber!=null"> `checkNumber`, </if>
             <if test="paymentDate!=null"> `paymentDate`, </if>
             <if test="amount!=null"> `amount`, </if>
-            <if test="isPaid!=null"> `isPaid`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="customerNumber!=null"> #{customerNumber}, </if>
+            <if test="studentNumber!=null"> #{studentNumber}, </if>
             <if test="checkNumber!=null"> #{checkNumber}, </if>
             <if test="paymentDate!=null"> #{paymentDate}, </if>
             <if test="amount!=null"> #{amount}, </if>
-            <if test="isPaid!=null"> #{isPaid}, </if>
         </trim>
         ON DUPLICATE KEY UPDATE
         <trim suffixOverrides=",">
             <if test="paymentDate!=null"> `paymentDate` = #{paymentDate}, </if>
             <if test="amount!=null"> `amount` = #{amount}, </if>
-            <if test="isPaid!=null"> `isPaid` = #{isPaid}, </if>
         </trim>
         <!-- @formatter:on -->
     </insert>

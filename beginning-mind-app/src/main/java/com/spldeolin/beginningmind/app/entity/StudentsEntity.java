@@ -2,50 +2,44 @@ package com.spldeolin.beginningmind.app.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import com.spldeolin.beginningmind.app.enums.StudentsStateEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
 /**
- * <p>customers
+ * <p>students
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
-public class CustomersEntity implements Serializable, Cloneable {
+public class StudentsEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 2574954191253082112L;
+    private static final long serialVersionUID = 7519643616395353088L;
 
     /**
-     * <p>customerNumber
+     * <p>studentNumber
      * <p>不能为null
      */
-    Integer customerNumber;
+    Integer studentNumber;
 
     /**
-     * <p>customerName
+     * <p>LastName
      * <p>长度：50
      * <p>不能为null
      */
-    String customerName;
+    String lastName;
 
     /**
-     * <p>contactLastName
+     * <p>FirstName
      * <p>长度：50
      * <p>不能为null
      */
-    String contactLastName;
-
-    /**
-     * <p>contactFirstName
-     * <p>长度：50
-     * <p>不能为null
-     */
-    String contactFirstName;
+    String firstName;
 
     /**
      * <p>phone
@@ -78,7 +72,7 @@ public class CustomersEntity implements Serializable, Cloneable {
      * <p>state
      * <p>长度：50
      */
-    String state;
+    StudentsStateEnum state;
 
     /**
      * <p>postalCode
@@ -107,5 +101,4 @@ public class CustomersEntity implements Serializable, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

@@ -70,7 +70,7 @@ public class JdbcTypeServiceImpl2 extends JdbcTypeServiceImpl {
             ed.addAnnotation(parseAnnotation("@lombok.AllArgsConstructor"));
             ed.setPublic(true);
             ed.setName(enumName);
-            ed.addImplementedType("com.spldeolin.beginningmind.app.ancestor.EnumAncestor<String>");
+            ed.addImplementedType("com.spldeolin.satisficing.framework.api.EnumAncestor<String>");
             for (String part : enumMatcher.group(1).split(" ")) {
                 String[] split = part.split("=");
                 String enumConstantName = split[0].replaceAll("[^a-zA-Z0-9]", "");

@@ -14,7 +14,7 @@ import com.spldeolin.beginningmind.app.entity.EmployeesEntity;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @SuppressWarnings("all")
 public class EmployeesDesign {
@@ -418,4 +418,4 @@ public class EmployeesDesign {
 
     String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.EmployeesEntity\",\"entityName\":\"EmployeesEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.EmployeesMapper\",\"mapperName\":\"EmployeesMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/EmployeesMapper.xml\"],\"properties\":{\"lastName\":{\"columnName\":\"lastName\",\"propertyName\":\"lastName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"firstName\":{\"columnName\":\"firstName\",\"propertyName\":\"firstName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"extension\":{\"columnName\":\"extension\",\"propertyName\":\"extension\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":10,\"notnull\":true,\"defaultV\":null},\"jobTitle\":{\"columnName\":\"jobTitle\",\"propertyName\":\"jobTitle\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"officeCode\":{\"columnName\":\"officeCode\",\"propertyName\":\"officeCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":10,\"notnull\":true,\"defaultV\":null},\"reportsTo\":{\"columnName\":\"reportsTo\",\"propertyName\":\"reportsTo\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"email\":{\"columnName\":\"email\",\"propertyName\":\"email\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":100,\"notnull\":true,\"defaultV\":null},\"employeeNumber\":{\"columnName\":\"employeeNumber\",\"propertyName\":\"employeeNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"employees\",\"notDeletedSql\":null}";
 }
-//d8ddd9b1f743065ad62d03a794a5be1d
+//09008143d9f7a6e0e1b8683bd4bbd9ad

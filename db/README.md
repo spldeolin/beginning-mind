@@ -1,1 +1,1 @@
-From Link: http://www.mysqltutorial.org/mysql-sample-database.aspx
+From Link: https://gist.github.com/MinaMal/e649fd393431d5a534aaab540682869e#file-realparssampledatabasev2-sql

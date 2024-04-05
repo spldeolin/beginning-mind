@@ -7,22 +7,23 @@ import com.google.common.collect.Multimap;
 import com.spldeolin.allison1875.support.ByChainPredicate;
 import com.spldeolin.allison1875.support.EntityKey;
 import com.spldeolin.allison1875.support.OrderChainPredicate;
-import com.spldeolin.beginningmind.app.entity.CustomersEntity;
+import com.spldeolin.beginningmind.app.entity.StudentsEntity;
+import com.spldeolin.beginningmind.app.enums.StudentsStateEnum;
 
 //@formatter:off
 /**
- * <p>customers
+ * <p>students
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @SuppressWarnings("all")
-public class CustomersDesign {
+public class StudentsDesign {
 
     private final static UnsupportedOperationException e = new UnsupportedOperationException();
 
-    private CustomersDesign() {
+    private StudentsDesign() {
     }
 
     public static QueryChain query(String methodName) {
@@ -56,19 +57,15 @@ public class CustomersDesign {
 
         /**
          */
-        public QueryChain customerNumber;
+        public QueryChain studentNumber;
 
         /**
          */
-        public QueryChain customerName;
+        public QueryChain lastName;
 
         /**
          */
-        public QueryChain contactLastName;
-
-        /**
-         */
-        public QueryChain contactFirstName;
+        public QueryChain firstName;
 
         /**
          */
@@ -118,19 +115,19 @@ public class CustomersDesign {
             throw e;
         }
 
-        public List<CustomersEntity> many() {
+        public List<StudentsEntity> many() {
             throw e;
         }
 
-        public <P> Map<P, CustomersEntity> many(Each<P> property) {
+        public <P> Map<P, StudentsEntity> many(Each<P> property) {
             throw e;
         }
 
-        public <P> Multimap<P, CustomersEntity> many(MultiEach<P> property) {
+        public <P> Multimap<P, StudentsEntity> many(MultiEach<P> property) {
             throw e;
         }
 
-        public CustomersEntity one() {
+        public StudentsEntity one() {
             throw e;
         }
 
@@ -143,19 +140,15 @@ public class CustomersDesign {
 
         /**
          */
-        NextableUpdateChain customerNumber(Integer customerNumber);
+        NextableUpdateChain studentNumber(Integer studentNumber);
 
         /**
          */
-        NextableUpdateChain customerName(String customerName);
+        NextableUpdateChain lastName(String lastName);
 
         /**
          */
-        NextableUpdateChain contactLastName(String contactLastName);
-
-        /**
-         */
-        NextableUpdateChain contactFirstName(String contactFirstName);
+        NextableUpdateChain firstName(String firstName);
 
         /**
          */
@@ -175,7 +168,7 @@ public class CustomersDesign {
 
         /**
          */
-        NextableUpdateChain state(String state);
+        NextableUpdateChain state(StudentsStateEnum state);
 
         /**
          */
@@ -216,19 +209,15 @@ public class CustomersDesign {
 
         /**
          */
-        public ByChainPredicate<NEXT, Integer> customerNumber;
+        public ByChainPredicate<NEXT, Integer> studentNumber;
 
         /**
          */
-        public ByChainPredicate<NEXT, String> customerName;
+        public ByChainPredicate<NEXT, String> lastName;
 
         /**
          */
-        public ByChainPredicate<NEXT, String> contactLastName;
-
-        /**
-         */
-        public ByChainPredicate<NEXT, String> contactFirstName;
+        public ByChainPredicate<NEXT, String> firstName;
 
         /**
          */
@@ -248,7 +237,7 @@ public class CustomersDesign {
 
         /**
          */
-        public ByChainPredicate<NEXT, String> state;
+        public ByChainPredicate<NEXT, StudentsStateEnum> state;
 
         /**
          */
@@ -271,19 +260,15 @@ public class CustomersDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, Integer> customerNumber;
+        public ByChainPredicate<NextableByChainReturn, Integer> studentNumber;
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, String> customerName;
+        public ByChainPredicate<NextableByChainReturn, String> lastName;
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, String> contactLastName;
-
-        /**
-         */
-        public ByChainPredicate<NextableByChainReturn, String> contactFirstName;
+        public ByChainPredicate<NextableByChainReturn, String> firstName;
 
         /**
          */
@@ -303,7 +288,7 @@ public class CustomersDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, String> state;
+        public ByChainPredicate<NextableByChainReturn, StudentsStateEnum> state;
 
         /**
          */
@@ -321,19 +306,19 @@ public class CustomersDesign {
          */
         public ByChainPredicate<NextableByChainReturn, BigDecimal> creditLimit;
 
-        public List<CustomersEntity> many() {
+        public List<StudentsEntity> many() {
             throw e;
         }
 
-        public <P> Map<P, CustomersEntity> many(Each<P> property) {
+        public <P> Map<P, StudentsEntity> many(Each<P> property) {
             throw e;
         }
 
-        public <P> Multimap<P, CustomersEntity> many(MultiEach<P> property) {
+        public <P> Multimap<P, StudentsEntity> many(MultiEach<P> property) {
             throw e;
         }
 
-        public CustomersEntity one() {
+        public StudentsEntity one() {
             throw e;
         }
 
@@ -350,19 +335,15 @@ public class CustomersDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, Integer> customerNumber;
+        public ByChainPredicate<NextableByChainVoid, Integer> studentNumber;
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, String> customerName;
+        public ByChainPredicate<NextableByChainVoid, String> lastName;
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, String> contactLastName;
-
-        /**
-         */
-        public ByChainPredicate<NextableByChainVoid, String> contactFirstName;
+        public ByChainPredicate<NextableByChainVoid, String> firstName;
 
         /**
          */
@@ -382,7 +363,7 @@ public class CustomersDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, String> state;
+        public ByChainPredicate<NextableByChainVoid, StudentsStateEnum> state;
 
         /**
          */
@@ -409,19 +390,15 @@ public class CustomersDesign {
 
         /**
          */
-        public OrderChainPredicate<NextableOrderChain> customerNumber;
+        public OrderChainPredicate<NextableOrderChain> studentNumber;
 
         /**
          */
-        public OrderChainPredicate<NextableOrderChain> customerName;
+        public OrderChainPredicate<NextableOrderChain> lastName;
 
         /**
          */
-        public OrderChainPredicate<NextableOrderChain> contactLastName;
-
-        /**
-         */
-        public OrderChainPredicate<NextableOrderChain> contactFirstName;
+        public OrderChainPredicate<NextableOrderChain> firstName;
 
         /**
          */
@@ -462,19 +439,19 @@ public class CustomersDesign {
 
     public static class NextableOrderChain extends OrderChain {
 
-        public List<CustomersEntity> many() {
+        public List<StudentsEntity> many() {
             throw e;
         }
 
-        public <P> Map<P, CustomersEntity> many(Each<P> property) {
+        public <P> Map<P, StudentsEntity> many(Each<P> property) {
             throw e;
         }
 
-        public <P> Multimap<P, CustomersEntity> many(MultiEach<P> property) {
+        public <P> Multimap<P, StudentsEntity> many(MultiEach<P> property) {
             throw e;
         }
 
-        public CustomersEntity one() {
+        public StudentsEntity one() {
             throw e;
         }
 
@@ -485,13 +462,11 @@ public class CustomersDesign {
 
     public interface Each<P> {
 
-        Each<Integer> customerNumber = (Each<Integer>) new Object();
+        Each<Integer> studentNumber = (Each<Integer>) new Object();
 
-        Each<String> customerName = (Each<String>) new Object();
+        Each<String> lastName = (Each<String>) new Object();
 
-        Each<String> contactLastName = (Each<String>) new Object();
-
-        Each<String> contactFirstName = (Each<String>) new Object();
+        Each<String> firstName = (Each<String>) new Object();
 
         Each<String> phone = (Each<String>) new Object();
 
@@ -501,7 +476,7 @@ public class CustomersDesign {
 
         Each<String> city = (Each<String>) new Object();
 
-        Each<String> state = (Each<String>) new Object();
+        Each<StudentsStateEnum> state = (Each<StudentsStateEnum>) new Object();
 
         Each<String> postalCode = (Each<String>) new Object();
 
@@ -514,13 +489,11 @@ public class CustomersDesign {
 
     public interface MultiEach<P> {
 
-        MultiEach<Integer> customerNumber = (MultiEach<Integer>) new Object();
+        MultiEach<Integer> studentNumber = (MultiEach<Integer>) new Object();
 
-        MultiEach<String> customerName = (MultiEach<String>) new Object();
+        MultiEach<String> lastName = (MultiEach<String>) new Object();
 
-        MultiEach<String> contactLastName = (MultiEach<String>) new Object();
-
-        MultiEach<String> contactFirstName = (MultiEach<String>) new Object();
+        MultiEach<String> firstName = (MultiEach<String>) new Object();
 
         MultiEach<String> phone = (MultiEach<String>) new Object();
 
@@ -530,7 +503,7 @@ public class CustomersDesign {
 
         MultiEach<String> city = (MultiEach<String>) new Object();
 
-        MultiEach<String> state = (MultiEach<String>) new Object();
+        MultiEach<StudentsStateEnum> state = (MultiEach<StudentsStateEnum>) new Object();
 
         MultiEach<String> postalCode = (MultiEach<String>) new Object();
 
@@ -541,32 +514,30 @@ public class CustomersDesign {
         MultiEach<BigDecimal> creditLimit = (MultiEach<BigDecimal>) new Object();
     }
 
-    public static EntityKey<CustomersEntity, Integer> customerNumber;
+    public static EntityKey<StudentsEntity, Integer> studentNumber;
 
-    public static EntityKey<CustomersEntity, String> customerName;
+    public static EntityKey<StudentsEntity, String> lastName;
 
-    public static EntityKey<CustomersEntity, String> contactLastName;
+    public static EntityKey<StudentsEntity, String> firstName;
 
-    public static EntityKey<CustomersEntity, String> contactFirstName;
+    public static EntityKey<StudentsEntity, String> phone;
 
-    public static EntityKey<CustomersEntity, String> phone;
+    public static EntityKey<StudentsEntity, String> addressLine1;
 
-    public static EntityKey<CustomersEntity, String> addressLine1;
+    public static EntityKey<StudentsEntity, String> addressLine2;
 
-    public static EntityKey<CustomersEntity, String> addressLine2;
+    public static EntityKey<StudentsEntity, String> city;
 
-    public static EntityKey<CustomersEntity, String> city;
+    public static EntityKey<StudentsEntity, StudentsStateEnum> state;
 
-    public static EntityKey<CustomersEntity, String> state;
+    public static EntityKey<StudentsEntity, String> postalCode;
 
-    public static EntityKey<CustomersEntity, String> postalCode;
+    public static EntityKey<StudentsEntity, String> country;
 
-    public static EntityKey<CustomersEntity, String> country;
+    public static EntityKey<StudentsEntity, Integer> salesRepEmployeeNumber;
 
-    public static EntityKey<CustomersEntity, Integer> salesRepEmployeeNumber;
+    public static EntityKey<StudentsEntity, BigDecimal> creditLimit;
 
-    public static EntityKey<CustomersEntity, BigDecimal> creditLimit;
-
-    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.CustomersEntity\",\"entityName\":\"CustomersEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.CustomersMapper\",\"mapperName\":\"CustomersMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/CustomersMapper.xml\"],\"properties\":{\"country\":{\"columnName\":\"country\",\"propertyName\":\"country\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"city\":{\"columnName\":\"city\",\"propertyName\":\"city\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"contactFirstName\":{\"columnName\":\"contactFirstName\",\"propertyName\":\"contactFirstName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"postalCode\":{\"columnName\":\"postalCode\",\"propertyName\":\"postalCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":false,\"defaultV\":null},\"salesRepEmployeeNumber\":{\"columnName\":\"salesRepEmployeeNumber\",\"propertyName\":\"salesRepEmployeeNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"customerNumber\":{\"columnName\":\"customerNumber\",\"propertyName\":\"customerNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"customerName\":{\"columnName\":\"customerName\",\"propertyName\":\"customerName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"phone\":{\"columnName\":\"phone\",\"propertyName\":\"phone\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"addressLine1\":{\"columnName\":\"addressLine1\",\"propertyName\":\"addressLine1\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"creditLimit\":{\"columnName\":\"creditLimit\",\"propertyName\":\"creditLimit\",\"javaType\":{\"simpleName\":\"BigDecimal\",\"qualifier\":\"java.math.BigDecimal\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"contactLastName\":{\"columnName\":\"contactLastName\",\"propertyName\":\"contactLastName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"addressLine2\":{\"columnName\":\"addressLine2\",\"propertyName\":\"addressLine2\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null},\"state\":{\"columnName\":\"state\",\"propertyName\":\"state\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null}},\"tableName\":\"customers\",\"notDeletedSql\":null}";
+    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.StudentsEntity\",\"entityName\":\"StudentsEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.StudentsMapper\",\"mapperName\":\"StudentsMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/StudentsMapper.xml\"],\"properties\":{\"lastName\":{\"columnName\":\"LastName\",\"propertyName\":\"lastName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"firstName\":{\"columnName\":\"FirstName\",\"propertyName\":\"firstName\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"country\":{\"columnName\":\"country\",\"propertyName\":\"country\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"phone\":{\"columnName\":\"phone\",\"propertyName\":\"phone\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"city\":{\"columnName\":\"city\",\"propertyName\":\"city\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"studentNumber\":{\"columnName\":\"studentNumber\",\"propertyName\":\"studentNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"postalCode\":{\"columnName\":\"postalCode\",\"propertyName\":\"postalCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":false,\"defaultV\":null},\"addressLine1\":{\"columnName\":\"addressLine1\",\"propertyName\":\"addressLine1\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":true,\"defaultV\":null},\"creditLimit\":{\"columnName\":\"creditLimit\",\"propertyName\":\"creditLimit\",\"javaType\":{\"simpleName\":\"BigDecimal\",\"qualifier\":\"java.math.BigDecimal\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"addressLine2\":{\"columnName\":\"addressLine2\",\"propertyName\":\"addressLine2\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null},\"salesRepEmployeeNumber\":{\"columnName\":\"salesRepEmployeeNumber\",\"propertyName\":\"salesRepEmployeeNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":false,\"defaultV\":null},\"state\":{\"columnName\":\"state\",\"propertyName\":\"state\",\"javaType\":{\"simpleName\":\"StudentsStateEnum\",\"qualifier\":\"com.spldeolin.beginningmind.app.enums.StudentsStateEnum\"},\"description\":\"\",\"length\":50,\"notnull\":false,\"defaultV\":null}},\"tableName\":\"students\",\"notDeletedSql\":null}";
 }
-//612e022bffee8517d6bb10ed5b11471e
+//0aa78086d16280a29fe4d8ec31a2abed

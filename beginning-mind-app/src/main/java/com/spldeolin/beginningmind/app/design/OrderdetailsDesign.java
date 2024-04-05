@@ -15,7 +15,7 @@ import com.spldeolin.beginningmind.app.entity.OrderdetailsEntity;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @SuppressWarnings("all")
 public class OrderdetailsDesign {
@@ -60,7 +60,7 @@ public class OrderdetailsDesign {
 
         /**
          */
-        public QueryChain productCode;
+        public QueryChain courseCode;
 
         /**
          */
@@ -111,7 +111,7 @@ public class OrderdetailsDesign {
 
         /**
          */
-        NextableUpdateChain productCode(String productCode);
+        NextableUpdateChain courseCode(String courseCode);
 
         /**
          */
@@ -148,7 +148,7 @@ public class OrderdetailsDesign {
 
         /**
          */
-        public ByChainPredicate<NEXT, String> productCode;
+        public ByChainPredicate<NEXT, String> courseCode;
 
         /**
          */
@@ -167,7 +167,7 @@ public class OrderdetailsDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainReturn, String> productCode;
+        public ByChainPredicate<NextableByChainReturn, String> courseCode;
 
         /**
          */
@@ -210,7 +210,7 @@ public class OrderdetailsDesign {
 
         /**
          */
-        public ByChainPredicate<NextableByChainVoid, String> productCode;
+        public ByChainPredicate<NextableByChainVoid, String> courseCode;
 
         /**
          */
@@ -233,7 +233,7 @@ public class OrderdetailsDesign {
 
         /**
          */
-        public OrderChainPredicate<NextableOrderChain> productCode;
+        public OrderChainPredicate<NextableOrderChain> courseCode;
 
         /**
          */
@@ -271,7 +271,7 @@ public class OrderdetailsDesign {
 
         Each<Integer> orderNumber = (Each<Integer>) new Object();
 
-        Each<String> productCode = (Each<String>) new Object();
+        Each<String> courseCode = (Each<String>) new Object();
 
         Each<Integer> quantityOrdered = (Each<Integer>) new Object();
 
@@ -282,7 +282,7 @@ public class OrderdetailsDesign {
 
         MultiEach<Integer> orderNumber = (MultiEach<Integer>) new Object();
 
-        MultiEach<String> productCode = (MultiEach<String>) new Object();
+        MultiEach<String> courseCode = (MultiEach<String>) new Object();
 
         MultiEach<Integer> quantityOrdered = (MultiEach<Integer>) new Object();
 
@@ -291,12 +291,12 @@ public class OrderdetailsDesign {
 
     public static EntityKey<OrderdetailsEntity, Integer> orderNumber;
 
-    public static EntityKey<OrderdetailsEntity, String> productCode;
+    public static EntityKey<OrderdetailsEntity, String> courseCode;
 
     public static EntityKey<OrderdetailsEntity, Integer> quantityOrdered;
 
     public static EntityKey<OrderdetailsEntity, BigDecimal> priceEach;
 
-    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.OrderdetailsEntity\",\"entityName\":\"OrderdetailsEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.OrderdetailsMapper\",\"mapperName\":\"OrderdetailsMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/OrderdetailsMapper.xml\"],\"properties\":{\"orderNumber\":{\"columnName\":\"orderNumber\",\"propertyName\":\"orderNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"productCode\":{\"columnName\":\"productCode\",\"propertyName\":\"productCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":true,\"defaultV\":null},\"quantityOrdered\":{\"columnName\":\"quantityOrdered\",\"propertyName\":\"quantityOrdered\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"priceEach\":{\"columnName\":\"priceEach\",\"propertyName\":\"priceEach\",\"javaType\":{\"simpleName\":\"BigDecimal\",\"qualifier\":\"java.math.BigDecimal\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"orderdetails\",\"notDeletedSql\":null}";
+    String meta = "{\"entityQualifier\":\"com.spldeolin.beginningmind.app.entity.OrderdetailsEntity\",\"entityName\":\"OrderdetailsEntity\",\"mapperQualifier\":\"com.spldeolin.beginningmind.app.mapper.OrderdetailsMapper\",\"mapperName\":\"OrderdetailsMapper\",\"mapperRelativePaths\":[\"src/main/resources/mapper/OrderdetailsMapper.xml\"],\"properties\":{\"orderNumber\":{\"columnName\":\"orderNumber\",\"propertyName\":\"orderNumber\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"courseCode\":{\"columnName\":\"courseCode\",\"propertyName\":\"courseCode\",\"javaType\":{\"simpleName\":\"String\",\"qualifier\":\"java.lang.String\"},\"description\":\"\",\"length\":15,\"notnull\":true,\"defaultV\":null},\"quantityOrdered\":{\"columnName\":\"quantityOrdered\",\"propertyName\":\"quantityOrdered\",\"javaType\":{\"simpleName\":\"Integer\",\"qualifier\":\"java.lang.Integer\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null},\"priceEach\":{\"columnName\":\"priceEach\",\"propertyName\":\"priceEach\",\"javaType\":{\"simpleName\":\"BigDecimal\",\"qualifier\":\"java.math.BigDecimal\"},\"description\":\"\",\"length\":null,\"notnull\":true,\"defaultV\":null}},\"tableName\":\"orderdetails\",\"notDeletedSql\":null}";
 }
-//8ed6486c724b91badf1b223e82f134bf
+//c50912235727af54064e5cfedd63edd2

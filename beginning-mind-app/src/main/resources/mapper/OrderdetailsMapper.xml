@@ -5,13 +5,13 @@
 
     <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
         <id column="orderNumber" property="orderNumber"/>
-        <id column="productCode" property="productCode"/>
+        <id column="courseCode" property="courseCode"/>
         <result column="quantityOrdered" property="quantityOrdered"/>
         <result column="priceEach" property="priceEach"/>
     </resultMap>
 
     <sql id="all">
-        `orderNumber`, `productCode`, `quantityOrdered`, `priceEach`
+        `orderNumber`, `courseCode`, `quantityOrdered`, `priceEach`
     </sql>
 
     <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.OrderdetailsEntity">
@@ -19,13 +19,13 @@
         INSERT INTO `orderdetails`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderNumber!=null"> `orderNumber`, </if>
-            <if test="productCode!=null"> `productCode`, </if>
+            <if test="courseCode!=null"> `courseCode`, </if>
             <if test="quantityOrdered!=null"> `quantityOrdered`, </if>
             <if test="priceEach!=null"> `priceEach`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="orderNumber!=null"> #{orderNumber}, </if>
-            <if test="productCode!=null"> #{productCode}, </if>
+            <if test="courseCode!=null"> #{courseCode}, </if>
             <if test="quantityOrdered!=null"> #{quantityOrdered}, </if>
             <if test="priceEach!=null"> #{priceEach}, </if>
         </trim>
@@ -38,13 +38,13 @@
             INSERT INTO `orderdetails`
             <trim prefix="(" suffix=")" suffixOverrides=",">
                 <if test="one.orderNumber!=null"> `orderNumber`, </if>
-                <if test="one.productCode!=null"> `productCode`, </if>
+                <if test="one.courseCode!=null"> `courseCode`, </if>
                 <if test="one.quantityOrdered!=null"> `quantityOrdered`, </if>
                 <if test="one.priceEach!=null"> `priceEach`, </if>
             </trim>
             <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
                 <if test="one.orderNumber!=null"> #{one.orderNumber}, </if>
-                <if test="one.productCode!=null"> #{one.productCode}, </if>
+                <if test="one.courseCode!=null"> #{one.courseCode}, </if>
                 <if test="one.quantityOrdered!=null"> #{one.quantityOrdered}, </if>
                 <if test="one.priceEach!=null"> #{one.priceEach}, </if>
             </trim>
@@ -58,7 +58,7 @@
             ( <include refid="all"/> )
         VALUES
             <foreach collection="entities" item="one" separator=",">(
-                #{one.orderNumber}, #{one.productCode}, #{one.quantityOrdered}, #{one.priceEach}
+                #{one.orderNumber}, #{one.courseCode}, #{one.quantityOrdered}, #{one.priceEach}
             )</foreach>
         <!-- @formatter:on -->
     </insert>
@@ -73,7 +73,7 @@
             </set>
             WHERE TRUE
               AND `orderNumber` = #{one.orderNumber}
-              AND `productCode` = #{one.productCode}
+              AND `courseCode` = #{one.courseCode}
             <!-- @formatter:on -->
         </foreach>
     </update>
@@ -87,7 +87,7 @@
                 `priceEach` = #{one.priceEach}
             WHERE TRUE
               AND `orderNumber` = #{one.orderNumber}
-              AND `productCode` = #{one.productCode}
+              AND `courseCode` = #{one.courseCode}
             <!-- @formatter:on -->
         </foreach>
     </update>
@@ -99,7 +99,7 @@
         FROM `orderdetails`
         WHERE TRUE
           AND `orderNumber` = #{orderNumber}
-          AND `productCode` = #{productCode}
+          AND `courseCode` = #{courseCode}
         <!-- @formatter:on -->
     </select>
 
@@ -112,7 +112,7 @@
         </set>
         WHERE TRUE
           AND `orderNumber` = #{orderNumber}
-          AND `productCode` = #{productCode}
+          AND `courseCode` = #{courseCode}
         <!-- @formatter:on -->
     </update>
 
@@ -124,7 +124,7 @@
             `priceEach` = #{priceEach}
         WHERE TRUE
           AND `orderNumber` = #{orderNumber}
-          AND `productCode` = #{productCode}
+          AND `courseCode` = #{courseCode}
         <!-- @formatter:on -->
     </update>
 
@@ -136,7 +136,7 @@
         FROM `orderdetails`
         WHERE TRUE
           <if test="orderNumber!=null"> AND `orderNumber` = #{orderNumber} </if>
-          <if test="productCode!=null"> AND `productCode` = #{productCode} </if>
+          <if test="courseCode!=null"> AND `courseCode` = #{courseCode} </if>
           <if test="quantityOrdered!=null"> AND `quantityOrdered` = #{quantityOrdered} </if>
           <if test="priceEach!=null"> AND `priceEach` = #{priceEach} </if>
         <!-- @formatter:on -->
@@ -156,13 +156,13 @@
         INSERT INTO `orderdetails`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="orderNumber!=null"> `orderNumber`, </if>
-            <if test="productCode!=null"> `productCode`, </if>
+            <if test="courseCode!=null"> `courseCode`, </if>
             <if test="quantityOrdered!=null"> `quantityOrdered`, </if>
             <if test="priceEach!=null"> `priceEach`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
             <if test="orderNumber!=null"> #{orderNumber}, </if>
-            <if test="productCode!=null"> #{productCode}, </if>
+            <if test="courseCode!=null"> #{courseCode}, </if>
             <if test="quantityOrdered!=null"> #{quantityOrdered}, </if>
             <if test="priceEach!=null"> #{priceEach}, </if>
         </trim>
@@ -175,4 +175,25 @@
     </insert>
 
     <!-- [END] Any modifications may be overwritten by future code generations. -->
+
+
+    <!-- Allison 1875 Lot No: QT1001S-6EE40EE2 -->
+    <select id='queryOrderdetails' resultType='com.spldeolin.beginningmind.app.javabean.record.QueryOrderdetailsRecord'>
+        <!-- @formatter:off -->
+        SELECT
+            `orderNumber` AS orderNumber,
+            `courseCode` AS courseCode
+        FROM
+            `orderdetails`
+        WHERE TRUE
+        <if test="orderNumber != null">
+            <if test="orderNumber.size() > 0">
+                AND `orderNumber` IN (<foreach collection='orderNumber' item='one' separator=','>#{one}</foreach>)
+            </if>
+            <if test="orderNumber.size() == 0">
+                AND FALSE
+            </if>
+        </if>
+        <!-- @formatter:on -->
+    </select>
 </mapper>

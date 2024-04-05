@@ -5,7 +5,6 @@ import java.util.List;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.spldeolin.beginningmind.app.enums.OfficesStateEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
@@ -23,24 +22,23 @@ public class ListOrdersReqDto {
     /**
      * 啊
      */
-    @NotNull Integer customerNumber;
+    @NotNull
+    Integer studentNumber;
 
     /**
      * 是
      */
-    @NotNull List<@Max(1) Integer> customerNumbers;
+    @NotNull
+    List<@Max(150) Integer> studentNumbers;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     Date orderDateLeft;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm::", timezone = "Asia/Shanghai")
     List<Date> orderDateLefts;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Shanghai")
     Date orderDateRight;
-
-    OfficesStateEnum state;
-
-    List<OfficesStateEnum> states;
 
     int pageNum;
 

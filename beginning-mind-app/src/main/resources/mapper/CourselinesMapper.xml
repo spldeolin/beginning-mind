@@ -1,27 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.spldeolin.beginningmind.app.mapper.ProductlinesMapper">
+<mapper namespace="com.spldeolin.beginningmind.app.mapper.CourselinesMapper">
     <!-- [START] Any modifications may be overwritten by future code generations. -->
 
-    <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.ProductlinesEntity">
-        <id column="productLine" property="productLine"/>
+    <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.CourselinesEntity">
+        <id column="courseLine" property="courseLine"/>
         <result column="textDescription" property="textDescription"/>
+        <result column="htmlDescription" property="htmlDescription"/>
+        <result column="imageUrl" property="imageUrl"/>
     </resultMap>
 
     <sql id="all">
-        `productLine`, `textDescription`
+        `courseLine`, `textDescription`, `htmlDescription`, `imageUrl`
     </sql>
 
-    <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.ProductlinesEntity">
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.CourselinesEntity">
         <!-- @formatter:off -->
-        INSERT INTO `productlines`
+        INSERT INTO `courselines`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productLine!=null"> `productLine`, </if>
+            <if test="courseLine!=null"> `courseLine`, </if>
             <if test="textDescription!=null"> `textDescription`, </if>
+            <if test="htmlDescription!=null"> `htmlDescription`, </if>
+            <if test="imageUrl!=null"> `imageUrl`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="productLine!=null"> #{productLine}, </if>
+            <if test="courseLine!=null"> #{courseLine}, </if>
             <if test="textDescription!=null"> #{textDescription}, </if>
+            <if test="htmlDescription!=null"> #{htmlDescription}, </if>
+            <if test="imageUrl!=null"> #{imageUrl}, </if>
         </trim>
         <!-- @formatter:on -->
     </insert>
@@ -29,14 +35,18 @@
     <insert id="batchInsert">
         <!-- @formatter:off -->
         <foreach collection="entities" item="one" separator=";">
-            INSERT INTO `productlines`
+            INSERT INTO `courselines`
             <trim prefix="(" suffix=")" suffixOverrides=",">
-                <if test="one.productLine!=null"> `productLine`, </if>
+                <if test="one.courseLine!=null"> `courseLine`, </if>
                 <if test="one.textDescription!=null"> `textDescription`, </if>
+                <if test="one.htmlDescription!=null"> `htmlDescription`, </if>
+                <if test="one.imageUrl!=null"> `imageUrl`, </if>
             </trim>
             <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
-                <if test="one.productLine!=null"> #{one.productLine}, </if>
+                <if test="one.courseLine!=null"> #{one.courseLine}, </if>
                 <if test="one.textDescription!=null"> #{one.textDescription}, </if>
+                <if test="one.htmlDescription!=null"> #{one.htmlDescription}, </if>
+                <if test="one.imageUrl!=null"> #{one.imageUrl}, </if>
             </trim>
         </foreach>;
         <!-- @formatter:on -->
@@ -44,11 +54,11 @@
 
     <insert id="batchInsertEvenNull">
         <!-- @formatter:off -->
-        INSERT INTO `productlines`
+        INSERT INTO `courselines`
             ( <include refid="all"/> )
         VALUES
             <foreach collection="entities" item="one" separator=",">(
-                #{one.productLine}, #{one.textDescription}
+                #{one.courseLine}, #{one.textDescription}, #{one.htmlDescription}, #{one.imageUrl}
             )</foreach>
         <!-- @formatter:on -->
     </insert>
@@ -56,12 +66,14 @@
     <update id="batchUpdate">
         <foreach collection="entities" item="one" separator=";">
             <!-- @formatter:off -->
-            UPDATE `productlines`
+            UPDATE `courselines`
             <set>
                 <if test="one.textDescription!=null"> `textDescription` = #{one.textDescription}, </if>
+                <if test="one.htmlDescription!=null"> `htmlDescription` = #{one.htmlDescription}, </if>
+                <if test="one.imageUrl!=null"> `imageUrl` = #{one.imageUrl}, </if>
             </set>
             WHERE TRUE
-              AND `productLine` = #{one.productLine}
+              AND `courseLine` = #{one.courseLine}
             <!-- @formatter:on -->
         </foreach>
     </update>
@@ -69,11 +81,13 @@
     <update id="batchUpdateEvenNull">
         <foreach collection="entities" item="one" separator=";">
             <!-- @formatter:off -->
-            UPDATE `productlines`
+            UPDATE `courselines`
             SET
-                `textDescription` = #{one.textDescription}
+                `textDescription` = #{one.textDescription},
+                `htmlDescription` = #{one.htmlDescription},
+                `imageUrl` = #{one.imageUrl}
             WHERE TRUE
-              AND `productLine` = #{one.productLine}
+              AND `courseLine` = #{one.courseLine}
             <!-- @formatter:on -->
         </foreach>
     </update>
@@ -82,30 +96,34 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `productlines`
+        FROM `courselines`
         WHERE TRUE
-          AND `productLine` = #{productLine}
+          AND `courseLine` = #{courseLine}
         <!-- @formatter:on -->
     </select>
 
-    <update id="updateById" parameterType="com.spldeolin.beginningmind.app.entity.ProductlinesEntity">
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.app.entity.CourselinesEntity">
         <!-- @formatter:off -->
-        UPDATE `productlines`
+        UPDATE `courselines`
         <set>
             <if test="textDescription!=null"> `textDescription` = #{textDescription}, </if>
+            <if test="htmlDescription!=null"> `htmlDescription` = #{htmlDescription}, </if>
+            <if test="imageUrl!=null"> `imageUrl` = #{imageUrl}, </if>
         </set>
         WHERE TRUE
-          AND `productLine` = #{productLine}
+          AND `courseLine` = #{courseLine}
         <!-- @formatter:on -->
     </update>
 
-    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.app.entity.ProductlinesEntity">
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.app.entity.CourselinesEntity">
         <!-- @formatter:off -->
-        UPDATE `productlines`
+        UPDATE `courselines`
         SET
-            `textDescription` = #{textDescription}
+            `textDescription` = #{textDescription},
+            `htmlDescription` = #{htmlDescription},
+            `imageUrl` = #{imageUrl}
         WHERE TRUE
-          AND `productLine` = #{productLine}
+          AND `courseLine` = #{courseLine}
         <!-- @formatter:on -->
     </update>
 
@@ -113,9 +131,9 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `productlines`
+        FROM `courselines`
         WHERE TRUE
-          AND `productLine` IN (<foreach collection="productLines" item="one" separator=",">#{one}</foreach>)
+          AND `courseLine` IN (<foreach collection="courseLines" item="one" separator=",">#{one}</foreach>)
         <!-- @formatter:on -->
     </select>
 
@@ -123,21 +141,22 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `productlines`
+        FROM `courselines`
         WHERE TRUE
-          AND `productLine` IN (<foreach collection="productLines" item="one" separator=",">#{one}</foreach>)
+          AND `courseLine` IN (<foreach collection="courseLines" item="one" separator=",">#{one}</foreach>)
         <!-- @formatter:on -->
     </select>
 
-    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.app.entity.ProductlinesEntity"
-        resultMap="all">
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.app.entity.CourselinesEntity" resultMap="all">
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `productlines`
+        FROM `courselines`
         WHERE TRUE
-          <if test="productLine!=null"> AND `productLine` = #{productLine} </if>
+          <if test="courseLine!=null"> AND `courseLine` = #{courseLine} </if>
           <if test="textDescription!=null"> AND `textDescription` = #{textDescription} </if>
+          <if test="htmlDescription!=null"> AND `htmlDescription` = #{htmlDescription} </if>
+          <if test="imageUrl!=null"> AND `imageUrl` = #{imageUrl} </if>
         <!-- @formatter:on -->
     </select>
 
@@ -145,25 +164,31 @@
         <!-- @formatter:off -->
         SELECT
             <include refid="all"/>
-        FROM `productlines`
+        FROM `courselines`
         WHERE TRUE
         <!-- @formatter:on -->
     </select>
 
-    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.app.entity.ProductlinesEntity">
+    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.app.entity.CourselinesEntity">
         <!-- @formatter:off -->
-        INSERT INTO `productlines`
+        INSERT INTO `courselines`
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="productLine!=null"> `productLine`, </if>
+            <if test="courseLine!=null"> `courseLine`, </if>
             <if test="textDescription!=null"> `textDescription`, </if>
+            <if test="htmlDescription!=null"> `htmlDescription`, </if>
+            <if test="imageUrl!=null"> `imageUrl`, </if>
         </trim>
         <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
-            <if test="productLine!=null"> #{productLine}, </if>
+            <if test="courseLine!=null"> #{courseLine}, </if>
             <if test="textDescription!=null"> #{textDescription}, </if>
+            <if test="htmlDescription!=null"> #{htmlDescription}, </if>
+            <if test="imageUrl!=null"> #{imageUrl}, </if>
         </trim>
         ON DUPLICATE KEY UPDATE
         <trim suffixOverrides=",">
             <if test="textDescription!=null"> `textDescription` = #{textDescription}, </if>
+            <if test="htmlDescription!=null"> `htmlDescription` = #{htmlDescription}, </if>
+            <if test="imageUrl!=null"> `imageUrl` = #{imageUrl}, </if>
         </trim>
         <!-- @formatter:on -->
     </insert>

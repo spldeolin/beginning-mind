@@ -12,20 +12,20 @@ import lombok.experimental.FieldDefaults;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class PaymentsEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 7421933002375058432L;
+    private static final long serialVersionUID = 8598062097966544896L;
 
     /**
-     * <p>customerNumber
+     * <p>studentNumber
      * <p>不能为null
      */
-    Integer customerNumber;
+    Integer studentNumber;
 
     /**
      * <p>checkNumber
@@ -46,15 +46,8 @@ public class PaymentsEntity implements Serializable, Cloneable {
      */
     BigDecimal amount;
 
-    /**
-     * 已支付
-     * <p>isPaid
-     */
-    Boolean isPaid;
-
     @Override
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

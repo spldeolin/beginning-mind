@@ -10,14 +10,14 @@ import lombok.experimental.FieldDefaults;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class EmployeesEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 51522544336732160L;
+    private static final long serialVersionUID = 2965946259264637952L;
 
     /**
      * <p>employeeNumber
@@ -76,5 +76,4 @@ public class EmployeesEntity implements Serializable, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

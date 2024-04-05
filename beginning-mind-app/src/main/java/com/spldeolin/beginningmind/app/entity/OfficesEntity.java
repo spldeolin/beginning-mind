@@ -1,7 +1,7 @@
 package com.spldeolin.beginningmind.app.entity;
 
 import java.io.Serializable;
-import com.spldeolin.beginningmind.app.enums.OfficesStateEnum;
+import com.spldeolin.beginningmind.app.enums.OfficeStateEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
@@ -11,14 +11,14 @@ import lombok.experimental.FieldDefaults;
  * <p>
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Data
 @Accessors(chain = true)
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE)
 public class OfficesEntity implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 6028349458028378112L;
+    private static final long serialVersionUID = 6825832118700019712L;
 
     /**
      * <p>officeCode
@@ -58,7 +58,7 @@ public class OfficesEntity implements Serializable, Cloneable {
      * <p>state
      * <p>长度：50
      */
-    OfficesStateEnum state;
+    OfficeStateEnum state;
 
     /**
      * <p>country
@@ -85,5 +85,4 @@ public class OfficesEntity implements Serializable, Cloneable {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
-
 }

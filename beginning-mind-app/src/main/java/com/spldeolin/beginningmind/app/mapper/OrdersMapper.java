@@ -1,16 +1,16 @@
 package com.spldeolin.beginningmind.app.mapper;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import org.apache.ibatis.annotations.MapKey;
 import org.apache.ibatis.annotations.Param;
 import com.spldeolin.beginningmind.app.entity.OrdersEntity;
+import com.spldeolin.beginningmind.app.javabean.cond.QueryOrdersCond;
 
 /**
  * <p>orders
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 public interface OrdersMapper {
 
@@ -107,9 +107,7 @@ public interface OrdersMapper {
     int insertOrUpdate(OrdersEntity entity);
 
     /**
-     * QT1001S-D7AB04BE
+     * QT1001S-E73C252D
      */
-    List<OrdersEntity> queryOrders(@Param("customerNumber") Integer customerNumber, @Param("orderDate") Date orderDate,
-            @Param("orderDateEx") Date orderDateEx);
-
+    List<OrdersEntity> queryOrders(QueryOrdersCond queryOrdersCond);
 }

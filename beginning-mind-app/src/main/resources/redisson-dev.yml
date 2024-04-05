@@ -1,3 +1,4 @@
 singleServerConfig:
   address: 'redis://localhost:6379'
   password: root
+codec: !<org.redisson.codec.FstCodec> { }

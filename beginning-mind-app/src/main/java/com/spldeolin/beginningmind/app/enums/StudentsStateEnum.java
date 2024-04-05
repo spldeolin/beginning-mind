@@ -10,13 +10,13 @@ import lombok.Getter;
 /**
  * <p>Any modifications may be overwritten by future code generations.
  *
- * @author Deolin 2024-02-20
+ * @author Deolin 2024-04-05
  */
 @Getter
 @AllArgsConstructor
-public enum OfficesStateEnum implements EnumAncestor<String> {
+public enum StudentsStateEnum implements EnumAncestor<String> {
 
-    CA("CA", "ca"), MA("MA", "ma"), NY("NY", "ny"), ChiyodaKu("Chiyoda-Ku", "chiyoda");
+    a("a", "在校"), b("b", "毕业"), c("c", "嗣业");
 
     @JsonValue
     private final String code;
@@ -34,7 +34,7 @@ public enum OfficesStateEnum implements EnumAncestor<String> {
      * 获取code对应的枚举
      */
     @JsonCreator
-    public static OfficesStateEnum of(String code) {
+    public static StudentsStateEnum of(String code) {
         return Arrays.stream(values()).filter(anEnum -> anEnum.getCode().equals(code)).findFirst().orElse(null);
     }
 
