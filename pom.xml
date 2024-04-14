@@ -45,12 +45,12 @@
         <dependencies>
             <!-- https://github.com/spldeolin/satisficing-framework -->
             <dependency>
-                <groupId>com.spldeolin.satisficing</groupId>
+                <groupId>com.spldeolin.satisficing.framework</groupId>
                 <artifactId>satisficing-api</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>
             <dependency>
-                <groupId>com.spldeolin.satisficing</groupId>
+                <groupId>com.spldeolin.satisficing.framework</groupId>
                 <artifactId>satisficing-app</artifactId>
                 <version>0.1-SNAPSHOT</version>
             </dependency>

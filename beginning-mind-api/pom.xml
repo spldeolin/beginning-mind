@@ -12,7 +12,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.spldeolin.satisficing</groupId>
+            <groupId>com.spldeolin.satisficing.framework</groupId>
             <artifactId>satisficing-api</artifactId>
         </dependency>
         <dependency>

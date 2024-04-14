@@ -21,7 +21,7 @@
             <version>${parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.spldeolin.satisficing</groupId>
+            <groupId>com.spldeolin.satisficing.framework</groupId>
             <artifactId>satisficing-app</artifactId>
         </dependency>
         <dependency>
