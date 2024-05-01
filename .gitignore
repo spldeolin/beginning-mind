@@ -13,5 +13,5 @@ target/
 # Mac OS
 .DS_Store
 
-# Allison 1875
-*.bak
+# Log
+*.log
