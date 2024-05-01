@@ -34,6 +34,8 @@ spring:
 
 logging:
   config: classpath:logback-spring.xml
+  level:
+    com.spldeolin.beginningmind: DEBUG
 
 mybatis:
   mapper-locations: classpath*:mapper/*.xml
