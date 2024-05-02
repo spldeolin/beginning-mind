@@ -4,7 +4,9 @@ server:
 
 spring:
 
-  profiles: dev
+  config:
+    activate:
+      on-profile: dev
 
   application.name: beginning-mind
 
