@@ -17,7 +17,7 @@ import com.spldeolin.beginningmind.app.javabean.resp.ListOrdersRespDto;
 import com.spldeolin.beginningmind.app.mapper.OrderdetailsMapper;
 import com.spldeolin.beginningmind.app.mapper.OrdersMapper;
 import com.spldeolin.beginningmind.app.service.ListOrdersService;
-import com.spldeolin.satisficing.framework.app.util.PageUtils;
+import com.spldeolin.satisficing.service.util.PageUtils;
 import lombok.extern.slf4j.Slf4j;
 
 /**

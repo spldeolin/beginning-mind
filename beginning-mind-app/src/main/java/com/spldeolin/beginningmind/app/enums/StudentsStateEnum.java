@@ -3,7 +3,7 @@ package com.spldeolin.beginningmind.app.enums;
 import java.util.Arrays;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.spldeolin.satisficing.framework.api.EnumAncestor;
+import com.spldeolin.satisficing.client.EnumAncestor;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

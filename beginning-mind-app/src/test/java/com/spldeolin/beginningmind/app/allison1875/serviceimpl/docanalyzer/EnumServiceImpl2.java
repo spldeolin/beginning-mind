@@ -2,7 +2,7 @@ package com.spldeolin.beginningmind.app.allison1875.serviceimpl.docanalyzer;
 
 import com.spldeolin.allison1875.docanalyzer.javabean.AnalyzeEnumConstantsRetval;
 import com.spldeolin.allison1875.docanalyzer.service.impl.EnumServiceImpl;
-import com.spldeolin.satisficing.framework.api.EnumAncestor;
+import com.spldeolin.satisficing.client.EnumAncestor;
 
 /**
  * @author Deolin 2024-02-26

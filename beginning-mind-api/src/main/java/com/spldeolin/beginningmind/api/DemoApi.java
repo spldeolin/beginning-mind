@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.spldeolin.beginningmind.api.javabean.req.DemoReqDto;
 import com.spldeolin.beginningmind.api.javabean.resp.DemoRespDto;
-import com.spldeolin.satisficing.framework.api.javabean.RequestResult;
+import com.spldeolin.satisficing.client.javabean.RequestResult;
 
 /**
  * @author Deolin 2023-04-09

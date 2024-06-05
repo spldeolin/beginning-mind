@@ -5,6 +5,8 @@ import static com.github.javaparser.utils.CodeGenerationUtils.f;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
@@ -52,6 +54,20 @@ public class JdbcTypeServiceImpl2 extends JdbcTypeServiceImpl {
     public JavaTypeNamingDto jdbcType2javaType(InformationSchemaDto columnMeta, AstForest astForest,
             TableStructureAnalysisDto tableStructureAnalysis) {
         JavaTypeNamingDto javaTypeNamingDto = super.jdbcType2javaType(columnMeta, astForest, tableStructureAnalysis);
+
+        String dataType = columnMeta.getDataType();
+        if ("date".equals(dataType)) {
+            return new JavaTypeNamingDto().setClass(LocalDate.class);
+        }
+        if ("time".equals(dataType)) {
+            return new JavaTypeNamingDto().setClass(LocalTime.class);
+        }
+        if ("datetime".equals(dataType)) {
+            return new JavaTypeNamingDto().setClass(LocalDateTime.class);
+        }
+        if ("timestamp".equals(dataType)) {
+            return new JavaTypeNamingDto().setClass(LocalDateTime.class);
+        }
 
         String description = columnMeta.getColumnComment();
 

@@ -19,6 +19,6 @@ public interface Constant {
             .setRecordPackage("com.spldeolin.beginningmind.app.javabean.record")
             .setWholeDtoPackage("com.spldeolin.beginningmind.app.javabean")
             .setMapperXmlDirectoryPaths(Lists.newArrayList("src/main/resources/mapper")).setAuthor("Deolin")
-            .setIsJavabeanCloneable(true).setIsJavabeanSerializable(true);
+            .setIsJavabeanCloneable(false).setIsJavabeanSerializable(false);
 
 }

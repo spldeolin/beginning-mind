@@ -18,11 +18,15 @@
         <dependency>
             <groupId>com.spldeolin</groupId>
             <artifactId>beginning-mind-api</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.spldeolin.satisficing.framework</groupId>
-            <artifactId>satisficing-app</artifactId>
+            <artifactId>satisficing-service</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spldeolin.satisficing.framework</groupId>
+            <artifactId>satisficing-security-service</artifactId>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -33,12 +37,14 @@
         <dependency>
             <groupId>com.spldeolin.allison1875</groupId>
             <artifactId>allison1875-all</artifactId>
+            <version>10.1-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
         <!-- https://github.com/spldeolin/allison1875-support -->
         <dependency>
             <groupId>com.spldeolin.allison1875</groupId>
             <artifactId>allison1875-support</artifactId>
+            <version>5.0</version>
         </dependency>
     </dependencies>
 
@@ -47,13 +53,6 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
             </plugin>
         </plugins>
         <resources>
