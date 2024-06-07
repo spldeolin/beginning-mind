@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spldeolin.beginningmind.service.mapper.OfficesMapper">
+    <!-- [START] Any modifications may be overwritten by future code generations. -->
+
+    <resultMap id="all" type="com.spldeolin.beginningmind.service.entity.OfficesEntity">
+        <id column="officeCode" property="officeCode"/>
+        <result column="city" property="city"/>
+        <result column="phone" property="phone"/>
+        <result column="addressLine1" property="addressLine1"/>
+        <result column="addressLine2" property="addressLine2"/>
+        <result column="state" property="state"/>
+        <result column="country" property="country"/>
+        <result column="postalCode" property="postalCode"/>
+        <result column="territory" property="territory"/>
+    </resultMap>
+
+    <sql id="all">
+        `officeCode`, `city`, `phone`, `addressLine1`, `addressLine2`, `state`, `country`, `postalCode`, `territory`
+    </sql>
+
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.service.entity.OfficesEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `offices`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="officeCode!=null"> `officeCode`, </if>
+            <if test="city!=null"> `city`, </if>
+            <if test="phone!=null"> `phone`, </if>
+            <if test="addressLine1!=null"> `addressLine1`, </if>
+            <if test="addressLine2!=null"> `addressLine2`, </if>
+            <if test="state!=null"> `state`, </if>
+            <if test="country!=null"> `country`, </if>
+            <if test="postalCode!=null"> `postalCode`, </if>
+            <if test="territory!=null"> `territory`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="officeCode!=null"> #{officeCode}, </if>
+            <if test="city!=null"> #{city}, </if>
+            <if test="phone!=null"> #{phone}, </if>
+            <if test="addressLine1!=null"> #{addressLine1}, </if>
+            <if test="addressLine2!=null"> #{addressLine2}, </if>
+            <if test="state!=null"> #{state}, </if>
+            <if test="country!=null"> #{country}, </if>
+            <if test="postalCode!=null"> #{postalCode}, </if>
+            <if test="territory!=null"> #{territory}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsert">
+        <!-- @formatter:off -->
+        <foreach collection="entities" item="one" separator=";">
+            INSERT INTO `offices`
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="one.officeCode!=null"> `officeCode`, </if>
+                <if test="one.city!=null"> `city`, </if>
+                <if test="one.phone!=null"> `phone`, </if>
+                <if test="one.addressLine1!=null"> `addressLine1`, </if>
+                <if test="one.addressLine2!=null"> `addressLine2`, </if>
+                <if test="one.state!=null"> `state`, </if>
+                <if test="one.country!=null"> `country`, </if>
+                <if test="one.postalCode!=null"> `postalCode`, </if>
+                <if test="one.territory!=null"> `territory`, </if>
+            </trim>
+            <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
+                <if test="one.officeCode!=null"> #{one.officeCode}, </if>
+                <if test="one.city!=null"> #{one.city}, </if>
+                <if test="one.phone!=null"> #{one.phone}, </if>
+                <if test="one.addressLine1!=null"> #{one.addressLine1}, </if>
+                <if test="one.addressLine2!=null"> #{one.addressLine2}, </if>
+                <if test="one.state!=null"> #{one.state}, </if>
+                <if test="one.country!=null"> #{one.country}, </if>
+                <if test="one.postalCode!=null"> #{one.postalCode}, </if>
+                <if test="one.territory!=null"> #{one.territory}, </if>
+            </trim>
+        </foreach>;
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsertEvenNull">
+        <!-- @formatter:off -->
+        INSERT INTO `offices`
+            ( <include refid="all"/> )
+        VALUES
+            <foreach collection="entities" item="one" separator=",">(
+                #{one.officeCode}, #{one.city}, #{one.phone}, #{one.addressLine1}, #{one.addressLine2}, #{one.state},
+                #{one.country}, #{one.postalCode}, #{one.territory}
+            )</foreach>
+        <!-- @formatter:on -->
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `offices`
+            <set>
+                <if test="one.city!=null"> `city` = #{one.city}, </if>
+                <if test="one.phone!=null"> `phone` = #{one.phone}, </if>
+                <if test="one.addressLine1!=null"> `addressLine1` = #{one.addressLine1}, </if>
+                <if test="one.addressLine2!=null"> `addressLine2` = #{one.addressLine2}, </if>
+                <if test="one.state!=null"> `state` = #{one.state}, </if>
+                <if test="one.country!=null"> `country` = #{one.country}, </if>
+                <if test="one.postalCode!=null"> `postalCode` = #{one.postalCode}, </if>
+                <if test="one.territory!=null"> `territory` = #{one.territory}, </if>
+            </set>
+            WHERE TRUE
+              AND `officeCode` = #{one.officeCode}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <update id="batchUpdateEvenNull">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `offices`
+            SET
+                `city` = #{one.city},
+                `phone` = #{one.phone},
+                `addressLine1` = #{one.addressLine1},
+                `addressLine2` = #{one.addressLine2},
+                `state` = #{one.state},
+                `country` = #{one.country},
+                `postalCode` = #{one.postalCode},
+                `territory` = #{one.territory}
+            WHERE TRUE
+              AND `officeCode` = #{one.officeCode}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="String" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `offices`
+        WHERE TRUE
+          AND `officeCode` = #{officeCode}
+        <!-- @formatter:on -->
+    </select>
+
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.service.entity.OfficesEntity">
+        <!-- @formatter:off -->
+        UPDATE `offices`
+        <set>
+            <if test="city!=null"> `city` = #{city}, </if>
+            <if test="phone!=null"> `phone` = #{phone}, </if>
+            <if test="addressLine1!=null"> `addressLine1` = #{addressLine1}, </if>
+            <if test="addressLine2!=null"> `addressLine2` = #{addressLine2}, </if>
+            <if test="state!=null"> `state` = #{state}, </if>
+            <if test="country!=null"> `country` = #{country}, </if>
+            <if test="postalCode!=null"> `postalCode` = #{postalCode}, </if>
+            <if test="territory!=null"> `territory` = #{territory}, </if>
+        </set>
+        WHERE TRUE
+          AND `officeCode` = #{officeCode}
+        <!-- @formatter:on -->
+    </update>
+
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.service.entity.OfficesEntity">
+        <!-- @formatter:off -->
+        UPDATE `offices`
+        SET
+            `city` = #{city},
+            `phone` = #{phone},
+            `addressLine1` = #{addressLine1},
+            `addressLine2` = #{addressLine2},
+            `state` = #{state},
+            `country` = #{country},
+            `postalCode` = #{postalCode},
+            `territory` = #{territory}
+        WHERE TRUE
+          AND `officeCode` = #{officeCode}
+        <!-- @formatter:on -->
+    </update>
+
+    <select id="queryByIds" parameterType="String" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `offices`
+        WHERE TRUE
+          AND `officeCode` IN (<foreach collection="officeCodes" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByIdsEachId" parameterType="String" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `offices`
+        WHERE TRUE
+          AND `officeCode` IN (<foreach collection="officeCodes" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.service.entity.OfficesEntity" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `offices`
+        WHERE TRUE
+          <if test="officeCode!=null"> AND `officeCode` = #{officeCode} </if>
+          <if test="city!=null"> AND `city` = #{city} </if>
+          <if test="phone!=null"> AND `phone` = #{phone} </if>
+          <if test="addressLine1!=null"> AND `addressLine1` = #{addressLine1} </if>
+          <if test="addressLine2!=null"> AND `addressLine2` = #{addressLine2} </if>
+          <if test="state!=null"> AND `state` = #{state} </if>
+          <if test="country!=null"> AND `country` = #{country} </if>
+          <if test="postalCode!=null"> AND `postalCode` = #{postalCode} </if>
+          <if test="territory!=null"> AND `territory` = #{territory} </if>
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="listAll" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `offices`
+        WHERE TRUE
+        <!-- @formatter:on -->
+    </select>
+
+    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.service.entity.OfficesEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `offices`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="officeCode!=null"> `officeCode`, </if>
+            <if test="city!=null"> `city`, </if>
+            <if test="phone!=null"> `phone`, </if>
+            <if test="addressLine1!=null"> `addressLine1`, </if>
+            <if test="addressLine2!=null"> `addressLine2`, </if>
+            <if test="state!=null"> `state`, </if>
+            <if test="country!=null"> `country`, </if>
+            <if test="postalCode!=null"> `postalCode`, </if>
+            <if test="territory!=null"> `territory`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="officeCode!=null"> #{officeCode}, </if>
+            <if test="city!=null"> #{city}, </if>
+            <if test="phone!=null"> #{phone}, </if>
+            <if test="addressLine1!=null"> #{addressLine1}, </if>
+            <if test="addressLine2!=null"> #{addressLine2}, </if>
+            <if test="state!=null"> #{state}, </if>
+            <if test="country!=null"> #{country}, </if>
+            <if test="postalCode!=null"> #{postalCode}, </if>
+            <if test="territory!=null"> #{territory}, </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="city!=null"> `city` = #{city}, </if>
+            <if test="phone!=null"> `phone` = #{phone}, </if>
+            <if test="addressLine1!=null"> `addressLine1` = #{addressLine1}, </if>
+            <if test="addressLine2!=null"> `addressLine2` = #{addressLine2}, </if>
+            <if test="state!=null"> `state` = #{state}, </if>
+            <if test="country!=null"> `country` = #{country}, </if>
+            <if test="postalCode!=null"> `postalCode` = #{postalCode}, </if>
+            <if test="territory!=null"> `territory` = #{territory}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <!-- [END] Any modifications may be overwritten by future code generations. -->
+</mapper>

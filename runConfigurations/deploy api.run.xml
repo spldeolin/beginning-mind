@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="deploy api" type="MavenRunConfiguration" factoryName="Maven">
+    <configuration default="false" name="deploy client" type="MavenRunConfiguration" factoryName="Maven">
         <MavenSettings>
             <option name="myGeneralSettings"/>
             <option name="myRunnerSettings"/>

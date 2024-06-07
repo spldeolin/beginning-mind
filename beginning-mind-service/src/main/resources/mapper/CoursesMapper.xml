@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spldeolin.beginningmind.service.mapper.CoursesMapper">
+    <!-- [START] Any modifications may be overwritten by future code generations. -->
+
+    <resultMap id="all" type="com.spldeolin.beginningmind.service.entity.CoursesEntity">
+        <id column="courseCode" property="courseCode"/>
+        <result column="courseName" property="courseName"/>
+        <result column="courseLine" property="courseLine"/>
+        <result column="courseScale" property="courseScale"/>
+        <result column="courseVendor" property="courseVendor"/>
+        <result column="courseDescription" property="courseDescription"/>
+        <result column="buyPrice" property="buyPrice"/>
+        <result column="MSRP" property="msrp"/>
+    </resultMap>
+
+    <sql id="all">
+        `courseCode`, `courseName`, `courseLine`, `courseScale`, `courseVendor`, `courseDescription`, `buyPrice`, `MSRP`
+    </sql>
+
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.service.entity.CoursesEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `courses`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseCode!=null"> `courseCode`, </if>
+            <if test="courseName!=null"> `courseName`, </if>
+            <if test="courseLine!=null"> `courseLine`, </if>
+            <if test="courseScale!=null"> `courseScale`, </if>
+            <if test="courseVendor!=null"> `courseVendor`, </if>
+            <if test="courseDescription!=null"> `courseDescription`, </if>
+            <if test="buyPrice!=null"> `buyPrice`, </if>
+            <if test="msrp!=null"> `MSRP`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="courseCode!=null"> #{courseCode}, </if>
+            <if test="courseName!=null"> #{courseName}, </if>
+            <if test="courseLine!=null"> #{courseLine}, </if>
+            <if test="courseScale!=null"> #{courseScale}, </if>
+            <if test="courseVendor!=null"> #{courseVendor}, </if>
+            <if test="courseDescription!=null"> #{courseDescription}, </if>
+            <if test="buyPrice!=null"> #{buyPrice}, </if>
+            <if test="msrp!=null"> #{msrp}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsert">
+        <!-- @formatter:off -->
+        <foreach collection="entities" item="one" separator=";">
+            INSERT INTO `courses`
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="one.courseCode!=null"> `courseCode`, </if>
+                <if test="one.courseName!=null"> `courseName`, </if>
+                <if test="one.courseLine!=null"> `courseLine`, </if>
+                <if test="one.courseScale!=null"> `courseScale`, </if>
+                <if test="one.courseVendor!=null"> `courseVendor`, </if>
+                <if test="one.courseDescription!=null"> `courseDescription`, </if>
+                <if test="one.buyPrice!=null"> `buyPrice`, </if>
+                <if test="one.msrp!=null"> `MSRP`, </if>
+            </trim>
+            <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
+                <if test="one.courseCode!=null"> #{one.courseCode}, </if>
+                <if test="one.courseName!=null"> #{one.courseName}, </if>
+                <if test="one.courseLine!=null"> #{one.courseLine}, </if>
+                <if test="one.courseScale!=null"> #{one.courseScale}, </if>
+                <if test="one.courseVendor!=null"> #{one.courseVendor}, </if>
+                <if test="one.courseDescription!=null"> #{one.courseDescription}, </if>
+                <if test="one.buyPrice!=null"> #{one.buyPrice}, </if>
+                <if test="one.msrp!=null"> #{one.msrp}, </if>
+            </trim>
+        </foreach>;
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsertEvenNull">
+        <!-- @formatter:off -->
+        INSERT INTO `courses`
+            ( <include refid="all"/> )
+        VALUES
+            <foreach collection="entities" item="one" separator=",">(
+                #{one.courseCode}, #{one.courseName}, #{one.courseLine}, #{one.courseScale}, #{one.courseVendor},
+                #{one.courseDescription}, #{one.buyPrice}, #{one.msrp}
+            )</foreach>
+        <!-- @formatter:on -->
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `courses`
+            <set>
+                <if test="one.courseName!=null"> `courseName` = #{one.courseName}, </if>
+                <if test="one.courseLine!=null"> `courseLine` = #{one.courseLine}, </if>
+                <if test="one.courseScale!=null"> `courseScale` = #{one.courseScale}, </if>
+                <if test="one.courseVendor!=null"> `courseVendor` = #{one.courseVendor}, </if>
+                <if test="one.courseDescription!=null"> `courseDescription` = #{one.courseDescription}, </if>
+                <if test="one.buyPrice!=null"> `buyPrice` = #{one.buyPrice}, </if>
+                <if test="one.msrp!=null"> `MSRP` = #{one.msrp}, </if>
+            </set>
+            WHERE TRUE
+              AND `courseCode` = #{one.courseCode}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <update id="batchUpdateEvenNull">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `courses`
+            SET
+                `courseName` = #{one.courseName},
+                `courseLine` = #{one.courseLine},
+                `courseScale` = #{one.courseScale},
+                `courseVendor` = #{one.courseVendor},
+                `courseDescription` = #{one.courseDescription},
+                `buyPrice` = #{one.buyPrice},
+                `MSRP` = #{one.msrp}
+            WHERE TRUE
+              AND `courseCode` = #{one.courseCode}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="String" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `courses`
+        WHERE TRUE
+          AND `courseCode` = #{courseCode}
+        <!-- @formatter:on -->
+    </select>
+
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.service.entity.CoursesEntity">
+        <!-- @formatter:off -->
+        UPDATE `courses`
+        <set>
+            <if test="courseName!=null"> `courseName` = #{courseName}, </if>
+            <if test="courseLine!=null"> `courseLine` = #{courseLine}, </if>
+            <if test="courseScale!=null"> `courseScale` = #{courseScale}, </if>
+            <if test="courseVendor!=null"> `courseVendor` = #{courseVendor}, </if>
+            <if test="courseDescription!=null"> `courseDescription` = #{courseDescription}, </if>
+            <if test="buyPrice!=null"> `buyPrice` = #{buyPrice}, </if>
+            <if test="msrp!=null"> `MSRP` = #{msrp}, </if>
+        </set>
+        WHERE TRUE
+          AND `courseCode` = #{courseCode}
+        <!-- @formatter:on -->
+    </update>
+
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.service.entity.CoursesEntity">
+        <!-- @formatter:off -->
+        UPDATE `courses`
+        SET
+            `courseName` = #{courseName},
+            `courseLine` = #{courseLine},
+            `courseScale` = #{courseScale},
+            `courseVendor` = #{courseVendor},
+            `courseDescription` = #{courseDescription},
+            `buyPrice` = #{buyPrice},
+            `MSRP` = #{msrp}
+        WHERE TRUE
+          AND `courseCode` = #{courseCode}
+        <!-- @formatter:on -->
+    </update>
+
+    <select id="queryByIds" parameterType="String" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `courses`
+        WHERE TRUE
+          AND `courseCode` IN (<foreach collection="courseCodes" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByIdsEachId" parameterType="String" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `courses`
+        WHERE TRUE
+          AND `courseCode` IN (<foreach collection="courseCodes" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.service.entity.CoursesEntity" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `courses`
+        WHERE TRUE
+          <if test="courseCode!=null"> AND `courseCode` = #{courseCode} </if>
+          <if test="courseName!=null"> AND `courseName` = #{courseName} </if>
+          <if test="courseLine!=null"> AND `courseLine` = #{courseLine} </if>
+          <if test="courseScale!=null"> AND `courseScale` = #{courseScale} </if>
+          <if test="courseVendor!=null"> AND `courseVendor` = #{courseVendor} </if>
+          <if test="courseDescription!=null"> AND `courseDescription` = #{courseDescription} </if>
+          <if test="buyPrice!=null"> AND `buyPrice` = #{buyPrice} </if>
+          <if test="msrp!=null"> AND `MSRP` = #{msrp} </if>
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="listAll" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `courses`
+        WHERE TRUE
+        <!-- @formatter:on -->
+    </select>
+
+    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.service.entity.CoursesEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `courses`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="courseCode!=null"> `courseCode`, </if>
+            <if test="courseName!=null"> `courseName`, </if>
+            <if test="courseLine!=null"> `courseLine`, </if>
+            <if test="courseScale!=null"> `courseScale`, </if>
+            <if test="courseVendor!=null"> `courseVendor`, </if>
+            <if test="courseDescription!=null"> `courseDescription`, </if>
+            <if test="buyPrice!=null"> `buyPrice`, </if>
+            <if test="msrp!=null"> `MSRP`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="courseCode!=null"> #{courseCode}, </if>
+            <if test="courseName!=null"> #{courseName}, </if>
+            <if test="courseLine!=null"> #{courseLine}, </if>
+            <if test="courseScale!=null"> #{courseScale}, </if>
+            <if test="courseVendor!=null"> #{courseVendor}, </if>
+            <if test="courseDescription!=null"> #{courseDescription}, </if>
+            <if test="buyPrice!=null"> #{buyPrice}, </if>
+            <if test="msrp!=null"> #{msrp}, </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="courseName!=null"> `courseName` = #{courseName}, </if>
+            <if test="courseLine!=null"> `courseLine` = #{courseLine}, </if>
+            <if test="courseScale!=null"> `courseScale` = #{courseScale}, </if>
+            <if test="courseVendor!=null"> `courseVendor` = #{courseVendor}, </if>
+            <if test="courseDescription!=null"> `courseDescription` = #{courseDescription}, </if>
+            <if test="buyPrice!=null"> `buyPrice` = #{buyPrice}, </if>
+            <if test="msrp!=null"> `MSRP` = #{msrp}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <!-- [END] Any modifications may be overwritten by future code generations. -->
+</mapper>
