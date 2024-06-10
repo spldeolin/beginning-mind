@@ -1,12 +1,7 @@
 server:
   port: 2333
-  context-path: /
 
 spring:
-
-  config:
-    activate:
-      on-profile: dev
 
   application.name: beginning-mind
 
@@ -31,14 +26,8 @@ spring:
       file: classpath:redisson-dev.yml
 
 logging:
-  config: classpath:logback-spring.xml
   level:
     com.spldeolin.beginningmind: DEBUG
-
-mybatis:
-  mapper-locations: classpath*:mapper/*.xml
-  configuration:
-    default-enum-type-handler: com.spldeolin.satisficing.service.mybatis.EnumTypeHandlerEx
 
 thread-pool:
   core-size: 5

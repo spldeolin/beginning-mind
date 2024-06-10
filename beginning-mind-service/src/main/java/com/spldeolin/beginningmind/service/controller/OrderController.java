@@ -9,7 +9,7 @@ import com.github.pagehelper.PageInfo;
 import com.spldeolin.beginningmind.service.javabean.req.ListOrdersReqDto;
 import com.spldeolin.beginningmind.service.javabean.resp.ListOrdersRespDto;
 import com.spldeolin.beginningmind.service.service.ListOrdersService;
-import com.spldeolin.satisficing.client.javabean.RequestResult;
+import com.spldeolin.satisficing.client.RequestResult;
 
 /**
  * @author Deolin 2024-02-20

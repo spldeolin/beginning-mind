@@ -40,6 +40,6 @@ public enum StudentsStateEnum implements EnumAncestor<String> {
 
     @Override
     public String toString() {
-        return asJavabean().toString();
+        return code;
     }
 }
