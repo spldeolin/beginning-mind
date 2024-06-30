@@ -51,28 +51,60 @@
                 <groupId>com.spldeolin.allison1875</groupId>
                 <artifactId>allison1875-maven-plugin</artifactId>
                 <version>11.0-SNAPSHOT</version>
-                <!--                <dependencies>-->
-                <!--                    <dependency>-->
-                <!--                        <groupId>com.spldeolin.allison1875</groupId>-->
-                <!--                        <artifactId>allison1875-satisficing</artifactId>-->
-                <!--                        <version>11.0-SNAPSHOT</version>-->
-                <!--                    </dependency>-->
-                <!--                </dependencies>-->
+                <dependencies>
+                    <dependency>
+                        <groupId>com.spldeolin.allison1875</groupId>
+                        <artifactId>allison1875-extension-satisficing</artifactId>
+                        <version>11.0-SNAPSHOT</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <!--                    <docAnalyzerModuleQualifier>com.spldeolin.satisficing.allison1875.DocAnalyzerModule</docAnalyzerModuleQualifier>-->
+                    <docAnalyzerModuleQualifier>
+                        com.spldeolin.allison1875.satisficing.DocAnalyzerModule
+                    </docAnalyzerModuleQualifier>
+                    <persistenceGeneratorModuleQualifier>
+                        com.spldeolin.allison1875.satisficing.PersistenceGeneratorModule
+                    </persistenceGeneratorModuleQualifier>
+                    <handlerTransformerModuleQualifier>
+                        com.spldeolin.allison1875.satisficing.HandlerTransformerModule
+                    </handlerTransformerModuleQualifier>
                     <basePackage>com.spldeolin.beginningmind.service</basePackage>
                     <persistenceGeneratorConfig>
                         <jdbcUrl>jdbc:mysql://localhost:3306</jdbcUrl>
                         <userName>root</userName>
                         <password>root</password>
                         <schema>beginningmind</schema>
+                        <tables>user</tables>
                     </persistenceGeneratorConfig>
                     <handlerTransformerConfig>
                         <pageTypeQualifier>com.github.pagehelper.PageInfo</pageTypeQualifier>
                     </handlerTransformerConfig>
                 </configuration>
-            </plugin>
+                <executions>
 
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                    <compilerArgs>
+                        <arg>-sourcepath</arg>
+                        <arg>
+                            ${project.basedir}/src/main/java${path.separator}${project.basedir}/target/generated-sources/annotations${path.separator}/
+                        </arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
         </plugins>
         <resources>
             <!-- 必须要有这个，否则会导致bootstrap.yml文件build到target目录时，%profileActive%没有发生替换 -->
