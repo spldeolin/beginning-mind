@@ -60,13 +60,13 @@
                 </dependencies>
                 <configuration>
                     <docAnalyzerModuleQualifier>
-                        com.spldeolin.allison1875.satisficing.DocAnalyzerModule
+                        com.spldeolin.allison1875.extension.satisficing.DocAnalyzerModule
                     </docAnalyzerModuleQualifier>
                     <persistenceGeneratorModuleQualifier>
-                        com.spldeolin.allison1875.satisficing.PersistenceGeneratorModule
+                        com.spldeolin.allison1875.extension.satisficing.PersistenceGeneratorModule
                     </persistenceGeneratorModuleQualifier>
                     <handlerTransformerModuleQualifier>
-                        com.spldeolin.allison1875.satisficing.HandlerTransformerModule
+                        com.spldeolin.allison1875.extension.satisficing.HandlerTransformerModule
                     </handlerTransformerModuleQualifier>
                     <basePackage>com.spldeolin.beginningmind.service</basePackage>
                     <persistenceGeneratorConfig>
