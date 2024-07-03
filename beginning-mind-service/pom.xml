@@ -36,7 +36,7 @@
         <dependency>
             <groupId>com.spldeolin.allison1875</groupId>
             <artifactId>allison1875-support</artifactId>
-            <version>11.0-SNAPSHOT</version>
+            <version>11.0</version>
         </dependency>
     </dependencies>
 
@@ -50,12 +50,12 @@
             <plugin>
                 <groupId>com.spldeolin.allison1875</groupId>
                 <artifactId>allison1875-maven-plugin</artifactId>
-                <version>11.0-SNAPSHOT</version>
+                <version>11.0</version>
                 <dependencies>
                     <dependency>
                         <groupId>com.spldeolin.allison1875</groupId>
                         <artifactId>allison1875-extension-satisficing</artifactId>
-                        <version>11.0-SNAPSHOT</version>
+                        <version>11.0</version>
                     </dependency>
                 </dependencies>
                 <configuration>
