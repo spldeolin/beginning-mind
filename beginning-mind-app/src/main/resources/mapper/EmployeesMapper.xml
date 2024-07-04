@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spldeolin.beginningmind.app.mapper.EmployeesMapper">
+    <!-- [START] Any modifications may be overwritten by future code generations. -->
+
+    <resultMap id="all" type="com.spldeolin.beginningmind.app.entity.EmployeesEntity">
+        <id column="employeeNumber" property="employeeNumber"/>
+        <result column="lastName" property="lastName"/>
+        <result column="firstName" property="firstName"/>
+        <result column="extension" property="extension"/>
+        <result column="email" property="email"/>
+        <result column="officeCode" property="officeCode"/>
+        <result column="reportsTo" property="reportsTo"/>
+        <result column="jobTitle" property="jobTitle"/>
+    </resultMap>
+
+    <sql id="all">
+        `employeeNumber`, `lastName`, `firstName`, `extension`, `email`, `officeCode`, `reportsTo`, `jobTitle`
+    </sql>
+
+    <insert id="insert" parameterType="com.spldeolin.beginningmind.app.entity.EmployeesEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `employees`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeNumber!=null"> `employeeNumber`, </if>
+            <if test="lastName!=null"> `lastName`, </if>
+            <if test="firstName!=null"> `firstName`, </if>
+            <if test="extension!=null"> `extension`, </if>
+            <if test="email!=null"> `email`, </if>
+            <if test="officeCode!=null"> `officeCode`, </if>
+            <if test="reportsTo!=null"> `reportsTo`, </if>
+            <if test="jobTitle!=null"> `jobTitle`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="employeeNumber!=null"> #{employeeNumber}, </if>
+            <if test="lastName!=null"> #{lastName}, </if>
+            <if test="firstName!=null"> #{firstName}, </if>
+            <if test="extension!=null"> #{extension}, </if>
+            <if test="email!=null"> #{email}, </if>
+            <if test="officeCode!=null"> #{officeCode}, </if>
+            <if test="reportsTo!=null"> #{reportsTo}, </if>
+            <if test="jobTitle!=null"> #{jobTitle}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsert">
+        <!-- @formatter:off -->
+        <foreach collection="entities" item="one" separator=";">
+            INSERT INTO `employees`
+            <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="one.employeeNumber!=null"> `employeeNumber`, </if>
+                <if test="one.lastName!=null"> `lastName`, </if>
+                <if test="one.firstName!=null"> `firstName`, </if>
+                <if test="one.extension!=null"> `extension`, </if>
+                <if test="one.email!=null"> `email`, </if>
+                <if test="one.officeCode!=null"> `officeCode`, </if>
+                <if test="one.reportsTo!=null"> `reportsTo`, </if>
+                <if test="one.jobTitle!=null"> `jobTitle`, </if>
+            </trim>
+            <trim prefix="VALUE (" suffix=")" suffixOverrides=",">
+                <if test="one.employeeNumber!=null"> #{one.employeeNumber}, </if>
+                <if test="one.lastName!=null"> #{one.lastName}, </if>
+                <if test="one.firstName!=null"> #{one.firstName}, </if>
+                <if test="one.extension!=null"> #{one.extension}, </if>
+                <if test="one.email!=null"> #{one.email}, </if>
+                <if test="one.officeCode!=null"> #{one.officeCode}, </if>
+                <if test="one.reportsTo!=null"> #{one.reportsTo}, </if>
+                <if test="one.jobTitle!=null"> #{one.jobTitle}, </if>
+            </trim>
+        </foreach>;
+        <!-- @formatter:on -->
+    </insert>
+
+    <insert id="batchInsertEvenNull">
+        <!-- @formatter:off -->
+        INSERT INTO `employees`
+            ( <include refid="all"/> )
+        VALUES
+            <foreach collection="entities" item="one" separator=",">(
+                #{one.employeeNumber}, #{one.lastName}, #{one.firstName}, #{one.extension}, #{one.email},
+                #{one.officeCode}, #{one.reportsTo}, #{one.jobTitle}
+            )</foreach>
+        <!-- @formatter:on -->
+    </insert>
+
+    <update id="batchUpdate">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `employees`
+            <set>
+                <if test="one.lastName!=null"> `lastName` = #{one.lastName}, </if>
+                <if test="one.firstName!=null"> `firstName` = #{one.firstName}, </if>
+                <if test="one.extension!=null"> `extension` = #{one.extension}, </if>
+                <if test="one.email!=null"> `email` = #{one.email}, </if>
+                <if test="one.officeCode!=null"> `officeCode` = #{one.officeCode}, </if>
+                <if test="one.reportsTo!=null"> `reportsTo` = #{one.reportsTo}, </if>
+                <if test="one.jobTitle!=null"> `jobTitle` = #{one.jobTitle}, </if>
+            </set>
+            WHERE TRUE
+              AND `employeeNumber` = #{one.employeeNumber}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <update id="batchUpdateEvenNull">
+        <foreach collection="entities" item="one" separator=";">
+            <!-- @formatter:off -->
+            UPDATE `employees`
+            SET
+                `lastName` = #{one.lastName},
+                `firstName` = #{one.firstName},
+                `extension` = #{one.extension},
+                `email` = #{one.email},
+                `officeCode` = #{one.officeCode},
+                `reportsTo` = #{one.reportsTo},
+                `jobTitle` = #{one.jobTitle}
+            WHERE TRUE
+              AND `employeeNumber` = #{one.employeeNumber}
+            <!-- @formatter:on -->
+        </foreach>
+    </update>
+
+    <select id="queryById" parameterType="Integer" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `employees`
+        WHERE TRUE
+          AND `employeeNumber` = #{employeeNumber}
+        <!-- @formatter:on -->
+    </select>
+
+    <update id="updateById" parameterType="com.spldeolin.beginningmind.app.entity.EmployeesEntity">
+        <!-- @formatter:off -->
+        UPDATE `employees`
+        <set>
+            <if test="lastName!=null"> `lastName` = #{lastName}, </if>
+            <if test="firstName!=null"> `firstName` = #{firstName}, </if>
+            <if test="extension!=null"> `extension` = #{extension}, </if>
+            <if test="email!=null"> `email` = #{email}, </if>
+            <if test="officeCode!=null"> `officeCode` = #{officeCode}, </if>
+            <if test="reportsTo!=null"> `reportsTo` = #{reportsTo}, </if>
+            <if test="jobTitle!=null"> `jobTitle` = #{jobTitle}, </if>
+        </set>
+        WHERE TRUE
+          AND `employeeNumber` = #{employeeNumber}
+        <!-- @formatter:on -->
+    </update>
+
+    <update id="updateByIdEvenNull" parameterType="com.spldeolin.beginningmind.app.entity.EmployeesEntity">
+        <!-- @formatter:off -->
+        UPDATE `employees`
+        SET
+            `lastName` = #{lastName},
+            `firstName` = #{firstName},
+            `extension` = #{extension},
+            `email` = #{email},
+            `officeCode` = #{officeCode},
+            `reportsTo` = #{reportsTo},
+            `jobTitle` = #{jobTitle}
+        WHERE TRUE
+          AND `employeeNumber` = #{employeeNumber}
+        <!-- @formatter:on -->
+    </update>
+
+    <select id="queryByIds" parameterType="Integer" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `employees`
+        WHERE TRUE
+          AND `employeeNumber` IN (<foreach collection="employeeNumbers" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByIdsEachId" parameterType="Integer" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `employees`
+        WHERE TRUE
+          AND `employeeNumber` IN (<foreach collection="employeeNumbers" item="one" separator=",">#{one}</foreach>)
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="queryByEntity" parameterType="com.spldeolin.beginningmind.app.entity.EmployeesEntity"
+        resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `employees`
+        WHERE TRUE
+          <if test="employeeNumber!=null"> AND `employeeNumber` = #{employeeNumber} </if>
+          <if test="lastName!=null"> AND `lastName` = #{lastName} </if>
+          <if test="firstName!=null"> AND `firstName` = #{firstName} </if>
+          <if test="extension!=null"> AND `extension` = #{extension} </if>
+          <if test="email!=null"> AND `email` = #{email} </if>
+          <if test="officeCode!=null"> AND `officeCode` = #{officeCode} </if>
+          <if test="reportsTo!=null"> AND `reportsTo` = #{reportsTo} </if>
+          <if test="jobTitle!=null"> AND `jobTitle` = #{jobTitle} </if>
+        <!-- @formatter:on -->
+    </select>
+
+    <select id="listAll" resultMap="all">
+        <!-- @formatter:off -->
+        SELECT
+            <include refid="all"/>
+        FROM `employees`
+        WHERE TRUE
+        <!-- @formatter:on -->
+    </select>
+
+    <insert id="insertOrUpdate" parameterType="com.spldeolin.beginningmind.app.entity.EmployeesEntity">
+        <!-- @formatter:off -->
+        INSERT INTO `employees`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeNumber!=null"> `employeeNumber`, </if>
+            <if test="lastName!=null"> `lastName`, </if>
+            <if test="firstName!=null"> `firstName`, </if>
+            <if test="extension!=null"> `extension`, </if>
+            <if test="email!=null"> `email`, </if>
+            <if test="officeCode!=null"> `officeCode`, </if>
+            <if test="reportsTo!=null"> `reportsTo`, </if>
+            <if test="jobTitle!=null"> `jobTitle`, </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="employeeNumber!=null"> #{employeeNumber}, </if>
+            <if test="lastName!=null"> #{lastName}, </if>
+            <if test="firstName!=null"> #{firstName}, </if>
+            <if test="extension!=null"> #{extension}, </if>
+            <if test="email!=null"> #{email}, </if>
+            <if test="officeCode!=null"> #{officeCode}, </if>
+            <if test="reportsTo!=null"> #{reportsTo}, </if>
+            <if test="jobTitle!=null"> #{jobTitle}, </if>
+        </trim>
+        ON DUPLICATE KEY UPDATE
+        <trim suffixOverrides=",">
+            <if test="lastName!=null"> `lastName` = #{lastName}, </if>
+            <if test="firstName!=null"> `firstName` = #{firstName}, </if>
+            <if test="extension!=null"> `extension` = #{extension}, </if>
+            <if test="email!=null"> `email` = #{email}, </if>
+            <if test="officeCode!=null"> `officeCode` = #{officeCode}, </if>
+            <if test="reportsTo!=null"> `reportsTo` = #{reportsTo}, </if>
+            <if test="jobTitle!=null"> `jobTitle` = #{jobTitle}, </if>
+        </trim>
+        <!-- @formatter:on -->
+    </insert>
+
+    <!-- [END] Any modifications may be overwritten by future code generations. -->
+</mapper>

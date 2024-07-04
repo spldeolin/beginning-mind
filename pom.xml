@@ -15,8 +15,8 @@
     <version>1.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>beginning-mind-client</module>
-        <module>beginning-mind-service</module>
+        <module>beginning-mind-api</module>
+        <module>beginning-mind-app</module>
     </modules>
 
     <profiles>
