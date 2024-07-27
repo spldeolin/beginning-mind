@@ -1,0 +1,4 @@
+singleServerConfig:
+  address: 'redis://redis-svc:6379'
+  password: ENC(adfadfaadfa==)
+#codec: !<org.redisson.codec.FstCodec> { }

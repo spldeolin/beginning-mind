@@ -7,9 +7,9 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
-    username: root
-    password: root
+    url: jdbc:mysql://mysql-svc:3306/beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    username: ENC(fddddadafdadfa==)
+    password: ENC(fddddadafdadfa==)
     type: com.zaxxer.hikari.HikariDataSource
     hikari:
       minimum-idle: 5
@@ -23,7 +23,7 @@ spring:
 
   redis:
     redisson:
-      file: classpath:redisson-dev.yml
+      file: classpath:redisson-prod.yml
 
 logging:
   level:
@@ -40,7 +40,7 @@ snow-flake:
   machine-id: 1
 
 rsa:
-  public-key: 1
+  pulbic-key: 1
   private-key: 2
 
 rpc-url:
