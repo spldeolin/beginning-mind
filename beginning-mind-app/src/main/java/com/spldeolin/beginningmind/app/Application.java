@@ -8,8 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 /**
  * @author Deolin 2019-01-22
  */
-@ComponentScan("com.spldeolin.beginningmind.service")
-@MapperScan("com.spldeolin.beginningmind.service.mapper")
+@ComponentScan("com.spldeolin.beginningmind.app")
+@MapperScan("com.spldeolin.beginningmind.app.mapper")
 @SpringBootApplication
 public class Application {
 

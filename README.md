@@ -1,1 +1,1 @@
-## *beginning-mind*
+ # beginning-mind

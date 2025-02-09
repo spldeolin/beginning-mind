@@ -1,4 +1,4 @@
 singleServerConfig:
-  address: 'redis://localhost:6379'
-  password: root
+  address: redis://localhost:6379
+  password: # NO_PASSWORD
 #codec: !<org.redisson.codec.FstCodec> { }

@@ -3,7 +3,7 @@
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>com.spldeolin</groupId>
+        <groupId>com.spldeolin.beginningmind</groupId>
         <artifactId>beginning-mind</artifactId>
         <version>1.0.0-SNAPSHOT</version>
     </parent>
@@ -16,47 +16,25 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.spldeolin</groupId>
+            <groupId>com.spldeolin.beginningmind</groupId>
             <artifactId>beginning-mind-api</artifactId>
-            <version>${project.parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>com.spldeolin.satisficing</groupId>
             <artifactId>satisficing-app</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.spldeolin.satisficing</groupId>
-            <artifactId>satisficing-identity-app</artifactId>
+            <groupId>com.spldeolin.allison1875</groupId>
+            <artifactId>allison1875-support</artifactId>
+            <optional>true</optional>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-        <dependency>
-            <groupId>com.spldeolin.allison1875</groupId>
-            <artifactId>allison1875-support</artifactId>
-            <version>11.0</version>
-        </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>dev</id>
-            <properties>
-                <profileActive>dev</profileActive>
-            </properties>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-        </profile>
-        <profile>
-            <id>prod</id>
-            <properties>
-                <profileActive>prod</profileActive>
-            </properties>
-        </profile>
-    </profiles>
 
     <build>
         <plugins>
@@ -67,39 +45,53 @@
             <plugin>
                 <groupId>com.spldeolin.allison1875</groupId>
                 <artifactId>allison1875-maven-plugin</artifactId>
-                <version>11.0</version>
+                <version>12.1-SNAPSHOT</version>
                 <dependencies>
                     <dependency>
-                        <groupId>com.spldeolin.allison1875</groupId>
-                        <artifactId>allison1875-extension-satisficing</artifactId>
-                        <version>11.0</version>
+                        <groupId>com.spldeolin.satisficing</groupId>
+                        <artifactId>satisficing-allison1875</artifactId>
+                        <version>0.0.1-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
                 <configuration>
-                    <docAnalyzerModuleQualifier>
-                        com.spldeolin.allison1875.extension.satisficing.DocAnalyzerModule
-                    </docAnalyzerModuleQualifier>
-                    <persistenceGeneratorModuleQualifier>
-                        com.spldeolin.allison1875.extension.satisficing.PersistenceGeneratorModule
-                    </persistenceGeneratorModuleQualifier>
-                    <handlerTransformerModuleQualifier>
-                        com.spldeolin.allison1875.extension.satisficing.HandlerTransformerModule
-                    </handlerTransformerModuleQualifier>
-                    <basePackage>com.spldeolin.beginningmind.service</basePackage>
-                    <persistenceGeneratorConfig>
-                        <jdbcUrl>jdbc:mysql://localhost:3306</jdbcUrl>
-                        <userName>root</userName>
-                        <password>root</password>
-                        <schema>beginningmind</schema>
-                        <tables>user</tables>
-                    </persistenceGeneratorConfig>
-                    <handlerTransformerConfig>
-                        <pageTypeQualifier>com.github.pagehelper.PageInfo</pageTypeQualifier>
-                    </handlerTransformerConfig>
+                    <common>
+                        <basePackage>com.spldeolin.beginningmind.app</basePackage>
+                        <enableLotNoAnnounce>false</enableLotNoAnnounce>
+                        <author>Deolin</author>
+                    </common>
+                    <docAnalyzer>
+                        <module>com.spldeolin.satisficing.allison1875.DocAnalyzerModule</module>
+                    </docAnalyzer>
+                    <handlerTransformer>
+                        <module>com.spldeolin.satisficing.allison1875.HandlerTransformerModule</module>
+                    </handlerTransformer>
+                    <persistenceGenerator>
+                        <module>com.spldeolin.satisficing.allison1875.PersistenceGeneratorModule</module>
+                        <!-- <jdbcUrl>jdbc:mysql://localhost:3306</jdbcUrl> -->
+                        <!-- <userName>root</userName> -->
+                        <!-- <password>root</password> -->
+                        <!-- <schema>beginning_mind</schema> -->
+                        <!-- <tables></tables> -->
+                        <ddl>CREATE TABLE `sample`
+                            (
+                            `id` BIGINT NOT NULL COMMENT '主键',
+                            `created_time` DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+                            `updated_time` DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT
+                            '更新时间',
+                            `prop_one1` VARCHAR(255) DEFAULT NULL,
+                            `propTwo2` DATE,
+                            `prop3` TIME,
+                            `prop4` DATETIME,
+                            `prop5` TIMESTAMP,
+                            `prop6` VARCHAR(64) COMMENT '枚举演示 E(foo=FOO标题 bar=BAR标题)',
+                            `prop7` INT,
+                            `prop8` TINYINT(1) COMMENT '只有TINYINT(1)会映射到Boolean',
+                            PRIMARY KEY (`id`)
+                            ) COMMENT '演示用'
+                        </ddl>
+                        <enableGenerateDesign>true</enableGenerateDesign>
+                    </persistenceGenerator>
                 </configuration>
-                <executions>
-
-                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

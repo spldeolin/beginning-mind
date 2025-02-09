@@ -7,7 +7,7 @@ spring:
 
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/beginningmind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/beginning_mind?characterEncoding=UTF-8&useUnicode=true&allowMultiQueries=true&serverTimezone=Asia/Shanghai
     username: root
     password: root
     type: com.zaxxer.hikari.HikariDataSource
@@ -27,7 +27,7 @@ spring:
 
 logging:
   level:
-    com.spldeolin.beginningmind: DEBUG
+    com.spldeolin.satisficing: DEBUG
 
 thread-pool:
   core-size: 5
@@ -38,10 +38,3 @@ thread-pool:
 snow-flake:
   datacenter-id: 1
   machine-id: 1
-
-rsa:
-  public-key: 1
-  private-key: 2
-
-rpc-url:
-  satisficing-identity-app: http://localhost
