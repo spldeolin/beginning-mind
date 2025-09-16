@@ -64,6 +64,7 @@
                     </docAnalyzer>
                     <handlerTransformer>
                         <module>com.spldeolin.satisficing.allison1875.HandlerTransformerModule</module>
+                        <pageTypeQualifier>com.github.pagehelper.PageInfo</pageTypeQualifier>
                     </handlerTransformer>
                     <persistenceGenerator>
                         <module>com.spldeolin.satisficing.allison1875.PersistenceGeneratorModule</module>
